@@ -1,0 +1,5 @@
+name: BadBlockBungee
+author: xMalware
+version: 1.0
+description: :o
+main: fr.xmalware.badblock.bungee.BadBungee
