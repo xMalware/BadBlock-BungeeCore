@@ -1,0 +1,26 @@
+package fr.badblock.bungee.link.bungee;
+
+import java.util.Set;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@Data
+public class BungeeObject
+{
+
+	private String				name;
+	private String 		 		ip;
+	private Set<String>			usernames;
+	private long				timestamp;
+	
+	public void refresh(Set<String> set)
+	{
+		setUsernames(set);
+		setTimestamp(BungeeTask.getTimestamp());
+	}
+
+}

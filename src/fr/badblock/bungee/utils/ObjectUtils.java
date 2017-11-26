@@ -1,0 +1,15 @@
+package fr.badblock.bungee.utils;
+
+import org.bson.BSONObject;
+
+public class ObjectUtils
+{
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public static <T> T getOr(BSONObject dbObject, String keyName, T d)
+	{
+		if (dbObject == null || !dbObject.containsKey(keyName)) return d;
+		return (T) dbObject.get(keyName);
+	}
+	
+}
