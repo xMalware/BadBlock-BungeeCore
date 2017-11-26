@@ -1,4 +1,4 @@
-package fr.badblock.bungee.events;
+package fr.badblock.bungee.api.events;
 
 import fr.badblock.bungee.players.BadPlayer;
 import lombok.AllArgsConstructor;

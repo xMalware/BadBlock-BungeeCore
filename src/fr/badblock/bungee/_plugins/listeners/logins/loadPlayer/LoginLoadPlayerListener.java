@@ -1,6 +1,6 @@
-package fr.badblock.bungee.listeners;
+package fr.badblock.bungee._plugins.listeners.logins.loadPlayer;
 
-import fr.badblock.bungee.events.PlayerJoinEvent;
+import fr.badblock.bungee.api.events.PlayerJoinEvent;
 import fr.badblock.bungee.link.bungee.BungeeTask;
 import fr.badblock.bungee.listeners.abstracts.BadListener;
 import fr.badblock.bungee.players.BadPlayer;
@@ -9,11 +9,11 @@ import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 
-public class PlayerJoinListener extends BadListener
+public class LoginLoadPlayerListener extends BadListener
 {
 
-	@EventHandler (priority = EventPriority.HIGHEST)
-	public void onLogin(PreLoginEvent event)
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onPreLogin(PreLoginEvent event)
 	{
 		BadPlayer badPlayer = new BadPlayer(event, event.getConnection());
 		// Call event

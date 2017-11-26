@@ -1,4 +1,4 @@
-package fr.badblock.bungee.listeners;
+package fr.badblock.bungee._plugins.listeners.permissions;
 
 import fr.badblock.bungee.listeners.abstracts.BadListener;
 import fr.badblock.bungee.players.BadPlayer;
@@ -20,7 +20,6 @@ public class PermissionListener extends BadListener
 			{
 				return;
 			}
-			System.out.println(bPlayer.getName() + "(" + event.getPermission() + "): " + badPlayer.hasPermission(event.getPermission())); 
 			event.setHasPermission(badPlayer.hasPermission(event.getPermission()));
 		}
 	}

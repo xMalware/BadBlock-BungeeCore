@@ -21,6 +21,7 @@ public class BadPlayer extends BadOfflinePlayer
 
 	private static Map<String, BadPlayer> maps 			= new HashMap<>();
 
+	private ProxiedPlayer		proxiedPlayer;
 	private PendingConnection	pendingConnection;
 	private PreLoginEvent		preLoginEvent;
 	private BSONObject	  		dbObject;
@@ -40,6 +41,21 @@ public class BadPlayer extends BadOfflinePlayer
 		setPendingConnection(pendingConnection);
 		put();
 
+	}
+
+	public void load(ProxiedPlayer proxiedPlayer)
+	{
+		setProxiedPlayer(proxiedPlayer);
+	}
+
+	@SuppressWarnings("deprecation")
+	public void sendMessage(String message)
+	{
+		if (getProxiedPlayer() == null)
+		{
+			return;
+		}
+		getProxiedPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
 	}
 
 	private void put()
