@@ -1,8 +1,8 @@
 package fr.badblock.bungee._plugins.listeners.logins.loadPlayer;
 
+import fr.badblock.bungee._plugins.listeners.BadListener;
 import fr.badblock.bungee.api.events.PlayerJoinEvent;
 import fr.badblock.bungee.link.bungee.BungeeTask;
-import fr.badblock.bungee.listeners.abstracts.BadListener;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.PreLoginEvent;

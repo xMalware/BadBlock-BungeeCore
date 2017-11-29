@@ -1,4 +1,4 @@
-package fr.badblock.bungee.listeners.abstracts;
+package fr.badblock.bungee._plugins.commands;
 
 import fr.badblock.bungee.BadBungee;
 import fr.toenga.common.utils.i18n.I18n;

@@ -40,7 +40,6 @@ public class BadPlayer extends BadOfflinePlayer
 		setPreLoginEvent(preLoginEvent);
 		setPendingConnection(pendingConnection);
 		put();
-
 	}
 
 	public void load(ProxiedPlayer proxiedPlayer)

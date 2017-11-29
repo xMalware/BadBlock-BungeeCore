@@ -1,4 +1,4 @@
-package fr.badblock.bungee.listeners.abstracts;
+package fr.badblock.bungee._plugins.listeners;
 
 import fr.badblock.bungee.BadBungee;
 import net.md_5.bungee.BungeeCord;

@@ -1,6 +1,6 @@
 package fr.badblock.bungee._plugins.listeners.permissions;
 
-import fr.badblock.bungee.listeners.abstracts.BadListener;
+import fr.badblock.bungee._plugins.listeners.BadListener;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PermissionCheckEvent;

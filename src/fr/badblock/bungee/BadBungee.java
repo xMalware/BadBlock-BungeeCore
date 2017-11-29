@@ -64,36 +64,43 @@ public class BadBungee extends Plugin {
 		try
 		{
 			PackageUtils.instanciateListeners(this,
-					"fr.xmalware.badblock.bungee.listeners", // Bungee listeners
 					"fr.xmalware.badblock.bungee.rabbit.listeners", // Rabbit listeners
-					"fr.xmalware.badblock.bungee._plugins.checkLogin",
-					"fr.xmalware.badblock.bungee._plugins.basicCommands"
+					// Commands
+					"fr.xmalware.badblock.bungee._plugins.commands.admin",
+					"fr.xmalware.badblock.bungee._plugins.commands.modo",
+					"fr.xmalware.badblock.bungee._plugins.commands.basic",
+					// Listeners
+					"fr.xmalware.badblock.bungee._plugins.listeners.logins.checkLogin",
+					"fr.xmalware.badblock.bungee._plugins.listeners.logins.loadPlayer",
+					"fr.xmalware.badblock.bungee._plugins.listeners.motd",
+					"fr.xmalware.badblock.bungee._plugins.listeners.permissions",
+					"fr.xmalware.badblock.bungee._plugins.listeners.punishments"
 					);
 		}
 		catch (IOException exception)
 		{
 			exception.printStackTrace();
 		}
-		
+
 		// Permissions
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		DB db = mongoService.getDb();
 		DBCollection collection = db.getCollection("permissions");
 		BasicDBObject query = new BasicDBObject();
 		DBCursor cursor = collection.find(query);
-		
+
 		if (cursor.hasNext())
 		{
-		    DBObject dbObject = cursor.next();
-		    String json = getGson().toJson(dbObject.get("groups"));
-		    
-		    PermissionsManager.createPermissionManager(getGson().fromJson(json, JsonObject.class), "bungee");
+			DBObject dbObject = cursor.next();
+			String json = getGson().toJson(dbObject.get("groups"));
+
+			PermissionsManager.createPermissionManager(getGson().fromJson(json, JsonObject.class), "bungee");
 		}
 	}
 
 	private void loadI18n() {
 		File i18n = new File(getDataFolder(), "i18n/");
-		
+
 		try {
 			I18n.getInstance().load(i18n);
 		} catch (Exception exception) {

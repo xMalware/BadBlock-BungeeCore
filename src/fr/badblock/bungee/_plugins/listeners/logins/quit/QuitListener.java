@@ -1,6 +1,6 @@
-package fr.badblock.bungee.listeners;
+package fr.badblock.bungee._plugins.listeners.logins.quit;
 
-import fr.badblock.bungee.listeners.abstracts.BadListener;
+import fr.badblock.bungee._plugins.listeners.BadListener;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;

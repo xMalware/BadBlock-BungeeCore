@@ -5,8 +5,8 @@ import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import fr.badblock.bungee.listeners.abstracts.BadCommand;
-import fr.badblock.bungee.listeners.abstracts.BadListener;
+import fr.badblock.bungee._plugins.commands.BadCommand;
+import fr.badblock.bungee._plugins.listeners.BadListener;
 import fr.toenga.common.tech.rabbitmq.listener.RabbitListener;
 import net.md_5.bungee.api.plugin.Plugin;
 

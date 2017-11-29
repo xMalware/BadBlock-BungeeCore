@@ -1,7 +1,7 @@
 package fr.badblock.bungee._plugins.commands.admin;
 
+import fr.badblock.bungee._plugins.commands.BadCommand;
 import fr.badblock.bungee.link.bungee.BungeeManager;
-import fr.badblock.bungee.listeners.abstracts.BadCommand;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 

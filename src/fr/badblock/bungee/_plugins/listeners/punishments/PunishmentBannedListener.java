@@ -1,7 +1,7 @@
 package fr.badblock.bungee._plugins.listeners.punishments;
 
+import fr.badblock.bungee._plugins.listeners.BadListener;
 import fr.badblock.bungee.api.events.PlayerJoinEvent;
-import fr.badblock.bungee.listeners.abstracts.BadListener;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.toenga.common.utils.bungee.Punished;
 import net.md_5.bungee.event.EventHandler;
