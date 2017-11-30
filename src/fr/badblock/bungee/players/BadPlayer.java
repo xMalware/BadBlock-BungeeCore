@@ -10,7 +10,9 @@ import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
+import fr.badblock.bungee.utils.ChatColorUtils;
 import fr.toenga.common.utils.data.Callback;
+import fr.toenga.common.utils.general.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.md_5.bungee.api.ChatColor;
@@ -50,23 +52,24 @@ public class BadPlayer extends BadOfflinePlayer
 	}
 
 	@SuppressWarnings("deprecation")
-	public void sendLocalMessage(String message)
+	public void sendLocalMessage(String... messages)
 	{
 		if (toProxiedPlayer() == null)
 		{
 			return;
 		}
-		toProxiedPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+		
+		toProxiedPlayer().sendMessages(ChatColorUtils.translateColors('&', messages));
 	}
 	
-	public void sendOutgoingMessage(String message)
+	public void sendOutgoingMessage(String... messages)
 	{
 		if (toProxiedPlayer() != null)
 		{
-			sendLocalMessage(message);
+			sendLocalMessage(messages);
 			return;
 		}
-		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, message));
+		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(messages)));
 	}
 
 	private void put()

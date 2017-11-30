@@ -64,6 +64,11 @@ public class BungeeManager
 		sendPacket(new BungeePacket(BungeePacketType.BROADCAST, stringBuilder.toString()));
 	}
 	
+	public void targetedBrodcast(String permission, String... messages)
+	{
+		getPlayer(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingMessage(messages));
+	}
+	
 	public void getOfflinePlayer(String name, Callback<BadOfflinePlayer> callback)
 	{
 		name = name.toLowerCase();
