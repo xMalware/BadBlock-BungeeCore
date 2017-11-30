@@ -2,10 +2,12 @@ package fr.badblock.bungee.loader;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -22,6 +24,7 @@ import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.rabbitmq.RabbitConnector;
 import fr.toenga.common.tech.rabbitmq.RabbitService;
 import fr.toenga.common.utils.i18n.I18n;
+import fr.toenga.common.utils.permissions.Permissible;
 import fr.toenga.common.utils.permissions.PermissionsManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +34,8 @@ import lombok.EqualsAndHashCode;
 public class BungeeLoader
 {
 
+	private static final Type collectionType = new TypeToken<Map<String, Permissible>>(){}.getType();
+	
 	private BadBungee		badBungee;
 	private BadBungeeConfig	config;
 
@@ -106,6 +111,7 @@ public class BungeeLoader
 					// Listeners
 					"fr.xmalware.badblock.bungee._plugins.listeners.logins.checkLogin",
 					"fr.xmalware.badblock.bungee._plugins.listeners.logins.loadPlayer",
+					"fr.xmalware.badblock.bungee._plugins.listeners.serverConnect",
 					"fr.xmalware.badblock.bungee._plugins.listeners.motd",
 					"fr.xmalware.badblock.bungee._plugins.listeners.permissions",
 					"fr.xmalware.badblock.bungee._plugins.listeners.punishments"
@@ -123,12 +129,15 @@ public class BungeeLoader
 		DB db = mongoService.getDb();
 		DBCollection collection = db.getCollection("permissions");
 		BasicDBObject query = new BasicDBObject();
+		query.append("place", "bungee");
 		DBCursor cursor = collection.find(query);
 		if (cursor.hasNext())
 		{
 			DBObject dbObject = cursor.next();
 			String json = getBadBungee().getGson().toJson(dbObject.get("groups"));
-			PermissionsManager.createPermissionManager(getBadBungee().getGson().fromJson(json, JsonObject.class), "bungee");
+			System.out.println(json);
+			Map<String, Permissible> gson = getBadBungee().getGson().fromJson(json, collectionType);
+			PermissionsManager.createPermissionManager(gson, "bungee");
 		}
 	}
 

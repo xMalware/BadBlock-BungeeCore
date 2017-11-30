@@ -43,7 +43,7 @@ public class BadOfflinePlayer
 		loadData();
 	}
 	
-	private void loadData()
+	protected void loadData()
 	{
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		mongoService.useAsyncMongo(new MongoMethod(mongoService)

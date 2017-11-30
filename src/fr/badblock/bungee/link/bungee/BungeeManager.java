@@ -116,7 +116,7 @@ public class BungeeManager
 	{
 		final String toLowerName = name.toLowerCase();
 		long count = bungees.values().parallelStream().filter(bungee -> 
-		bungee.getUsernames().parallelStream().filter(n -> n.toLowerCase().equals(toLowerName)).count() > 0).count();
+		bungee.getUsernames().keySet().parallelStream().filter(n -> n.toLowerCase().equals(toLowerName)).count() > 0).count();
 		return count > 0;
 	}
 	

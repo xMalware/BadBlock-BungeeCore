@@ -1,12 +1,14 @@
 package fr.badblock.bungee.link.bungee;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.bson.BSONObject;
 
 import com.google.gson.Gson;
 
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketEncoder;
@@ -18,7 +20,7 @@ public class BungeeTask extends Thread
 {
 
 	public static boolean		run				= true;
-	public static BungeeObject	bungeeObject	= new BungeeObject(BadBungee.getInstance().getConfig().getBungeeName(), getIP(), new HashSet<>(), getTimestamp());
+	public static BungeeObject	bungeeObject	= new BungeeObject(BadBungee.getInstance().getConfig().getBungeeName(), getIP(), new HashMap<>(), getTimestamp());
 	
 	public BungeeTask()
 	{
@@ -61,8 +63,9 @@ public class BungeeTask extends Thread
 	public static void keepAlive()
 	{
 		BadBungee badBungee = BadBungee.getInstance();
-		Set<String> playerNames = badBungee.getProxy().getPlayers().parallelStream().map(player -> player.getName()).collect(Collectors.toSet());
-		bungeeObject.refresh(playerNames);
+		final Map<String, BSONObject> players = new HashMap<>();
+		BadPlayer.getPlayers().forEach(player -> players.put(player.getName(), player.getDbObject()));
+		bungeeObject.refresh(players);
 		Gson gson = badBungee.getGson();
 		String jsonFormatString = gson.toJson(bungeeObject);
 		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, jsonFormatString), 

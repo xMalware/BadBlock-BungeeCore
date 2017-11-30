@@ -1,7 +1,6 @@
 package fr.badblock.bungee.link.processing.players.abstracts;
 
-import fr.badblock.bungee.link.processing.players.PlayerSendMessageProcessing;
-import fr.badblock.bungee.link.processing.players.PlayerSendServerProcessing;
+import fr.badblock.bungee.link.processing.players.*;
 import lombok.Getter;
 
 @Getter
@@ -9,7 +8,8 @@ public enum PlayerPacketType
 {
 
 	SEND_MESSAGE	(new PlayerSendMessageProcessing()),
-	SEND_SERVER		(new PlayerSendServerProcessing());
+	SEND_SERVER		(new PlayerSendServerProcessing()),
+	RELOAD_DATA		(new PlayerReloadDataProcessing());
 	
 	private _PlayerProcessing process;
 	

@@ -1,5 +1,6 @@
 package fr.badblock.bungee.players;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +43,11 @@ public class BadPlayer extends BadOfflinePlayer
 		put();
 	}
 
+	public void reload()
+	{
+		loadData();
+	}
+	
 	public void load(ProxiedPlayer proxiedPlayer)
 	{
 		setProxiedPlayer(proxiedPlayer);
@@ -82,6 +88,11 @@ public class BadPlayer extends BadOfflinePlayer
 	public static boolean has(String name)
 	{
 		return maps.containsKey(name);
+	}
+	
+	public static Collection<BadPlayer> getPlayers()
+	{
+		return maps.values();
 	}
 
 }

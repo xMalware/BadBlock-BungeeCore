@@ -2,6 +2,10 @@ package fr.badblock.bungee.utils;
 
 import org.bson.BSONObject;
 
+import com.google.gson.JsonObject;
+
+import fr.toenga.common.utils.general.GsonUtils;
+
 public class ObjectUtils
 {
 
@@ -11,5 +15,10 @@ public class ObjectUtils
 		if (dbObject == null || !dbObject.containsKey(keyName)) return d;
 		return (T) dbObject.get(keyName);
 	}
-	
+
+	public static JsonObject getJsonObject(String part)
+	{
+		return GsonUtils.getPrettyGson().fromJson(part, JsonObject.class);
+	}
+
 }
