@@ -11,7 +11,10 @@ public class PlayerSendMessageProcessing extends _PlayerProcessing
 	@Override
 	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket)
 	{
-		proxiedPlayer.sendMessage(playerPacket.getContent());
+		for (String message : playerPacket.getContent().split(System.lineSeparator()))
+		{
+			proxiedPlayer.sendMessage(message);
+		}
 	}
-	
+
 }
