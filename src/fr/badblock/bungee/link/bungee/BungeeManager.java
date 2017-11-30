@@ -1,9 +1,13 @@
 package fr.badblock.bungee.link.bungee;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -110,6 +114,15 @@ public class BungeeManager
 		String json = badBungee.getGson().toJson(bungeePacket);
 		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, json), 
 				BadBungeeQueues.BUNGEE_PROCESSING, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
+	}
+	
+	public List<BadPlayer> getPlayer(Predicate<BadPlayer> predicate)
+	{
+		List<BadPlayer> badPlayers = new ArrayList<>();
+		bungees.values().parallelStream().forEach(
+				bungee -> 
+				badPlayers.addAll(bungee.getUsernames().values().parallelStream().filter(player -> predicate.test(player)).collect(Collectors.toList())));
+		return badPlayers;
 	}
 	
 	public boolean hasUsername(String name)

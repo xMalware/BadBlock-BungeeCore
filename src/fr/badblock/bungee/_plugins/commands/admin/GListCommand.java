@@ -16,6 +16,7 @@ public class GListCommand extends BadCommand
 	@Override
 	public void run(CommandSender sender, String[] args)
 	{
+		BungeeManager.getInstance().getPlayer(player -> player.hasPermission("chatstaff")).forEach(player -> player.sendOutgoingMessage("ok"));
 		I19n.sendMessage(sender, "commands.glist.message", BungeeManager.getInstance().getRealTimeOnlinePlayers());
 	}
 

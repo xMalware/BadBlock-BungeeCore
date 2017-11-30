@@ -33,7 +33,7 @@ public class PunishmentMutedListener extends BadListener
 					punished.buildMuteTime(badPlayer.getLocale()),
 					punished.getMuteReason(), punished.getMuter()))
 			{
-				badPlayer.sendMessage(string);
+				badPlayer.sendLocalMessage(string);
 			}
 		}
 	}

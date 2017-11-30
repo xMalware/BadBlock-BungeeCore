@@ -12,12 +12,12 @@ import net.md_5.bungee.api.plugin.Event;
 @Data
 public class PlayerJoinEvent extends Event
 {
-	
-	private BadPlayer badPlayer;
+
+	private BadPlayer 	  badPlayer;
+	private PreLoginEvent preLoginEvent;
 
 	public void cancel(String message)
 	{
-		PreLoginEvent preLoginEvent = badPlayer.getPreLoginEvent();
 		preLoginEvent.setCancelled(true);
 		preLoginEvent.setCancelReason(message);
 	}

@@ -3,8 +3,6 @@ package fr.badblock.bungee.link.bungee;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bson.BSONObject;
-
 import com.google.gson.Gson;
 
 import fr.badblock.bungee.BadBungee;
@@ -63,8 +61,8 @@ public class BungeeTask extends Thread
 	public static void keepAlive()
 	{
 		BadBungee badBungee = BadBungee.getInstance();
-		final Map<String, BSONObject> players = new HashMap<>();
-		BadPlayer.getPlayers().forEach(player -> players.put(player.getName(), player.getDbObject()));
+		final Map<String, BadPlayer> players = new HashMap<>();
+		BadPlayer.getPlayers().forEach(player -> players.put(player.getName(), player));
 		bungeeObject.refresh(players);
 		Gson gson = badBungee.getGson();
 		String jsonFormatString = gson.toJson(bungeeObject);

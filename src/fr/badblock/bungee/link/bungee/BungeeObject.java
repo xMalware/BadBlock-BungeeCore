@@ -2,8 +2,7 @@ package fr.badblock.bungee.link.bungee;
 
 import java.util.Map;
 
-import org.bson.BSONObject;
-
+import fr.badblock.bungee.players.BadPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,10 +15,10 @@ public class BungeeObject
 
 	private String					name;
 	private String 		 			ip;
-	private Map<String, BSONObject>	usernames;
+	private Map<String, BadPlayer>	usernames;
 	private long					timestamp;
 	
-	public void refresh(Map<String, BSONObject> set)
+	public void refresh(Map<String, BadPlayer> set)
 	{
 		setUsernames(set);
 		setTimestamp(BungeeTask.getTimestamp());

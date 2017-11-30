@@ -29,12 +29,12 @@ import lombok.EqualsAndHashCode;
 public class BadOfflinePlayer
 {
 	
-	private String						name;
-	private BSONObject	  				dbObject;
-	private Callback<BadOfflinePlayer>	callback;
+	private 			String						name;
+	private transient	BSONObject	  				dbObject;
+	private 			Callback<BadOfflinePlayer>	callback;
 	
-	private Permissible					permissions;
-	private Punished					punished;
+	private 			Permissible					permissions;
+	private 			Punished					punished;
 
 	public BadOfflinePlayer(String name, Callback<BadOfflinePlayer> callback)
 	{

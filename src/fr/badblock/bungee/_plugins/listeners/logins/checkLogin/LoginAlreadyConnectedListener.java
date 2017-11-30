@@ -14,7 +14,7 @@ public class LoginAlreadyConnectedListener extends BadListener
 	public void onPlayerJoinEvent(PlayerJoinEvent event)
 	{
 		BadPlayer badPlayer = event.getBadPlayer();
-		String username = badPlayer.getPendingConnection().getName();
+		String username = badPlayer.getName();
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 		// Already connected
 		if (bungeeManager.hasUsername(username))
