@@ -1,4 +1,4 @@
-package fr.badblock.bungee._plugins.commands.admin;
+package fr.badblock.bungee._plugins.commands.a_admin;
 
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee._plugins.commands.BadCommand;
