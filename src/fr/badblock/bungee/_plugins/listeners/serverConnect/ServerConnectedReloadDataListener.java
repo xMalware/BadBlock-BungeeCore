@@ -15,6 +15,7 @@ public class ServerConnectedReloadDataListener extends BadListener
 	{
 		ProxiedPlayer proxiedPlayer = event.getPlayer();
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
+		badPlayer.updateLastServer(proxiedPlayer);
 		badPlayer.reload();
 	}
 	

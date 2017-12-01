@@ -23,16 +23,17 @@ import fr.toenga.common.utils.permissions.Permissible;
 import fr.toenga.common.utils.permissions.PermissionsManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
 public class BadOfflinePlayer
 {
-	
+
 	private 			String						name;
 	private transient	BSONObject	  				dbObject;
 	private 			Callback<BadOfflinePlayer>	callback;
-	
+
 	private 			Permissible					permissions;
 	private 			Punished					punished;
 
@@ -42,7 +43,35 @@ public class BadOfflinePlayer
 		setCallback(callback);
 		loadData();
 	}
+
+	public void updateData(String key, Object value)
+	{
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		mongoService.useAsyncMongo(new MongoMethod(mongoService)
+		{
+			@Override
+			public void run(MongoService mongoService)
+			{
+				DB db = mongoService.getDb();
+				DBCollection collection = db.getCollection("players");
+				BasicDBObject query = new BasicDBObject();
+				BasicDBObject update = new BasicDBObject();
+
+				query.put("name", getName().toLowerCase());
+				update.put(key, value);
+
+				collection.update(query, update); 
+				loadData();
+				callback.done(BadOfflinePlayer.this, null);
+			}
+		});
+	}
 	
+	public void updateLastServer(ProxiedPlayer proxiedPlayer)
+	{
+		updateData("lastServer", proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null ? proxiedPlayer.getServer().getInfo().getName() : "");
+	}
+
 	protected void loadData()
 	{
 		MongoService mongoService = BadBungee.getInstance().getMongoService();

@@ -66,7 +66,12 @@ public class BungeeManager
 	
 	public void targetedBrodcast(String permission, String... messages)
 	{
-		getPlayer(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingMessage(messages));
+		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingMessage(messages));
+	}
+	
+	public void targetedTranslatedBroadcast(String permission, String key, Object... args)
+	{
+		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
 	}
 	
 	public void getOfflinePlayer(String name, Callback<BadOfflinePlayer> callback)
@@ -121,12 +126,12 @@ public class BungeeManager
 				BadBungeeQueues.BUNGEE_PROCESSING, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
 	}
 	
-	public List<BadPlayer> getPlayer(Predicate<BadPlayer> predicate)
+	public List<BadPlayer> getLoggedPlayers(Predicate<BadPlayer> predicate)
 	{
 		List<BadPlayer> badPlayers = new ArrayList<>();
 		bungees.values().parallelStream().forEach(
 				bungee -> 
-				badPlayers.addAll(bungee.getUsernames().values().parallelStream().filter(player -> predicate.test(player)).collect(Collectors.toList())));
+				badPlayers.addAll(bungee.getUsernames().values().parallelStream().filter(player -> player.isLogged() && predicate.test(player)).collect(Collectors.toList())));
 		return badPlayers;
 	}
 	

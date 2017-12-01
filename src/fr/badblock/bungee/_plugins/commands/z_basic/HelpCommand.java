@@ -1,4 +1,4 @@
-package fr.badblock.bungee._plugins.commands.basic;
+package fr.badblock.bungee._plugins.commands.z_basic;
 
 import fr.badblock.bungee._plugins.commands.BadCommand;
 import fr.badblock.bungee.utils.i18n.I19n;

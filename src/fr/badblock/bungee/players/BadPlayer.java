@@ -13,6 +13,7 @@ import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
 import fr.badblock.bungee.utils.ChatColorUtils;
 import fr.toenga.common.utils.data.Callback;
 import fr.toenga.common.utils.general.StringUtils;
+import fr.toenga.common.utils.i18n.I18n;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.md_5.bungee.api.ChatColor;
@@ -45,6 +46,11 @@ public class BadPlayer extends BadOfflinePlayer
 		setName(pendingConnection.getName());
 		put();
 	}
+	
+	public boolean isLogged()
+	{
+		return getDbObject().containsField("lastServer") && getDbObject().get("lastServer") != null && !getDbObject().get("lastServer").toString().startsWith("login");
+	}
 
 	public void reload()
 	{
@@ -62,6 +68,17 @@ public class BadPlayer extends BadOfflinePlayer
 		toProxiedPlayer().sendMessages(ChatColorUtils.translateColors('&', messages));
 	}
 	
+	@SuppressWarnings("deprecation")
+	public void sendTranslatedLocalMessage(String key, Object... args)
+	{
+		if (toProxiedPlayer() == null)
+		{
+			return;
+		}
+		
+		toProxiedPlayer().sendMessages(ChatColorUtils.translateColors('&', I18n.getInstance().get(getLocale(), key, args)));
+	}
+	
 	public void sendOutgoingMessage(String... messages)
 	{
 		if (toProxiedPlayer() != null)
@@ -70,6 +87,16 @@ public class BadPlayer extends BadOfflinePlayer
 			return;
 		}
 		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(messages)));
+	}
+	
+	public void sendTranslatedOutgoingMessage(String key, Object... args)
+	{
+		if (toProxiedPlayer() != null)
+		{
+			sendTranslatedLocalMessage(key, args);
+			return;
+		}
+		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(I18n.getInstance().get(getLocale(), key, args))));
 	}
 
 	private void put()
