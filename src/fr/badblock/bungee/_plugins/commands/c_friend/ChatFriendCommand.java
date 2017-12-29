@@ -27,7 +27,7 @@ public class ChatFriendCommand extends BadCommand
 		String message = StringUtils.join(args, " ");
 
 		message = ChatColor.stripColor(message);
-		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.chatfriend", "commands.chatfriend.message", sender.getName());
+		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.chatfriend", "commands.chatfriend.message", sender.getName(), message);
 	}
 
 }

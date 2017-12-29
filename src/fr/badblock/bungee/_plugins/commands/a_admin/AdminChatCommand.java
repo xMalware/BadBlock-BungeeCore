@@ -27,7 +27,7 @@ public class AdminChatCommand extends BadCommand
 		String message = StringUtils.join(args, " ");
 
 		message = ChatColor.stripColor(message);
-		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.adminchat", "commands.adminchat.message", sender.getName());
+		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.adminchat", "commands.adminchat.message", sender.getName(), message);
 	}
 
 }
