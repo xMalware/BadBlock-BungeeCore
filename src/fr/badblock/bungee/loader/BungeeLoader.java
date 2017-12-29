@@ -2,17 +2,9 @@ package fr.badblock.bungee.loader;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.config.BadBungeeConfig;
@@ -24,8 +16,6 @@ import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.rabbitmq.RabbitConnector;
 import fr.toenga.common.tech.rabbitmq.RabbitService;
 import fr.toenga.common.utils.i18n.I18n;
-import fr.toenga.common.utils.permissions.Permissible;
-import fr.toenga.common.utils.permissions.PermissionsManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,8 +24,8 @@ import lombok.EqualsAndHashCode;
 public class BungeeLoader
 {
 
-	private static final Type collectionType = new TypeToken<Map<String, Permissible>>(){}.getType();
-	
+	//private static final Type collectionType = new TypeToken<Map<String, Permissible>>(){}.getType();
+
 	private BadBungee		badBungee;
 	private BadBungeeConfig	config;
 
@@ -103,18 +93,19 @@ public class BungeeLoader
 		try
 		{
 			PackageUtils.instanciateListeners(getBadBungee(),
-					"fr.xmalware.badblock.bungee.rabbit.listeners", // Rabbit listeners
+					"fr.badblock.bungee.rabbit.listeners", // Rabbit listeners
 					// Commands
-					"fr.xmalware.badblock.bungee._plugins.commands.admin",
-					"fr.xmalware.badblock.bungee._plugins.commands.modo",
-					"fr.xmalware.badblock.bungee._plugins.commands.basic",
+					"fr.badblock.bungee._plugins.commands.admin",
+					"fr.badblock.bungee._plugins.commands.modo",
+					"fr.badblock.bungee._plugins.commands.basic",
 					// Listeners
-					"fr.xmalware.badblock.bungee._plugins.listeners.logins.checkLogin",
-					"fr.xmalware.badblock.bungee._plugins.listeners.logins.loadPlayer",
-					"fr.xmalware.badblock.bungee._plugins.listeners.serverConnect",
-					"fr.xmalware.badblock.bungee._plugins.listeners.motd",
-					"fr.xmalware.badblock.bungee._plugins.listeners.permissions",
-					"fr.xmalware.badblock.bungee._plugins.listeners.punishments"
+					"fr.badblock.bungee._plugins.listeners.logins.checkLogin",
+					"fr.badblock.bungee._plugins.listeners.logins.loadPlayer",
+					"fr.badblock.bungee._plugins.listeners.logins.quit",
+					"fr.badblock.bungee._plugins.listeners.serverConnect",
+					"fr.badblock.bungee._plugins.listeners.motd",
+					"fr.badblock.bungee._plugins.listeners.permissions",
+					"fr.badblock.bungee._plugins.listeners.punishments"
 					);
 		}
 		catch (IOException exception)
@@ -125,7 +116,7 @@ public class BungeeLoader
 
 	private void loadPermissions()
 	{
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		/*MongoService mongoService = BadBungee.getInstance().getMongoService();
 		DB db = mongoService.getDb();
 		DBCollection collection = db.getCollection("permissions");
 		BasicDBObject query = new BasicDBObject();
@@ -138,7 +129,7 @@ public class BungeeLoader
 			System.out.println(json);
 			Map<String, Permissible> gson = getBadBungee().getGson().fromJson(json, collectionType);
 			PermissionsManager.createPermissionManager(gson, "bungee");
-		}
+		}*/
 	}
 
 }

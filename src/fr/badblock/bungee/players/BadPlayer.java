@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bson.BSONObject;
-
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
@@ -28,9 +26,7 @@ public class BadPlayer extends BadOfflinePlayer
 {
 
 	private static Map<String, BadPlayer> maps 			= new HashMap<>();
-
-	private String				name;
-	private BSONObject	  		dbObject;
+	
 
 	public BadPlayer(PreLoginEvent preLoginEvent, PendingConnection pendingConnection)
 	{
@@ -39,6 +35,7 @@ public class BadPlayer extends BadOfflinePlayer
 
 			@Override
 			public void done(BadOfflinePlayer result, Throwable error) {
+				result.getLoadedCallbacks().forEach(callback -> callback.done((BadPlayer) result, null));
 				BadBungee.log(ChatColor.GREEN + "Loaded data for " + pendingConnection.getName());
 			}
 
@@ -47,9 +44,14 @@ public class BadPlayer extends BadOfflinePlayer
 		put();
 	}
 	
+	public String getLastServer()
+	{
+		return getDbObject().get("lastServer").toString();
+	}
+	
 	public boolean isLogged()
 	{
-		return getDbObject().containsField("lastServer") && getDbObject().get("lastServer") != null && !getDbObject().get("lastServer").toString().startsWith("login");
+		return getDbObject().containsField("lastServer") && getLastServer() != null && !getLastServer().startsWith("login");
 	}
 
 	public void reload()

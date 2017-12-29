@@ -24,6 +24,13 @@ public class PunishmentMutedListener extends BadListener
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 		Punished punished = badPlayer.getPunished();
+		
+		// Null punish
+		if (punished == null)
+		{
+			return;
+		}
+		
 		// Check end
 		punished.checkEnd();
 		if (punished.isMute())

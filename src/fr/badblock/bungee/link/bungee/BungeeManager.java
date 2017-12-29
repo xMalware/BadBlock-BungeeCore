@@ -74,6 +74,12 @@ public class BungeeManager
 		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
 	}
 	
+	public BadPlayer getBadPlayer(String name)
+	{
+		List<BadPlayer> list = getLoggedPlayers(p -> p.getName().toLowerCase().equals(name.toLowerCase()));
+		return list.isEmpty() ? null : list.get(0);
+	}
+	
 	public void getOfflinePlayer(String name, Callback<BadOfflinePlayer> callback)
 	{
 		name = name.toLowerCase();

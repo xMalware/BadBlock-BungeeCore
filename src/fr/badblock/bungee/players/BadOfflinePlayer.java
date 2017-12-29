@@ -1,5 +1,7 @@
 package fr.badblock.bungee.players;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bson.BSONObject;
@@ -32,7 +34,10 @@ public class BadOfflinePlayer
 
 	private 			String						name;
 	private transient	BSONObject	  				dbObject;
-	private 			Callback<BadOfflinePlayer>	callback;
+
+	private transient	Callback<BadOfflinePlayer>	callback;
+	private transient	List<Callback<BadPlayer>> 	loadedCallbacks;
+	private 			boolean						loaded;
 
 	private 			Permissible					permissions;
 	private 			Punished					punished;
@@ -41,7 +46,18 @@ public class BadOfflinePlayer
 	{
 		setName(name);
 		setCallback(callback);
+		setLoadedCallbacks(new ArrayList<>());
 		loadData();
+	}
+
+	public void registerLoadedCallback(Callback<BadPlayer> callback)
+	{
+		if (isLoaded())
+		{
+			callback.done((BadPlayer) this, null);
+			return;	
+		}
+		getLoadedCallbacks().add(callback);
 	}
 
 	public void updateData(String key, Object value)
@@ -60,13 +76,15 @@ public class BadOfflinePlayer
 				query.put("name", getName().toLowerCase());
 				update.put(key, value);
 
+				System.out.println(query.toJson());
+				System.out.println(update.toJson());
 				collection.update(query, update); 
 				loadData();
 				callback.done(BadOfflinePlayer.this, null);
 			}
 		});
 	}
-	
+
 	public void updateLastServer(ProxiedPlayer proxiedPlayer)
 	{
 		updateData("lastServer", proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null ? proxiedPlayer.getServer().getInfo().getName() : "");
@@ -94,8 +112,11 @@ public class BadOfflinePlayer
 					setDbObject(cursor.next());
 					BadBungee.log("§c" + getName() + " exists in the player table.");
 
-					permissions = PermissionsManager.getManager().loadPermissible( getJsonObject("permissions") );
 					punished = Punished.fromJson( getJsonObject("punish") );
+					if (PermissionsManager.getManager() != null)
+					{
+						permissions = PermissionsManager.getManager().loadPermissible( getJsonObject("permissions") );
+					}
 				}
 				else
 				{
@@ -113,6 +134,7 @@ public class BadOfflinePlayer
 
 					BadBungee.log("§aCreated!");
 				}
+				setLoaded(true);
 				callback.done(BadOfflinePlayer.this, null);
 			}
 		});
@@ -125,6 +147,11 @@ public class BadOfflinePlayer
 
 	public boolean hasPermission(String permission)
 	{
+		if (getPermissions() == null)
+		{
+			return false;
+		}
+		
 		return getPermissions().hasPermission(permission);
 	}
 

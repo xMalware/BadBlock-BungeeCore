@@ -38,7 +38,7 @@ public abstract class BadCommand extends Command
 			}
 		}
 		run(sender, args);
-	} 
+	}
 
 	public abstract void run(CommandSender sender, String[] args);
 

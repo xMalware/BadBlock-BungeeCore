@@ -15,6 +15,13 @@ public class PunishmentBannedListener extends BadListener
 	{
 		BadPlayer badPlayer = event.getBadPlayer();
 		Punished punished = badPlayer.getPunished();
+		
+		// Null punish
+		if (punished == null)
+		{
+			return;
+		}
+		
 		// Check end
 		punished.checkEnd();
 		if (punished.isBan())
