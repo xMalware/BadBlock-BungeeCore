@@ -22,6 +22,7 @@ import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
+import fr.badblock.bungee.utils.Filter;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketEncoder;
@@ -64,15 +65,37 @@ public class BungeeManager
 		sendPacket(new BungeePacket(BungeePacketType.BROADCAST, stringBuilder.toString()));
 	}
 	
-	public void targetedBrodcast(String permission, String... messages)
-	{
+	public void targetedBrodcast(String permission, String... messages) {
 		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingMessage(messages));
 	}
 	
-	public void targetedTranslatedBroadcast(String permission, String key, Object... args)
-	{
+	public void targetedTranslatedBroadcast(String permission, String key, Object... args) {
 		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
 	}
+
+    public void targetedJsonBrodcast(String permission, String... messages) {
+        getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingJsonMessage(messages));
+    }
+
+    public void targetedTranslatedJsonBroadcast(String permission, String key, Object... args) {
+        getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
+    }
+
+    public void targetedBrodcast(Filter<BadPlayer> filter, String... messages) {
+        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingMessage(messages));
+    }
+
+    public void targetedTranslatedBroadcast(Filter<BadPlayer> filter, String key, Object... args) {
+        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
+    }
+
+    public void targetedJsonBrodcast(Filter<BadPlayer> filter, String... messages) {
+        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingJsonMessage(messages));
+    }
+
+    public void targetedTranslatedJsonBroadcast(Filter<BadPlayer> filter, String key, Object... args) {
+        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
+    }
 	
 	public BadPlayer getBadPlayer(String name)
 	{
@@ -140,6 +163,11 @@ public class BungeeManager
 				badPlayers.addAll(bungee.getUsernames().values().parallelStream().filter(player -> player.isLogged() && predicate.test(player)).collect(Collectors.toList())));
 		return badPlayers;
 	}
+
+    public List<BadPlayer> getLoggedPlayers()
+    {
+        return getLoggedPlayers(a -> true);
+    }
 	
 	public boolean hasUsername(String name)
 	{
