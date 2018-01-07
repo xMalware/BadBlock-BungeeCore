@@ -6,6 +6,11 @@ import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.Arrays;
 
+/**
+ * Util Class for working with the minecraft jsons
+ *
+ * @author RedSpri
+ */
 public class McJsonUtils {
 
     /**
