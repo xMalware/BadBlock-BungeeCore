@@ -3,13 +3,11 @@ package fr.badblock.bungee._plugins.objects.friendlist;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee._plugins.objects.party.Party;
 import fr.badblock.bungee.utils.mongodb.SynchroMongoDBGetter;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
-import fr.toenga.common.utils.data.Callback;
 
 public class FriendListManager {
     public static final String COLLECTION = "friendlists";

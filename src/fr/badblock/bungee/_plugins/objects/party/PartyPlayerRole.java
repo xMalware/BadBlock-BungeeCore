@@ -5,6 +5,6 @@ public enum PartyPlayerRole
 
 	DEFAULT,
 	MODO,
-	ADMIN;
-	
+    ADMIN
+
 }

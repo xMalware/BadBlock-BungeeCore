@@ -4,6 +4,6 @@ public enum PartyPlayerState
 {
 
 	WAITING,
-	ACCEPTED;
-	
+    ACCEPTED
+
 }
