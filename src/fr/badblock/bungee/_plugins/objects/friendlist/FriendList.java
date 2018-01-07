@@ -69,6 +69,10 @@ public class FriendList {
         add(name, FriendListPlayerState.REQUESTED);
     }
 
+    public boolean isFriend(String name) {
+        name = name.toLowerCase();
+        return players.containsKey(name) && players.get(name).getState() == FriendListPlayerState.ACCEPTED;
+    }
     public DBObject toObject() {
         BasicDBObject object = new BasicDBObject();
         if (owner != null) object.put(OWNER, owner);

@@ -15,7 +15,8 @@ public class ChatStaffCommand extends BadCommand
 		super("chatstaff", "bungee.command.chatstaff", "cs");
 	}
 
-	@Override
+    @SuppressWarnings("ConstantConditions")
+    @Override
 	public void run(CommandSender sender, String[] args)
 	{
 		if (args.length == 0) 
