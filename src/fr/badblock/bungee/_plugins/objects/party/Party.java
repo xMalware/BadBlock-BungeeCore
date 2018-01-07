@@ -55,6 +55,7 @@ public class Party
 	public void add(String name, PartyPlayerRole role, PartyPlayerState state)
 	{
 		name = name.toLowerCase();
+        if (players.containsKey(name)) players.remove(name);
 		PartyPlayer partyPlayer = toPartyPlayer(name, role, state);
 		players.put(name, partyPlayer);
 		if (uuid != null)
@@ -85,7 +86,7 @@ public class Party
 		{
 			object.put("_id", uuid);
 		}
-		object.put("players", players);
+		object.put("players", GsonUtils.getGson().toJson(players, collectionType));
 
 		return object;
 	}

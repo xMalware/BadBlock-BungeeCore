@@ -1,6 +1,7 @@
 package fr.badblock.bungee._plugins.objects.friendlist;
 
 import com.google.gson.reflect.TypeToken;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import fr.toenga.common.utils.general.GsonUtils;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,10 @@ import java.util.Map;
 @AllArgsConstructor
 @Data
 public class FriendList {
+    public static final String OWNER = "_owner";
+    public static final String QUERYABLE = "queryable";
+    public static final String PLAYERS = "players";
+
     private static final Type collectionType = new TypeToken<Map<String, FriendListPlayer>>(){}.getType();
     
     private String owner;
@@ -32,16 +37,43 @@ public class FriendList {
     }
 
     public FriendList(DBObject dbObject) {
-        owner = dbObject.get("owner").toString();
-        queryable = Boolean.getBoolean(dbObject.get("queryable").toString());
-        players = GsonUtils.getGson().fromJson(dbObject.get("players").toString(), collectionType);
+        owner = dbObject.get(OWNER).toString();
+        queryable = Boolean.getBoolean(dbObject.get(QUERYABLE).toString());
+        players = GsonUtils.getGson().fromJson(dbObject.get(PLAYERS).toString(), collectionType);
     }
 
-    public FriendListPlayer getPartyPlayer(String name) {
+    public FriendListPlayer getFriendListPlayer(String name) {
         return getPlayers().get(name.toLowerCase());
     }
 
-    private FriendListPlayer toPartyPlayer(String name, FriendListPlayerState state) {
+    private FriendListPlayer toFriendListPlayer(String name, FriendListPlayerState state) {
         return new FriendListPlayer(name, state);
+    }
+
+    public void add(String name, FriendListPlayerState state) {
+        name = name.toLowerCase();
+        if (players.containsKey(name)) players.remove(name);
+        FriendListPlayer partyPlayer = toFriendListPlayer(name, state);
+        players.put(name, partyPlayer);
+        if (owner != null) FriendListManager.update(this);
+    }
+    public void add(String name) {
+        add(name, FriendListPlayerState.ACCEPTED);
+    }
+
+    public void request(String name) {
+        add(name, FriendListPlayerState.WAITING);
+    }
+
+    public void requested(String name) {
+        add(name, FriendListPlayerState.REQUESTED);
+    }
+
+    public DBObject toObject() {
+        BasicDBObject object = new BasicDBObject();
+        if (owner != null) object.put(OWNER, owner);
+        object.put(QUERYABLE, queryable);
+        object.put(PLAYERS, GsonUtils.getGson().toJson(players, collectionType));
+        return object;
     }
 }
