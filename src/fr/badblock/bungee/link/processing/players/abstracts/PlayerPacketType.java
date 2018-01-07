@@ -7,9 +7,10 @@ import lombok.Getter;
 public enum PlayerPacketType
 {
 
-	SEND_MESSAGE	(new PlayerSendMessageProcessing()),
-	SEND_SERVER		(new PlayerSendServerProcessing()),
-	RELOAD_DATA		(new PlayerReloadDataProcessing());
+	SEND_MESSAGE	  (new PlayerSendMessageProcessing()),
+    SEND_JSON_MESSAGE (new PlayerSendJsonMessageProcessing()),
+	SEND_SERVER		  (new PlayerSendServerProcessing()),
+	RELOAD_DATA		  (new PlayerReloadDataProcessing());
 	
 	private _PlayerProcessing process;
 	
