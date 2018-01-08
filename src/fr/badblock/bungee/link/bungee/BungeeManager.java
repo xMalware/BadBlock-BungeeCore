@@ -1,20 +1,6 @@
 package fr.badblock.bungee.link.bungee;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-
+import com.mongodb.*;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacket;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacketType;
@@ -34,6 +20,10 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.ServerPing;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Data
 public class BungeeManager
@@ -64,12 +54,12 @@ public class BungeeManager
 		}
 		sendPacket(new BungeePacket(BungeePacketType.BROADCAST, stringBuilder.toString()));
 	}
-	
-	public void targetedBrodcast(String permission, String... messages) {
+
+    public void targetedBrodcast(String permission, String... messages) {
 		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingMessage(messages));
 	}
-	
-	public void targetedTranslatedBroadcast(String permission, String key, Object... args) {
+
+    public void targetedTranslatedBroadcast(String permission, String key, Object... args) {
 		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
 	}
 
