@@ -15,8 +15,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
-public class Party
-{
+public class Party {
 
 	private static final Type collectionType = new TypeToken<Map<String, PartyPlayer>>(){}.getType();
 

@@ -6,8 +6,7 @@ import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import fr.toenga.common.utils.data.Callback;
 
-public class PartyManager
-{
+public class PartyManager {
 
 	public static void getParty(String player, Callback<Party> callback)
 	{
