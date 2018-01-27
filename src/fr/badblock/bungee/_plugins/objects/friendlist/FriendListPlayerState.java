@@ -1,7 +1,10 @@
 package fr.badblock.bungee._plugins.objects.friendlist;
 
-public enum FriendListPlayerState {
+public enum FriendListPlayerState
+{
+	
     REQUESTED,
     WAITING,
     ACCEPTED;
+	
 }

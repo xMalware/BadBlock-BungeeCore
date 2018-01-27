@@ -7,7 +7,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
-public class FriendListPlayer {
+public class FriendListPlayer
+{
+	
     private String name;
     private FriendListPlayerState state;
+    
 }
