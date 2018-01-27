@@ -26,9 +26,9 @@ public class FriendList
 
 	private String							owner;
 	private boolean 						queryable = true;
-	public Map<String, FriendListPlayer>	players;
+    private Map<String, FriendListPlayer> players;
 
-	public FriendList(String owner)
+    FriendList(String owner)
 	{
 		this.owner = owner;
 		players = new HashMap<>();
@@ -39,46 +39,72 @@ public class FriendList
 		this(owner);
 	}
 
-	public FriendList(DBObject dbObject)
+    FriendList(DBObject dbObject)
 	{
 		owner = dbObject.get(OWNER).toString();
 		queryable = Boolean.getBoolean(dbObject.get(QUERYABLE).toString());
 		players = GsonUtils.getGson().fromJson(dbObject.get(PLAYERS).toString(), collectionType);
 	}
 
-	public FriendListPlayer getFriendListPlayer(String name) {
-		return getPlayers().get(name.toLowerCase());
-	}
-
 	private FriendListPlayer toFriendListPlayer(String name, FriendListPlayerState state) {
 		return new FriendListPlayer(name, state);
 	}
 
-	public void add(String name, FriendListPlayerState state) {
+    private void add(String name, FriendListPlayerState state) {
 		name = name.toLowerCase();
-		if (players.containsKey(name)) players.remove(name);
 		FriendListPlayer partyPlayer = toFriendListPlayer(name, state);
-		players.put(name, partyPlayer);
-	}
-	public void add(String name) {
+        if (players.containsKey(name)) players.replace(name, partyPlayer);
+        else players.put(name, partyPlayer);
+        save();
+    }
+
+
+    void setQueryable(boolean queryable) {
+        this.queryable = queryable;
+        save();
+    }
+
+    void remove(String name) {
+        name = name.toLowerCase();
+        players.remove(name);
+        save();
+    }
+
+    void accept(String name) {
 		add(name, FriendListPlayerState.ACCEPTED);
 	}
 
-	public void request(String name) {
+    void request(String name) {
 		add(name, FriendListPlayerState.WAITING);
 	}
 
-	public void requested(String name) {
+    void requested(String name) {
 		add(name, FriendListPlayerState.REQUESTED);
 	}
 
-	public boolean isFriend(String name)
+    boolean isFriend(String name)
 	{
 		name = name.toLowerCase();
 		return players.containsKey(name) && players.get(name).getState() == FriendListPlayerState.ACCEPTED;
 	}
 
-	public void save()
+    boolean wantToBeFriendWith(String name) {
+        name = name.toLowerCase();
+        return players.containsKey(name) && players.get(name).getState() == FriendListPlayerState.REQUESTED;
+    }
+
+    boolean alreadyRequestedBy(String name) {
+        name = name.toLowerCase();
+        if (players.containsKey(name)) return players.get(name).getState() == FriendListPlayerState.WAITING;
+        else return false;
+    }
+
+    boolean isInList(String name) {
+        name = name.toLowerCase();
+        return players.containsKey(name);
+    }
+
+    private void save()
 	{
 		if (owner != null)
 		{
@@ -86,7 +112,7 @@ public class FriendList
 		}
 	}
 
-	public DBObject toObject()
+    DBObject toObject()
 	{
 		BasicDBObject object = new BasicDBObject();
 		if (owner != null) object.put(OWNER, owner);
