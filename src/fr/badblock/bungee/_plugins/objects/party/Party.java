@@ -57,10 +57,7 @@ public class Party
 		name = name.toLowerCase();
 		PartyPlayer partyPlayer = toPartyPlayer(name, role, state);
 		players.put(name, partyPlayer);
-		if (uuid != null)
-		{
-			PartyManager.update(this);
-		}
+		save();
 	}
 	public void add(String name, PartyPlayerRole role)
 	{
@@ -75,6 +72,23 @@ public class Party
 	public void accept(String name)
 	{
 		add(name, getPartyPlayer(name).getRole());
+	}
+	
+	public void remove(String name)
+	{
+		name = name.toLowerCase();
+		players.remove(name);
+		save();
+	}
+	
+	public void save()
+	{
+		// Unknown uuid
+		if (uuid == null)
+		{
+			return;
+		}
+		PartyManager.update(this);
 	}
 
 	public DBObject toObject()

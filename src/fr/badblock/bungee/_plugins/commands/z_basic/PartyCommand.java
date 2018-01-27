@@ -11,6 +11,8 @@ import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.i18n.I19n;
 import fr.toenga.common.utils.data.Callback;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class PartyCommand extends BadCommand
@@ -36,16 +38,19 @@ public class PartyCommand extends BadCommand
 		String subCommand = args[0];
 		switch (subCommand)
 		{
+		// Help
 		case "help":
 		case "?":
 		case "aide":
 			help(sender);
 			break;
+			// Follow
 		case "follow":
 		case "toggle":
 		case "suivi":
 		case "suivre":
 			follow(sender);
+			// Invite
 		case "invite":
 		case "create":
 		case "creer":
@@ -54,10 +59,25 @@ public class PartyCommand extends BadCommand
 		case "ajouter":
 			invite(proxiedPlayer, args);
 			break;
+			// Accept
 		case "accept":
 		case "accepter":
 			accept(proxiedPlayer, args);
 			break;
+			// Remove
+		case "remove":
+		case "delete":
+		case "erase":
+		case "supprimer":
+		case "kick":
+			remove(proxiedPlayer, args);
+			// Teleport
+		case "tp":
+		case "teleport":
+		case "connect":
+		case "c":
+			tp(proxiedPlayer, args);
+			// Default
 		default:
 			unknown(sender);
 			break;
@@ -97,6 +117,7 @@ public class PartyCommand extends BadCommand
 					String message = follow ? "disabled" : "enabled";
 					I19n.sendMessage(sender, prefix + "follow." + message, sender.getName());
 					partyPlayer.setFollow(!follow);
+					party.save();
 				}
 			}
 
@@ -195,6 +216,141 @@ public class PartyCommand extends BadCommand
 				}
 				party.accept(sender.getName());
 				currPlayer.sendTranslatedOutgoingMessage(prefix + "accept.accepted", otherPlayer.getName());
+			}
+
+		});
+	}
+	
+	public void remove(ProxiedPlayer sender, String[] args)
+	{
+		if (args.length != 2)
+		{
+			I19n.sendMessage(sender, prefix + "remove.usage");
+			return;
+		}
+		String toRemove = args[1];
+		PartyManager.getParty(sender.getName(), new Callback<Party>()
+		{
+
+			@Override
+			public void done(Party party, Throwable error) {
+				
+				// Not in group
+				if (party == null)
+				{
+					I19n.sendMessage(sender, prefix + "remove.yourenotingroup");
+					return;
+				}
+				
+				// Player not in group
+				PartyPlayer partyPlayer = party.getPartyPlayer(toRemove);
+				if (partyPlayer == null)
+				{
+					I19n.sendMessage(sender, prefix + "remove.playernotingroup");
+					return;
+				}
+
+				// Remove player
+				party.remove(toRemove);
+				
+				// Send message
+				if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
+				{
+					I19n.sendMessage(sender, prefix + "remove.cancelled", partyPlayer.getName());
+				}
+				else
+				{
+					I19n.sendMessage(sender, prefix + "remove.removed", partyPlayer.getName());	
+				}
+				
+			}
+
+		});
+	}
+	
+	public void tp(ProxiedPlayer sender, String[] args)
+	{
+		if (args.length != 2)
+		{
+			I19n.sendMessage(sender, prefix + "tp.usage");
+			return;
+		}
+		String toTp = args[1];
+		BungeeManager bungeeManager = BungeeManager.getInstance();
+		PartyManager.getParty(sender.getName(), new Callback<Party>()
+		{
+
+			@Override
+			public void done(Party party, Throwable error) {
+				
+				// Sender not in group
+				if (party == null)
+				{
+					I19n.sendMessage(sender, prefix + "tp.yourenotingroup");
+					return;
+				}
+				
+				// Player not in group
+				PartyPlayer partyPlayer = party.getPartyPlayer(toTp);
+				if (partyPlayer == null)
+				{
+					I19n.sendMessage(sender, prefix + "tp.playernotingroup");
+					return;
+				}
+				
+				// Player not accepted yet in group
+				if (!partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
+				{
+					I19n.sendMessage(sender, prefix + "tp.playernotaccepted");
+					return;
+				}
+				
+				// Not connected on the server
+				BadPlayer badPlayer = bungeeManager.getBadPlayer(toTp);
+				if (badPlayer == null)
+				{
+					I19n.sendMessage(sender, prefix + "tp.notconnected");
+					return;
+				}
+
+				// Get last server
+				String lastServer = badPlayer.getLastServer();
+				
+				// Unknown server to teleport (null)
+				if (lastServer == null)
+				{
+					I19n.sendMessage(sender, prefix + "tp.unknownserver");
+					return;
+				}
+
+				// Unknown server to teleport (empty)
+				if (lastServer.isEmpty())
+				{
+					I19n.sendMessage(sender, prefix + "tp.unknownserver");
+					return;
+				}
+
+				// The player isn't logged
+				if (!badPlayer.isLogged())
+				{
+					I19n.sendMessage(sender, prefix + "tp.notlogged");
+					return;
+				}
+				
+				// Get server
+				ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(lastServer);
+				
+				// Unknown server
+				if (serverInfo == null)
+				{
+					I19n.sendMessage(sender, prefix + "tp.unknownserver");
+					return;
+				}
+				
+				// Teleport to server
+				sender.connect(serverInfo);
+				I19n.sendMessage(sender, prefix + "tp.teleported", toTp);
+				
 			}
 
 		});
