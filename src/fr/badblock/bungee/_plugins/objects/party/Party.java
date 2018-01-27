@@ -1,23 +1,21 @@
 package fr.badblock.bungee._plugins.objects.party;
 
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-
 import fr.toenga.common.utils.general.GsonUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
-public class Party
-{
+public class Party {
 
 	private static final Type collectionType = new TypeToken<Map<String, PartyPlayer>>(){}.getType();
 
@@ -55,6 +53,7 @@ public class Party
 	public void add(String name, PartyPlayerRole role, PartyPlayerState state)
 	{
 		name = name.toLowerCase();
+        if (players.containsKey(name)) players.remove(name);
 		PartyPlayer partyPlayer = toPartyPlayer(name, role, state);
 		players.put(name, partyPlayer);
 		save();
@@ -99,7 +98,7 @@ public class Party
 		{
 			object.put("_id", uuid);
 		}
-		object.put("players", players);
+		object.put("players", GsonUtils.getGson().toJson(players, collectionType));
 
 		return object;
 	}

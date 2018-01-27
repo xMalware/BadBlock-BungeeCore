@@ -9,6 +9,7 @@ import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
 import fr.badblock.bungee.utils.ChatColorUtils;
+import fr.badblock.bungee.utils.mcjson.McJsonUtils;
 import fr.toenga.common.utils.data.Callback;
 import fr.toenga.common.utils.general.StringUtils;
 import fr.toenga.common.utils.i18n.I18n;
@@ -19,6 +20,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PreLoginEvent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -60,46 +62,46 @@ public class BadPlayer extends BadOfflinePlayer
 	}
 
 	@SuppressWarnings("deprecation")
-	public void sendLocalMessage(String... messages)
-	{
-		if (toProxiedPlayer() == null)
-		{
-			return;
-		}
-		
+	public void sendLocalMessage(String... messages) {
+		if (toProxiedPlayer() == null) return;
 		toProxiedPlayer().sendMessages(ChatColorUtils.translateColors('&', messages));
 	}
+
+    public void sendLocalJsonMessage(String... jsons) {
+        if (toProxiedPlayer() == null) return;
+        McJsonUtils.sendJsons(toProxiedPlayer(), McJsonUtils.parseMcJsons(ChatColorUtils.translateColors('&', jsons)));
+    }
 	
 	@SuppressWarnings("deprecation")
-	public void sendTranslatedLocalMessage(String key, Object... args)
-	{
-		if (toProxiedPlayer() == null)
-		{
-			return;
-		}
-		
+	public void sendTranslatedLocalMessage(String key, Object... args) {
+		if (toProxiedPlayer() == null) return;
 		toProxiedPlayer().sendMessages(ChatColorUtils.translateColors('&', I18n.getInstance().get(getLocale(), key, args)));
 	}
+
+    public void sendTranslatedLocalJsonMessage(String key, Object... args) {
+        if (toProxiedPlayer() == null) return;
+        McJsonUtils.sendJsons(toProxiedPlayer(), McJsonUtils.parseMcJsons(ChatColorUtils.translateColors('&',  I18n.getInstance().get(getLocale(), key, args))));
+    }
 	
-	public void sendOutgoingMessage(String... messages)
-	{
-		if (toProxiedPlayer() != null)
-		{
-			sendLocalMessage(messages);
-			return;
-		}
-		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(messages)));
+	public void sendOutgoingMessage(String... messages) {
+		if (toProxiedPlayer() != null) sendLocalMessage(messages);
+		else BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(messages)));
 	}
+
+    public void sendOutgoingJsonMessage(String... jsons) {
+        if (toProxiedPlayer() == null) return;
+        else BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, StringUtils.toOneString(jsons)));
+    }
 	
-	public void sendTranslatedOutgoingMessage(String key, Object... args)
-	{
-		if (toProxiedPlayer() != null)
-		{
-			sendTranslatedLocalMessage(key, args);
-			return;
-		}
-		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(I18n.getInstance().get(getLocale(), key, args))));
+	public void sendTranslatedOutgoingMessage(String key, Object... args) {
+		if (toProxiedPlayer() != null) sendTranslatedLocalMessage(key, args);
+		else BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(I18n.getInstance().get(getLocale(), key, args))));
 	}
+
+    public void sendTranslatedOutgoingJsonMessage(String key, Object... args) {
+        if (toProxiedPlayer() != null) sendTranslatedLocalJsonMessage(key, args);
+        else BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, StringUtils.toOneString(I18n.getInstance().get(getLocale(), key, args))));
+    }
 
 	private void put()
 	{

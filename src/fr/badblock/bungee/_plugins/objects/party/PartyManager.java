@@ -1,18 +1,12 @@
 package fr.badblock.bungee._plugins.objects.party;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-
+import com.mongodb.*;
 import fr.badblock.bungee.BadBungee;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import fr.toenga.common.utils.data.Callback;
 
-public class PartyManager
-{
+public class PartyManager {
 
 	public static void getParty(String player, Callback<Party> callback)
 	{
