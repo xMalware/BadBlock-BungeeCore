@@ -1,6 +1,7 @@
 package fr.badblock.bungee._plugins.commands;
 
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.utils.ThreadRunnable;
 import fr.toenga.common.utils.i18n.I18n;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,7 +38,8 @@ public abstract class BadCommand extends Command
 				return;
 			}
 		}
-		run(sender, args);
+        BadCommand command = this;
+        ThreadRunnable.run(() -> command.run(sender, args));
 	}
 
 	public abstract void run(CommandSender sender, String[] args);

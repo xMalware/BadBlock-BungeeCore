@@ -1,7 +1,7 @@
 package fr.badblock.bungee.utils;
 
 /**
- * Wrapper for run content in a thread with an interface lambda wrapper
+ * Wrapper for run content in a thread with an interface lambda
  *
  * @author RedSpri
  */

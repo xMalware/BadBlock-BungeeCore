@@ -30,7 +30,7 @@ public class FriendListManager
         }
     }
 
-    public static void update(FriendList friendlist)
+    protected static void update(FriendList friendlist)
     {
         MongoService mongoService = BadBungee.getInstance().getMongoService();
         mongoService.useAsyncMongo(new MongoMethod(mongoService)
@@ -47,7 +47,7 @@ public class FriendListManager
         });
     }
 
-    public static void insert(FriendList friendList)
+    protected static void insert(FriendList friendList)
     {
         MongoService mongoService = BadBungee.getInstance().getMongoService();
         mongoService.useAsyncMongo(new MongoMethod(mongoService)
@@ -93,7 +93,7 @@ public class FriendListManager
             else {
                 if (wantedFriendList.wantToBeFriendWith(want)) {
                     wantedFriendList.accept(want);
-                    message.REQUESTED_ACCEPTED(wantedBadPlayer, wantBadPlayer);
+                    message.REQUESTED_ACCEPT(wantedBadPlayer, wantBadPlayer);
                     wantFriendList.accept(wanted);
                     message.ACCEPT_REQUESTER(wantBadPlayer, wantedBadPlayer);
                 } else {
@@ -104,11 +104,11 @@ public class FriendListManager
         } else {
             if (wantedFriendList.isQueryable()) {
                 wantedFriendList.request(want);
-                //TODO send "[want] want to be your friend" to wanted
+                message.REQUEST(wantedBadPlayer, wantBadPlayer);
                 wantFriendList.requested(wanted);
-                //TODO send "[wanted] received your friend request" to want
+                message.REQUEST_RECEIVED(wantBadPlayer, wantedBadPlayer);
             } else {
-                //TODO send "[wanted] doesn't accept friend requests." to want
+                message.DONT_ACCEPT_REQUESTS(wantBadPlayer, wantedBadPlayer);
             }
         }
     }

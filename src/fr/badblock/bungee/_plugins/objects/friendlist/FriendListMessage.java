@@ -7,7 +7,7 @@ import fr.toenga.common.utils.i18n.I18n;
 
 class FriendListMessage {
     private String prefix(String code) {
-        return "commands.friendlist." + code;
+        return "objects.friendlist." + code;
     }
 
     void ERROR(BadPlayer p) {
@@ -38,7 +38,7 @@ class FriendListMessage {
         p.sendTranslatedOutgoingJsonMessage(prefix("requests.already_friend"), with.getName());
     }
 
-    void REQUESTED_ACCEPTED(BadPlayer p, BadPlayer requested) {
+    void REQUESTED_ACCEPT(BadPlayer p, BadPlayer requested) {
         p.sendTranslatedOutgoingJsonMessage(prefix("requests.requested_accept"), requested.getName());
     }
 
@@ -50,12 +50,12 @@ class FriendListMessage {
         p.sendTranslatedOutgoingJsonMessage(prefix("requests.already_requested"));
     }
 
-    void REQUESTED(BadPlayer p, BadPlayer requester) {
-        String intro = I18n.getInstance().get(p.getLocale(), "requests.requested.intro", requester.getName())[0];
-        String accept = I18n.getInstance().get(p.getLocale(), "requests.requested.accept")[0];
-        String accept_hover = I18n.getInstance().get(p.getLocale(), "requests.requested.accept_hover", requester.getName())[0];
-        String refuse = I18n.getInstance().get(p.getLocale(), "requests.requested.refuse")[0];
-        String refuse_hover = I18n.getInstance().get(p.getLocale(), "requests.requested.refuse_hover", requester.getName())[0];
+    void REQUEST(BadPlayer p, BadPlayer requester) {
+        String intro = I18n.getInstance().get(p.getLocale(), "requests.request.intro", requester.getName())[0];
+        String accept = I18n.getInstance().get(p.getLocale(), "requests.request.accept")[0];
+        String accept_hover = I18n.getInstance().get(p.getLocale(), "requests.request.accept_hover", requester.getName())[0];
+        String refuse = I18n.getInstance().get(p.getLocale(), "requests.request.refuse")[0];
+        String refuse_hover = I18n.getInstance().get(p.getLocale(), "requests.request.refuse_hover", requester.getName())[0];
         McJson json = new McJsonFactory(intro).
                 finaliseAndInitNewComponent("\n\n     ").finaliseComponent().
                 initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/friend accept " + requester.getName()).
@@ -63,6 +63,14 @@ class FriendListMessage {
                 initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend accept " + requester.getName()).
                 build();
         p.sendTranslatedOutgoingMCJson(json);
+    }
+
+    void REQUEST_RECEIVED(BadPlayer p, BadPlayer receiver) {
+        p.sendTranslatedOutgoingJsonMessage(prefix("requests.request_received"), receiver.getName());
+    }
+
+    void DONT_ACCEPT_REQUESTS(BadPlayer p, BadPlayer who) {
+        p.sendTranslatedOutgoingJsonMessage(prefix("requests.dont_accept_requests"), who.getName());
     }
 
 
