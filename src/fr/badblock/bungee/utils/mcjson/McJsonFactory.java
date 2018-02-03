@@ -13,7 +13,6 @@ import java.util.List;
  * @author RedSpri
  * @see fr.badblock.bungee.utils.mcjson;
  */
-@SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "unused"})
 @Getter(AccessLevel.PRIVATE)
 @Setter(AccessLevel.PRIVATE)
 public class McJsonFactory {
