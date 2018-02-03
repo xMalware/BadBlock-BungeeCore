@@ -20,8 +20,8 @@ public interface ThreadRunnable {
      *
      * @param runnable the ThreadRunnable
      */
-    static void run(Runnable runnable) {
-        run((ThreadRunnable) runnable::run);
+    static void runRunnable(Runnable runnable) {
+        run(runnable::run);
     }
 
     /**
