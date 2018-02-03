@@ -13,6 +13,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.ObjectUtils;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
@@ -41,6 +42,8 @@ public class BadOfflinePlayer
 
 	private 			Permissible					permissions;
 	private 			Punished					punished;
+	
+	private				BadPlayerSettings			settings;
 
 	public BadOfflinePlayer(String name, Callback<BadOfflinePlayer> callback)
 	{
@@ -76,8 +79,6 @@ public class BadOfflinePlayer
 				query.put("name", getName().toLowerCase());
 				update.put(key, value);
 
-				System.out.println(query.toJson());
-				System.out.println(update.toJson());
 				collection.update(query, update); 
 				loadData();
 				callback.done(BadOfflinePlayer.this, null);
@@ -123,6 +124,7 @@ public class BadOfflinePlayer
 					// Le joueur n'existe pas
 					punished = new Punished();
 					permissions = new Permissible();
+					settings = new BadPlayerSettings();
 
 					BadBungee.log(getName() + " doesn't exist in the player table.");
 					BadBungee.log("§aCreating it...");
@@ -178,8 +180,11 @@ public class BadOfflinePlayer
 		object.put("realName", getName());
 		object.put("lastIp", "");
 		object.put("uniqueId", UUID.randomUUID().toString());
+		object.put("settings", settings);
+		object.put("punish", punished);
+		object.put("permissions", permissions);
 		object.put("version", "0");
-		// FIXME
+		// TODO
 
 		return object;
 	}

@@ -21,4 +21,9 @@ public class ObjectUtils
 		return GsonUtils.getPrettyGson().fromJson(part, JsonObject.class);
 	}
 
+	public static JsonObject getJsonObject(Object object)
+	{
+		return GsonUtils.getPrettyGson().fromJson(GsonUtils.getGson().toJson(object), JsonObject.class);
+	}
+
 }

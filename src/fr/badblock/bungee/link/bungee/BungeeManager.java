@@ -1,6 +1,20 @@
 package fr.badblock.bungee.link.bungee;
 
-import com.mongodb.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacket;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacketType;
@@ -20,10 +34,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.ServerPing;
-
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 @Data
 public class BungeeManager
@@ -91,6 +102,11 @@ public class BungeeManager
 	{
 		List<BadPlayer> list = getLoggedPlayers(p -> p.getName().toLowerCase().equals(name.toLowerCase()));
 		return list.isEmpty() ? null : list.get(0);
+	}
+	
+	public BadPlayer getBadPlayer(ProxiedPlayer proxiedPlayer)
+	{
+		return BadPlayer.get(proxiedPlayer);
 	}
 	
 	public void getOfflinePlayer(String name, Callback<BadOfflinePlayer> callback)

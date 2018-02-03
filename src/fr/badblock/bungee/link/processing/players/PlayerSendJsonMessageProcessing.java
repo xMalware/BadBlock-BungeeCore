@@ -8,9 +8,9 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class PlayerSendJsonMessageProcessing extends _PlayerProcessing {
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket) {
+	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket)
+	{
         McJsonUtils.sendJsons(proxiedPlayer, McJsonUtils.parseMcJsons(ChatColorUtils.translateColors('&', playerPacket.getContent().split(System.lineSeparator()))));
 	}
 

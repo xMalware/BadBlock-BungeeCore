@@ -28,7 +28,6 @@ public class BadPlayer extends BadOfflinePlayer
 {
 
 	private static Map<String, BadPlayer> maps 			= new HashMap<>();
-	
 
 	public BadPlayer(PreLoginEvent preLoginEvent, PendingConnection pendingConnection)
 	{

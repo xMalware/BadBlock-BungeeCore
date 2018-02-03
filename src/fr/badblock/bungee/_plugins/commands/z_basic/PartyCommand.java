@@ -1,6 +1,7 @@
 package fr.badblock.bungee._plugins.commands.z_basic;
 
 import fr.badblock.bungee._plugins.commands.BadCommand;
+import fr.badblock.bungee._plugins.objects.party.Partyable;
 import fr.badblock.bungee._plugins.objects.party.Party;
 import fr.badblock.bungee._plugins.objects.party.PartyManager;
 import fr.badblock.bungee._plugins.objects.party.PartyPlayer;
@@ -8,8 +9,12 @@ import fr.badblock.bungee._plugins.objects.party.PartyPlayerRole;
 import fr.badblock.bungee._plugins.objects.party.PartyPlayerState;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.BadPlayer;
+import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.i18n.I19n;
+import fr.badblock.bungee.utils.mcjson.McJson;
+import fr.badblock.bungee.utils.mcjson.McJsonFactory;
 import fr.toenga.common.utils.data.Callback;
+import fr.toenga.common.utils.i18n.I18n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -46,10 +51,14 @@ public class PartyCommand extends BadCommand
 			break;
 			// Follow
 		case "follow":
-		case "toggle":
 		case "suivi":
 		case "suivre":
 			follow(sender);
+			break;
+			// Toggle
+		case "toggle":
+			toggle(proxiedPlayer, args);
+			break;
 			// Invite
 		case "invite":
 		case "create":
@@ -220,7 +229,7 @@ public class PartyCommand extends BadCommand
 
 		});
 	}
-	
+
 	public void remove(ProxiedPlayer sender, String[] args)
 	{
 		if (args.length != 2)
@@ -234,14 +243,14 @@ public class PartyCommand extends BadCommand
 
 			@Override
 			public void done(Party party, Throwable error) {
-				
+
 				// Not in group
 				if (party == null)
 				{
 					I19n.sendMessage(sender, prefix + "remove.yourenotingroup");
 					return;
 				}
-				
+
 				// Player not in group
 				PartyPlayer partyPlayer = party.getPartyPlayer(toRemove);
 				if (partyPlayer == null)
@@ -252,7 +261,7 @@ public class PartyCommand extends BadCommand
 
 				// Remove player
 				party.remove(toRemove);
-				
+
 				// Send message
 				if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
 				{
@@ -262,12 +271,12 @@ public class PartyCommand extends BadCommand
 				{
 					I19n.sendMessage(sender, prefix + "remove.removed", partyPlayer.getName());	
 				}
-				
+
 			}
 
 		});
 	}
-	
+
 	public void tp(ProxiedPlayer sender, String[] args)
 	{
 		if (args.length != 2)
@@ -282,14 +291,14 @@ public class PartyCommand extends BadCommand
 
 			@Override
 			public void done(Party party, Throwable error) {
-				
+
 				// Sender not in group
 				if (party == null)
 				{
 					I19n.sendMessage(sender, prefix + "tp.yourenotingroup");
 					return;
 				}
-				
+
 				// Player not in group
 				PartyPlayer partyPlayer = party.getPartyPlayer(toTp);
 				if (partyPlayer == null)
@@ -297,14 +306,14 @@ public class PartyCommand extends BadCommand
 					I19n.sendMessage(sender, prefix + "tp.playernotingroup");
 					return;
 				}
-				
+
 				// Player not accepted yet in group
 				if (!partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
 				{
 					I19n.sendMessage(sender, prefix + "tp.playernotaccepted");
 					return;
 				}
-				
+
 				// Not connected on the server
 				BadPlayer badPlayer = bungeeManager.getBadPlayer(toTp);
 				if (badPlayer == null)
@@ -315,7 +324,7 @@ public class PartyCommand extends BadCommand
 
 				// Get last server
 				String lastServer = badPlayer.getLastServer();
-				
+
 				// Unknown server to teleport (null)
 				if (lastServer == null)
 				{
@@ -336,24 +345,65 @@ public class PartyCommand extends BadCommand
 					I19n.sendMessage(sender, prefix + "tp.notlogged");
 					return;
 				}
-				
+
 				// Get server
 				ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(lastServer);
-				
+
 				// Unknown server
 				if (serverInfo == null)
 				{
 					I19n.sendMessage(sender, prefix + "tp.unknownserver");
 					return;
 				}
-				
+
 				// Teleport to server
 				sender.connect(serverInfo);
 				I19n.sendMessage(sender, prefix + "tp.teleported", toTp);
-				
+
 			}
 
 		});
+	}
+
+	public void toggle(ProxiedPlayer sender, String[] args)
+	{
+		BadPlayer badPlayer = BungeeManager.getInstance().getBadPlayer(sender);
+		BadPlayerSettings settings = badPlayer.getSettings();
+		if (args.length != 2)
+		{
+			String intro = I18n.getInstance().get(badPlayer.getLocale(), prefix + "toggle.intro")[0];
+			String with_everyone = I18n.getInstance().get(badPlayer.getLocale(), prefix + "toggle.with_everyone")[0];
+			String with_everyone_hover = I18n.getInstance().get(badPlayer.getLocale(), prefix + "toggle.with_everyone_hover")[0];
+			String with_only_his_friends = I18n.getInstance().get(badPlayer.getLocale(), prefix + "toggle.with_only_his_friends")[0];
+			String with_only_his_friends_hover = I18n.getInstance().get(badPlayer.getLocale(), prefix + "toggle.with_only_his_friends_hover")[0];
+			String with_nobody = I18n.getInstance().get(badPlayer.getLocale(), prefix + "toggle.with_nobody")[0];
+			String with_nobody_hover = I18n.getInstance().get(badPlayer.getLocale(), prefix + "toggle.with_nobody_hover")[0];
+			McJson json = new McJsonFactory(intro).
+					finaliseAndInitNewComponent("\n\n     ").finaliseComponent().
+					initNewComponent(with_everyone).setHoverText(with_everyone_hover).setClickCommand("/party toggle with_everyone").
+					finaliseAndInitNewComponent("     ").finaliseComponent().
+					initNewComponent(with_only_his_friends).setHoverText(with_only_his_friends_hover).setClickCommand("/party toggle with_only_his_friends").
+					finaliseAndInitNewComponent("     ").finaliseComponent().
+					initNewComponent(with_nobody).setHoverText(with_nobody_hover).setClickCommand("/party toggle with_nobody").
+					build();
+			badPlayer.sendTranslatedOutgoingMCJson(json);
+			return;
+		}
+		String rawType = args[1]; 
+		Partyable partyable = Partyable.getByString(rawType);
+		if (partyable == null)
+		{
+			I19n.sendMessage(sender, prefix + "toggle.unknowntype");
+			return;
+		}
+		String displayType = I19n.getMessage(sender, prefix + "toggle." + rawType);
+		if (settings.getPartyable().equals(partyable))
+		{
+			I19n.sendMessage(sender, prefix + "toggle.already", displayType);
+			return;
+		}
+		badPlayer.getSettings().setPartyable(partyable);
+		I19n.sendMessage(sender, prefix + "toggle.with", displayType);
 	}
 
 	public void help(CommandSender sender)

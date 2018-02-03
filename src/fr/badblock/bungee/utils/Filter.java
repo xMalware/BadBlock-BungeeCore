@@ -39,7 +39,8 @@ public interface Filter<T> {
      * @param array the array to be filtered
      * @return the filtered array
      */
-    default T[] filterArray(T[] array) {
+    @SuppressWarnings("unchecked")
+	default T[] filterArray(T[] array) {
         return (T[]) filterList(Arrays.asList(array)).toArray();
     }
 }
