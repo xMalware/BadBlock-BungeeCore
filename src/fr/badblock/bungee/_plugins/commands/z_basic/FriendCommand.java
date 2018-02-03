@@ -1,6 +1,8 @@
 package fr.badblock.bungee._plugins.commands.z_basic;
 
 import fr.badblock.bungee._plugins.commands.BadCommand;
+import fr.badblock.bungee._plugins.objects.friendlist.FriendListManager;
+import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -45,6 +47,25 @@ public class FriendCommand extends BadCommand {
             case "authoriser":
                 status(proxiedPlayer, args);
                 break;
+            case "ask":
+            case "add":
+            case "invite":
+            case "request":
+            case "accept":
+            case "demander":
+            case "ajouter":
+            case "inviter":
+            case "accepter":
+                add(proxiedPlayer, args);
+                break;
+            case "remove":
+            case "delete":
+            case "cancel":
+            case "supprimer":
+            case "enlever":
+            case "annuler":
+                remove(proxiedPlayer, args);
+                break;
             default:
                 unknown(sender);
                 break;
@@ -52,7 +73,7 @@ public class FriendCommand extends BadCommand {
     }
 
     private void unknown(CommandSender sender) {
-        I19n.sendMessage(sender, prefix + "unknowncommand");
+        I19n.sendMessage(sender, prefix + "unknown_command");
     }
 
     private void help(CommandSender sender) {
@@ -60,6 +81,40 @@ public class FriendCommand extends BadCommand {
     }
 
     private void status(ProxiedPlayer sender, String[] args) {
-
+        if (args.length < 2) FriendListManager.showStatusSelector(sender.getName());
+        else {
+            switch (args[1]) {
+                case "yes":
+                case "true":
+                case "oui":
+                    FriendListManager.setQueryable(sender.getName(), true);
+                case "no":
+                case "false":
+                case "non":
+                    FriendListManager.setQueryable(sender.getName(), false);
+                default:
+                    I19n.sendMessage(sender, prefix + "status.unknown");
+                    break;
+            }
+        }
     }
+
+    private void add(ProxiedPlayer sender, String[] args) {
+        if (args.length < 2) I19n.sendMessage(sender, prefix + "add.usage");
+        else {
+            if (BungeeManager.getInstance().getBadPlayer(args[1]) == null)
+                I19n.sendMessage(sender, prefix + "unknown_player");
+            else FriendListManager.request(sender.getName(), args[1]);
+        }
+    }
+
+    private void remove(ProxiedPlayer sender, String[] args) {
+        if (args.length < 2) I19n.sendMessage(sender, prefix + "remove.usage");
+        else {
+            if (BungeeManager.getInstance().getBadPlayer(args[1]) == null)
+                I19n.sendMessage(sender, prefix + "unknown_player");
+            else FriendListManager.remove(sender.getName(), args[1]);
+        }
+    }
+
 }

@@ -18,6 +18,21 @@ class FriendListMessage {
         p.sendTranslatedOutgoingJsonMessage("schizophrenia_is_bad");
     }
 
+    void QUERY_SELECTOR(BadPlayer p) {
+        String intro = I18n.getInstance().get(p.getLocale(), "querying.selector.intro")[0];
+        String accept = I18n.getInstance().get(p.getLocale(), "querying.selector.accept")[0];
+        String accept_hover = I18n.getInstance().get(p.getLocale(), "querying.selector.accept_hover")[0];
+        String refuse = I18n.getInstance().get(p.getLocale(), "querying.selector.refuse")[0];
+        String refuse_hover = I18n.getInstance().get(p.getLocale(), "querying.selector.refuse_hover")[0];
+        McJson json = new McJsonFactory(intro).
+                finaliseAndInitNewComponent("\n\n     ").finaliseComponent().
+                initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/friend status yes").
+                finaliseAndInitNewComponent("     ").finaliseComponent().
+                initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend status no").
+                build();
+        p.sendTranslatedOutgoingMCJson(json);
+    }
+
     void ALREADY_ACCEPT(BadPlayer p) {
         p.sendTranslatedOutgoingJsonMessage(prefix("querying.already_accept"));
     }

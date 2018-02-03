@@ -62,6 +62,11 @@ public class FriendListManager
         });
     }
 
+    public static void showStatusSelector(String player) {
+        BadPlayer badPlayer = BungeeManager.getInstance().getBadPlayer(player);
+        message.QUERY_SELECTOR(badPlayer);
+    }
+
     public static boolean isFriends(String player, String otherplayer) {
         return getFriendList(player).isFriend(otherplayer);
     }
