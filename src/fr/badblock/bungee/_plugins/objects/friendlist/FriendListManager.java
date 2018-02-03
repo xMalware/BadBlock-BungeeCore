@@ -70,18 +70,12 @@ public class FriendListManager
         FriendList friendList = getFriendList(player);
         BadPlayer badPlayer = BungeeManager.getInstance().getBadPlayer(player);
         if (friendList.isQueryable() == status) {
-            if (status) {
-                //TODO send "You already accept friend requests" to player
-            } else {
-                //TODO send "You already refuse friend requests" to player
-            }
+            if (status) message.ALREADY_ACCEPT(badPlayer);
+            else message.ALREADY_REFUSE(badPlayer);
         } else {
             friendList.setQueryable(status);
-            if (status) {
-                //TODO send "You now accept friend requests" to player
-            } else {
-                //TODO send "You now refuse friend requests" to player
-            }
+            if (status) message.NOW_ACCEPT(badPlayer);
+            else message.NOW_REFUSE(badPlayer);
         }
     }
 
@@ -90,21 +84,21 @@ public class FriendListManager
         FriendList wantFriendList = getFriendList(want);
         BadPlayer wantBadPlayer = BungeeManager.getInstance().getBadPlayer(want);
         BadPlayer wantedBadPlayer = BungeeManager.getInstance().getBadPlayer(wanted);
+        if (want.equals(wanted)) {
+            message.SCHIZOPHRENIA_IS_BAD(wantBadPlayer);
+            return;
+        }
         if (wantedFriendList.isInList(want)) {
-            if (wantedFriendList.isFriend(want)) {
-                //TODO send "You are already friend with [wanted]" to want
-            } else {
+            if (wantedFriendList.isFriend(want)) message.ALREADY_FRIEND(wantBadPlayer, wantBadPlayer);
+            else {
                 if (wantedFriendList.wantToBeFriendWith(want)) {
                     wantedFriendList.accept(want);
-                    //TODO send "[want] accepted your friend request. You are now friend with [want]" to wanted
+                    message.REQUESTED_ACCEPTED(wantedBadPlayer, wantBadPlayer);
                     wantFriendList.accept(wanted);
-                    //TODO send "You accepted [wanted]'s friend request. "You are now friend with [wanted]" to want
+                    message.ACCEPT_REQUESTER(wantBadPlayer, wantedBadPlayer);
                 } else {
-                    if (wantedFriendList.alreadyRequestedBy(want)) {
-                        //TODO send "You already requested [wanted]" to want
-                    } else {
-                        //TODO send "Unknown error" to want
-                    }
+                    if (wantedFriendList.alreadyRequestedBy(want)) message.ALREADY_REQUESTED(wantBadPlayer);
+                    else message.ERROR(wantBadPlayer);
                 }
             }
         } else {
@@ -122,8 +116,12 @@ public class FriendListManager
     public static void remove(String want, String wanted) {
         FriendList wantedFriendList = getFriendList(wanted);
         FriendList wantFriendList = getFriendList(want);
-        BadPlayer wantPlayer = BungeeManager.getInstance().getBadPlayer(want);
-        BadPlayer wantedPlayer = BungeeManager.getInstance().getBadPlayer(wanted);
+        BadPlayer wantBadPlayer = BungeeManager.getInstance().getBadPlayer(want);
+        BadPlayer wantedBadPlayer = BungeeManager.getInstance().getBadPlayer(wanted);
+        if (want.equals(wanted)) {
+            message.SCHIZOPHRENIA_IS_BAD(wantBadPlayer);
+            return;
+        }
         if (wantedFriendList.isInList(want) || wantFriendList.isInList(wanted)) {
             if (wantedFriendList.isFriend(want) || wantFriendList.isFriend(wanted)) {
                 wantedFriendList.remove(want);
@@ -138,8 +136,12 @@ public class FriendListManager
                     //TODO send "You decline [wanted] friend request" to want
                 } else {
                     if (wantedFriendList.alreadyRequestedBy(want)) {
+                        wantFriendList.remove(wanted);
+                        //TODO send "You cancel [wanted] friend request" to want
+                        wantedFriendList.remove(want);
+                        //TODO send "[want] cancelled his friend request" to wanted
+                    } else message.ERROR(wantBadPlayer);
 
-                    }
                 }
             }
         } else {

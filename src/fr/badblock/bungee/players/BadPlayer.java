@@ -1,14 +1,11 @@
 package fr.badblock.bungee.players;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
 import fr.badblock.bungee.utils.ChatColorUtils;
+import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.mcjson.McJsonUtils;
 import fr.toenga.common.utils.data.Callback;
 import fr.toenga.common.utils.general.StringUtils;
@@ -20,7 +17,10 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PreLoginEvent;
-import net.md_5.bungee.chat.ComponentSerializer;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -101,6 +101,12 @@ public class BadPlayer extends BadOfflinePlayer
     public void sendTranslatedOutgoingJsonMessage(String key, Object... args) {
         if (toProxiedPlayer() != null) sendTranslatedLocalJsonMessage(key, args);
         else BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, StringUtils.toOneString(I18n.getInstance().get(getLocale(), key, args))));
+    }
+
+    public void sendTranslatedOutgoingMCJson(McJson mcjson) {
+        if (toProxiedPlayer() != null) sendLocalJsonMessage(mcjson.toString());
+        else
+            BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, (mcjson.toString())));
     }
 
 	private void put()
