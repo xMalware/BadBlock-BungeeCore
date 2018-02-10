@@ -11,11 +11,11 @@ class FriendListMessage {
     }
 
     void ERROR(BadPlayer p) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("unknown_error"));
+        p.sendTranslatedOutgoingMessage(prefix("unknown_error"));
     }
 
     void SCHIZOPHRENIA_IS_BAD(BadPlayer p) {
-        p.sendTranslatedOutgoingJsonMessage("schizophrenia_is_bad");
+        p.sendTranslatedOutgoingMessage("schizophrenia_is_bad");
     }
 
     void QUERY_SELECTOR(BadPlayer p) {
@@ -33,36 +33,39 @@ class FriendListMessage {
         p.sendTranslatedOutgoingMCJson(json);
     }
 
+    void UNKNOWN_STATUS(BadPlayer p) {
+        p.sendTranslatedOutgoingMessage(prefix("querying.unknown"));
+    }
     void ALREADY_ACCEPT(BadPlayer p) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("querying.already_accept"));
+        p.sendTranslatedOutgoingMessage(prefix("querying.already_accept"));
     }
 
     void ALREADY_REFUSE(BadPlayer p) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("querying.already_refuse"));
+        p.sendTranslatedOutgoingMessage(prefix("querying.already_refuse"));
     }
 
     void NOW_ACCEPT(BadPlayer p) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("querying.now_accept"));
+        p.sendTranslatedOutgoingMessage(prefix("querying.now_accept"));
     }
 
     void NOW_REFUSE(BadPlayer p) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("querying.now_refuse"));
+        p.sendTranslatedOutgoingMessage(prefix("querying.now_refuse"));
     }
 
     void ALREADY_FRIEND(BadPlayer p, BadPlayer with) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("requests.already_friend"), with.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.already_friend"), with.getName());
     }
 
     void REQUESTED_ACCEPT(BadPlayer p, BadPlayer requested) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("requests.requested_accept"), requested.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.requested_accept"), requested.getName());
     }
 
     void ACCEPT_REQUESTER(BadPlayer p, BadPlayer requester) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("requests.accept_requester"), requester.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.accept_requester"), requester.getName());
     }
 
     void ALREADY_REQUESTED(BadPlayer p) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("requests.already_requested"));
+        p.sendTranslatedOutgoingMessage(prefix("requests.already_requested"));
     }
 
     void REQUEST(BadPlayer p, BadPlayer requester) {
@@ -81,11 +84,11 @@ class FriendListMessage {
     }
 
     void REQUEST_RECEIVED(BadPlayer p, BadPlayer receiver) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("requests.request_received"), receiver.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.request_received"), receiver.getName());
     }
 
     void DONT_ACCEPT_REQUESTS(BadPlayer p, BadPlayer who) {
-        p.sendTranslatedOutgoingJsonMessage(prefix("requests.dont_accept_requests"), who.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.dont_accept_requests"), who.getName());
     }
 
 

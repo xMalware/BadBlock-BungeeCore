@@ -81,22 +81,9 @@ public class FriendCommand extends BadCommand {
     }
 
     private void status(ProxiedPlayer sender, String[] args) {
-        if (args.length < 2) FriendListManager.showStatusSelector(sender.getName());
-        else {
-            switch (args[1]) {
-                case "yes":
-                case "true":
-                case "oui":
-                    FriendListManager.setQueryable(sender.getName(), true);
-                case "no":
-                case "false":
-                case "non":
-                    FriendListManager.setQueryable(sender.getName(), false);
-                default:
-                    I19n.sendMessage(sender, prefix + "status.unknown");
-                    break;
-            }
-        }
+        if (args.length < 2)
+            FriendListManager.showStatusSelector(BungeeManager.getInstance().getBadPlayer(sender.getName()));
+        else FriendListManager.setQueryable(BungeeManager.getInstance().getBadPlayer(sender.getName()), args[1]);
     }
 
     private void add(ProxiedPlayer sender, String[] args) {

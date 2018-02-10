@@ -10,15 +10,19 @@ import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.mongodb.SynchroMongoDBGetter;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
+import lombok.Getter;
 
-public class FriendListManager
-{
+/**
+ * Main class for FriendLists
+ *
+ * @author RedSpri
+ */
+public class FriendListManager {
+    private static final String COLLECTION = "friendlist";
+    @Getter
     private static FriendListMessage message = new FriendListMessage();
-	
-    public static final String COLLECTION = "friendlist";
-    
-    public static synchronized FriendList getFriendList(String player)
-    {
+
+    private static synchronized FriendList getFriendList(String player) {
         BasicDBObject query = new BasicDBObject();
         query.append(FriendList.OWNER, player.toLowerCase());
         DBObject obj = new SynchroMongoDBGetter(COLLECTION, query).getDbObject();
@@ -30,14 +34,11 @@ public class FriendListManager
         }
     }
 
-    protected static void update(FriendList friendlist)
-    {
+    static void update(FriendList friendlist) {
         MongoService mongoService = BadBungee.getInstance().getMongoService();
-        mongoService.useAsyncMongo(new MongoMethod(mongoService)
-        {
+        mongoService.useAsyncMongo(new MongoMethod(mongoService) {
             @Override
-            public void run(MongoService mongoService)
-            {
+            public void run(MongoService mongoService) {
                 DB db = mongoService.getDb();
                 DBCollection collection = db.getCollection(COLLECTION);
                 BasicDBObject query = new BasicDBObject();
@@ -47,8 +48,7 @@ public class FriendListManager
         });
     }
 
-    protected static void insert(FriendList friendList)
-    {
+    private static void insert(FriendList friendList) {
         MongoService mongoService = BadBungee.getInstance().getMongoService();
         mongoService.useAsyncMongo(new MongoMethod(mongoService)
         {
@@ -62,25 +62,22 @@ public class FriendListManager
         });
     }
 
-    public static void showStatusSelector(String player) {
-        BadPlayer badPlayer = BungeeManager.getInstance().getBadPlayer(player);
-        message.QUERY_SELECTOR(badPlayer);
+    public static void showStatusSelector(BadPlayer player) {
+        message.QUERY_SELECTOR(player);
     }
 
-    public static boolean isFriends(String player, String otherplayer) {
-        return getFriendList(player).isFriend(otherplayer);
-    }
-
-    public static void setQueryable(String player, boolean status) {
-        FriendList friendList = getFriendList(player);
-        BadPlayer badPlayer = BungeeManager.getInstance().getBadPlayer(player);
-        if (friendList.isQueryable() == status) {
-            if (status) message.ALREADY_ACCEPT(badPlayer);
-            else message.ALREADY_REFUSE(badPlayer);
-        } else {
-            friendList.setQueryable(status);
-            if (status) message.NOW_ACCEPT(badPlayer);
-            else message.NOW_REFUSE(badPlayer);
+    public static void setQueryable(BadPlayer player, String status) {
+        FriendListable friendListable = FriendListable.getByString(status);
+        if (friendListable == null) message.UNKNOWN_STATUS(player);
+        else {
+            if (player.getSettings().getFriendListable() == friendListable) {
+                if (player.getSettings().getFriendListable() == FriendListable.YES) message.ALREADY_ACCEPT(player);
+                else message.ALREADY_REFUSE(player);
+            } else {
+                player.getSettings().setFriendListable(friendListable);
+                if (player.getSettings().getFriendListable() == FriendListable.YES) message.NOW_ACCEPT(player);
+                else message.NOW_REFUSE(player);
+            }
         }
     }
 
@@ -107,7 +104,7 @@ public class FriendListManager
                 }
             }
         } else {
-            if (wantedFriendList.isQueryable()) {
+            if (wantedBadPlayer.getSettings().getFriendListable() == FriendListable.YES) {
                 wantedFriendList.request(want);
                 message.REQUEST(wantedBadPlayer, wantBadPlayer);
                 wantFriendList.requested(wanted);

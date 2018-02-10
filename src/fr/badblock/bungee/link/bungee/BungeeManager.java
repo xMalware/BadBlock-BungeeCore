@@ -1,20 +1,6 @@
 package fr.badblock.bungee.link.bungee;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-
+import com.mongodb.*;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacket;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacketType;
@@ -23,6 +9,7 @@ import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
 import fr.badblock.bungee.utils.Filter;
+import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketEncoder;
@@ -35,6 +22,10 @@ import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Data
 public class BungeeManager
@@ -82,6 +73,10 @@ public class BungeeManager
         getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
     }
 
+    public void targetedTranslatedMCJsonBroadcast(String permission, McJson mcJson) {
+        getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
+    }
+
     public void targetedBrodcast(Filter<BadPlayer> filter, String... messages) {
         filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingMessage(messages));
     }
@@ -97,6 +92,12 @@ public class BungeeManager
     public void targetedTranslatedJsonBroadcast(Filter<BadPlayer> filter, String key, Object... args) {
         filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
     }
+
+    public void targetedTranslatedMCJsonBroadcast(Filter<BadPlayer> filter, McJson mcJson) {
+        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
+    }
+
+
 	
 	public BadPlayer getBadPlayer(String name)
 	{

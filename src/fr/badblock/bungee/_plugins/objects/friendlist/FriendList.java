@@ -19,13 +19,11 @@ public class FriendList
 {
 
 	public static final String				OWNER = "_owner";
-	public static final String				QUERYABLE = "queryable";
 	public static final String				PLAYERS = "players";
 
 	private static final Type				collectionType = new TypeToken<Map<String, FriendListPlayer>>(){}.getType();
 
 	private String							owner;
-	private boolean 						queryable = true;
     private Map<String, FriendListPlayer> players;
 
     FriendList(String owner)
@@ -42,7 +40,6 @@ public class FriendList
     FriendList(DBObject dbObject)
 	{
 		owner = dbObject.get(OWNER).toString();
-		queryable = Boolean.getBoolean(dbObject.get(QUERYABLE).toString());
 		players = GsonUtils.getGson().fromJson(dbObject.get(PLAYERS).toString(), collectionType);
 	}
 
@@ -60,7 +57,6 @@ public class FriendList
 
 
     void setQueryable(boolean queryable) {
-        this.queryable = queryable;
         save();
     }
 
@@ -116,7 +112,6 @@ public class FriendList
 	{
 		BasicDBObject object = new BasicDBObject();
 		if (owner != null) object.put(OWNER, owner);
-		object.put(QUERYABLE, queryable);
 		object.put(PLAYERS, GsonUtils.getGson().toJson(players, collectionType));
 		return object;
 	}
