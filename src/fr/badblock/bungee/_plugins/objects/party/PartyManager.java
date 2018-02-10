@@ -1,11 +1,6 @@
 package fr.badblock.bungee._plugins.objects.party;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-
+import com.mongodb.*;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.BadPlayer;
@@ -326,6 +321,7 @@ public class PartyManager
 			return;
 		}
 		badPlayer.getSettings().setPartyable(partyable);
+        badPlayer.updateSettings();
 		PartyManager.getMessages().TOGGLE_WITH(sender, rawType);
 	}
 	

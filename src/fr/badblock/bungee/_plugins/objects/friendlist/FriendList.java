@@ -32,11 +32,6 @@ public class FriendList
 		players = new HashMap<>();
 	}
 
-	public FriendList(String owner, String request, FriendListPlayerState state)
-	{
-		this(owner);
-	}
-
     FriendList(DBObject dbObject)
 	{
 		owner = dbObject.get(OWNER).toString();

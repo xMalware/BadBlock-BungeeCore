@@ -1,17 +1,10 @@
 package fr.badblock.bungee.players;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.bson.BSONObject;
-
 import com.google.gson.JsonObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.ObjectUtils;
@@ -27,6 +20,11 @@ import fr.toenga.common.utils.permissions.PermissionsManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.bson.BSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -34,6 +32,7 @@ public class BadOfflinePlayer
 {
 
 	private 			String						name;
+    private UUID uniqueId;
 	private transient	BSONObject	  				dbObject;
 
 	private transient	Callback<BadOfflinePlayer>	callback;
@@ -91,6 +90,10 @@ public class BadOfflinePlayer
 		updateData("lastServer", proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null ? proxiedPlayer.getServer().getInfo().getName() : "");
 	}
 
+    public void updateSettings() {
+        updateData("settings", settings.toJson());
+    }
+
 	protected void loadData()
 	{
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
@@ -113,11 +116,17 @@ public class BadOfflinePlayer
 					setDbObject(cursor.next());
 					BadBungee.log("§c" + getName() + " exists in the player table.");
 
+                    name = getString("realName");
+                    //lastip
+                    uniqueId = UUID.fromString(getString("uniqueId"));
+                    settings = new BadPlayerSettings(getString("settings"));
+
 					punished = Punished.fromJson( getJsonObject("punish") );
 					if (PermissionsManager.getManager() != null)
 					{
 						permissions = PermissionsManager.getManager().loadPermissible( getJsonObject("permissions") );
 					}
+
 				}
 				else
 				{
@@ -157,6 +166,14 @@ public class BadOfflinePlayer
 		return getPermissions().hasPermission(permission);
 	}
 
+    public String getString(String part) {
+        if (dbObject.containsField(part)) {
+            return dbObject.get(part).toString();
+        } else {
+            return new String();
+        }
+    }
+
 	public JsonObject getJsonObject(String part)
 	{
 		//FIXME vraiment pas optimisé, à voir si il y a mieux
@@ -180,7 +197,7 @@ public class BadOfflinePlayer
 		object.put("realName", getName());
 		object.put("lastIp", "");
 		object.put("uniqueId", UUID.randomUUID().toString());
-		object.put("settings", settings);
+        object.put("settings", settings.toJson());
 		object.put("punish", punished);
 		object.put("permissions", permissions);
 		object.put("version", "0");

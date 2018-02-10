@@ -144,5 +144,4 @@ public class BadPlayer extends BadOfflinePlayer
 	{
 		return maps.values();
 	}
-
 }

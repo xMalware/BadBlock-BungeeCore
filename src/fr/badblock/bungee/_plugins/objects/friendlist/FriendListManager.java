@@ -5,6 +5,8 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.api.events.objects.friendlist.FriendListRemoveEvent;
+import fr.badblock.bungee.api.events.objects.friendlist.FriendListRemoveEvent.FriendListRemoveStatus;
 import fr.badblock.bungee.api.events.objects.friendlist.FriendListRequestEvent;
 import fr.badblock.bungee.api.events.objects.friendlist.FriendListRequestEvent.FriendListRequestStatus;
 import fr.badblock.bungee.api.events.objects.friendlist.FriendListableChangeEvent;
@@ -28,7 +30,7 @@ public class FriendListManager {
 
     private static synchronized FriendList getFriendList(String player) {
         BasicDBObject query = new BasicDBObject();
-        query.append(FriendList.OWNER, player.toLowerCase());
+        query.append(FriendList.OWNER, player);
         DBObject obj = new SynchroMongoDBGetter(COLLECTION, query).getDbObject();
         if (obj != null) return new FriendList(obj);
         else {
@@ -84,6 +86,7 @@ public class FriendListManager {
                     else message.ALREADY_REFUSE(player);
                 } else {
                     player.getSettings().setFriendListable(e.getNewStatus());
+                    player.updateSettings();
                     if (e.getNewStatus() == FriendListable.YES) message.NOW_ACCEPT(player);
                     else message.NOW_REFUSE(player);
                 }
@@ -117,9 +120,8 @@ public class FriendListManager {
         }
         FriendListRequestEvent e = new FriendListRequestEvent(wantBadPlayer, wantedBadPlayer, status);
         e = ProxyServer.getInstance().getPluginManager().callEvent(e);
-        if (e.isCancelled()) {
-            message.OPERATION_CANCELLED(wantBadPlayer, e.getCancelReason());
-        } else {
+        if (e.isCancelled()) message.OPERATION_CANCELLED(wantBadPlayer, e.getCancelReason());
+        else {
             switch (e.getStatus()) {
                 case UNKNOWN_ERROR:
                     message.ERROR(wantBadPlayer);
@@ -146,7 +148,7 @@ public class FriendListManager {
                     message.ALREADY_REQUESTED(wantBadPlayer);
                     break;
                 case PLAYER_DONT_ACCEPT_REQUEST:
-                    message.DONT_ACCEPT_REQUESTS(wantBadPlayer, wantedBadPlayer);
+                    message.DO_NOT_ACCEPT_REQUESTS(wantBadPlayer, wantedBadPlayer);
                 default:
                     message.ERROR(wantBadPlayer);
                     break;
@@ -159,34 +161,59 @@ public class FriendListManager {
         FriendList wantFriendList = getFriendList(want);
         BadPlayer wantBadPlayer = BungeeManager.getInstance().getBadPlayer(want);
         BadPlayer wantedBadPlayer = BungeeManager.getInstance().getBadPlayer(wanted);
-        if (want.equals(wanted)) {
-            message.SCHIZOPHRENIA_IS_BAD(wantBadPlayer);
-            return;
-        }
-        if (wantedFriendList.isInList(want) || wantFriendList.isInList(wanted)) {
-            if (wantedFriendList.isFriend(want) || wantFriendList.isFriend(wanted)) {
-                wantedFriendList.remove(want);
-                //TODO send "[want] removed you from his friend list." to wanted
-                wantFriendList.remove(wanted);
-                //TODO send "You are no longer friend with [wanted]." to want
-            } else {
-                if (wantedFriendList.wantToBeFriendWith(want)) {
-                    wantedFriendList.remove(want);
-                    //TODO send "[want] declined your friend request" to wanted
-                    wantFriendList.remove(wanted);
-                    //TODO send "You decline [wanted] friend request" to want
-                } else {
-                    if (wantedFriendList.alreadyRequestedBy(want)) {
-                        wantFriendList.remove(wanted);
-                        //TODO send "You cancel [wanted] friend request" to want
-                        wantedFriendList.remove(want);
-                        //TODO send "[want] cancelled his friend request" to wanted
-                    } else message.ERROR(wantBadPlayer);
-
+        FriendListRemoveStatus status;
+        if (want.equals(wanted)) status = FriendListRemoveStatus.PLAYER_SCHIZOPHRENIA;
+        else {
+            if (wantedFriendList.isInList(want) || wantFriendList.isInList(wanted)) {
+                if (wantedFriendList.isFriend(want) || wantFriendList.isFriend(wanted))
+                    status = FriendListRemoveStatus.PLAYER_REMOVED_FROM_LIST;
+                else {
+                    if (wantedFriendList.wantToBeFriendWith(want))
+                        status = FriendListRemoveStatus.PLAYER_REQUEST_DECLINED;
+                    else {
+                        if (wantedFriendList.alreadyRequestedBy(want))
+                            status = FriendListRemoveStatus.REQUEST_TO_PLAYER_CANCELLED;
+                        else status = FriendListRemoveStatus.UNKNOWN_ERROR;
+                    }
                 }
+            } else status = FriendListRemoveStatus.NOT_REQUESTED_OR_FRIEND_WITH_PLAYER;
+        }
+        FriendListRemoveEvent e = new FriendListRemoveEvent(wantBadPlayer, wantedBadPlayer, status);
+        e = ProxyServer.getInstance().getPluginManager().callEvent(e);
+        if (e.isCancelled()) message.OPERATION_CANCELLED(wantBadPlayer, e.getCancelReason());
+        else {
+            switch (e.getStatus()) {
+                case UNKNOWN_ERROR:
+                    message.ERROR(wantBadPlayer);
+                    break;
+                case PLAYER_SCHIZOPHRENIA:
+                    message.SCHIZOPHRENIA_IS_BAD(wantBadPlayer);
+                    break;
+                case PLAYER_REQUEST_DECLINED:
+                    wantedFriendList.remove(want);
+                    message.DECLINED_YOUR_REQUEST(wantedBadPlayer, wantBadPlayer);
+                    wantFriendList.remove(wanted);
+                    message.REJECT_REQUEST_OF(wantBadPlayer, wantedBadPlayer);
+                    break;
+                case PLAYER_REMOVED_FROM_LIST:
+                    wantedFriendList.remove(want);
+                    message.REMOVED_YOU_FROM_FRIENDS(wantedBadPlayer, wantBadPlayer);
+                    wantFriendList.remove(wanted);
+                    message.NOW_NO_LONGER_FRIEND(wantBadPlayer, wantedBadPlayer);
+                    break;
+                case REQUEST_TO_PLAYER_CANCELLED:
+                    wantFriendList.remove(wanted);
+                    //TODO send "You cancel your request to [wanted]" to want
+                    wantedFriendList.remove(want);
+                    //TODO send "[want] cancelled his friend request" to wanted
+                    break;
+                case NOT_REQUESTED_OR_FRIEND_WITH_PLAYER:
+                    //TODO send "You are not friend with or you haven't requested [wanted]" to want
+                    break;
+                default:
+                    message.ERROR(wantBadPlayer);
+                    break;
             }
-        } else {
-            //TODO send "You are not friend with or you haven't requested [wanted]" to want
         }
     }
 

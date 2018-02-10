@@ -40,6 +40,7 @@ class FriendListMessage {
     void UNKNOWN_STATUS(BadPlayer p) {
         p.sendTranslatedOutgoingMessage(prefix("querying.unknown"));
     }
+
     void ALREADY_ACCEPT(BadPlayer p) {
         p.sendTranslatedOutgoingMessage(prefix("querying.already_accept"));
     }
@@ -91,9 +92,30 @@ class FriendListMessage {
         p.sendTranslatedOutgoingMessage(prefix("requests.request_received"), receiver.getName());
     }
 
-    void DONT_ACCEPT_REQUESTS(BadPlayer p, BadPlayer who) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.dont_accept_requests"), who.getName());
+    void DO_NOT_ACCEPT_REQUESTS(BadPlayer p, BadPlayer who) {
+        p.sendTranslatedOutgoingMessage(prefix("requests.do_not_accept_requests"), who.getName());
     }
+
+    void DECLINED_YOUR_REQUEST(BadPlayer p, BadPlayer who) {
+        p.sendTranslatedOutgoingMessage(prefix("requests.declined_your_requested"), who.getName());
+    }
+
+    void REJECT_REQUEST_OF(BadPlayer p, BadPlayer of) {
+        p.sendTranslatedOutgoingMessage(prefix("requests.reject_request_of"), of.getName());
+    }
+
+    void REMOVED_YOU_FROM_FRIENDS(BadPlayer p, BadPlayer who) {
+        p.sendTranslatedOutgoingMessage(prefix("requests.remove_you_from_friends"), who.getName());
+    }
+
+    void NOW_NO_LONGER_FRIEND(BadPlayer p, BadPlayer with) {
+        p.sendTranslatedOutgoingMessage(prefix("requests.now_no_longer_friend"), with.getName());
+    }
+
+    void CANCEL_REQUEST_TO(BadPlayer p, BadPlayer to) {
+        p.sendTranslatedOutgoingMessage(prefix("requests.cancel_request_to"), to.getName());
+    }
+
 
 
 }
