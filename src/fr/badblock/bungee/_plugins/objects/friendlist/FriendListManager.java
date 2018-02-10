@@ -5,12 +5,16 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.api.events.objects.friendlist.FriendListRequestEvent;
+import fr.badblock.bungee.api.events.objects.friendlist.FriendListRequestEvent.FriendListRequestStatus;
+import fr.badblock.bungee.api.events.objects.friendlist.FriendListableChangeEvent;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.mongodb.SynchroMongoDBGetter;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import lombok.Getter;
+import net.md_5.bungee.api.ProxyServer;
 
 /**
  * Main class for FriendLists
@@ -70,13 +74,19 @@ public class FriendListManager {
         FriendListable friendListable = FriendListable.getByString(status);
         if (friendListable == null) message.UNKNOWN_STATUS(player);
         else {
-            if (player.getSettings().getFriendListable() == friendListable) {
-                if (player.getSettings().getFriendListable() == FriendListable.YES) message.ALREADY_ACCEPT(player);
-                else message.ALREADY_REFUSE(player);
+            FriendListableChangeEvent e = new FriendListableChangeEvent(player, player.getSettings().getFriendListable(), friendListable);
+            e = ProxyServer.getInstance().getPluginManager().callEvent(e);
+            if (e.isCancelled()) {
+                message.OPERATION_CANCELLED(player, e.getCancelReason());
             } else {
-                player.getSettings().setFriendListable(friendListable);
-                if (player.getSettings().getFriendListable() == FriendListable.YES) message.NOW_ACCEPT(player);
-                else message.NOW_REFUSE(player);
+                if (e.getOldStatus() == e.getNewStatus()) {
+                    if (e.getNewStatus() == FriendListable.YES) message.ALREADY_ACCEPT(player);
+                    else message.ALREADY_REFUSE(player);
+                } else {
+                    player.getSettings().setFriendListable(e.getNewStatus());
+                    if (e.getNewStatus() == FriendListable.YES) message.NOW_ACCEPT(player);
+                    else message.NOW_REFUSE(player);
+                }
             }
         }
     }
@@ -86,31 +96,60 @@ public class FriendListManager {
         FriendList wantFriendList = getFriendList(want);
         BadPlayer wantBadPlayer = BungeeManager.getInstance().getBadPlayer(want);
         BadPlayer wantedBadPlayer = BungeeManager.getInstance().getBadPlayer(wanted);
-        if (want.equals(wanted)) {
-            message.SCHIZOPHRENIA_IS_BAD(wantBadPlayer);
-            return;
+        FriendListRequestStatus status;
+        if (want.equals(wanted)) status = FriendListRequestStatus.PLAYER_SCHIZOPHRENIA;
+        else {
+            if (wantedFriendList.isInList(want)) {
+                if (wantedFriendList.isFriend(want)) status = FriendListRequestStatus.PLAYERS_ALREADY_FRIENDS;
+                else {
+                    if (wantedFriendList.wantToBeFriendWith(want)) status = FriendListRequestStatus.PLAYERS_NOW_FRIENDS;
+                    else {
+                        if (wantedFriendList.alreadyRequestedBy(want))
+                            status = FriendListRequestStatus.PLAYER_ALREADY_REQUESTED;
+                        else status = FriendListRequestStatus.UNKNOWN_ERROR;
+                    }
+                }
+            } else {
+                if (wantedBadPlayer.getSettings().getFriendListable() == FriendListable.YES)
+                    status = FriendListRequestStatus.PLAYER_RECEIVE_REQUEST;
+                else status = FriendListRequestStatus.PLAYER_DONT_ACCEPT_REQUEST;
+            }
         }
-        if (wantedFriendList.isInList(want)) {
-            if (wantedFriendList.isFriend(want)) message.ALREADY_FRIEND(wantBadPlayer, wantBadPlayer);
-            else {
-                if (wantedFriendList.wantToBeFriendWith(want)) {
+        FriendListRequestEvent e = new FriendListRequestEvent(wantBadPlayer, wantedBadPlayer, status);
+        e = ProxyServer.getInstance().getPluginManager().callEvent(e);
+        if (e.isCancelled()) {
+            message.OPERATION_CANCELLED(wantBadPlayer, e.getCancelReason());
+        } else {
+            switch (e.getStatus()) {
+                case UNKNOWN_ERROR:
+                    message.ERROR(wantBadPlayer);
+                    break;
+                case PLAYERS_NOW_FRIENDS:
                     wantedFriendList.accept(want);
                     message.REQUESTED_ACCEPT(wantedBadPlayer, wantBadPlayer);
                     wantFriendList.accept(wanted);
                     message.ACCEPT_REQUESTER(wantBadPlayer, wantedBadPlayer);
-                } else {
-                    if (wantedFriendList.alreadyRequestedBy(want)) message.ALREADY_REQUESTED(wantBadPlayer);
-                    else message.ERROR(wantBadPlayer);
-                }
-            }
-        } else {
-            if (wantedBadPlayer.getSettings().getFriendListable() == FriendListable.YES) {
-                wantedFriendList.request(want);
-                message.REQUEST(wantedBadPlayer, wantBadPlayer);
-                wantFriendList.requested(wanted);
-                message.REQUEST_RECEIVED(wantBadPlayer, wantedBadPlayer);
-            } else {
-                message.DONT_ACCEPT_REQUESTS(wantBadPlayer, wantedBadPlayer);
+                    break;
+                case PLAYER_SCHIZOPHRENIA:
+                    message.SCHIZOPHRENIA_IS_BAD(wantBadPlayer);
+                    break;
+                case PLAYER_RECEIVE_REQUEST:
+                    wantedFriendList.request(want);
+                    message.REQUEST(wantedBadPlayer, wantBadPlayer);
+                    wantFriendList.requested(wanted);
+                    message.REQUEST_RECEIVED(wantBadPlayer, wantedBadPlayer);
+                    break;
+                case PLAYERS_ALREADY_FRIENDS:
+                    message.ALREADY_FRIEND(wantBadPlayer, wantedBadPlayer);
+                    break;
+                case PLAYER_ALREADY_REQUESTED:
+                    message.ALREADY_REQUESTED(wantBadPlayer);
+                    break;
+                case PLAYER_DONT_ACCEPT_REQUEST:
+                    message.DONT_ACCEPT_REQUESTS(wantBadPlayer, wantedBadPlayer);
+                default:
+                    message.ERROR(wantBadPlayer);
+                    break;
             }
         }
     }

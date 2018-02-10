@@ -186,8 +186,7 @@ public class BungeeManager
 	
 	public int getRealTimeOnlinePlayers()
 	{
-		return bungees.values().parallelStream().filter(bungee -> isValid(bungee)).
-				map(bungee -> bungee.getUsernames().size()).mapToInt(Number::intValue).sum();
+        return bungees.values().parallelStream().filter(this::isValid).map(bungee -> bungee.getUsernames().size()).mapToInt(Number::intValue).sum();
 	}
 	
 	public int getOnlinePlayers()

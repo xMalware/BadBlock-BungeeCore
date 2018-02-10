@@ -14,6 +14,10 @@ class FriendListMessage {
         p.sendTranslatedOutgoingMessage(prefix("unknown_error"));
     }
 
+    void OPERATION_CANCELLED(BadPlayer p, String reason) {
+        p.sendTranslatedOutgoingMessage(prefix("operation_cancelled"), reason);
+    }
+
     void SCHIZOPHRENIA_IS_BAD(BadPlayer p) {
         p.sendTranslatedOutgoingMessage("schizophrenia_is_bad");
     }
