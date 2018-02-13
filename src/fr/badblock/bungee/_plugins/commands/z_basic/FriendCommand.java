@@ -8,19 +8,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class FriendCommand extends BadCommand {
-    /**
-     * friend chat (faudra que je le mette quelque part)
-     * FriendList friendList = FriendListManager.getFriendList(sender.getName());
-     if (friendList == null) friendList = new FriendList(sender.getName());
-     if (friendList.getPlayers().size() < 1) {
-     I19n.sendMessage(sender, "commands.chatfriend.nofriends");
-     FriendListManager.update(friendList);
-     } else {
-     final FriendList finalFriendList = friendList;
-     BungeeManager.getInstance().targetedTranslatedBroadcast(p -> finalFriendList.isFriend(p.getName()), "commands.chatfriend.message", sender.getName(), message);
-     }
-     */
-
     private String prefix = "commands.friend.";
 
     public FriendCommand() {

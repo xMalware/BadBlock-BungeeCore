@@ -7,6 +7,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
+import fr.badblock.bungee.players.layer.BadPlayerSettingsSerializer;
 import fr.badblock.bungee.utils.ObjectUtils;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
@@ -91,7 +92,7 @@ public class BadOfflinePlayer
 	}
 
     public void updateSettings() {
-        updateData("settings", settings.toJson());
+        updateData("settings", BadPlayerSettingsSerializer.serialize(settings));
     }
 
 	protected void loadData()
@@ -119,13 +120,14 @@ public class BadOfflinePlayer
                     name = getString("realName");
                     //lastip
                     uniqueId = UUID.fromString(getString("uniqueId"));
-                    settings = new BadPlayerSettings(getString("settings"));
+                    settings = BadPlayerSettingsSerializer.deserialize(getString("settings"));
 
 					punished = Punished.fromJson( getJsonObject("punish") );
 					if (PermissionsManager.getManager() != null)
 					{
 						permissions = PermissionsManager.getManager().loadPermissible( getJsonObject("permissions") );
 					}
+                    //version
 
 				}
 				else
@@ -197,7 +199,7 @@ public class BadOfflinePlayer
 		object.put("realName", getName());
 		object.put("lastIp", "");
 		object.put("uniqueId", UUID.randomUUID().toString());
-        object.put("settings", settings.toJson());
+        object.put("settings", BadPlayerSettingsSerializer.serialize(settings));
 		object.put("punish", punished);
 		object.put("permissions", permissions);
 		object.put("version", "0");

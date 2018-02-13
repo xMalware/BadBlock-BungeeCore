@@ -5,8 +5,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Ignore a field when settings is (de)serialised in/from json
+ *
+ * @author RedSpri
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface SettingIgnore {
-    String part() default "_";
+@interface SettingIgnore {
 }

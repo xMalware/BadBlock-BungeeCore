@@ -14,6 +14,10 @@ class FriendListMessage {
         p.sendTranslatedOutgoingMessage(prefix("unknown_error"));
     }
 
+    void UNKNOWN_PLAYER(BadPlayer p, String player) {
+        p.sendTranslatedOutgoingMessage(prefix("unknown_player"), player);
+    }
+
     void OPERATION_CANCELLED(BadPlayer p, String reason) {
         p.sendTranslatedOutgoingMessage(prefix("operation_cancelled"), reason);
     }

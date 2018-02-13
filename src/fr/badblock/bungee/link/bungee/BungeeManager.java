@@ -101,9 +101,14 @@ public class BungeeManager
 	
 	public BadPlayer getBadPlayer(String name)
 	{
-		List<BadPlayer> list = getLoggedPlayers(p -> p.getName().toLowerCase().equals(name.toLowerCase()));
+        List<BadPlayer> list = getLoggedPlayers(p -> p.getName().equalsIgnoreCase(name));
 		return list.isEmpty() ? null : list.get(0);
 	}
+
+    public BadPlayer getBadPlayer(UUID uuid) {
+        List<BadPlayer> list = getLoggedPlayers(p -> p.getUniqueId().toString().equalsIgnoreCase(uuid.toString()));
+        return list.isEmpty() ? null : list.get(0);
+    }
 	
 	public BadPlayer getBadPlayer(ProxiedPlayer proxiedPlayer)
 	{

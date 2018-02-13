@@ -18,6 +18,8 @@ import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 
+import java.util.UUID;
+
 /**
  * Main class for FriendLists
  *
@@ -28,9 +30,9 @@ public class FriendListManager {
     @Getter
     private static FriendListMessage message = new FriendListMessage();
 
-    private static synchronized FriendList getFriendList(String player) {
+    private static synchronized FriendList getFriendList(UUID player) {
         BasicDBObject query = new BasicDBObject();
-        query.append(FriendList.OWNER, player);
+        query.append(FriendList.OWNER, player.toString());
         DBObject obj = new SynchroMongoDBGetter(COLLECTION, query).getDbObject();
         if (obj != null) return new FriendList(obj);
         else {
@@ -95,19 +97,25 @@ public class FriendListManager {
     }
 
     public static void request(String want, String wanted) {
-        FriendList wantedFriendList = getFriendList(wanted);
-        FriendList wantFriendList = getFriendList(want);
         BadPlayer wantBadPlayer = BungeeManager.getInstance().getBadPlayer(want);
         BadPlayer wantedBadPlayer = BungeeManager.getInstance().getBadPlayer(wanted);
+        if (wantedBadPlayer == null) {
+            message.UNKNOWN_PLAYER(wantBadPlayer, wanted);
+            return;
+        }
+        FriendList wantedFriendList = getFriendList(wantBadPlayer.getUniqueId());
+        FriendList wantFriendList = getFriendList(wantedBadPlayer.getUniqueId());
         FriendListRequestStatus status;
         if (want.equals(wanted)) status = FriendListRequestStatus.PLAYER_SCHIZOPHRENIA;
         else {
-            if (wantedFriendList.isInList(want)) {
-                if (wantedFriendList.isFriend(want)) status = FriendListRequestStatus.PLAYERS_ALREADY_FRIENDS;
+            if (wantedFriendList.isInList(wantBadPlayer.getUniqueId())) {
+                if (wantedFriendList.isFriend(wantBadPlayer.getUniqueId()))
+                    status = FriendListRequestStatus.PLAYERS_ALREADY_FRIENDS;
                 else {
-                    if (wantedFriendList.wantToBeFriendWith(want)) status = FriendListRequestStatus.PLAYERS_NOW_FRIENDS;
+                    if (wantedFriendList.wantToBeFriendWith(wantBadPlayer.getUniqueId()))
+                        status = FriendListRequestStatus.PLAYERS_NOW_FRIENDS;
                     else {
-                        if (wantedFriendList.alreadyRequestedBy(want))
+                        if (wantedFriendList.alreadyRequestedBy(wantBadPlayer.getUniqueId()))
                             status = FriendListRequestStatus.PLAYER_ALREADY_REQUESTED;
                         else status = FriendListRequestStatus.UNKNOWN_ERROR;
                     }
@@ -127,18 +135,18 @@ public class FriendListManager {
                     message.ERROR(wantBadPlayer);
                     break;
                 case PLAYERS_NOW_FRIENDS:
-                    wantedFriendList.accept(want);
+                    wantedFriendList.accept(wantBadPlayer.getUniqueId());
                     message.REQUESTED_ACCEPT(wantedBadPlayer, wantBadPlayer);
-                    wantFriendList.accept(wanted);
+                    wantFriendList.accept(wantedBadPlayer.getUniqueId());
                     message.ACCEPT_REQUESTER(wantBadPlayer, wantedBadPlayer);
                     break;
                 case PLAYER_SCHIZOPHRENIA:
                     message.SCHIZOPHRENIA_IS_BAD(wantBadPlayer);
                     break;
                 case PLAYER_RECEIVE_REQUEST:
-                    wantedFriendList.request(want);
+                    wantedFriendList.request(wantBadPlayer.getUniqueId());
                     message.REQUEST(wantedBadPlayer, wantBadPlayer);
-                    wantFriendList.requested(wanted);
+                    wantFriendList.requested(wantedBadPlayer.getUniqueId());
                     message.REQUEST_RECEIVED(wantBadPlayer, wantedBadPlayer);
                     break;
                 case PLAYERS_ALREADY_FRIENDS:
@@ -157,21 +165,25 @@ public class FriendListManager {
     }
 
     public static void remove(String want, String wanted) {
-        FriendList wantedFriendList = getFriendList(wanted);
-        FriendList wantFriendList = getFriendList(want);
         BadPlayer wantBadPlayer = BungeeManager.getInstance().getBadPlayer(want);
         BadPlayer wantedBadPlayer = BungeeManager.getInstance().getBadPlayer(wanted);
+        if (wantedBadPlayer == null) {
+            message.UNKNOWN_PLAYER(wantBadPlayer, wanted);
+            return;
+        }
+        FriendList wantedFriendList = getFriendList(wantedBadPlayer.getUniqueId());
+        FriendList wantFriendList = getFriendList(wantBadPlayer.getUniqueId());
         FriendListRemoveStatus status;
         if (want.equals(wanted)) status = FriendListRemoveStatus.PLAYER_SCHIZOPHRENIA;
         else {
-            if (wantedFriendList.isInList(want) || wantFriendList.isInList(wanted)) {
-                if (wantedFriendList.isFriend(want) || wantFriendList.isFriend(wanted))
+            if (wantedFriendList.isInList(wantBadPlayer.getUniqueId()) || wantFriendList.isInList(wantedBadPlayer.getUniqueId())) {
+                if (wantedFriendList.isFriend(wantBadPlayer.getUniqueId()) || wantFriendList.isFriend(wantedBadPlayer.getUniqueId()))
                     status = FriendListRemoveStatus.PLAYER_REMOVED_FROM_LIST;
                 else {
-                    if (wantedFriendList.wantToBeFriendWith(want))
+                    if (wantedFriendList.wantToBeFriendWith(wantBadPlayer.getUniqueId()))
                         status = FriendListRemoveStatus.PLAYER_REQUEST_DECLINED;
                     else {
-                        if (wantedFriendList.alreadyRequestedBy(want))
+                        if (wantedFriendList.alreadyRequestedBy(wantBadPlayer.getUniqueId()))
                             status = FriendListRemoveStatus.REQUEST_TO_PLAYER_CANCELLED;
                         else status = FriendListRemoveStatus.UNKNOWN_ERROR;
                     }
@@ -190,21 +202,21 @@ public class FriendListManager {
                     message.SCHIZOPHRENIA_IS_BAD(wantBadPlayer);
                     break;
                 case PLAYER_REQUEST_DECLINED:
-                    wantedFriendList.remove(want);
+                    wantedFriendList.remove(wantBadPlayer.getUniqueId());
                     message.DECLINED_YOUR_REQUEST(wantedBadPlayer, wantBadPlayer);
-                    wantFriendList.remove(wanted);
+                    wantFriendList.remove(wantedBadPlayer.getUniqueId());
                     message.REJECT_REQUEST_OF(wantBadPlayer, wantedBadPlayer);
                     break;
                 case PLAYER_REMOVED_FROM_LIST:
-                    wantedFriendList.remove(want);
+                    wantedFriendList.remove(wantBadPlayer.getUniqueId());
                     message.REMOVED_YOU_FROM_FRIENDS(wantedBadPlayer, wantBadPlayer);
-                    wantFriendList.remove(wanted);
+                    wantFriendList.remove(wantedBadPlayer.getUniqueId());
                     message.NOW_NO_LONGER_FRIEND(wantBadPlayer, wantedBadPlayer);
                     break;
                 case REQUEST_TO_PLAYER_CANCELLED:
-                    wantFriendList.remove(wanted);
+                    wantFriendList.remove(wantedBadPlayer.getUniqueId());
                     //TODO send "You cancel your request to [wanted]" to want
-                    wantedFriendList.remove(want);
+                    wantedFriendList.remove(wantBadPlayer.getUniqueId());
                     //TODO send "[want] cancelled his friend request" to wanted
                     break;
                 case NOT_REQUESTED_OR_FRIEND_WITH_PLAYER:

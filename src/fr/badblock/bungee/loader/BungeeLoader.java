@@ -1,11 +1,7 @@
 package fr.badblock.bungee.loader;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.config.ConfigLoader;
@@ -18,6 +14,9 @@ import fr.toenga.common.tech.rabbitmq.RabbitService;
 import fr.toenga.common.utils.i18n.I18n;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.File;
+import java.io.IOException;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -98,6 +97,7 @@ public class BungeeLoader
 					"fr.badblock.bungee._plugins.commands.admin",
 					"fr.badblock.bungee._plugins.commands.modo",
 					"fr.badblock.bungee._plugins.commands.basic",
+                    "fr.badblock.bungee._plugins.commands.basic",
 					// Listeners
 					"fr.badblock.bungee._plugins.listeners.logins.checkLogin",
 					"fr.badblock.bungee._plugins.listeners.logins.loadPlayer",

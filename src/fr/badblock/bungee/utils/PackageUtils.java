@@ -1,18 +1,18 @@
 package fr.badblock.bungee.utils;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
 import fr.badblock.bungee._plugins.commands.BadCommand;
 import fr.badblock.bungee._plugins.listeners.BadListener;
 import fr.toenga.common.tech.rabbitmq.listener.RabbitListener;
 import net.md_5.bungee.api.plugin.Plugin;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 public class PackageUtils {
 
-	public static void instanciateListeners(Plugin plugin, String... paths) throws IOException {
+    public static void instanciateListeners(Plugin plugin, String... paths) throws IOException {
 		URL url = plugin.getClass().getProtectionDomain().getCodeSource().getLocation();
 
 		ZipInputStream zip = new ZipInputStream(url.openStream());
@@ -49,18 +49,37 @@ public class PackageUtils {
 
 		}
 	}
-	
-	private static boolean inheritFrom(Class<?> clazz, Class<?> from){
-		while(clazz != Object.class)
-		{
-			if(clazz == from)
-				return true;
 
-			clazz = clazz.getSuperclass();
-		}
+    /**
+     * pourquoi pas faire ?
+     * public static void instantiateListenersAlternative(Plugin plugin, String... paths) {
+     * String prefix = plugin.getClass().getPackage().getName();
+     * for (String s : paths) {
+     * Class<?> clazz;
+     * try {
+     * clazz = Class.forName(prefix + s);
+     * if (clazz != null) {
+     * if(inheritFrom(clazz, BadListener.class) || inheritFrom(clazz, RabbitListener.class) || inheritFrom(clazz, BadCommand.class)) {
+     * instanciate(clazz);
+     * }
+     * }
+     * } catch (Exception exception) {
+     * exception.printStackTrace();
+     * }
+     * }
+     * }
+     */
 
-		return false;
-	}
+    private static boolean inheritFrom(Class<?> clazz, Class<?> from){
+        while(clazz != Object.class) {
+            if(clazz == from)
+                return true;
+
+            clazz = clazz.getSuperclass();
+        }
+
+        return false;
+    }
 
 	private static Object instanciate(Class<?> clazz) throws Exception {
 		try {
