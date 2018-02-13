@@ -120,6 +120,12 @@ class FriendListMessage {
         p.sendTranslatedOutgoingMessage(prefix("requests.cancel_request_to"), to.getName());
     }
 
+    void CANCELLED_REQUEST(BadPlayer p, BadPlayer who) {
+        p.sendTranslatedOutgoingMessage(prefix("requests.cancelled_request"), who.getName());
+    }
 
+    void NO_RELATIONSHIP(BadPlayer p, BadPlayer with) {
+        p.sendTranslatedOutgoingMessage(prefix("requests.no_relationship"), with.getName());
+    }
 
 }

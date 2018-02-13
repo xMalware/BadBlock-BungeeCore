@@ -215,12 +215,12 @@ public class FriendListManager {
                     break;
                 case REQUEST_TO_PLAYER_CANCELLED:
                     wantFriendList.remove(wantedBadPlayer.getUniqueId());
-                    //TODO send "You cancel your request to [wanted]" to want
+                    message.CANCEL_REQUEST_TO(wantBadPlayer, wantedBadPlayer);
                     wantedFriendList.remove(wantBadPlayer.getUniqueId());
-                    //TODO send "[want] cancelled his friend request" to wanted
+                    message.CANCELLED_REQUEST(wantedBadPlayer, wantBadPlayer);
                     break;
                 case NOT_REQUESTED_OR_FRIEND_WITH_PLAYER:
-                    //TODO send "You are not friend with or you haven't requested [wanted]" to want
+                    message.NO_RELATIONSHIP(wantBadPlayer, wantedBadPlayer);
                     break;
                 default:
                     message.ERROR(wantBadPlayer);
