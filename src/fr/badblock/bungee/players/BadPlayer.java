@@ -22,7 +22,7 @@ import java.util.Map;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class BadPlayer extends BadOfflinePlayer
+public final class BadPlayer extends BadOfflinePlayer
 {
 
 	private static Map<String, BadPlayer> maps 			= new HashMap<>();
@@ -30,6 +30,10 @@ public class BadPlayer extends BadOfflinePlayer
     public BadPlayer(PendingConnection pendingConnection) {
         super(pendingConnection.getName());
         BadBungee.log(ChatColor.GREEN + "Loaded data for " + pendingConnection.getName());
+        setLastIp(BadIP.fromString(pendingConnection.getAddress().getHostName()));
+        updateLastIp();
+        setVersion(pendingConnection.getVersion());
+        updateVersion();
 		put();
 	}
 

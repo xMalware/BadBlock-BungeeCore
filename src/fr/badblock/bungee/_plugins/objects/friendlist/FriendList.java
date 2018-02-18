@@ -16,7 +16,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
-public class FriendList
+public final class FriendList
 {
 
 	public static final String				OWNER = "_owner";

@@ -5,7 +5,7 @@ import fr.badblock.bungee._plugins.objects.party.Partyable;
 import lombok.Data;
 
 @Data
-public class BadPlayerSettings
+public final class BadPlayerSettings
 {
 
 	// Is partyable by who?

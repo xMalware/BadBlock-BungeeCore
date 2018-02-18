@@ -30,7 +30,7 @@ import java.util.UUID;
  *
  * @author RedSpri
  */
-public class FriendListManager {
+public final class FriendListManager {
     private static final String COLLECTION = "friendlist";
     @Getter
     private static FriendListMessage message = new FriendListMessage();

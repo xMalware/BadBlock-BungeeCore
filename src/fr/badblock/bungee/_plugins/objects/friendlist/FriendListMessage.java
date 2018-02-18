@@ -6,7 +6,7 @@ import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.mcjson.McJsonFactory;
 import fr.toenga.common.utils.i18n.I18n;
 
-class FriendListMessage {
+final class FriendListMessage {
     private String prefix(String code) {
         return "objects.friendlist." + code;
     }

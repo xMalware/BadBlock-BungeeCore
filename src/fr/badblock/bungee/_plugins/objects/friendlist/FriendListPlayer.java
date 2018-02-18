@@ -9,7 +9,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
-public class FriendListPlayer
+public final class FriendListPlayer
 {
 
     private UUID uuid;

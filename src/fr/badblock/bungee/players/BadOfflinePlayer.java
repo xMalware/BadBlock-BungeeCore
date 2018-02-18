@@ -35,6 +35,7 @@ public class BadOfflinePlayer {
     private static Map<String, BadOfflinePlayer> maps = new HashMap<>();
 
 	private 			String						name;
+    private BadIP lastIp;
     private UUID uniqueId;
 	private transient	BSONObject	  				dbObject;
 
@@ -42,6 +43,7 @@ public class BadOfflinePlayer {
 	private 			Punished					punished;
 	
 	private				BadPlayerSettings			settings;
+    private Integer version;
     private Boolean finded = true;
 
     public BadOfflinePlayer(String name) {
@@ -88,6 +90,14 @@ public class BadOfflinePlayer {
         updateData("settings", BadPlayerSettingsSerializer.serialize(settings));
     }
 
+    public void updateVersion() {
+        updateData("version", getVersion().toString());
+    }
+
+    public void updateLastIp() {
+        updateData("lastIp", getLastIp().toString());
+    }
+
     public void updateData(String key, Object value) {
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
         mongoService.useAsyncMongo(new MongoMethod(mongoService) {
@@ -124,14 +134,14 @@ public class BadOfflinePlayer {
             setDbObject(obj);
             BadBungee.log("§c" + getName() + " exists in the player table.");
             setName(getString("realName"));
-            //TODO lastip
+            setLastIp(BadIP.fromString(getString("lastIp")));
             setUniqueId(UUID.fromString(getString("uniqueId")));
             setSettings(BadPlayerSettingsSerializer.deserialize(getString("settings")));
             setPunished(Punished.fromJson(getJsonObject("punish")));
             if (PermissionsManager.getManager() != null) {
                 setPermissions(PermissionsManager.getManager().loadPermissible(getJsonObject("permissions")));
             }
-            //TODO version
+            setVersion(Integer.valueOf(getString("version")));
         } else {
             BadBungee.log(getName() + " doesn't exist in the player table.");
             if (create) insert();
@@ -150,6 +160,8 @@ public class BadOfflinePlayer {
                 permissions = new Permissible();
                 settings = new BadPlayerSettings();
                 uniqueId = UUID.randomUUID();
+                lastIp = BadIP.fromString("");
+                version = 0;
                 BasicDBObject obj = getSavedObject();
                 setDbObject(obj);
                 DB db = mongoService.getDb();
@@ -186,12 +198,12 @@ public class BadOfflinePlayer {
 		BasicDBObject object = new BasicDBObject();
 		object.put("name", getName().toLowerCase());
 		object.put("realName", getName());
-		object.put("lastIp", "");
+        object.put("lastIp", getLastIp().toString());
         object.put("uniqueId", getUniqueId());
         object.put("settings", BadPlayerSettingsSerializer.serialize(getSettings()));
         object.put("punish", getPunished());
         object.put("permissions", getPermissions());
-		object.put("version", "0");
+        object.put("version", getVersion().toString());
 		// TODO
 		return object;
 	}
