@@ -53,6 +53,13 @@ public class FriendCommand extends BadCommand {
             case "annuler":
                 remove(proxiedPlayer, args);
                 break;
+            case "list":
+            case "show":
+            case "lister":
+            case "afficher":
+            case "montrer":
+                list(proxiedPlayer, args);
+                break;
             default:
                 unknown(sender);
                 break;
@@ -69,26 +76,23 @@ public class FriendCommand extends BadCommand {
 
     private void status(ProxiedPlayer sender, String[] args) {
         if (args.length < 2)
-            FriendListManager.showStatusSelector(BungeeManager.getInstance().getBadPlayer(sender.getName()));
-        else FriendListManager.setQueryable(BungeeManager.getInstance().getBadPlayer(sender.getName()), args[1]);
+            FriendListManager.showStatusSelector(BungeeManager.getInstance().getBadPlayer(sender));
+        else FriendListManager.setQueryable(BungeeManager.getInstance().getBadPlayer(sender), args[1]);
     }
 
     private void add(ProxiedPlayer sender, String[] args) {
         if (args.length < 2) I19n.sendMessage(sender, prefix + "add.usage");
-        else {
-            if (BungeeManager.getInstance().getBadPlayer(args[1]) == null)
-                I19n.sendMessage(sender, prefix + "unknown_player");
-            else FriendListManager.request(sender.getName(), args[1]);
-        }
+        else FriendListManager.request(sender.getName(), args[1]);
     }
 
     private void remove(ProxiedPlayer sender, String[] args) {
         if (args.length < 2) I19n.sendMessage(sender, prefix + "remove.usage");
-        else {
-            if (BungeeManager.getInstance().getBadPlayer(args[1]) == null)
-                I19n.sendMessage(sender, prefix + "unknown_player");
-            else FriendListManager.remove(sender.getName(), args[1]);
-        }
+        else FriendListManager.remove(sender.getName(), args[1]);
+    }
+
+    private void list(ProxiedPlayer sender, String[] args) {
+        if (args.length < 2) FriendListManager.showFriendList(BungeeManager.getInstance().getBadPlayer(sender));
+        else FriendListManager.showFriendList(BungeeManager.getInstance().getBadPlayer(sender), args[1]);
     }
 
 }

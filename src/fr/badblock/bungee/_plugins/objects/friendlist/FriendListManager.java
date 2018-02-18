@@ -12,12 +12,16 @@ import fr.badblock.bungee.api.events.objects.friendlist.FriendListRequestEvent.F
 import fr.badblock.bungee.api.events.objects.friendlist.FriendListableChangeEvent;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.BadPlayer;
+import fr.badblock.bungee.utils.Filter;
 import fr.badblock.bungee.utils.mongodb.SynchroMongoDBGetter;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -123,7 +127,7 @@ public class FriendListManager {
             } else {
                 if (wantedBadPlayer.getSettings().getFriendListable() == FriendListable.YES)
                     status = FriendListRequestStatus.PLAYER_RECEIVE_REQUEST;
-                else status = FriendListRequestStatus.PLAYER_DONT_ACCEPT_REQUEST;
+                else status = FriendListRequestStatus.PLAYER_DO_NOT_ACCEPT_REQUEST;
             }
         }
         FriendListRequestEvent e = new FriendListRequestEvent(wantBadPlayer, wantedBadPlayer, status);
@@ -155,7 +159,7 @@ public class FriendListManager {
                 case PLAYER_ALREADY_REQUESTED:
                     message.ALREADY_REQUESTED(wantBadPlayer);
                     break;
-                case PLAYER_DONT_ACCEPT_REQUEST:
+                case PLAYER_DO_NOT_ACCEPT_REQUEST:
                     message.DO_NOT_ACCEPT_REQUESTS(wantBadPlayer, wantedBadPlayer);
                 default:
                     message.ERROR(wantBadPlayer);
@@ -226,6 +230,41 @@ public class FriendListManager {
                     message.ERROR(wantBadPlayer);
                     break;
             }
+        }
+    }
+
+
+    public static void showFriendList(BadPlayer p) {
+        showFriendList(p, "1");
+    }
+
+    public static List<BadPlayer> getFriends(BadPlayer badPlayer) {
+        Map<UUID, FriendListPlayer> players = getFriendList(badPlayer.getUniqueId()).getPlayers();
+        List<BadPlayer> friends = new ArrayList<>();
+        Filter.filterSetStatic(e -> players.get(e).getState() == FriendListPlayerState.ACCEPTED, players.keySet()).forEach(e -> friends.add(BungeeManager.getInstance().getBadPlayer(e)));
+        return friends;
+    }
+
+    public static void showFriendList(BadPlayer badPlayer, String page) {
+        int i;
+        try {
+            i = Integer.parseInt(page);
+        } catch (NumberFormatException e) {
+            message.INCORRECT_PAGE_NUMBER(badPlayer, page);
+            return;
+        }
+        List<BadPlayer> friends = getFriends(badPlayer);
+        int pages = friends.size() / 10;
+        if (pages > 1 && i > pages) {
+            message.TOO_BIG_PAGE_NUMBER(badPlayer, i);
+        } else {
+            //TODO header
+            for (int l = (i - 1) * 10; l < i * 10; l++) {
+                if (friends.size() - 1 <= l) break;
+                BadPlayer friend = friends.get(l);
+                //TODO friend list value
+            }
+            //TODO footer
         }
     }
 

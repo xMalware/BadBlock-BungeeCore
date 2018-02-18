@@ -128,4 +128,12 @@ class FriendListMessage {
         p.sendTranslatedOutgoingMessage(prefix("requests.no_relationship"), with.getName());
     }
 
+    void INCORRECT_PAGE_NUMBER(BadPlayer p, String page) {
+        p.sendTranslatedOutgoingMessage(prefix("list.incorrect_page_number"), page);
+    }
+
+    void TOO_BIG_PAGE_NUMBER(BadPlayer p, Integer page) {
+        p.sendTranslatedOutgoingMessage(prefix("list.too_big_page_number"), page.toString());
+    }
+
 }

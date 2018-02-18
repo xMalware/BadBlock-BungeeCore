@@ -20,7 +20,7 @@ public class FriendListRequestEvent extends CancellableEvent {
         PLAYERS_NOW_FRIENDS,
         PLAYER_ALREADY_REQUESTED,
         PLAYER_RECEIVE_REQUEST,
-        PLAYER_DONT_ACCEPT_REQUEST,
+        PLAYER_DO_NOT_ACCEPT_REQUEST,
         UNKNOWN_ERROR
     }
 }
