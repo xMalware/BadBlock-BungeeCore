@@ -10,20 +10,20 @@ import com.mongodb.DBObject;
  */
 public class SynchroMongoDBGetter {
     private DBObject dbObject = null;
-    private String collectionname;
+    private String collectionName;
     private BasicDBObject query;
 
     BasicDBObject getQuery() {
         return query;
     }
 
-    String getCollectionName() {
-        return collectionname;
+    public SynchroMongoDBGetter(String collectionname, BasicDBObject query) {
+        this.collectionName = collectionname;
+        this.query = query;
     }
 
-    public SynchroMongoDBGetter(String collectionname, BasicDBObject query) {
-        this.collectionname = collectionname;
-        this.query = query;
+    String getCollectionName() {
+        return collectionName;
     }
 
     /**

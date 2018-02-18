@@ -8,7 +8,6 @@ import com.mongodb.DBObject;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.players.layer.BadPlayerSettingsSerializer;
-import fr.badblock.bungee.utils.Filter;
 import fr.badblock.bungee.utils.ObjectUtils;
 import fr.badblock.bungee.utils.mongodb.SynchroMongoDBGetter;
 import fr.toenga.common.tech.mongodb.MongoService;
@@ -24,15 +23,11 @@ import lombok.EqualsAndHashCode;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bson.BSONObject;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
 public class BadOfflinePlayer {
-    private static Map<String, BadOfflinePlayer> maps = new HashMap<>();
 
 	private 			String						name;
     private BadIP lastIp;
@@ -67,23 +62,15 @@ public class BadOfflinePlayer {
     }
 
     public static BadOfflinePlayer get(String name) {
-        List<BadOfflinePlayer> list = Filter.filterCollectionStatic(p -> p.getName().equalsIgnoreCase(name), maps.values());
-        if (list.isEmpty()) {
-            BadOfflinePlayer p = new BadOfflinePlayer(name, false);
-            if (!p.getFinded()) return null;
-            maps.put(p.getName(), p);
-            return p;
-        } else return list.get(0);
+        BadOfflinePlayer p = new BadOfflinePlayer(name, false);
+        if (!p.getFinded()) return null;
+        else return p;
     }
 
     public static BadOfflinePlayer get(UUID uuid) {
-        List<BadOfflinePlayer> list = Filter.filterCollectionStatic(p -> p.getUniqueId().toString().equalsIgnoreCase(uuid.toString()), maps.values());
-        if (list.isEmpty()) {
-            BadOfflinePlayer p = new BadOfflinePlayer(uuid, false);
-            if (!p.getFinded()) return null;
-            maps.put(p.getName(), p);
-            return p;
-        } else return list.get(0);
+        BadOfflinePlayer p = new BadOfflinePlayer(uuid, false);
+        if (!p.getFinded()) return null;
+        else return p;
     }
 
     public void updateSettings() {
