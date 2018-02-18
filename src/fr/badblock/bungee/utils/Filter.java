@@ -24,20 +24,6 @@ public interface Filter<T> {
     /**
      * Filter a list
      *
-     * @param list the list to be filtered
-     * @return the filtered list
-     */
-    default List<T> filterList(List<T> list) {
-        List<T> filtered = new ArrayList<>();
-        list.forEach(t -> {
-            if (keep(t)) filtered.add(t);
-        });
-        return filtered;
-    }
-
-    /**
-     * Filter a list
-     *
      * @param filter the filter
      * @param list   the list to be filtered
      * @return the filtered list
@@ -66,7 +52,21 @@ public interface Filter<T> {
      */
     @SuppressWarnings("unchecked")
     static <E> E[] filterArrayStatic(Filter<E> filter, E[] array) {
-        return (E[]) filter.filterList(Arrays.asList(array)).toArray();
+        return filter.filterArray(array);
+    }
+
+    /**
+     * Filter a list
+     *
+     * @param list the list to be filtered
+     * @return the filtered list
+     */
+    default List<T> filterList(List<T> list) {
+        List<T> filtered = new ArrayList<>();
+        list.forEach(t -> {
+            if (keep(t)) filtered.add(t);
+        });
+        return filtered;
     }
 
     /**
