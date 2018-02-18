@@ -4,15 +4,16 @@ import com.google.gson.JsonObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.players.layer.BadPlayerSettingsSerializer;
+import fr.badblock.bungee.utils.Filter;
 import fr.badblock.bungee.utils.ObjectUtils;
+import fr.badblock.bungee.utils.mongodb.SynchroMongoDBGetter;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import fr.toenga.common.utils.bungee.Punished;
-import fr.toenga.common.utils.data.Callback;
 import fr.toenga.common.utils.general.GsonUtils;
 import fr.toenga.common.utils.i18n.I18n;
 import fr.toenga.common.utils.i18n.Locale;
@@ -23,194 +24,188 @@ import lombok.EqualsAndHashCode;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bson.BSONObject;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class BadOfflinePlayer
-{
+public class BadOfflinePlayer {
+    private static Map<String, BadOfflinePlayer> maps = new HashMap<>();
 
 	private 			String						name;
     private UUID uniqueId;
 	private transient	BSONObject	  				dbObject;
 
-	private transient	Callback<BadOfflinePlayer>	callback;
-	private transient	List<Callback<BadPlayer>> 	loadedCallbacks;
-	private 			boolean						loaded;
-
 	private 			Permissible					permissions;
 	private 			Punished					punished;
 	
 	private				BadPlayerSettings			settings;
+    private Boolean finded = true;
 
-	public BadOfflinePlayer(String name, Callback<BadOfflinePlayer> callback)
-	{
+    public BadOfflinePlayer(String name) {
 		setName(name);
-		setCallback(callback);
-		setLoadedCallbacks(new ArrayList<>());
-		loadData();
-	}
+        loadData(true);
+    }
 
-	public void registerLoadedCallback(Callback<BadPlayer> callback)
-	{
-		if (isLoaded())
-		{
-			callback.done((BadPlayer) this, null);
-			return;	
-		}
-		getLoadedCallbacks().add(callback);
-	}
+    public BadOfflinePlayer(UUID uniqueId) {
+        setUniqueId(uniqueId);
+        loadData(true, true);
+    }
 
-	public void updateData(String key, Object value)
-	{
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		mongoService.useAsyncMongo(new MongoMethod(mongoService)
-		{
-			@Override
-			public void run(MongoService mongoService)
-			{
-				DB db = mongoService.getDb();
-				DBCollection collection = db.getCollection("players");
-				BasicDBObject query = new BasicDBObject();
-				BasicDBObject update = new BasicDBObject();
+    public BadOfflinePlayer(String name, boolean create) {
+        setName(name);
+        loadData(create);
+    }
 
-				query.put("name", getName().toLowerCase());
-				update.put(key, value);
+    public BadOfflinePlayer(UUID uniqueId, boolean create) {
+        setUniqueId(uniqueId);
+        loadData(true, create);
+    }
 
-				collection.update(query, update); 
-				loadData();
-				callback.done(BadOfflinePlayer.this, null);
-			}
-		});
-	}
+    public static BadOfflinePlayer get(String name) {
+        List<BadOfflinePlayer> list = Filter.filterCollectionStatic(p -> p.getName().equalsIgnoreCase(name), maps.values());
+        if (list.isEmpty()) {
+            BadOfflinePlayer p = new BadOfflinePlayer(name, false);
+            if (!p.getFinded()) return null;
+            maps.put(p.getName(), p);
+            return p;
+        } else return list.get(0);
+    }
 
-	public void updateLastServer(ProxiedPlayer proxiedPlayer)
-	{
-		updateData("lastServer", proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null ? proxiedPlayer.getServer().getInfo().getName() : "");
-	}
+    public static BadOfflinePlayer get(UUID uuid) {
+        List<BadOfflinePlayer> list = Filter.filterCollectionStatic(p -> p.getUniqueId().toString().equalsIgnoreCase(uuid.toString()), maps.values());
+        if (list.isEmpty()) {
+            BadOfflinePlayer p = new BadOfflinePlayer(uuid, false);
+            if (!p.getFinded()) return null;
+            maps.put(p.getName(), p);
+            return p;
+        } else return list.get(0);
+    }
 
     public void updateSettings() {
         updateData("settings", BadPlayerSettingsSerializer.serialize(settings));
     }
 
-	protected void loadData()
-	{
+    public void updateData(String key, Object value) {
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		mongoService.useAsyncMongo(new MongoMethod(mongoService)
-		{
+        mongoService.useAsyncMongo(new MongoMethod(mongoService) {
+
 			@Override
-			public void run(MongoService mongoService)
-			{
+            public void run(MongoService mongoService) {
 				DB db = mongoService.getDb();
 				DBCollection collection = db.getCollection("players");
 				BasicDBObject query = new BasicDBObject();
-
-				query.put("name", getName().toLowerCase());
-
-				DBCursor cursor = collection.find(query); 
-				boolean find = cursor.hasNext();
-
-				if (find)
-				{
-					setDbObject(cursor.next());
-					BadBungee.log("§c" + getName() + " exists in the player table.");
-
-                    name = getString("realName");
-                    //lastip
-                    uniqueId = UUID.fromString(getString("uniqueId"));
-                    settings = BadPlayerSettingsSerializer.deserialize(getString("settings"));
-
-					punished = Punished.fromJson( getJsonObject("punish") );
-					if (PermissionsManager.getManager() != null)
-					{
-						permissions = PermissionsManager.getManager().loadPermissible( getJsonObject("permissions") );
-					}
-                    //version
-
-				}
-				else
-				{
-					// Le joueur n'existe pas
-					punished = new Punished();
-					permissions = new Permissible();
-					settings = new BadPlayerSettings();
-
-					BadBungee.log(getName() + " doesn't exist in the player table.");
-					BadBungee.log("§aCreating it...");
-
-					BasicDBObject obj = getSavedObject();
-
-					setDbObject(obj);
-					collection.insert(obj);
-
-					BadBungee.log("§aCreated!");
-				}
-				setLoaded(true);
-				callback.done(BadOfflinePlayer.this, null);
+				BasicDBObject update = new BasicDBObject();
+                query.put("name", getName().toLowerCase());
+				update.put(key, value);
+                collection.update(query, update);
+                loadData(false);
 			}
+
 		});
 	}
 
-	public String[] getTranslatedMessages(String key, Object... objects)
-	{
-		return I18n.getInstance().get(getLocale(), key, objects);
+    public void updateLastServer(ProxiedPlayer proxiedPlayer) {
+		updateData("lastServer", proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null ? proxiedPlayer.getServer().getInfo().getName() : "");
 	}
 
-	public boolean hasPermission(String permission)
-	{
-		if (getPermissions() == null)
-		{
-			return false;
-		}
-		
-		return getPermissions().hasPermission(permission);
-	}
+    void loadData(boolean create) {
+        loadData(false, create);
+    }
 
-    public String getString(String part) {
-        if (dbObject.containsField(part)) {
-            return dbObject.get(part).toString();
+    private void loadData(boolean uuid, boolean create) {
+        BasicDBObject query = new BasicDBObject();
+        if (!uuid) query.append("name", getName().toLowerCase());
+        else query.append("uniqueId", getUniqueId().toString());
+        DBObject obj = new SynchroMongoDBGetter("players", query).getDbObject();
+        if (obj != null) {
+            setDbObject(obj);
+            BadBungee.log("§c" + getName() + " exists in the player table.");
+            setName(getString("realName"));
+            //TODO lastip
+            setUniqueId(UUID.fromString(getString("uniqueId")));
+            setSettings(BadPlayerSettingsSerializer.deserialize(getString("settings")));
+            setPunished(Punished.fromJson(getJsonObject("punish")));
+            if (PermissionsManager.getManager() != null) {
+                setPermissions(PermissionsManager.getManager().loadPermissible(getJsonObject("permissions")));
+            }
+            //TODO version
         } else {
-            return new String();
+            BadBungee.log(getName() + " doesn't exist in the player table.");
+            if (create) insert();
+            else setFinded(false);
         }
     }
 
-	public JsonObject getJsonObject(String part)
-	{
-		//FIXME vraiment pas optimisé, à voir si il y a mieux
+    private void insert() {
+        BadBungee.log("§aCreating it...");
+        MongoService mongoService = BadBungee.getInstance().getMongoService();
+        mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 
-		if(dbObject.containsField(part))
-		{
-			String value = dbObject.get(part).toString();
-			return GsonUtils.getPrettyGson().fromJson(value, JsonObject.class);
-		}
-		else
-		{
-			return new JsonObject();
-		}
+            @Override
+            public void run(MongoService mongoService) {
+                punished = new Punished();
+                permissions = new Permissible();
+                settings = new BadPlayerSettings();
+                uniqueId = UUID.randomUUID();
+                BasicDBObject obj = getSavedObject();
+                setDbObject(obj);
+                DB db = mongoService.getDb();
+                DBCollection collection = db.getCollection("players");
+                collection.insert(obj);
+                BadBungee.log("§aCreated!");
+            }
+        });
+    }
+
+    public String[] getTranslatedMessages(String key, Object... objects) {
+		return I18n.getInstance().get(getLocale(), key, objects);
 	}
 
-	public BasicDBObject getSavedObject()
-	{
-		BasicDBObject object = new BasicDBObject();
+    public boolean hasPermission(String permission) {
+        if (getPermissions() == null) return false;
+		return getPermissions().hasPermission(permission);
+	}
 
+    private String getString(String part) {
+        if (getDbObject().containsField(part)) return getDbObject().get(part).toString();
+        else return "";
+    }
+
+    public JsonObject getJsonObject(String part) {
+		//FIXME vraiment pas optimisé, à voir si il y a mieux
+        if (getDbObject().containsField(part)) {
+            String value = getDbObject().get(part).toString();
+			return GsonUtils.getPrettyGson().fromJson(value, JsonObject.class);
+		} else return new JsonObject();
+    }
+
+    public BasicDBObject getSavedObject() {
+		BasicDBObject object = new BasicDBObject();
 		object.put("name", getName().toLowerCase());
 		object.put("realName", getName());
 		object.put("lastIp", "");
-		object.put("uniqueId", UUID.randomUUID().toString());
-        object.put("settings", BadPlayerSettingsSerializer.serialize(settings));
-		object.put("punish", punished);
-		object.put("permissions", permissions);
+        object.put("uniqueId", getUniqueId());
+        object.put("settings", BadPlayerSettingsSerializer.serialize(getSettings()));
+        object.put("punish", getPunished());
+        object.put("permissions", getPermissions());
 		object.put("version", "0");
 		// TODO
-
 		return object;
 	}
 
-	public Locale getLocale()
-	{
+    public Locale getLocale() {
 		return ObjectUtils.getOr(getDbObject(), "locale", Locale.FRENCH_FRANCE);
 	}
+
+    public boolean isOnline() {
+        return BadPlayer.has(getName());
+    }
+
+    public BadPlayer getOnlineBadPlayer() {
+        return isOnline() ? BadPlayer.get(getName()) : null;
+    }
 
 }

@@ -1,5 +1,6 @@
 package fr.badblock.bungee._plugins.objects.friendlist;
 
+import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.mcjson.McJsonFactory;
@@ -61,15 +62,16 @@ class FriendListMessage {
         p.sendTranslatedOutgoingMessage(prefix("querying.now_refuse"));
     }
 
-    void ALREADY_FRIEND(BadPlayer p, BadPlayer with) {
+    void ALREADY_FRIEND(BadPlayer p, BadOfflinePlayer with) {
         p.sendTranslatedOutgoingMessage(prefix("requests.already_friend"), with.getName());
     }
 
-    void REQUESTED_ACCEPT(BadPlayer p, BadPlayer requested) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.requested_accept"), requested.getName());
+    void REQUESTED_ACCEPT(BadOfflinePlayer p, BadPlayer requested) {
+        if (p.isOnline())
+            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.requested_accept"), requested.getName());
     }
 
-    void ACCEPT_REQUESTER(BadPlayer p, BadPlayer requester) {
+    void ACCEPT_REQUESTER(BadPlayer p, BadOfflinePlayer requester) {
         p.sendTranslatedOutgoingMessage(prefix("requests.accept_requester"), requester.getName());
     }
 
@@ -77,7 +79,7 @@ class FriendListMessage {
         p.sendTranslatedOutgoingMessage(prefix("requests.already_requested"));
     }
 
-    void REQUEST(BadPlayer p, BadPlayer requester) {
+    void REQUEST(BadOfflinePlayer p, BadPlayer requester) {
         String intro = I18n.getInstance().get(p.getLocale(), "requests.request.intro", requester.getName())[0];
         String accept = I18n.getInstance().get(p.getLocale(), "requests.request.accept")[0];
         String accept_hover = I18n.getInstance().get(p.getLocale(), "requests.request.accept_hover", requester.getName())[0];
@@ -89,42 +91,45 @@ class FriendListMessage {
                 finaliseAndInitNewComponent("     ").finaliseComponent().
                 initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend accept " + requester.getName()).
                 build();
-        p.sendTranslatedOutgoingMCJson(json);
+        if (p.isOnline()) p.getOnlineBadPlayer().sendTranslatedOutgoingMCJson(json);
     }
 
-    void REQUEST_RECEIVED(BadPlayer p, BadPlayer receiver) {
+    void REQUEST_RECEIVED(BadPlayer p, BadOfflinePlayer receiver) {
         p.sendTranslatedOutgoingMessage(prefix("requests.request_received"), receiver.getName());
     }
 
-    void DO_NOT_ACCEPT_REQUESTS(BadPlayer p, BadPlayer who) {
+    void DO_NOT_ACCEPT_REQUESTS(BadPlayer p, BadOfflinePlayer who) {
         p.sendTranslatedOutgoingMessage(prefix("requests.do_not_accept_requests"), who.getName());
     }
 
-    void DECLINED_YOUR_REQUEST(BadPlayer p, BadPlayer who) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.declined_your_requested"), who.getName());
+    void DECLINED_YOUR_REQUEST(BadOfflinePlayer p, BadPlayer who) {
+        if (p.isOnline())
+            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.declined_your_requested"), who.getName());
     }
 
-    void REJECT_REQUEST_OF(BadPlayer p, BadPlayer of) {
+    void REJECT_REQUEST_OF(BadPlayer p, BadOfflinePlayer of) {
         p.sendTranslatedOutgoingMessage(prefix("requests.reject_request_of"), of.getName());
     }
 
-    void REMOVED_YOU_FROM_FRIENDS(BadPlayer p, BadPlayer who) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.remove_you_from_friends"), who.getName());
+    void REMOVED_YOU_FROM_FRIENDS(BadOfflinePlayer p, BadPlayer who) {
+        if (p.isOnline())
+            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.remove_you_from_friends"), who.getName());
     }
 
-    void NOW_NO_LONGER_FRIEND(BadPlayer p, BadPlayer with) {
+    void NOW_NO_LONGER_FRIEND(BadPlayer p, BadOfflinePlayer with) {
         p.sendTranslatedOutgoingMessage(prefix("requests.now_no_longer_friend"), with.getName());
     }
 
-    void CANCEL_REQUEST_TO(BadPlayer p, BadPlayer to) {
+    void CANCEL_REQUEST_TO(BadPlayer p, BadOfflinePlayer to) {
         p.sendTranslatedOutgoingMessage(prefix("requests.cancel_request_to"), to.getName());
     }
 
-    void CANCELLED_REQUEST(BadPlayer p, BadPlayer who) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.cancelled_request"), who.getName());
+    void CANCELLED_REQUEST(BadOfflinePlayer p, BadPlayer who) {
+        if (p.isOnline())
+            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.cancelled_request"), who.getName());
     }
 
-    void NO_RELATIONSHIP(BadPlayer p, BadPlayer with) {
+    void NO_RELATIONSHIP(BadPlayer p, BadOfflinePlayer with) {
         p.sendTranslatedOutgoingMessage(prefix("requests.no_relationship"), with.getName());
     }
 

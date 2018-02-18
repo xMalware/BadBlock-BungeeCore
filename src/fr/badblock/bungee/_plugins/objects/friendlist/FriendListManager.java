@@ -11,6 +11,7 @@ import fr.badblock.bungee.api.events.objects.friendlist.FriendListRequestEvent;
 import fr.badblock.bungee.api.events.objects.friendlist.FriendListRequestEvent.FriendListRequestStatus;
 import fr.badblock.bungee.api.events.objects.friendlist.FriendListableChangeEvent;
 import fr.badblock.bungee.link.bungee.BungeeManager;
+import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.Filter;
 import fr.badblock.bungee.utils.mongodb.SynchroMongoDBGetter;
@@ -102,7 +103,7 @@ public class FriendListManager {
 
     public static void request(String want, String wanted) {
         BadPlayer wantBadPlayer = BungeeManager.getInstance().getBadPlayer(want);
-        BadPlayer wantedBadPlayer = BungeeManager.getInstance().getBadPlayer(wanted);
+        BadOfflinePlayer wantedBadPlayer = BungeeManager.getInstance().getBadOfflinePlayer(wanted);
         if (wantedBadPlayer == null) {
             message.UNKNOWN_PLAYER(wantBadPlayer, wanted);
             return;
@@ -170,7 +171,7 @@ public class FriendListManager {
 
     public static void remove(String want, String wanted) {
         BadPlayer wantBadPlayer = BungeeManager.getInstance().getBadPlayer(want);
-        BadPlayer wantedBadPlayer = BungeeManager.getInstance().getBadPlayer(wanted);
+        BadOfflinePlayer wantedBadPlayer = BungeeManager.getInstance().getBadOfflinePlayer(wanted);
         if (wantedBadPlayer == null) {
             message.UNKNOWN_PLAYER(wantBadPlayer, wanted);
             return;

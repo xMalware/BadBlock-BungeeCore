@@ -1,9 +1,6 @@
 package fr.badblock.bungee.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Util for filter arrays and list
@@ -20,6 +17,17 @@ public interface Filter<T> {
      * @return true if object is keeped, false if he is removed
      */
     boolean keep(T object);
+
+    /**
+     * Filter a collection
+     *
+     * @param filter     the filter
+     * @param collection the collection to be filtered
+     * @return the filtered collection
+     */
+    static <E> List<E> filterCollectionStatic(Filter<E> filter, Collection<E> collection) {
+        return filter.filterCollection(collection);
+    }
 
     /**
      * Filter a list
@@ -53,6 +61,20 @@ public interface Filter<T> {
     @SuppressWarnings("unchecked")
     static <E> E[] filterArrayStatic(Filter<E> filter, E[] array) {
         return filter.filterArray(array);
+    }
+
+    /**
+     * Filter a collection
+     *
+     * @param collection the collection to be filtered
+     * @return the filtered collection
+     */
+    default List<T> filterCollection(Collection<T> collection) {
+        List<T> filtered = new ArrayList<>();
+        collection.forEach(t -> {
+            if (keep(t)) filtered.add(t);
+        });
+        return filtered;
     }
 
     /**

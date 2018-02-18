@@ -15,7 +15,6 @@ import fr.toenga.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketEncoder;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketMessage;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketType;
-import fr.toenga.common.utils.data.Callback;
 import fr.toenga.common.utils.general.GlobalFlags;
 import lombok.Data;
 import lombok.Getter;
@@ -98,9 +97,7 @@ public class BungeeManager
     }
 
 
-	
-	public BadPlayer getBadPlayer(String name)
-	{
+    public BadPlayer getBadPlayer(String name) {
         List<BadPlayer> list = getLoggedPlayers(p -> p.getName().equalsIgnoreCase(name));
 		return list.isEmpty() ? null : list.get(0);
 	}
@@ -114,17 +111,16 @@ public class BungeeManager
 	{
 		return BadPlayer.get(proxiedPlayer);
 	}
-	
-	public void getOfflinePlayer(String name, Callback<BadOfflinePlayer> callback)
-	{
-		name = name.toLowerCase();
-		if (BadPlayer.has(name))
-		{
-			callback.done(BadPlayer.get(name), null);
-			return;
-		}
-		new BadOfflinePlayer(name, callback);
-	}
+
+    public BadOfflinePlayer getBadOfflinePlayer(String name) {
+        if (getBadPlayer(name) != null) return getBadPlayer(name);
+        return BadOfflinePlayer.get(name);
+    }
+
+    public BadOfflinePlayer getBadOfflinePlayer(UUID uuid) {
+        if (getBadPlayer(uuid) != null) return getBadPlayer(uuid);
+        return BadOfflinePlayer.get(uuid);
+    }
 	
 	public ServerPing generatePing()
 	{
