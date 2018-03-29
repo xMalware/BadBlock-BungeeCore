@@ -6,7 +6,9 @@ import com.mongodb.DBObject;
 
 import fr.badblock.bungee._plugins.objects.party.Partyable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 public class BadPlayerSettings
 {
@@ -27,11 +29,11 @@ public class BadPlayerSettings
 		partyable = Partyable.getByString(jsonObject.get("partyable").toString());
 	}
 	
-	public DBObject toDBObject()
+	public DBObject getDBObject()
 	{
-		BasicDBObject object = new BasicDBObject();
-		object.put("partyable", getPartyable().name());
-		return object;
+		BasicDBObject query = new BasicDBObject();
+		query.put("partyable", getPartyable().name());
+		return query;
 	}
 	
 }

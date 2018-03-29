@@ -19,8 +19,9 @@ public class ServerConnectedReloadDataListener extends BadListener
 		badPlayer.registerLoadedCallback(new Callback<BadPlayer>()
 		{
 			@Override
-			public void done(BadPlayer result, Throwable error) {
-				badPlayer.updateLastServer(proxiedPlayer);	
+			public void done(BadPlayer result, Throwable error)
+			{
+				badPlayer.updateLastServer(proxiedPlayer);
 			}
 		});
 	}

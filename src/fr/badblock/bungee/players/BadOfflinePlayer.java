@@ -42,7 +42,7 @@ public class BadOfflinePlayer
 
 	private 			Permissible					permissions;
 	private 			Punished					punished;
-	
+
 	private				BadPlayerSettings			settings;
 
 	public BadOfflinePlayer(String name, Callback<BadOfflinePlayer> callback)
@@ -50,6 +50,7 @@ public class BadOfflinePlayer
 		setName(name);
 		setCallback(callback);
 		setLoadedCallbacks(new ArrayList<>());
+		System.out.println("load offlineplayer");
 		loadData();
 	}
 
@@ -57,9 +58,11 @@ public class BadOfflinePlayer
 	{
 		if (isLoaded())
 		{
+			System.out.println("set as loaded!");
 			callback.done((BadPlayer) this, null);
 			return;	
 		}
+		System.out.println("added as callback");
 		getLoadedCallbacks().add(callback);
 	}
 
@@ -74,14 +77,20 @@ public class BadOfflinePlayer
 				DB db = mongoService.getDb();
 				DBCollection collection = db.getCollection("players");
 				BasicDBObject query = new BasicDBObject();
-				BasicDBObject update = new BasicDBObject();
+				BasicDBObject update = new BasicDBObject(key, value);
 
 				query.put("name", getName().toLowerCase());
-				update.put(key, value);
+				BasicDBObject updater = new BasicDBObject("$set", update);
 
-				collection.update(query, update); 
+				System.out.println(key + " : " + value);
+				collection.update(query, updater);
+				System.out.println("update " + key);
 				loadData();
-				callback.done(BadOfflinePlayer.this, null);
+				if (callback != null)
+				{
+					callback.done(BadOfflinePlayer.this, null);
+					callback = null;
+				}
 			}
 		});
 	}
@@ -113,14 +122,14 @@ public class BadOfflinePlayer
 					setDbObject(cursor.next());
 					BadBungee.log("§c" + getName() + " exists in the player table.");
 
-					punished = Punished.fromJson( getJsonObject("punish") );
+					punished = new Punished(getJsonObject("punish"));
 					if (PermissionsManager.getManager() != null)
 					{
 						permissions = PermissionsManager.getManager().loadPermissible( getJsonObject("permissions") );
 					}
-					
+
 					setSettings(new BadPlayerSettings(getJsonObject("settings")));
-					
+
 				}
 				else
 				{
@@ -156,7 +165,7 @@ public class BadOfflinePlayer
 		{
 			return false;
 		}
-		
+
 		return getPermissions().hasPermission(permission);
 	}
 
@@ -183,9 +192,9 @@ public class BadOfflinePlayer
 		object.put("realName", getName());
 		object.put("lastIp", "");
 		object.put("uniqueId", UUID.randomUUID().toString());
-		object.put("settings", settings.toDBObject());
-		object.put("punish", punished);
-		object.put("permissions", permissions);
+		object.put("settings", settings.getDBObject());
+		object.put("punish", punished.getDBObject());
+		object.put("permissions", permissions.getDBObject());
 		object.put("version", "0");
 		// TODO
 
