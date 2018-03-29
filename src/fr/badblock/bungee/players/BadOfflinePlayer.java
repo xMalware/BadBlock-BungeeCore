@@ -1,6 +1,7 @@
 package fr.badblock.bungee.players;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ import fr.toenga.common.utils.data.Callback;
 import fr.toenga.common.utils.general.GsonUtils;
 import fr.toenga.common.utils.i18n.I18n;
 import fr.toenga.common.utils.i18n.Locale;
-import fr.toenga.common.utils.permissions.Permissible;
+import fr.toenga.common.utils.permissions.PermissionUser;
 import fr.toenga.common.utils.permissions.PermissionsManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,7 +41,7 @@ public class BadOfflinePlayer
 	private transient	List<Callback<BadPlayer>> 	loadedCallbacks;
 	private 			boolean						loaded;
 
-	private 			Permissible					permissions;
+	private 			PermissionUser				permissions;
 	private 			Punished					punished;
 
 	private				BadPlayerSettings			settings;
@@ -125,7 +126,7 @@ public class BadOfflinePlayer
 					punished = new Punished(getJsonObject("punish"));
 					if (PermissionsManager.getManager() != null)
 					{
-						permissions = PermissionsManager.getManager().loadPermissible( getJsonObject("permissions") );
+						permissions = new PermissionUser(getJsonObject("permissions"));
 					}
 
 					setSettings(new BadPlayerSettings(getJsonObject("settings")));
@@ -135,7 +136,7 @@ public class BadOfflinePlayer
 				{
 					// Le joueur n'existe pas
 					punished = new Punished();
-					permissions = new Permissible();
+					permissions = new PermissionUser(new HashMap<>(), new ArrayList<>());
 					settings = new BadPlayerSettings();
 
 					BadBungee.log(getName() + " doesn't exist in the player table.");
@@ -170,7 +171,7 @@ public class BadOfflinePlayer
 			return false;
 		}
 
-		return getPermissions().hasPermission(permission);
+		return getPermissions().hasPermission("bungee", permission);
 	}
 
 	public JsonObject getJsonObject(String part)

@@ -24,6 +24,7 @@ import fr.toenga.common.tech.rabbitmq.RabbitConnector;
 import fr.toenga.common.tech.rabbitmq.RabbitService;
 import fr.toenga.common.utils.i18n.I18n;
 import fr.toenga.common.utils.permissions.Permissible;
+import fr.toenga.common.utils.permissions.PermissionsManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -128,18 +129,16 @@ public class BungeeLoader
 		DB db = mongoService.getDb();
 		DBCollection collection = db.getCollection("permissions");
 		BasicDBObject query = new BasicDBObject();
-		query.append("places", "bungee");
 		DBCursor cursor = collection.find(query);
 		Map<String, Permissible> groups = new HashMap<>();
-		if (cursor.hasNext())
+		while (cursor.hasNext())
 		{
 			DBObject dbObject = cursor.next();
-			String json = getBadBungee().getGson().toJson(dbObject.get("groups"));
-			System.out.println(json);
-			//Permissible permissible gson = getBadBungee().getGson().fromJson(json, );
+			String json = getBadBungee().getGson().toJson(dbObject);
+			Permissible permissible = getBadBungee().getGson().fromJson(json, Permissible.class);
+			groups.put(dbObject.get("name").toString(), permissible);
 		}
-		//Map<String, Permissible> gson = getBadBungee().getGson().fromJson(json, collectionType);
-		//PermissionsManager.createPermissionManager(gson, "bungee");
+		PermissionsManager.createPermissionManager(groups, "bungee");
 	}
 
 }
