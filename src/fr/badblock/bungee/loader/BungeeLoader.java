@@ -2,9 +2,16 @@ package fr.badblock.bungee.loader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.config.BadBungeeConfig;
@@ -16,6 +23,7 @@ import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.rabbitmq.RabbitConnector;
 import fr.toenga.common.tech.rabbitmq.RabbitService;
 import fr.toenga.common.utils.i18n.I18n;
+import fr.toenga.common.utils.permissions.Permissible;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -116,20 +124,22 @@ public class BungeeLoader
 
 	private void loadPermissions()
 	{
-		/*MongoService mongoService = BadBungee.getInstance().getMongoService();
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		DB db = mongoService.getDb();
 		DBCollection collection = db.getCollection("permissions");
 		BasicDBObject query = new BasicDBObject();
-		query.append("place", "bungee");
+		query.append("places", "bungee");
 		DBCursor cursor = collection.find(query);
+		Map<String, Permissible> groups = new HashMap<>();
 		if (cursor.hasNext())
 		{
 			DBObject dbObject = cursor.next();
 			String json = getBadBungee().getGson().toJson(dbObject.get("groups"));
 			System.out.println(json);
-			Map<String, Permissible> gson = getBadBungee().getGson().fromJson(json, collectionType);
-			PermissionsManager.createPermissionManager(gson, "bungee");
-		}*/
+			//Permissible permissible gson = getBadBungee().getGson().fromJson(json, );
+		}
+		//Map<String, Permissible> gson = getBadBungee().getGson().fromJson(json, collectionType);
+		//PermissionsManager.createPermissionManager(gson, "bungee");
 	}
 
 }

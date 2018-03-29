@@ -88,7 +88,7 @@ public class BadPlayer extends BadOfflinePlayer
 	}
 
     public void sendOutgoingJsonMessage(String... jsons) {
-        if (toProxiedPlayer() == null) return;
+        if (toProxiedPlayer() != null) sendLocalJsonMessage(jsons);
         else BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, StringUtils.toOneString(jsons)));
     }
 	

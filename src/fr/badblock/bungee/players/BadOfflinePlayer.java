@@ -118,6 +118,9 @@ public class BadOfflinePlayer
 					{
 						permissions = PermissionsManager.getManager().loadPermissible( getJsonObject("permissions") );
 					}
+					
+					setSettings(new BadPlayerSettings(getJsonObject("settings")));
+					
 				}
 				else
 				{
@@ -180,7 +183,7 @@ public class BadOfflinePlayer
 		object.put("realName", getName());
 		object.put("lastIp", "");
 		object.put("uniqueId", UUID.randomUUID().toString());
-		object.put("settings", settings);
+		object.put("settings", settings.toDBObject());
 		object.put("punish", punished);
 		object.put("permissions", permissions);
 		object.put("version", "0");
