@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.UUID;
+
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
-public class FriendListPlayer
+public final class FriendListPlayer
 {
-	
-    private String name;
+
+    private UUID uuid;
     private FriendListPlayerState state;
     
 }

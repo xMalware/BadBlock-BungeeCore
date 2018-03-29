@@ -11,112 +11,87 @@ import lombok.EqualsAndHashCode;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
-public class FriendList
+public final class FriendList
 {
 
 	public static final String				OWNER = "_owner";
-	public static final String				QUERYABLE = "queryable";
 	public static final String				PLAYERS = "players";
 
-	private static final Type				collectionType = new TypeToken<Map<String, FriendListPlayer>>(){}.getType();
+    private static final Type collectionType = new TypeToken<Map<UUID, FriendListPlayer>>() {
+    }.getType();
 
-	private String							owner;
-	private boolean 						queryable = true;
-    private Map<String, FriendListPlayer> players;
+    private UUID owner;
+    private Map<UUID, FriendListPlayer> players;
 
-    FriendList(String owner)
+    FriendList(UUID owner)
 	{
 		this.owner = owner;
 		players = new HashMap<>();
 	}
 
-	public FriendList(String owner, String request, FriendListPlayerState state)
-	{
-		this(owner);
-	}
-
     FriendList(DBObject dbObject)
 	{
-		owner = dbObject.get(OWNER).toString();
-		queryable = Boolean.getBoolean(dbObject.get(QUERYABLE).toString());
+        owner = UUID.fromString(dbObject.get(OWNER).toString());
 		players = GsonUtils.getGson().fromJson(dbObject.get(PLAYERS).toString(), collectionType);
 	}
 
-	private FriendListPlayer toFriendListPlayer(String name, FriendListPlayerState state) {
-		return new FriendListPlayer(name, state);
-	}
+    private FriendListPlayer toFriendListPlayer(UUID uuid, FriendListPlayerState state) {
+        return new FriendListPlayer(uuid, state);
+    }
 
-    private void add(String name, FriendListPlayerState state) {
-		name = name.toLowerCase();
-		FriendListPlayer partyPlayer = toFriendListPlayer(name, state);
-        if (players.containsKey(name)) players.replace(name, partyPlayer);
-        else players.put(name, partyPlayer);
+    private void add(UUID uuid, FriendListPlayerState state) {
+        FriendListPlayer partyPlayer = toFriendListPlayer(uuid, state);
+        if (players.containsKey(uuid)) players.replace(uuid, partyPlayer);
+        else players.put(uuid, partyPlayer);
         save();
     }
 
-
-    void setQueryable(boolean queryable) {
-        this.queryable = queryable;
+    void remove(UUID uuid) {
+        players.remove(uuid);
         save();
     }
 
-    void remove(String name) {
-        name = name.toLowerCase();
-        players.remove(name);
-        save();
+    void accept(UUID uuid) {
+        add(uuid, FriendListPlayerState.ACCEPTED);
     }
 
-    void accept(String name) {
-		add(name, FriendListPlayerState.ACCEPTED);
-	}
-
-    void request(String name) {
-		add(name, FriendListPlayerState.WAITING);
-	}
-
-    void requested(String name) {
-		add(name, FriendListPlayerState.REQUESTED);
-	}
-
-    boolean isFriend(String name)
-	{
-		name = name.toLowerCase();
-		return players.containsKey(name) && players.get(name).getState() == FriendListPlayerState.ACCEPTED;
-	}
-
-    boolean wantToBeFriendWith(String name) {
-        name = name.toLowerCase();
-        return players.containsKey(name) && players.get(name).getState() == FriendListPlayerState.REQUESTED;
+    void request(UUID uuid) {
+        add(uuid, FriendListPlayerState.WAITING);
     }
 
-    boolean alreadyRequestedBy(String name) {
-        name = name.toLowerCase();
-        if (players.containsKey(name)) return players.get(name).getState() == FriendListPlayerState.WAITING;
+    void requested(UUID uuid) {
+        add(uuid, FriendListPlayerState.REQUESTED);
+    }
+
+    boolean isFriend(UUID uuid) {
+        return players.containsKey(uuid) && players.get(uuid).getState() == FriendListPlayerState.ACCEPTED;
+    }
+
+    boolean wantToBeFriendWith(UUID uuid) {
+        return players.containsKey(uuid) && players.get(uuid).getState() == FriendListPlayerState.REQUESTED;
+    }
+
+    boolean alreadyRequestedBy(UUID uuid) {
+        if (players.containsKey(uuid)) return players.get(uuid).getState() == FriendListPlayerState.WAITING;
         else return false;
     }
 
-    boolean isInList(String name) {
-        name = name.toLowerCase();
-        return players.containsKey(name);
+    boolean isInList(UUID uuid) {
+        return players.containsKey(uuid);
     }
 
-    private void save()
-	{
-		if (owner != null)
-		{
-			FriendListManager.update(this);
-		}
-	}
+    private void save() {
+        if (owner != null) FriendListManager.update(this);
+    }
 
-    DBObject toObject()
-	{
+    DBObject toObject() {
 		BasicDBObject object = new BasicDBObject();
-		if (owner != null) object.put(OWNER, owner);
-		object.put(QUERYABLE, queryable);
+        if (owner != null) object.put(OWNER, owner.toString());
 		object.put(PLAYERS, GsonUtils.getGson().toJson(players, collectionType));
 		return object;
 	}

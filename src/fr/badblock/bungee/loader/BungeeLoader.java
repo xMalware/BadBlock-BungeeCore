@@ -107,6 +107,7 @@ public class BungeeLoader
 					"fr.badblock.bungee._plugins.commands.admin",
 					"fr.badblock.bungee._plugins.commands.modo",
 					"fr.badblock.bungee._plugins.commands.basic",
+                    "fr.badblock.bungee._plugins.commands.basic",
 					// Listeners
 					"fr.badblock.bungee._plugins.listeners.logins.checkLogin",
 					"fr.badblock.bungee._plugins.listeners.logins.loadPlayer",

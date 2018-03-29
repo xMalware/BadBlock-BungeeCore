@@ -15,7 +15,7 @@ public class PreLoginLoadPlayerListener extends BadListener
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPreLogin(PreLoginEvent event)
 	{
-		BadPlayer badPlayer = new BadPlayer(event, event.getConnection());
+        BadPlayer badPlayer = new BadPlayer(event.getConnection());
 		// Call event
 		ProxyServer.getInstance().getPluginManager().callEvent(new PlayerJoinEvent(badPlayer, event));
 		// Cancelled

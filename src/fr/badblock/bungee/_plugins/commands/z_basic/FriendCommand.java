@@ -8,19 +8,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class FriendCommand extends BadCommand {
-    /**
-     * friend chat (faudra que je le mette quelque part)
-     * FriendList friendList = FriendListManager.getFriendList(sender.getName());
-     if (friendList == null) friendList = new FriendList(sender.getName());
-     if (friendList.getPlayers().size() < 1) {
-     I19n.sendMessage(sender, "commands.chatfriend.nofriends");
-     FriendListManager.update(friendList);
-     } else {
-     final FriendList finalFriendList = friendList;
-     BungeeManager.getInstance().targetedTranslatedBroadcast(p -> finalFriendList.isFriend(p.getName()), "commands.chatfriend.message", sender.getName(), message);
-     }
-     */
-
     private String prefix = "commands.friend.";
 
     public FriendCommand() {
@@ -66,6 +53,13 @@ public class FriendCommand extends BadCommand {
             case "annuler":
                 remove(proxiedPlayer, args);
                 break;
+            case "list":
+            case "show":
+            case "lister":
+            case "afficher":
+            case "montrer":
+                list(proxiedPlayer, args);
+                break;
             default:
                 unknown(sender);
                 break;
@@ -81,40 +75,24 @@ public class FriendCommand extends BadCommand {
     }
 
     private void status(ProxiedPlayer sender, String[] args) {
-        if (args.length < 2) FriendListManager.showStatusSelector(sender.getName());
-        else {
-            switch (args[1]) {
-                case "yes":
-                case "true":
-                case "oui":
-                    FriendListManager.setQueryable(sender.getName(), true);
-                case "no":
-                case "false":
-                case "non":
-                    FriendListManager.setQueryable(sender.getName(), false);
-                default:
-                    I19n.sendMessage(sender, prefix + "status.unknown");
-                    break;
-            }
-        }
+        if (args.length < 2)
+            FriendListManager.showStatusSelector(BungeeManager.getInstance().getBadPlayer(sender));
+        else FriendListManager.setQueryable(BungeeManager.getInstance().getBadPlayer(sender), args[1]);
     }
 
     private void add(ProxiedPlayer sender, String[] args) {
         if (args.length < 2) I19n.sendMessage(sender, prefix + "add.usage");
-        else {
-            if (BungeeManager.getInstance().getBadPlayer(args[1]) == null)
-                I19n.sendMessage(sender, prefix + "unknown_player");
-            else FriendListManager.request(sender.getName(), args[1]);
-        }
+        else FriendListManager.request(sender.getName(), args[1]);
     }
 
     private void remove(ProxiedPlayer sender, String[] args) {
         if (args.length < 2) I19n.sendMessage(sender, prefix + "remove.usage");
-        else {
-            if (BungeeManager.getInstance().getBadPlayer(args[1]) == null)
-                I19n.sendMessage(sender, prefix + "unknown_player");
-            else FriendListManager.remove(sender.getName(), args[1]);
-        }
+        else FriendListManager.remove(sender.getName(), args[1]);
+    }
+
+    private void list(ProxiedPlayer sender, String[] args) {
+        if (args.length < 2) FriendListManager.showFriendList(BungeeManager.getInstance().getBadPlayer(sender));
+        else FriendListManager.showFriendList(BungeeManager.getInstance().getBadPlayer(sender), args[1]);
     }
 
 }

@@ -9,8 +9,7 @@ import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 
-public class PunishmentMutedListener extends BadListener
-{
+public class PunishmentMutedListener extends BadListener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onChatEventEvent(ChatEvent event)
@@ -40,7 +39,7 @@ public class PunishmentMutedListener extends BadListener
 					punished.buildMuteTime(badPlayer.getLocale()),
 					punished.getMuteReason(), punished.getMuter()))
 			{
-				badPlayer.sendLocalMessage(string);
+                badPlayer.sendOutgoingMessage(string);
 			}
 		}
 	}

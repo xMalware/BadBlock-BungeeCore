@@ -4,10 +4,15 @@ public enum FriendListPlayerState
 {
     /**
      * The player request an other player
-     **/
+     */
     REQUESTED,
-    /** An other player requested this player **/
+    /**
+     * An other player requested this player
+     */
     WAITING,
+    /**
+     * The players are friends
+     */
     ACCEPTED
 
 }

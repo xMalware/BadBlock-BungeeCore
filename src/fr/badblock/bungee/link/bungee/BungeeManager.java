@@ -1,20 +1,6 @@
 package fr.badblock.bungee.link.bungee;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-
+import com.mongodb.*;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacket;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacketType;
@@ -23,18 +9,22 @@ import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
 import fr.badblock.bungee.utils.Filter;
+import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketEncoder;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketMessage;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketType;
-import fr.toenga.common.utils.data.Callback;
 import fr.toenga.common.utils.general.GlobalFlags;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Data
 public class BungeeManager
@@ -82,6 +72,10 @@ public class BungeeManager
         getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
     }
 
+    public void targetedTranslatedMCJsonBroadcast(String permission, McJson mcJson) {
+        getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
+    }
+
     public void targetedBrodcast(Filter<BadPlayer> filter, String... messages) {
         filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingMessage(messages));
     }
@@ -97,29 +91,33 @@ public class BungeeManager
     public void targetedTranslatedJsonBroadcast(Filter<BadPlayer> filter, String key, Object... args) {
         filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
     }
-	
-	public BadPlayer getBadPlayer(String name)
-	{
-		List<BadPlayer> list = getLoggedPlayers(p -> p.getName().toLowerCase().equals(name.toLowerCase()));
+
+    public void targetedTranslatedMCJsonBroadcast(Filter<BadPlayer> filter, McJson mcJson) {
+        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
+    }
+
+
+    public BadPlayer getBadPlayer(String name) {
+        List<BadPlayer> list = getLoggedPlayers(p -> p.getName().equalsIgnoreCase(name));
 		return list.isEmpty() ? null : list.get(0);
 	}
+
+    public BadPlayer getBadPlayer(UUID uuid) {
+        List<BadPlayer> list = getLoggedPlayers(p -> p.getUniqueId().toString().equalsIgnoreCase(uuid.toString()));
+        return list.isEmpty() ? null : list.get(0);
+    }
 	
 	public BadPlayer getBadPlayer(ProxiedPlayer proxiedPlayer)
 	{
 		return BadPlayer.get(proxiedPlayer);
 	}
-	
-	public void getOfflinePlayer(String name, Callback<BadOfflinePlayer> callback)
-	{
-		name = name.toLowerCase();
-		if (BadPlayer.has(name))
-		{
-			callback.done(BadPlayer.get(name), null);
-			return;
-		}
-		new BadOfflinePlayer(name, callback);
-	}
-	
+
+    public BadOfflinePlayer getBadOfflinePlayer(String name)
+    {
+        if (getBadPlayer(name) != null) return getBadPlayer(name);
+        return BadOfflinePlayer.get(name);
+    }
+
 	public ServerPing generatePing()
 	{
 		if (serverPing != null && GlobalFlags.has(serverPing))
@@ -185,8 +183,7 @@ public class BungeeManager
 	
 	public int getRealTimeOnlinePlayers()
 	{
-		return bungees.values().parallelStream().filter(bungee -> isValid(bungee)).
-				map(bungee -> bungee.getUsernames().size()).mapToInt(Number::intValue).sum();
+        return bungees.values().parallelStream().filter(this::isValid).map(bungee -> bungee.getUsernames().size()).mapToInt(Number::intValue).sum();
 	}
 	
 	public int getOnlinePlayers()
