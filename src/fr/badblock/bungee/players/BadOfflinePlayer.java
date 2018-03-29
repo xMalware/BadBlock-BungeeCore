@@ -149,7 +149,11 @@ public class BadOfflinePlayer
 					BadBungee.log("§aCreated!");
 				}
 				setLoaded(true);
-				callback.done(BadOfflinePlayer.this, null);
+				if (callback != null)
+				{
+					callback.done(BadOfflinePlayer.this, null);
+					callback = null;
+				}
 			}
 		});
 	}
