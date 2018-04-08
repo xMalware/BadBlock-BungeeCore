@@ -3,10 +3,10 @@ package fr.badblock.bungee.players;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.bson.BSONObject;
-
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -39,7 +39,7 @@ public class BadOfflinePlayer
 	private 			String						name;
 	private				BadIP						lastIp;
 	private 			UUID						uniqueId;
-	private transient	BSONObject	  				dbObject;
+	private transient	DBObject	  				dbObject;
 
 	private transient	Callback<BadOfflinePlayer>	callback;
 	private transient	List<Callback<BadPlayer>> 	loadedCallbacks;
@@ -106,7 +106,62 @@ public class BadOfflinePlayer
 	{
 		updateData("lastIp", getLastIp().toString());
 	}
+	
+	public void saveData() throws Exception
+	{
+		if (!isLoaded())
+		{
+			throw new Exception("Trying to save data with unloaded data.");
+		}
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		mongoService.useAsyncMongo(new MongoMethod(mongoService)
+		{
 
+			@Override
+			public void run(MongoService mongoService)
+			{
+				DB db = mongoService.getDb();
+				DBCollection collection = db.getCollection("players");
+				BasicDBObject query = new BasicDBObject();
+
+				query.put("name", getName().toLowerCase());
+
+				collection.update(query, getDbObject());
+			}
+
+		});
+	}
+
+	public DBObject mergeData(DBObject base, JsonObject toAdd, boolean basePoint)
+	{
+		for(final Entry<String, JsonElement> entry : toAdd.entrySet())
+		{
+			String key = entry.getKey();
+			JsonElement element = toAdd.get(key);
+			if (!base.containsField(key) || !element.isJsonObject())
+			{
+				base.put(key, element);
+				return base;
+			} else {
+				try
+				{
+					DBObject dbObject = mergeData(ObjectUtils.toDbObject(base.get(key)), element.getAsJsonObject(), false);
+					base.put(key, dbObject);
+					if (basePoint)
+					{
+						saveData();
+					}
+					return dbObject;
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+	
 	public void updateData(String key, Object value)
 	{
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
@@ -124,9 +179,8 @@ public class BadOfflinePlayer
 				query.put("name", getName().toLowerCase());
 				BasicDBObject updater = new BasicDBObject("$set", update);
 
-				System.out.println(key + " : " + value);
 				collection.update(query, updater);
-				System.out.println("update " + key);
+				
 				loadData(true);
 				if (callback != null)
 				{

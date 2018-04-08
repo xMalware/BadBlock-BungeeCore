@@ -8,9 +8,17 @@ import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
+import fr.badblock.bungee.rabbit.BadBungeeQueues;
+import fr.badblock.bungee.rabbit.datareceivers.PlayerDataUpdateSender;
 import fr.badblock.bungee.utils.ChatColorUtils;
+import fr.badblock.bungee.utils.ObjectUtils;
 import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.mcjson.McJsonUtils;
+import fr.toenga.common.tech.rabbitmq.packet.RabbitPacket;
+import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketEncoder;
+import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketMessage;
+import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketType;
+import fr.toenga.common.utils.general.GsonUtils;
 import fr.toenga.common.utils.general.StringUtils;
 import fr.toenga.common.utils.i18n.I18n;
 import lombok.Data;
@@ -38,26 +46,17 @@ public final class BadPlayer extends BadOfflinePlayer
 		put();
 	}
 
-	public static BadPlayer get(ProxiedPlayer bPlayer)
+	public void sendDataToBukkit()
 	{
-		return get(bPlayer.getName());
+		String serverName = getCurrentServer();
+		PlayerDataUpdateSender playerDataUpdateSender = new PlayerDataUpdateSender(getName().toLowerCase(), ObjectUtils.getJsonObject(getDbObject().toString()));
+		String rawPlayerDataUpdateSender = GsonUtils.getGson().toJson(playerDataUpdateSender);
+		RabbitPacketMessage rabbitPacketMessage = new RabbitPacketMessage(300_000L, rawPlayerDataUpdateSender);
+		String builtQueue = BadBungeeQueues.BUNGEE_DATA_SENDERS + serverName;
+		RabbitPacket rabbitPacket = new RabbitPacket(rabbitPacketMessage, builtQueue, true, RabbitPacketEncoder.UTF8, RabbitPacketType.MESSAGE_BROKER);
+		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
 	}
-
-	public static BadPlayer get(String name)
-	{
-		return maps.getOrDefault(name, null);
-	}
-
-	public static boolean has(String name)
-	{
-		return maps.containsKey(name);
-	}
-
-	public static Collection<BadPlayer> getPlayers()
-	{
-		return maps.values();
-	}
-
+	
 	public String getLastServer()
 	{
 		return getDbObject().get("lastServer").toString();
@@ -166,7 +165,13 @@ public final class BadPlayer extends BadOfflinePlayer
 			BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, (mcjson.toString())));
 		}
 	}
-
+	
+	public String getCurrentServer()
+	{
+		ProxiedPlayer proxiedPlayer = toProxiedPlayer();
+		return proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null ? proxiedPlayer.getServer().getInfo().getName() : null;
+	}
+	
 	private void put()
 	{
 		maps.put(getName(), this);
@@ -183,4 +188,25 @@ public final class BadPlayer extends BadOfflinePlayer
 	{
 		return ProxyServer.getInstance().getPlayer(getName());
 	}
+	
+	public static BadPlayer get(ProxiedPlayer bPlayer)
+	{
+		return get(bPlayer.getName());
+	}
+
+	public static BadPlayer get(String name)
+	{
+		return maps.getOrDefault(name, null);
+	}
+
+	public static boolean has(String name)
+	{
+		return maps.containsKey(name);
+	}
+
+	public static Collection<BadPlayer> getPlayers()
+	{
+		return maps.values();
+	}
+	
 }

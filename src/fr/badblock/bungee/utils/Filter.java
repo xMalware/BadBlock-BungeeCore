@@ -1,6 +1,10 @@
 package fr.badblock.bungee.utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Util for filter arrays and list
@@ -58,7 +62,6 @@ public interface Filter<T> {
      * @param array  the array to be filtered
      * @return the filtered array
      */
-    @SuppressWarnings("unchecked")
     static <E> E[] filterArrayStatic(Filter<E> filter, E[] array) {
         return filter.filterArray(array);
     }

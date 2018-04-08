@@ -1,9 +1,15 @@
 package fr.badblock.bungee._plugins.objects.friendlist;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.api.events.objects.friendlist.FriendListRemoveEvent;
 import fr.badblock.bungee.api.events.objects.friendlist.FriendListRemoveEvent.FriendListRemoveStatus;
@@ -19,11 +25,6 @@ import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * Main class for FriendLists
