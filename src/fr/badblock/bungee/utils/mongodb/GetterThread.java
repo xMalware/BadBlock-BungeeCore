@@ -11,27 +11,35 @@ import fr.toenga.common.tech.mongodb.methods.MongoMethod;
  *
  * @author RedSpri
  */
-class GetterThread extends Thread {
-    SynchroMongoDBGetter getter;
-    public GetterThread(SynchroMongoDBGetter synchroMongoDBGetter) {
-        this.getter = synchroMongoDBGetter;
-    }
+class GetterThread extends Thread
+{
 
-    @Override
-    public void run() {
-        super.run();
-        MongoService mongoService = BadBungee.getInstance().getMongoService();
-        mongoService.useAsyncMongo(new MongoMethod(mongoService) {
-            @Override
-            public void run(MongoService mongoService) {
-                DB db = mongoService.getDb();
-                DBCursor cursor = db.getCollection(getter.getCollectionName()).find(getter.getQuery());
-                if (cursor != null && cursor.hasNext()) {
-                    DBObject dbObject = cursor.next();
-                    getter.setDbObject(dbObject);
-                }
-                else getter.setDbObject(null);
-            }
-        });
-    }
+	SynchroMongoDBGetter getter;
+
+	public GetterThread(SynchroMongoDBGetter synchroMongoDBGetter)
+	{
+		this.getter = synchroMongoDBGetter;
+	}
+
+	@Override
+	public void run()
+	{
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		mongoService.useAsyncMongo(new MongoMethod(mongoService)
+		{
+			@Override
+			public void run(MongoService mongoService)
+			{
+				DB db = mongoService.getDb();
+				DBCursor cursor = db.getCollection(getter.getCollectionName()).find(getter.getQuery());
+				if (cursor != null && cursor.hasNext())
+				{
+					DBObject dbObject = cursor.next();
+					getter.setDbObject(dbObject);
+				}
+				else getter.setDbObject(null);
+			}
+		});
+	}
+	
 }

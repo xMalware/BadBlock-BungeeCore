@@ -8,7 +8,7 @@ public class PluginsCommand extends BadCommand
 {
 
 	public PluginsCommand() {
-		super("plugins", "test", "pl", "bukkit:plugins", "bukkit:pl");
+		super("plugins", "", "pl", "bukkit:plugins", "bukkit:pl");
 	}
 
 	@Override

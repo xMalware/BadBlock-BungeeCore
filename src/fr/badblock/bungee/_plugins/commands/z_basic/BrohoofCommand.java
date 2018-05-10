@@ -8,7 +8,7 @@ public class BrohoofCommand extends BadCommand
 {
 
 	public BrohoofCommand() {
-		super("brohoof");
+		super("brohoof", "", ")");
 	}
 
 	@Override

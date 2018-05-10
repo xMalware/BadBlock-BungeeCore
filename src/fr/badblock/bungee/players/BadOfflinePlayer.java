@@ -11,13 +11,13 @@ import com.google.gson.JsonObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
-import fr.badblock.bungee.players.layer.BadPlayerSettingsSerializer;
 import fr.badblock.bungee.utils.ObjectUtils;
-import fr.badblock.bungee.utils.mongodb.SynchroMongoDBGetter;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import fr.toenga.common.utils.bungee.Punished;
@@ -37,7 +37,7 @@ public class BadOfflinePlayer
 {
 
 	private 			String						name;
-	private				BadIP						lastIp;
+	private				String						lastIp;
 	private 			UUID						uniqueId;
 	private transient	DBObject	  				dbObject;
 
@@ -57,7 +57,6 @@ public class BadOfflinePlayer
 		setName(name);
 		setCallback(callback);
 		setLoadedCallbacks(new ArrayList<>());
-		System.out.println("load offlineplayer");
 		loadData(true);
 	}
 
@@ -65,11 +64,9 @@ public class BadOfflinePlayer
 	{
 		if (isLoaded())
 		{
-			System.out.println("set as loaded!");
 			callback.done((BadPlayer) this, null);
 			return;	
 		}
-		System.out.println("added as callback");
 		getLoadedCallbacks().add(callback);
 	}
 
@@ -94,7 +91,7 @@ public class BadOfflinePlayer
 
 	public void updateSettings()
 	{
-		updateData("settings", BadPlayerSettingsSerializer.serialize(settings));
+		updateData("settings", settings.getDBObject());
 	}
 
 	public void updateVersion()
@@ -106,7 +103,7 @@ public class BadOfflinePlayer
 	{
 		updateData("lastIp", getLastIp().toString());
 	}
-	
+
 	public void saveData() throws Exception
 	{
 		if (!isLoaded())
@@ -161,7 +158,7 @@ public class BadOfflinePlayer
 		}
 		return null;
 	}
-	
+
 	public void updateData(String key, Object value)
 	{
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
@@ -180,7 +177,15 @@ public class BadOfflinePlayer
 				BasicDBObject updater = new BasicDBObject("$set", update);
 
 				collection.update(query, updater);
-				
+
+				try
+				{
+					Thread.sleep(100);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
 				loadData(true);
 				if (callback != null)
 				{
@@ -201,21 +206,30 @@ public class BadOfflinePlayer
 	{
 		BasicDBObject query = new BasicDBObject();
 		query.append("name", getName().toLowerCase());
-		DBObject obj = new SynchroMongoDBGetter("players", query).getDbObject();
-		if (obj != null)
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		DBCollection dbCollection = mongoService.getDb().getCollection("players");
+		DBCursor cursor = dbCollection.find(query);
+		if (cursor.hasNext())
 		{
-			setDbObject(obj);
+			setDbObject(cursor.next());
 			BadBungee.log("§c" + getName() + " exists in the player table.");
 			setName(getString("realName"));
-			setLastIp(BadIP.fromString(getString("lastIp")));
+			setLastIp(getString("lastIp"));
 			setUniqueId(UUID.fromString(getString("uniqueId")));
-			setSettings(BadPlayerSettingsSerializer.deserialize(getString("settings")));
-			setPunished(new Punished(getJsonObject("punish")));
+			setSettings(new BadPlayerSettings(getJsonElement("settings").getAsJsonObject()));
+			setPunished(new Punished(getJsonElement("punish").getAsJsonObject()));
 			if (PermissionsManager.getManager() != null)
 			{
-				setPermissions(new PermissionUser(getJsonObject("permissions")));
+				setPermissions(new PermissionUser(getJsonElement("permissions").getAsJsonObject()));
 			}
-			setVersion(Integer.valueOf(getString("version")));
+			try
+			{
+				setVersion(Integer.valueOf(getString("version")));
+			}
+			catch (Exception error)
+			{
+
+			}
 		}
 		else
 		{
@@ -244,7 +258,6 @@ public class BadOfflinePlayer
 				permissions = new PermissionUser(new HashMap<>(), new ArrayList<>());
 				settings = new BadPlayerSettings();
 				uniqueId = UUID.randomUUID();
-				lastIp = BadIP.fromString("");
 				version = 0;
 				BasicDBObject obj = getSavedObject();
 				setDbObject(obj);
@@ -282,13 +295,14 @@ public class BadOfflinePlayer
 		}
 	}
 
-	public JsonObject getJsonObject(String part)
+	public JsonElement getJsonElement(String part)
 	{
 		//FIXME vraiment pas optimisé, à voir si il y a mieux
 		if (getDbObject().containsField(part))
 		{
-			String value = getDbObject().get(part).toString();
-			return GsonUtils.getPrettyGson().fromJson(value, JsonObject.class);
+			String serialize = JSON.serialize(getDbObject().get(part));
+			JsonElement jsonElement = GsonUtils.toJsonElement(serialize);
+			return jsonElement;
 		}
 		else
 		{
@@ -303,7 +317,7 @@ public class BadOfflinePlayer
 		object.put("realName", getName());
 		object.put("lastIp", getLastIp());
 		object.put("uniqueId", UUID.randomUUID().toString());
-		object.put("settings", BadPlayerSettingsSerializer.serialize(settings));
+		object.put("settings", settings.getDBObject());
 		object.put("punish", punished.getDBObject());
 		object.put("permissions", permissions.getDBObject());
 		object.put("version", "0");

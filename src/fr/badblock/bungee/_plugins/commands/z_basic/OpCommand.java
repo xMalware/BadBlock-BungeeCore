@@ -18,6 +18,7 @@ public class OpCommand extends BadCommand
 		if (args.length != 1)
 		{
 			I19n.sendMessage(sender, "commands.op.usage");
+			return;
 		}
 		I19n.sendMessage(sender, "commands.op.message", args[0]);
 	}

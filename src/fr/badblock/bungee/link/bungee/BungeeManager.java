@@ -1,6 +1,21 @@
 package fr.badblock.bungee.link.bungee;
 
-import com.mongodb.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacket;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacketType;
@@ -20,11 +35,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.ServerPing;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Data
 public class BungeeManager
@@ -118,6 +130,7 @@ public class BungeeManager
         return BadOfflinePlayer.get(name);
     }
 
+	@SuppressWarnings("deprecation")
 	public ServerPing generatePing()
 	{
 		if (serverPing != null && GlobalFlags.has(serverPing))
@@ -134,6 +147,7 @@ public class BungeeManager
 			DBObject dbObject = cursor.next();
 			String json = dbObject.toString();
 			ServerPing serverPing = bungee.getGson().fromJson(json, ServerPing.class);
+			serverPing.setDescription(serverPing.getDescription().replace("{}", "\n"));
 			setSlots(serverPing.getPlayers().getMax());
 			GlobalFlags.set(serverPing, 1000);
 			// Manage
