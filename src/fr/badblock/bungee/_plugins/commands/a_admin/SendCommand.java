@@ -9,11 +9,17 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 
+/**
+ * Command to send a player from one server to another from the same network.
+ * This command works across the network and therefore through any bungee connected to the same servers and the same production mode.
+ * @author root
+ *
+ */
 public class SendCommand extends BadCommand
 {
 
 	public SendCommand() {
-		super("send", "bungee.commands.send", "move");
+		super("send", "bungee.command.send", "move");
 	}
 
 	@Override
