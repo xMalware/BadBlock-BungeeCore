@@ -23,6 +23,9 @@ public class BrohoofCommand extends BadCommand
 		super("brohoof", "", ")");
 	}
 
+	/**
+	 * Method called when using the command
+	 */
 	@Override
 	public void run(CommandSender sender, String[] args)
 	{
