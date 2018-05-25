@@ -276,6 +276,7 @@ public class BadOfflinePlayer
 
 	public boolean hasPermission(String permission)
 	{
+		System.out.println("hasPermission: " + GsonUtils.getPrettyGson().toJson(getPermissions()));
 		if (getPermissions() == null)
 		{
 			return false;

@@ -24,6 +24,7 @@ import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
 import fr.badblock.bungee.utils.Filter;
+import fr.badblock.bungee.utils.TimeUtils;
 import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacket;
@@ -35,27 +36,27 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.ServerPing;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 @Data
 public class BungeeManager
 {
-	
+
 	@Getter@Setter
 	private static BungeeManager instance = new BungeeManager();
 
 	private Map<String, BungeeObject> bungees = new HashMap<>();
 
-	private ServerPing	serverPing;
-	private int			tempOnlinePlayers;
-	private int			slots;
-	
+	private ServerPing			serverPing;
+	private int					tempOnlinePlayers;
+	private int					slots;
+	private CachedPlayerToken	token;
+
 	public void add(BungeeObject bungeeObject)
 	{
 		bungees.put(bungeeObject.getName(), bungeeObject);
 	}
-	
+
 	public void broadcast(String... messages)
 	{
 		StringBuilder stringBuilder = new StringBuilder();
@@ -68,67 +69,67 @@ public class BungeeManager
 		sendPacket(new BungeePacket(BungeePacketType.BROADCAST, stringBuilder.toString()));
 	}
 
-    public void targetedBrodcast(String permission, String... messages) {
+	public void targetedBrodcast(String permission, String... messages) {
 		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingMessage(messages));
 	}
 
-    public void targetedTranslatedBroadcast(String permission, String key, Object... args) {
+	public void targetedTranslatedBroadcast(String permission, String key, Object... args) {
 		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
 	}
 
-    public void targetedJsonBrodcast(String permission, String... messages) {
-        getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingJsonMessage(messages));
-    }
+	public void targetedJsonBrodcast(String permission, String... messages) {
+		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingJsonMessage(messages));
+	}
 
-    public void targetedTranslatedJsonBroadcast(String permission, String key, Object... args) {
-        getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
-    }
+	public void targetedTranslatedJsonBroadcast(String permission, String key, Object... args) {
+		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
+	}
 
-    public void targetedTranslatedMCJsonBroadcast(String permission, McJson mcJson) {
-        getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
-    }
+	public void targetedTranslatedMCJsonBroadcast(String permission, McJson mcJson) {
+		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
+	}
 
-    public void targetedBrodcast(Filter<BadPlayer> filter, String... messages) {
-        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingMessage(messages));
-    }
+	public void targetedBrodcast(Filter<BadPlayer> filter, String... messages) {
+		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingMessage(messages));
+	}
 
-    public void targetedTranslatedBroadcast(Filter<BadPlayer> filter, String key, Object... args) {
-        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
-    }
+	public void targetedTranslatedBroadcast(Filter<BadPlayer> filter, String key, Object... args) {
+		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
+	}
 
-    public void targetedJsonBrodcast(Filter<BadPlayer> filter, String... messages) {
-        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingJsonMessage(messages));
-    }
+	public void targetedJsonBrodcast(Filter<BadPlayer> filter, String... messages) {
+		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingJsonMessage(messages));
+	}
 
-    public void targetedTranslatedJsonBroadcast(Filter<BadPlayer> filter, String key, Object... args) {
-        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
-    }
+	public void targetedTranslatedJsonBroadcast(Filter<BadPlayer> filter, String key, Object... args) {
+		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
+	}
 
-    public void targetedTranslatedMCJsonBroadcast(Filter<BadPlayer> filter, McJson mcJson) {
-        filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
-    }
+	public void targetedTranslatedMCJsonBroadcast(Filter<BadPlayer> filter, McJson mcJson) {
+		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
+	}
 
 
-    public BadPlayer getBadPlayer(String name) {
-        List<BadPlayer> list = getLoggedPlayers(p -> p.getName().equalsIgnoreCase(name));
+	public BadPlayer getBadPlayer(String name) {
+		List<BadPlayer> list = getLoggedPlayers(p -> p.getName().equalsIgnoreCase(name));
 		return list.isEmpty() ? null : list.get(0);
 	}
 
-    public BadPlayer getBadPlayer(UUID uuid) {
-        List<BadPlayer> list = getLoggedPlayers(p -> p.getUniqueId().toString().equalsIgnoreCase(uuid.toString()));
-        return list.isEmpty() ? null : list.get(0);
-    }
-	
+	public BadPlayer getBadPlayer(UUID uuid) {
+		List<BadPlayer> list = getLoggedPlayers(p -> p.getUniqueId().toString().equalsIgnoreCase(uuid.toString()));
+		return list.isEmpty() ? null : list.get(0);
+	}
+
 	public BadPlayer getBadPlayer(ProxiedPlayer proxiedPlayer)
 	{
 		return BadPlayer.get(proxiedPlayer);
 	}
 
-    public BadOfflinePlayer getBadOfflinePlayer(String name)
-    {
-        if (getBadPlayer(name) != null) return getBadPlayer(name);
-        return BadOfflinePlayer.get(name);
-    }
+	public BadOfflinePlayer getBadOfflinePlayer(String name)
+	{
+		if (getBadPlayer(name) != null) return getBadPlayer(name);
+		return BadOfflinePlayer.get(name);
+	}
 
 	@SuppressWarnings("deprecation")
 	public ServerPing generatePing()
@@ -156,7 +157,7 @@ public class BungeeManager
 		}
 		return null;
 	}
-	
+
 	public void sendPacket(PlayerPacket playerPacket)
 	{
 		BadBungee badBungee = BadBungee.getInstance();
@@ -172,7 +173,7 @@ public class BungeeManager
 		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, json), 
 				BadBungeeQueues.BUNGEE_PROCESSING, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
 	}
-	
+
 	public List<BadPlayer> getLoggedPlayers(Predicate<BadPlayer> predicate)
 	{
 		List<BadPlayer> badPlayers = new ArrayList<>();
@@ -182,11 +183,11 @@ public class BungeeManager
 		return badPlayers;
 	}
 
-    public List<BadPlayer> getLoggedPlayers()
-    {
-        return getLoggedPlayers(a -> true);
-    }
-	
+	public List<BadPlayer> getLoggedPlayers()
+	{
+		return getLoggedPlayers(a -> true);
+	}
+
 	public boolean hasUsername(String name)
 	{
 		final String toLowerName = name.toLowerCase();
@@ -194,12 +195,16 @@ public class BungeeManager
 		bungee.getUsernames().keySet().parallelStream().filter(n -> n.toLowerCase().equals(toLowerName)).count() > 0).count();
 		return count > 0;
 	}
-	
+
 	public int getRealTimeOnlinePlayers()
 	{
-        return bungees.values().parallelStream().filter(this::isValid).map(bungee -> bungee.getUsernames().size()).mapToInt(Number::intValue).sum();
+		if (token == null || token.isExpired())
+		{
+			token = CachedPlayerToken.generateToken();
+		}
+		return token.getLastToken();
 	}
-	
+
 	public int getOnlinePlayers()
 	{
 		if (GlobalFlags.has("onlinePlayers"))
@@ -209,10 +214,10 @@ public class BungeeManager
 		GlobalFlags.set("onlinePlayers", 1_000);
 		return tempOnlinePlayers = getRealTimeOnlinePlayers();
 	}
-	
+
 	public boolean isValid(BungeeObject bungeeObject)
 	{
-		return bungeeObject.getTimestamp() > System.currentTimeMillis();
+		return TimeUtils.isValid(bungeeObject.getTimestamp());
 	}
-	
+
 }

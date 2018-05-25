@@ -8,7 +8,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
-public class BungeePacket {
+public class BungeePacket
+{
 
 	private BungeePacketType	type;
 	private String				content;

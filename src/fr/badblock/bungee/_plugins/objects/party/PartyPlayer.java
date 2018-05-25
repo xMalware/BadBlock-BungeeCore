@@ -7,7 +7,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
-public class PartyPlayer {
+public class PartyPlayer
+{
 
 	private String				name;
 	private PartyPlayerRole		role;

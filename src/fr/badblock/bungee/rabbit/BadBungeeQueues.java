@@ -3,6 +3,10 @@ package fr.badblock.bungee.rabbit;
 public class BadBungeeQueues
 {
 
+	// BUNGEE TOKENS
+	public static final String BUNGEE_TOKEN_QUERY				= "bungee.tokens.query";
+	public static final String BUNGEE_TOKEN_RESULT				= "bungee.tokens.result";
+	
 	// BUNGEE DATA
 	public static final String BUNGEE_DATA						= "bungee.inter.data";
 
