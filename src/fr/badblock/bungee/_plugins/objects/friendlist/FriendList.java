@@ -13,86 +13,208 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * 
+ * Managing the list of friends in memory
+ * 
+ * @author xMalware
+ *
+ */
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Data
 public final class FriendList
 {
 
+	// Some keys
 	public static final String				OWNER = "_owner";
 	public static final String				PLAYERS = "players";
 
-    private static final Type collectionType = new TypeToken<Map<UUID, FriendListPlayer>>() {
-    }.getType();
+	// Collection type
+	private static final Type collectionType = new TypeToken<Map<UUID, FriendListPlayer>>() {}.getType();
 
-    private UUID owner;
-    private Map<UUID, FriendListPlayer> players;
+	// The leader of his friend list
+	private UUID owner;
+	// Friend map
+	private Map<UUID, FriendListPlayer> players;
 
-    FriendList(UUID owner)
+	/**
+	 * Constructor of the class
+	 * @param owner > UUID of the owner
+	 */
+	FriendList(UUID owner)
 	{
 		this.owner = owner;
 		players = new HashMap<>();
 	}
 
-    FriendList(DBObject dbObject)
+	/**
+	 * Constructor of the class
+	 * @param dbObject > database object
+	 */
+	FriendList(DBObject dbObject)
 	{
-        owner = UUID.fromString(dbObject.get(OWNER).toString());
+		// Set the owner in memory
+		owner = UUID.fromString(dbObject.get(OWNER).toString());
+		// Set the players in memory
 		players = GsonUtils.getGson().fromJson(dbObject.get(PLAYERS).toString(), collectionType);
 	}
 
-    private FriendListPlayer toFriendListPlayer(UUID uuid, FriendListPlayerState state) {
-        return new FriendListPlayer(uuid, state);
-    }
+	/**
+	 * Convert into an object of friendship
+	 * @param uuid > player uuid
+	 * @param state > state of the friendship
+	 * @return
+	 */
+	private FriendListPlayer toFriendListPlayer(UUID uuid, FriendListPlayerState state)
+	{
+		return new FriendListPlayer(uuid, state);
+	}
 
-    private void add(UUID uuid, FriendListPlayerState state) {
-        FriendListPlayer partyPlayer = toFriendListPlayer(uuid, state);
-        if (players.containsKey(uuid)) players.replace(uuid, partyPlayer);
-        else players.put(uuid, partyPlayer);
-        save();
-    }
+	/**
+	 * Add a friend to memory
+	 * @param uuid > player uuid
+	 * @param state > state of the friendship
+	 */
+	private void add(UUID uuid, FriendListPlayerState state)
+	{
+		// We get the friendship object
+		FriendListPlayer partyPlayer = toFriendListPlayer(uuid, state);
+		// If the friendlist contains the uuid
+		if (players.containsKey(uuid))
+		{
+			// We replace the new state of the friendship
+			players.replace(uuid, partyPlayer);
+		}
+		else
+			// If the uuid isn't in the friendlist
+		{
+			// Add the friendship in the list
+			players.put(uuid, partyPlayer);
+		}
+		// Save changes to the database
+		save();
+	}
 
-    void remove(UUID uuid) {
-        players.remove(uuid);
-        save();
-    }
+	/**
+	 * Remove a friend from the list
+	 * @param uuid > player uuid
+	 */
+	void remove(UUID uuid)
+	{
+		// Remove from memory
+		players.remove(uuid);
+		// Save changes to the database
+		save();
+	}
 
-    void accept(UUID uuid) {
-        add(uuid, FriendListPlayerState.ACCEPTED);
-    }
+	/**
+	 * Accept a friend
+	 * @param uuid > Player UUID
+	 */
+	void accept(UUID uuid)
+	{
+		// Add a friend request with ACCEPTED state
+		add(uuid, FriendListPlayerState.ACCEPTED);
+	}
 
-    void request(UUID uuid) {
-        add(uuid, FriendListPlayerState.WAITING);
-    }
+	/**
+	 * Send a friend request
+	 * @param uuid > Player UUID
+	 */
+	void request(UUID uuid)
+	{
+		// Add a friend request with WAITING state
+		add(uuid, FriendListPlayerState.WAITING);
+	}
 
-    void requested(UUID uuid) {
-        add(uuid, FriendListPlayerState.REQUESTED);
-    }
+	/**
+	 * Send a friend request
+	 * @param uuid > Player UUID
+	 */
+	void requested(UUID uuid)
+	{
+		// Add a friend request with REQUESTED state
+		add(uuid, FriendListPlayerState.REQUESTED);
+	}
 
-    boolean isFriend(UUID uuid) {
-        return players.containsKey(uuid) && players.get(uuid).getState() == FriendListPlayerState.ACCEPTED;
-    }
+	/**
+	 * If the player is in the friendlist
+	 * @param uuid > Player UUID
+	 * @return true or false?
+	 */
+	boolean isFriend(UUID uuid)
+	{
+		// If the UUID is in the friendlist and if the request has been accepted
+		return players.containsKey(uuid) && players.get(uuid).getState() == FriendListPlayerState.ACCEPTED;
+	}
 
-    boolean wantToBeFriendWith(UUID uuid) {
-        return players.containsKey(uuid) && players.get(uuid).getState() == FriendListPlayerState.REQUESTED;
-    }
+	/**
+	 * If the player wants to be friend with another one
+	 * @param uuid > Player UUID
+	 * @return true or false?
+	 */
+	boolean wantToBeFriendWith(UUID uuid)
+	{
+		// If the UUID is in the friendlist and if the request is in REQUESTED state
+		return players.containsKey(uuid) && players.get(uuid).getState() == FriendListPlayerState.REQUESTED;
+	}
 
-    boolean alreadyRequestedBy(UUID uuid) {
-        if (players.containsKey(uuid)) return players.get(uuid).getState() == FriendListPlayerState.WAITING;
-        else return false;
-    }
+	/**
+	 * If a player already requested to be friend
+	 * @param uuid > Player UUID
+	 * @return true or false?
+	 */
+	boolean alreadyRequestedBy(UUID uuid)
+	{
+		// If the UUID is in the friendlist, return if the friendship state is WAITING
+		if (players.containsKey(uuid)) return players.get(uuid).getState() == FriendListPlayerState.WAITING;
+		// The UUID isn't in the friendlist, so we return false
+		else return false;
+	}
 
-    boolean isInList(UUID uuid) {
-        return players.containsKey(uuid);
-    }
+	/**
+	 * If a player is in the friendlist
+	 * @param uuid > Player UUID
+	 * @return true or false?
+	 */
+	boolean isInList(UUID uuid)
+	{
+		// If the UUID is in the friendlist ? true or false
+		return players.containsKey(uuid);
+	}
 
-    private void save() {
-        if (owner != null) FriendListManager.update(this);
-    }
+	/**
+	 * Save changes to database
+	 */
+	private void save()
+	{
+		// If the owner is set
+		if (owner != null)
+		{
+			// Update changes to database
+			FriendListManager.update(this);
+		}
+	}
 
-    DBObject toObject() {
+	/**
+	 * Get the friendlist as a DBObject
+	 * @return
+	 */
+	DBObject toObject()
+	{
+		// Create a new basic DBOBject
 		BasicDBObject object = new BasicDBObject();
-        if (owner != null) object.put(OWNER, owner.toString());
+		// If the owner is set
+		if (owner != null)
+		{
+			// So we put the owner in the object
+			object.put(OWNER, owner.toString());
+		}
+		// We put the friendlist in the object
 		object.put(PLAYERS, GsonUtils.getGson().toJson(players, collectionType));
+		// Return the database object
 		return object;
 	}
+
 }
