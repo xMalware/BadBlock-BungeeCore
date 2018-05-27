@@ -7,20 +7,39 @@ import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 
+/**
+ * 
+ * The purpose of this class is to check if the server is full when a player joins
+ * 
+ * @author xMalware
+ *
+ */
 public class LoginFullServerListener extends BadListener
 {
 
+	/**
+	 * When a player joins the server
+	 * @param event
+	 */
 	@EventHandler (priority = EventPriority.LOW)
 	public void onPlayerJoinEvent(PlayerJoinEvent event)
 	{
+		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
+		// We'll use our bungee manager to determinate if the network is full
 		BungeeManager bungeeManager = BungeeManager.getInstance();
-		if (bungeeManager.getOnlinePlayers() > bungeeManager.getSlots())
+		// If the player has a bypass to join the network even if it is full
+		if (badPlayer.hasPermission("bungee.bypass.full"))
 		{
-			// Permission check
-			event.cancel(badPlayer.getTranslatedMessages("bungee.login.full")[0]);
+			// So we stop there
 			return;
 		}
+		// If the number of players connected is equal to or greater than the number of slots of the network
+		if (bungeeManager.getOnlinePlayers() >= bungeeManager.getSlots())
+		{
+			// We cancel his connection to the server
+			event.cancel(badPlayer.getTranslatedMessages("bungee.login.full")[0]);
+		}
 	}
-	
+
 }
