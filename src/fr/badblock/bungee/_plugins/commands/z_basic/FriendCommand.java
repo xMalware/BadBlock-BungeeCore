@@ -14,10 +14,10 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * No permission is required to execute this command.
  * It is divided into subcommands:
  *  - /friend help/?/aide
- * - /friend status
- * - /friend ask/add/invite/request/accept/demander/ajouter/inviter/accepter
- * - /friend remove/delete/cancel/supprimer/enlever/annuler
- * - /friend list/show/lister/afficher/montrer
+ *  - /friend status
+ *  - /friend ask/add/invite/request/accept/demander/ajouter/inviter/accepter
+ *  - /friend remove/delete/cancel/supprimer/enlever/annuler
+ *  - /friend list/show/lister/afficher/montrer
  * 
  * I18n key prefix: 'commands.friend.'
  * 
