@@ -1,9 +1,16 @@
 package fr.badblock.bungee._plugins.objects.friendlist;
 
+/**
+ * States of a friendship
+ * 
+ * @author xMalware
+ *
+ */
 public enum FriendListPlayerState
 {
+	
     /**
-     * The player request an other player
+     * The player request another player
      */
     REQUESTED,
     /**

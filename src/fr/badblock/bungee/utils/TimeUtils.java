@@ -7,6 +7,23 @@ public class TimeUtils
 	{
 		return time() > time;
 	}
+	
+	public static void sleep(long time)
+	{
+		try
+		{
+			Thread.sleep(time);
+		}
+		catch (InterruptedException exception)
+		{
+			exception.printStackTrace();
+		}
+	}
+	
+	public static void sleepInSeconds(long time)
+	{
+		sleep(time * 1_000);
+	}
 
 	public static boolean isValid(long time)
 	{

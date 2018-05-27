@@ -7,10 +7,12 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class BadBungeeConfig {
+public class BadBungeeConfig
+{
 
 	private String			bungeeName;
 	private String			alertPrefix;
+	private String			ipHubApiKey;
 	private RabbitSettings	rabbitSettings;
 	private MongoSettings	mongoSettings;
 	
