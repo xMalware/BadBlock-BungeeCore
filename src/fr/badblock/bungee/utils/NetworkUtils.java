@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
+
 public class NetworkUtils
 {
 
