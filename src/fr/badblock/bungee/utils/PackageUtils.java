@@ -1,7 +1,7 @@
 package fr.badblock.bungee.utils;
 
-import fr.badblock.bungee._plugins.commands.BadCommand;
-import fr.badblock.bungee._plugins.listeners.BadListener;
+import fr.badblock.bungee.modules.abstracts.BadCommand;
+import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.toenga.common.tech.rabbitmq.listener.RabbitListener;
 import net.md_5.bungee.api.plugin.Plugin;
 

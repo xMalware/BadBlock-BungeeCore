@@ -1,6 +1,6 @@
 package fr.badblock.bungee.rabbit.claimants;
 
-import fr.badblock.bungee.utils.tasks.TaskManager;
+import fr.badblock.bungee.utils.time.TaskManager;
 
 public abstract class RabbitClaimant implements Runnable
 {

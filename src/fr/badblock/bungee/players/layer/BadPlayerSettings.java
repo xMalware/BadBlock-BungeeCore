@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-import fr.badblock.bungee._plugins.objects.friendlist.FriendListable;
-import fr.badblock.bungee._plugins.objects.party.Partyable;
+import fr.badblock.bungee.modules.friends.FriendListable;
+import fr.badblock.bungee.modules.party.Partyable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

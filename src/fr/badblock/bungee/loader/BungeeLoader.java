@@ -103,20 +103,20 @@ public class BungeeLoader
 		{
 			PackageUtils.instanciateListeners(getBadBungee(),
 					"fr.badblock.bungee.rabbit.listeners", // Rabbit listeners
-					// Commands
-					"fr.badblock.bungee._plugins.commands.a_admin",
-					"fr.badblock.bungee._plugins.commands.b_modo",
-					"fr.badblock.bungee._plugins.commands.c_friend",
-					"fr.badblock.bungee._plugins.commands.s_staff",
-					"fr.badblock.bungee._plugins.commands.z_basic",
-					// Listeners
-					"fr.badblock.bungee._plugins.listeners.logins.checkLogin",
-					"fr.badblock.bungee._plugins.listeners.logins.loadPlayer",
-					"fr.badblock.bungee._plugins.listeners.logins.quit",
-					"fr.badblock.bungee._plugins.listeners.serverConnect",
-					"fr.badblock.bungee._plugins.listeners.motd",
-					"fr.badblock.bungee._plugins.listeners.permissions",
-					"fr.badblock.bungee._plugins.listeners.punishments"
+					
+					"fr.badblock.bungee.modules.admin.commands",
+					"fr.badblock.bungee.modules.badfriends.commands",
+					"fr.badblock.bungee.modules.basic.commands",
+					"fr.badblock.bungee.modules.friends.commands",
+					"fr.badblock.bungee.modules.login.antivpn",
+					"fr.badblock.bungee.modules.login.checkers",
+					"fr.badblock.bungee.modules.login.datamanager",
+					"fr.badblock.bungee.modules.modo.commands",
+					"fr.badblock.bungee.modules.party.commands",
+					"fr.badblock.bungee.modules.permissions",
+					"fr.badblock.bungee.modules.ping",
+					"fr.badblock.bungee.modules.punishments",
+					"fr.badblock.bungee.modules.staff.commands"
 					);
 		}
 		catch (IOException exception)

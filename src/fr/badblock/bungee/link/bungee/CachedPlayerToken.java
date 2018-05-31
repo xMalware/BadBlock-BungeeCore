@@ -1,6 +1,6 @@
 package fr.badblock.bungee.link.bungee;
 
-import fr.badblock.bungee.utils.TimeUtils;
+import fr.badblock.bungee.utils.time.TimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

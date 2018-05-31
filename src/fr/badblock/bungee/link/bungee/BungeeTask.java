@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
-import fr.badblock.bungee.utils.TimeUtils;
+import fr.badblock.bungee.utils.time.TimeUtils;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketEncoder;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketMessage;

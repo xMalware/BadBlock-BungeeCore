@@ -1,9 +1,7 @@
 package fr.badblock.bungee.players;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.Map.Entry;
 
 import com.google.gson.JsonElement;
@@ -16,21 +14,15 @@ import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
 import fr.badblock.bungee.BadBungee;
-import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.ObjectUtils;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import fr.toenga.common.utils.bungee.Punished;
 import fr.toenga.common.utils.data.Callback;
 import fr.toenga.common.utils.general.GsonUtils;
-import fr.toenga.common.utils.i18n.I18n;
-import fr.toenga.common.utils.i18n.Locale;
-import fr.toenga.common.utils.permissions.PermissionUser;
-import fr.toenga.common.utils.permissions.PermissionsManager;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
