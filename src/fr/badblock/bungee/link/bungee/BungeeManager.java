@@ -52,12 +52,6 @@ public class BungeeManager
 	private int					slots;
 	private CachedPlayerToken	token;
 
-	public BungeeManager()
-	{
-		// Generate ping for the first time
-		generatePing();
-	}
-	
 	public void add(BungeeObject bungeeObject)
 	{
 		bungees.put(bungeeObject.getName(), bungeeObject);

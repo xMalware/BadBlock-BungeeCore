@@ -1,5 +1,6 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
+import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.bungee.BungeeTask;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
@@ -33,15 +34,25 @@ public class PreLoginLoadPlayerListener extends BadListener
 			// So we stop there
 			return;
 		}
-		
+
+		// Get bungee manager
+		BungeeManager bungeeManager = BungeeManager.getInstance();
+		// If the server ping null
+		if (bungeeManager.getServerPing() == null)
+		{
+			// Generate the server ping to init slots/players values
+			// to avoid "this server is fucking full!"
+			bungeeManager.generatePing();
+		}
+
 		// We create a BadPlayer object
-        BadPlayer badPlayer = new BadPlayer(event.getConnection());
-		
-    	// We synchronize all the other proxies
+		BadPlayer badPlayer = new BadPlayer(event.getConnection());
+
+		// We synchronize all the other proxies
 		BungeeTask.keepAlive();
-	
+
 		// We send an event that says the player tried to join the server
 		ProxyServer.getInstance().getPluginManager().callEvent(new PlayerJoinEvent(badPlayer, event));
 	}
-	
+
 }

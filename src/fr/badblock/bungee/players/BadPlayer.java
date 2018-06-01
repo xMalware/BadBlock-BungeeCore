@@ -67,6 +67,10 @@ public final class BadPlayer extends BadOfflinePlayer
 	@SuppressWarnings("deprecation")
 	public boolean isLogged()
 	{
+		System.out.print("logged A : " + (getDbObject() != null));
+		System.out.print("logged B : " + (getDbObject().containsKey("lastServer")));
+		System.out.print("logged C : " + (getLastServer() != null));
+		System.out.print("logged D : " + (!getLastServer().startsWith("login")));
 		System.out.print("logged : " + (getDbObject() != null && getDbObject().containsKey("lastServer") && getLastServer() != null && !getLastServer().startsWith("login")));
 		return getDbObject() != null && getDbObject().containsKey("lastServer") && getLastServer() != null && !getLastServer().startsWith("login");
 	}
