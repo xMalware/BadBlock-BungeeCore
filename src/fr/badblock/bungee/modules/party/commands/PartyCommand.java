@@ -123,7 +123,7 @@ public class PartyCommand extends BadCommand
 	public void unknown(ProxiedPlayer sender)
 	{
 		// We tell him this command doesn't exist.
-		PartyManager.getMessages().UNKOWN_COMMAND(sender);
+		PartyManager.getMessages().sendUnknownMessage(sender);
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class PartyCommand extends BadCommand
 	public void help(ProxiedPlayer sender)
 	{
 		// We give him the list of subcommands
-		PartyManager.getMessages().HELP(sender);
+		PartyManager.getMessages().sendHelp(sender);
 	}
 
 }

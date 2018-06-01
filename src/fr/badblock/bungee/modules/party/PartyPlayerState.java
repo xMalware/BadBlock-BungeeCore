@@ -1,6 +1,7 @@
 package fr.badblock.bungee.modules.party;
 
-public enum PartyPlayerState {
+public enum PartyPlayerState
+{
 
 	WAITING,
     ACCEPTED

@@ -30,28 +30,34 @@ public class PartyManager
 		{
 
 			@Override
-			public void done(Party party, Throwable error) {
+			public void done(Party party, Throwable error)
+			{
 				if (party == null)
 				{
-					messages.YOU_RE_NOT_IN_PARTY(sender);
+					messages.sendYouAreNotInParty(sender);
 				}
 				else
 				{
 					if (party.getPlayers() == null)
 					{
-						messages.ERROR_OCCURRED(sender, 1);
+						messages.sendErrorOccurred(sender, 1);
 						return;
 					}
+					
 					PartyPlayer partyPlayer = party.getPlayers().get(sender.getName());
+					
 					if (partyPlayer == null)
 					{
-						messages.ERROR_OCCURRED(sender, 2);
+						messages.sendErrorOccurred(sender, 2);
 						return;
 					}
+					
 					boolean follow = partyPlayer.isFollow();
 					String message = follow ? "disabled" : "enabled";
-					messages.FOLLOW(sender, message);
+					
+					messages.sendFollow(sender, message);
 					partyPlayer.setFollow(!follow);
+					
 					party.save();
 				}
 			}
@@ -63,23 +69,27 @@ public class PartyManager
 	{
 		if (args.length != 2)
 		{
-			PartyManager.getMessages().INVITE_USAGE(sender);
+			PartyManager.getMessages().sendInviteUsage(sender);
 			return;
 		}
+		
 		String invited = args[1];
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 		BadPlayer otherPlayer = bungeeManager.getBadPlayer(invited);
 		BadPlayer currPlayer = BadPlayer.get(sender);
+		
 		if (otherPlayer == null || !currPlayer.getLastServer().equals(otherPlayer.getLastServer()))
 		{
-			PartyManager.getMessages().ACCEPT_MUSTBEONSAMESERVER(sender);
+			PartyManager.getMessages().sendAcceptMustBeOnSameServer(sender);
 			return;
 		}
+		
 		PartyManager.getParty(sender.getName(), new Callback<Party>()
 		{
 
 			@Override
-			public void done(Party party, Throwable error) {
+			public void done(Party party, Throwable error)
+			{
 				if (party == null)
 				{
 					// Create party
@@ -90,22 +100,23 @@ public class PartyManager
 				else
 				{
 					PartyPlayer partyPlayer = party.getPartyPlayer(otherPlayer.getName());
+					
 					if (partyPlayer != null)
 					{
 						if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
 						{
-							PartyManager.getMessages().INVITE_ALREADYINPARTY(sender);
+							PartyManager.getMessages().sendInviteAlreadyInParty(sender);
 						}
 						else
 						{
-							PartyManager.getMessages().INVITE_ALREADYINVITED(sender);
+							PartyManager.getMessages().sendInviteAlreadyInvited(sender);
 						}
 					}
 					else
 					{
 						party.invite(otherPlayer.getName(), PartyPlayerRole.DEFAULT);
-						PartyManager.getMessages().INVITE_YOUINVITED(currPlayer, otherPlayer.getName());
-						PartyManager.getMessages().INVITE_YOUHAVEBEENINVITED(otherPlayer, currPlayer.getName());
+						PartyManager.getMessages().sendInviteYouInvited(currPlayer, otherPlayer.getName());
+						PartyManager.getMessages().sendInviteYouHaveBeenInvited(otherPlayer, currPlayer.getName());
 					}
 				}
 			}
@@ -115,50 +126,58 @@ public class PartyManager
 	
 	private static void _inviteMessage(BadPlayer currentPlayer, BadPlayer otherPlayer)
 	{
-		messages.INVITE_YOUINVITED(currentPlayer, otherPlayer.getName());
-		messages.INVITE_YOUHAVEBEENINVITED(otherPlayer, currentPlayer.getName());
+		messages.sendInviteYouInvited(currentPlayer, otherPlayer.getName());
+		messages.sendInviteYouHaveBeenInvited(otherPlayer, currentPlayer.getName());
 	}
 	
 	public static void accept(ProxiedPlayer sender, String[] args)
 	{
 		if (args.length != 2)
 		{
-			PartyManager.getMessages().ACCEPT_USAGE(sender);
+			PartyManager.getMessages().sendAcceptUsage(sender);
 			return;
 		}
+		
 		String ownerParty = args[1];
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 		BadPlayer otherPlayer = bungeeManager.getBadPlayer(ownerParty);
 		BadPlayer currPlayer = BadPlayer.get(sender);
+		
 		if (otherPlayer == null || !currPlayer.getLastServer().equals(otherPlayer.getLastServer()))
 		{
-			PartyManager.getMessages().ACCEPT_MUSTBEONSAMESERVER(sender);
+			PartyManager.getMessages().sendAcceptMustBeOnSameServer(sender);
 			return;
 		}
+		
 		PartyManager.getParty(otherPlayer.getName(), new Callback<Party>()
 		{
 
 			@Override
-			public void done(Party party, Throwable error) {
+			public void done(Party party, Throwable error)
+			{
 				if (party == null)
 				{
-					PartyManager.getMessages().ACCEPT_EXPIRED(sender, otherPlayer.getName());
-					PartyManager.getMessages().ACCEPT_EXPIRED(sender, otherPlayer.getName());
+					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
+					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
 					return;
 				}
+				
 				PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
+				
 				if (partyPlayer == null)
 				{
-					PartyManager.getMessages().ACCEPT_EXPIRED(sender, otherPlayer.getName());
+					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
 					return;
 				}
+				
 				if (!partyPlayer.getState().equals(PartyPlayerState.WAITING))
 				{
-					PartyManager.getMessages().ACCEPT_ALREADYINPARTY(sender, otherPlayer.getName());
+					PartyManager.getMessages().sendAcceptAlreadyInParty(sender, otherPlayer.getName());
 					return;
 				}
+				
 				party.accept(sender.getName());
-				PartyManager.getMessages().ACCEPT_ACCEPTED(sender, otherPlayer.getName());
+				PartyManager.getMessages().sendAcceptAccepted(sender, otherPlayer.getName());
 			}
 
 		});
@@ -168,7 +187,7 @@ public class PartyManager
 	{
 		if (args.length != 2)
 		{
-			PartyManager.getMessages().REMOVE_USAGE(sender);
+			PartyManager.getMessages().sendRemoveUsage(sender);
 			return;
 		}
 		String toRemove = args[1];
@@ -176,12 +195,13 @@ public class PartyManager
 		{
 
 			@Override
-			public void done(Party party, Throwable error) {
+			public void done(Party party, Throwable error)
+			{
 
 				// Not in group
 				if (party == null)
 				{
-					PartyManager.getMessages().REMOVE_YOURENOTINGROUP(sender);
+					PartyManager.getMessages().sendRemoveYouAreNotInGroup(sender);
 					return;
 				}
 
@@ -189,7 +209,7 @@ public class PartyManager
 				PartyPlayer partyPlayer = party.getPartyPlayer(toRemove);
 				if (partyPlayer == null)
 				{
-					PartyManager.getMessages().REMOVE_PLAYERNOTINGROUP(sender, toRemove);
+					PartyManager.getMessages().sendRemovePlayerNotInGroup(sender, toRemove);
 					return;
 				}
 
@@ -199,11 +219,11 @@ public class PartyManager
 				// Send message
 				if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
 				{
-					PartyManager.getMessages().REMOVE_CANCELLED(sender, partyPlayer.getName());
+					PartyManager.getMessages().sendRemoveCancelled(sender, partyPlayer.getName());
 				}
 				else
 				{
-					PartyManager.getMessages().REMOVE_REMOVED(sender, partyPlayer.getName());
+					PartyManager.getMessages().sendRemoveRemoved(sender, partyPlayer.getName());
 				}
 
 			}
@@ -215,7 +235,7 @@ public class PartyManager
 	{
 		if (args.length != 2)
 		{
-			PartyManager.getMessages().TP_USAGE(sender);
+			PartyManager.getMessages().sendTpUsage(sender);
 			return;
 		}
 		String toTp = args[1];
@@ -224,12 +244,13 @@ public class PartyManager
 		{
 
 			@Override
-			public void done(Party party, Throwable error) {
+			public void done(Party party, Throwable error)
+			{
 
 				// Sender not in group
 				if (party == null)
 				{
-					PartyManager.getMessages().TP_YOURENOTINGROUP(sender);
+					PartyManager.getMessages().sendTpYouAreNotInGroup(sender);
 					return;
 				}
 
@@ -237,14 +258,14 @@ public class PartyManager
 				PartyPlayer partyPlayer = party.getPartyPlayer(toTp);
 				if (partyPlayer == null)
 				{
-					PartyManager.getMessages().TP_PLAYERNOTINGROUP(sender, toTp);
+					PartyManager.getMessages().sendTpPlayerNotInGroup(sender, toTp);
 					return;
 				}
 
 				// Player not accepted yet in group
 				if (!partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
 				{
-					PartyManager.getMessages().TP_NOTACCEPTED(sender, toTp);
+					PartyManager.getMessages().sendTpNotAccepted(sender, toTp);
 					return;
 				}
 
@@ -252,7 +273,7 @@ public class PartyManager
 				BadPlayer badPlayer = bungeeManager.getBadPlayer(toTp);
 				if (badPlayer == null)
 				{
-					PartyManager.getMessages().TP_NOTCONNECTED(sender, toTp);
+					PartyManager.getMessages().sendTpNotConnected(sender, toTp);
 					return;
 				}
 
@@ -262,21 +283,21 @@ public class PartyManager
 				// Unknown server to teleport (null)
 				if (lastServer == null)
 				{
-					PartyManager.getMessages().TP_UNKNOWNSERVER(sender);
+					PartyManager.getMessages().sendTpUnknownServer(sender);
 					return;
 				}
 
 				// Unknown server to teleport (empty)
 				if (lastServer.isEmpty())
 				{
-					PartyManager.getMessages().TP_UNKNOWNSERVER(sender);
+					PartyManager.getMessages().sendTpUnknownServer(sender);
 					return;
 				}
 
 				// The player isn't logged
 				if (!badPlayer.isLogged())
 				{
-					PartyManager.getMessages().TP_NOTLOGGED(sender, badPlayer.getName());
+					PartyManager.getMessages().sendTpNotLogged(sender, badPlayer.getName());
 					return;
 				}
 
@@ -286,14 +307,13 @@ public class PartyManager
 				// Unknown server
 				if (serverInfo == null)
 				{
-					PartyManager.getMessages().TP_UNKNOWNSERVER(sender);
+					PartyManager.getMessages().sendTpUnknownServer(sender);
 					return;
 				}
 
 				// Teleport to server
 				sender.connect(serverInfo);
-				PartyManager.getMessages().TP_TELEPORTED(sender, badPlayer.getName());
-
+				PartyManager.getMessages().sendTpTeleported(sender, badPlayer.getName());
 			}
 
 		});
@@ -303,26 +323,31 @@ public class PartyManager
 	{
 		BadPlayer badPlayer = BungeeManager.getInstance().getBadPlayer(sender);
 		BadPlayerSettings settings = badPlayer.getSettings();
+		
 		if (args.length != 2)
 		{
 
 			return;
 		}
+		
 		String rawType = args[1]; 
 		Partyable partyable = Partyable.getByString(rawType);
+		
 		if (partyable == null)
 		{
-			PartyManager.getMessages().TOGGLE_UNKNOWNTYPE(sender, rawType);
+			PartyManager.getMessages().sendToggleUnknownType(sender, rawType);
 			return;
 		}
+		
 		if (settings.getPartyable().equals(partyable))
 		{
-			PartyManager.getMessages().TOGGLE_ALREADY(sender, rawType);
+			PartyManager.getMessages().sendToggleAlready(sender, rawType);
 			return;
 		}
+		
 		badPlayer.getSettings().setPartyable(partyable);
         badPlayer.updateSettings();
-		PartyManager.getMessages().TOGGLE_WITH(sender, rawType);
+		PartyManager.getMessages().sendToggleWith(sender, rawType);
 	}
 	
 	public static void getParty(String player, Callback<Party> callback)
@@ -338,6 +363,7 @@ public class PartyManager
 				BasicDBObject query = new BasicDBObject();
 				query.append("players", player.toLowerCase());
 				DBCursor cursor = collection.find(query);
+				
 				if (cursor != null && cursor.hasNext())
 				{
 					DBObject dbObject = cursor.next();
@@ -358,7 +384,8 @@ public class PartyManager
 		{
 
 			@Override
-			public void done(Party result, Throwable error) {
+			public void done(Party result, Throwable error)
+			{
 				callback.done(result != null, null);
 			}
 
