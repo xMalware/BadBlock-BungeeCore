@@ -112,7 +112,7 @@ public class BadOfflinePlayer
 		{
 			return "";
 		}
-		return permissible.getRawPrefix("prefix");
+		return permissible.getRawPrefix("chat");
 	}
 	
 	public String getRawChatSuffix()
