@@ -57,6 +57,11 @@ public class BungeeManager
 		bungees.put(bungeeObject.getName(), bungeeObject);
 	}
 
+	public void log(String message)
+	{
+		sendPacket(new BungeePacket(BungeePacketType.LOG, message));
+	}
+	
 	public void broadcast(String... messages)
 	{
 		StringBuilder stringBuilder = new StringBuilder();

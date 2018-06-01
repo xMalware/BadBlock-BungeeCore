@@ -1,7 +1,9 @@
 package fr.badblock.bungee.modules.abstracts;
 
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.utils.time.ThreadRunnable;
+import fr.toenga.common.utils.general.StringUtils;
 import fr.toenga.common.utils.i18n.I18n;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -65,6 +67,8 @@ public abstract class BadCommand extends Command
 				return;
 			}
 		}
+		// Logging
+		BungeeManager.getInstance().log(sender.getName() + " issued command /" + getName() + " " + StringUtils.join(args, " "));
 		// Execute the command in a separate thread
         ThreadRunnable.run(() -> BadCommand.this.run(sender, args));
 	}

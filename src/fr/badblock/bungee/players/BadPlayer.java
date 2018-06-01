@@ -6,8 +6,6 @@ import java.util.Map;
 
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
-import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacket;
-import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacketType;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
@@ -182,13 +180,13 @@ public final class BadPlayer extends BadOfflinePlayer
 	private void put()
 	{
 		maps.put(getName(), this);
-		BungeeManager.getInstance().sendPacket(new BungeePacket(BungeePacketType.LOG, ChatColor.GREEN + getName() + " is now connected."));
+		BungeeManager.getInstance().log(ChatColor.GREEN + getName() + " is now connected.");
 	}
 
 	public void remove()
 	{
 		maps.remove(getName());
-		BungeeManager.getInstance().sendPacket(new BungeePacket(BungeePacketType.LOG, ChatColor.RED + getName() + " is now disconnected."));
+		BungeeManager.getInstance().log(ChatColor.RED + getName() + " is now disconnected.");
 		BadBungee.log(ChatColor.RED + getName() + " is now disconnected.");
 	}
 
