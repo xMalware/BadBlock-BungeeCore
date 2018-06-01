@@ -67,6 +67,7 @@ public final class BadPlayer extends BadOfflinePlayer
 	@SuppressWarnings("deprecation")
 	public boolean isLogged()
 	{
+		System.out.print("logged : " + (getDbObject() != null && getDbObject().containsKey("lastServer") && getLastServer() != null && !getLastServer().startsWith("login")));
 		return getDbObject() != null && getDbObject().containsKey("lastServer") && getLastServer() != null && !getLastServer().startsWith("login");
 	}
 
@@ -101,12 +102,15 @@ public final class BadPlayer extends BadOfflinePlayer
 
 	public void sendTranslatedOutgoingMessage(String key, Object... args)
 	{
+		System.out.println("B");
 		if (toProxiedPlayer() != null)
 		{
+			System.out.println("C");
 			sendTranslatedLocalMessage(key, args);
 		}
 		else
 		{
+			System.out.println("D");
 			BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(I18n.getInstance().get(getLocale(), key, args))));
 		}
 	}

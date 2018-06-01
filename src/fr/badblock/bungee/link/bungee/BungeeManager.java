@@ -52,6 +52,12 @@ public class BungeeManager
 	private int					slots;
 	private CachedPlayerToken	token;
 
+	public BungeeManager()
+	{
+		// Generate ping for the first time
+		generatePing();
+	}
+	
 	public void add(BungeeObject bungeeObject)
 	{
 		bungees.put(bungeeObject.getName(), bungeeObject);
@@ -74,6 +80,7 @@ public class BungeeManager
 	}
 
 	public void targetedTranslatedBroadcast(String permission, String key, Object... args) {
+		System.out.println("A");
 		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
 	}
 
