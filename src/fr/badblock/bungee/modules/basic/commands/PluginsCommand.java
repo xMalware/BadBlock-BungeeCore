@@ -29,7 +29,7 @@ public class PluginsCommand extends BadCommand
 	public void run(CommandSender sender, String[] args)
 	{
 		// Sending the message
-		I19n.sendMessage(sender, "commands.plugins.message", sender.getName());
+		I19n.sendMessage(sender, "commands.plugins.message", null, sender.getName());
 	}
 
 }

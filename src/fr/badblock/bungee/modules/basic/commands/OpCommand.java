@@ -32,12 +32,12 @@ public class OpCommand extends BadCommand
 		if (args.length != 1)
 		{
 			// In this case the way of using the command is returned to the player
-			I19n.sendMessage(sender, "commands.op.usage");
+			I19n.sendMessage(sender, "commands.op.usage", null);
 			// We stop there
 			return;
 		}
 		// Sending a false operator add message
-		I19n.sendMessage(sender, "commands.op.message", args[0]);
+		I19n.sendMessage(sender, "commands.op.message", null, args[0]);
 	}
 
 }

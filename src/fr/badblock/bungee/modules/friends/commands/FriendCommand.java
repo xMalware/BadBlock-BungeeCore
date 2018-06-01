@@ -127,7 +127,7 @@ public class FriendCommand extends BadCommand
 	 */
 	private void unknown(CommandSender sender)
 	{
-		I19n.sendMessage(sender, prefix + "unknown_command");
+		I19n.sendMessage(sender, prefix + "unknown_command", null);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class FriendCommand extends BadCommand
 	 */
 	private void help(CommandSender sender)
 	{
-		I19n.sendMessage(sender, prefix + "help");
+		I19n.sendMessage(sender, prefix + "help", null);
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class FriendCommand extends BadCommand
 		if (args.length < 2)
 		{
 			// We send him the way to use the command
-			I19n.sendMessage(sender, prefix + "add.usage");
+			I19n.sendMessage(sender, prefix + "add.usage", null);
 			// We stop there
 			return;
 		}
@@ -188,7 +188,7 @@ public class FriendCommand extends BadCommand
 		if (args.length < 2)
 		{
 			// We send him the way to use the command
-			I19n.sendMessage(sender, prefix + "remove.usage");
+			I19n.sendMessage(sender, prefix + "remove.usage", null);
 			// We stop there
 			return;
 		}

@@ -36,7 +36,7 @@ public class GListCommand extends BadCommand
 	public void run(CommandSender sender, String[] args)
 	{
 		// Sending the answer to the command with the requested information
-		I19n.sendMessage(sender, "commands.glist.message", BungeeManager.getInstance().getRealTimeOnlinePlayers());
+		I19n.sendMessage(sender, "commands.glist.message", null, BungeeManager.getInstance().getRealTimeOnlinePlayers());
 	}
 
 }

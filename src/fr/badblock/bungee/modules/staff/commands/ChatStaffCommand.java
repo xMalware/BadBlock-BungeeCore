@@ -2,10 +2,12 @@ package fr.badblock.bungee.modules.staff.commands;
 
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.abstracts.BadCommand;
+import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.i18n.I19n;
 import fr.toenga.common.utils.general.StringUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
  * 
@@ -27,7 +29,7 @@ import net.md_5.bungee.api.CommandSender;
  */
 public class ChatStaffCommand extends BadCommand
 {
-	
+
 	/**
 	 * Command constructor
 	 */
@@ -46,19 +48,37 @@ public class ChatStaffCommand extends BadCommand
 		if (args.length == 0) 
 		{
 			// A message is sent to him containing the information allowing him to take note of the use of the command.
-			I19n.sendMessage(sender, "commands.chatstaff.usage");
+			I19n.sendMessage(sender, "commands.chatstaff.usage", null);
 			// Nothing has been written from him, no argument. After we explain it to him, we stop there.
 			return;
 		}
-		
+
 		// The message is retrieved by attaching each word of the message
 		String message = StringUtils.join(args, " ");
 
 		// The colors on the message are removed
 		message = ChatColor.stripColor(message);
-		
+
+		// Init raw prefix
+		String rawPrefix = "";
+		// Init raw suffix
+		String rawSuffix = "";
+
+		// If the sender is a player
+		if (sender instanceof ProxiedPlayer)
+		{
+			// Get player
+			ProxiedPlayer player = (ProxiedPlayer) sender;
+			// Get BadPlayer
+			BadPlayer badPlayer = BadPlayer.get(player);
+			// Set raw prefix
+			rawPrefix = badPlayer.getRawPrefix();
+			// Set raw suffix
+			rawSuffix = badPlayer.getRawSuffix();
+		}
+
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.chatstaff", "commands.chatstaff.message", sender.getName(), message);
+		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.chatstaff", "commands.chatstaff.message", new int[] { 0,2 }, rawPrefix, sender.getName(), rawSuffix, message);
 	}
 
 }

@@ -41,7 +41,7 @@ public class SendCommand extends BadCommand
 		if (args.length != 2)
 		{
 			// A message is sent to him containing the information allowing him to take note of the use of the command.
-			I19n.sendMessage(sender, "commands.send.usage");
+			I19n.sendMessage(sender, "commands.send.usage", null);
 			// Nothing has been written from him, no argument. After we explain it to him, we stop there.
 			return;
 		}
@@ -53,7 +53,7 @@ public class SendCommand extends BadCommand
 		if (!BungeeManager.getInstance().hasUsername(playerName))
 		{
 			// In this case, we notify the user who executed this command
-			I19n.sendMessage(sender, "commands.send.disconnected", playerName);
+			I19n.sendMessage(sender, "commands.send.disconnected", null, playerName);
 			// We stop there.
 			return;
 		}
@@ -67,7 +67,7 @@ public class SendCommand extends BadCommand
 		if (serverInfo == null)
 		{
 			// In this case, we notify the user who executed this command
-			I19n.sendMessage(sender, "commands.send.unknownserver", serverName);
+			I19n.sendMessage(sender, "commands.send.unknownserver", null, serverName);
 			// We stop there.
 			return;
 		}
@@ -77,7 +77,7 @@ public class SendCommand extends BadCommand
 		// We send the player's move with a packet over the network
 		BungeeManager.getInstance().sendPacket(new PlayerPacket(playerName, PlayerPacketType.SEND_SERVER, serverName));
 		// The requester is told that the action was indeed made
-		I19n.sendMessage(sender, "commands.send.sended", playerName, serverName);
+		I19n.sendMessage(sender, "commands.send.sended", null, playerName, serverName);
 	}
 
 }

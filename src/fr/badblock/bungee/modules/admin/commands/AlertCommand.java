@@ -49,7 +49,7 @@ public class AlertCommand extends BadCommand
 		if (args.length == 0)
 		{
 			// A message is sent to him containing the information allowing him to take note of the use of the command.
-			I19n.sendMessage(sender, "commands.alert.usage");
+			I19n.sendMessage(sender, "commands.alert.usage", null);
 			// Nothing has been written from him, no argument. After we explain it to him, we stop there.
 			return;
 		}

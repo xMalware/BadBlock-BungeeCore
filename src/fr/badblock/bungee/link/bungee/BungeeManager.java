@@ -73,17 +73,16 @@ public class BungeeManager
 		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingMessage(messages));
 	}
 
-	public void targetedTranslatedBroadcast(String permission, String key, Object... args) {
-		System.out.println("A");
-		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
+	public void targetedTranslatedBroadcast(String permission, String key, int[] indexesToTranslate, Object... args) {
+		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMessage(key, indexesToTranslate, args));
 	}
 
 	public void targetedJsonBrodcast(String permission, String... messages) {
 		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingJsonMessage(messages));
 	}
 
-	public void targetedTranslatedJsonBroadcast(String permission, String key, Object... args) {
-		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
+	public void targetedTranslatedJsonBroadcast(String permission, String key, int[] indexesToTranslate, Object... args) {
+		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, indexesToTranslate, args));
 	}
 
 	public void targetedTranslatedMCJsonBroadcast(String permission, McJson mcJson) {
@@ -94,16 +93,16 @@ public class BungeeManager
 		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingMessage(messages));
 	}
 
-	public void targetedTranslatedBroadcast(Filter<BadPlayer> filter, String key, Object... args) {
-		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMessage(key, args));
+	public void targetedTranslatedBroadcast(Filter<BadPlayer> filter, String key, int[] indexesToTranslate, Object... args) {
+		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMessage(key, indexesToTranslate, args));
 	}
 
 	public void targetedJsonBrodcast(Filter<BadPlayer> filter, String... messages) {
 		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingJsonMessage(messages));
 	}
 
-	public void targetedTranslatedJsonBroadcast(Filter<BadPlayer> filter, String key, Object... args) {
-		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, args));
+	public void targetedTranslatedJsonBroadcast(Filter<BadPlayer> filter, String key, int[] indexesToTranslate, Object... args) {
+		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, indexesToTranslate, args));
 	}
 
 	public void targetedTranslatedMCJsonBroadcast(Filter<BadPlayer> filter, McJson mcJson) {

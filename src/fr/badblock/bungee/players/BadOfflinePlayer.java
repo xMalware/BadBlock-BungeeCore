@@ -25,6 +25,7 @@ import fr.toenga.common.utils.data.Callback;
 import fr.toenga.common.utils.general.GsonUtils;
 import fr.toenga.common.utils.i18n.I18n;
 import fr.toenga.common.utils.i18n.Locale;
+import fr.toenga.common.utils.permissions.Permissible;
 import fr.toenga.common.utils.permissions.PermissionUser;
 import fr.toenga.common.utils.permissions.PermissionsManager;
 import lombok.Data;
@@ -39,7 +40,7 @@ public class BadOfflinePlayer
 	private 			String						name;
 	private				String						lastIp;
 	private 			UUID						uniqueId;
-	private transient	DBObject	  				dbObject;
+	private 			BasicDBObject	  			dbObject;
 
 	private transient	Callback<BadOfflinePlayer>	callback;
 	private transient	List<Callback<BadPlayer>> 	loadedCallbacks;
@@ -102,6 +103,37 @@ public class BadOfflinePlayer
 	public void updateLastIp()
 	{
 		updateData("lastIp", getLastIp().toString());
+	}
+
+	public String getRawPrefix()
+	{
+		Permissible permissible = getPermissions().getHighestRank("bungee", true);
+		if (permissible == null)
+		{
+			return "";
+		}
+		return permissible.getRawPrefix();
+	}
+	
+	public String getRawSuffix()
+	{
+		Permissible permissible = getPermissions().getHighestRank("bungee", true);
+		if (permissible == null)
+		{
+			return "";
+		}
+		return permissible.getRawSuffix();
+	}
+	
+	public String getFullName(Locale locale)
+	{
+		// TODO /gnick support
+		Permissible permissible = getPermissions().getHighestRank("bungee", true);
+		if (permissible == null)
+		{
+			return getName();
+		}
+		return permissible.getPrefix(locale) + getName() + permissible.getSuffix(locale);
 	}
 
 	public void saveData() throws Exception
@@ -211,7 +243,8 @@ public class BadOfflinePlayer
 		DBCursor cursor = dbCollection.find(query);
 		if (cursor.hasNext())
 		{
-			setDbObject(cursor.next());
+			setDbObject((BasicDBObject) cursor.next());
+			System.out.print("set dbobject: " + getDbObject());
 			BadBungee.log("§c" + getName() + " exists in the player table.");
 			setName(getString("realName"));
 			setLastIp(getString("lastIp"));
@@ -221,7 +254,6 @@ public class BadOfflinePlayer
 			if (PermissionsManager.getManager() != null)
 			{
 				setPermissions(new PermissionUser(getJsonElement("permissions").getAsJsonObject()));
-				System.out.println(GsonUtils.getPrettyGson().toJson(getPermissions()));
 			}
 			try
 			{

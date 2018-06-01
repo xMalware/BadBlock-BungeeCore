@@ -18,12 +18,12 @@ public class PlayerSendServerProcessing extends _PlayerProcessing
 		
 		if (serverInfo == null)
 		{
-			I19n.sendMessage(proxiedPlayer, "commands.send.unknownserver", serverName);
+			I19n.sendMessage(proxiedPlayer, "commands.send.unknownserver", null, serverName);
 			return;
 		}
 		
 		proxiedPlayer.connect(serverInfo);
-		I19n.sendMessage(proxiedPlayer, "commands.send.youvebeenmoved");
+		I19n.sendMessage(proxiedPlayer, "commands.send.youvebeenmoved", null);
 	}
 	
 }

@@ -14,25 +14,43 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public class I19n
 {
 
-	public static String[] getMessages(CommandSender commandSender, String key, Object... args)
+	public static String[] getMessages(Locale locale, String key, int[] indexesToTranslate, Object... args)
+	{
+		Object[] resultArgs = new Object[args.length];
+		System.arraycopy(args, 0, resultArgs, 0, args.length);
+		if (indexesToTranslate != null && indexesToTranslate.length != 0)
+		{
+			for (int indexToTranslate : indexesToTranslate)
+			{
+				if (resultArgs.length > indexToTranslate - 1)
+				{
+					continue; // something gone wrong
+				}
+				resultArgs[indexToTranslate] = I18n.getInstance().get(locale, args.toString())[0];
+			}
+		}
+		return I18n.getInstance().get(locale, key, args);
+	}
+	
+	public static String[] getMessages(CommandSender commandSender, String key, int[] indexesToTranslate, Object... args)
 	{
 		if (commandSender instanceof ProxiedPlayer)
 		{
 			Locale locale = BadPlayer.get((ProxiedPlayer) commandSender).getLocale();
-			return I18n.getInstance().get(locale, key, args);
+			return getMessages(locale, key, indexesToTranslate, args);
 		}
-		return I18n.getInstance().get(key, args);
+		return getMessages(I18n.getDefaultLocale(), key, indexesToTranslate, args);
 	}
 
-	public static String getMessage(CommandSender commandSender, String key, Object... args)
+	public static String getMessage(CommandSender commandSender, String key, int[] indexesToTranslate, Object... args)
 	{
-		return getMessages(commandSender, key, args)[0];
+		return getMessages(commandSender, key, indexesToTranslate, args)[0];
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void sendMessage(CommandSender commandSender, String key, Object... args)
+	public static void sendMessage(CommandSender commandSender, String key, int[] indexesToTranslate, Object... args)
 	{
-		commandSender.sendMessages(getMessages(commandSender, key, args));
+		commandSender.sendMessages(getMessages(commandSender, key, indexesToTranslate, args));
 	}
 	
 }

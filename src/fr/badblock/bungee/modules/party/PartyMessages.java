@@ -14,137 +14,137 @@ public class PartyMessages
 
 	public void UNKOWN_COMMAND(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "unknowncommand");
+		I19n.sendMessage(proxiedPlayer, prefix + "unknowncommand", null);
 	}
 	
 	public void YOU_RE_NOT_IN_PARTY(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "yourenotinparty");
+		I19n.sendMessage(proxiedPlayer, prefix + "yourenotinparty", null);
 	}
 	
 	public void ERROR_OCCURRED(ProxiedPlayer proxiedPlayer, int errorCode)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "erroroccurred", errorCode);
+		I19n.sendMessage(proxiedPlayer, prefix + "erroroccurred", null, errorCode);
 	}
 	
 	public void FOLLOW(ProxiedPlayer proxiedPlayer, String followType)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "follow." + followType);
+		I19n.sendMessage(proxiedPlayer, prefix + "follow." + followType, null);
 	}
 	
 	public void INVITE_USAGE(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "invite.usage");
+		I19n.sendMessage(proxiedPlayer, prefix + "invite.usage", null);
 	}
 
 	public void INVITE_ALREADYINPARTY(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "invite.alreadyinparty");
+		I19n.sendMessage(proxiedPlayer, prefix + "invite.alreadyinparty", null);
 	}
 	
 	public void INVITE_ALREADYINVITED(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "invite.alreadyinvited");
+		I19n.sendMessage(proxiedPlayer, prefix + "invite.alreadyinvited", null);
 	}
 	
 	public void INVITE_YOUINVITED(BadPlayer badPlayer, String invitedPlayer)
 	{
-		badPlayer.sendTranslatedOutgoingMessage(prefix + "invite.youinvited", invitedPlayer);
+		badPlayer.sendTranslatedOutgoingMessage(prefix + "invite.youinvited", null, invitedPlayer);
 	}
 	
 	public void INVITE_YOUHAVEBEENINVITED(BadPlayer otherPlayer, String byPlayer)
 	{
-		otherPlayer.sendTranslatedOutgoingMessage(prefix + "invite.youhavebeeninvited", byPlayer);
+		otherPlayer.sendTranslatedOutgoingMessage(prefix + "invite.youhavebeeninvited", null, byPlayer);
 	}
 	
 	public void ACCEPT_USAGE(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "accept.usage");
+		I19n.sendMessage(proxiedPlayer, prefix + "accept.usage", null);
 	}
 	
 	public void ACCEPT_MUSTBEONSAMESERVER(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "accept.mustbeonsameserver");
+		I19n.sendMessage(proxiedPlayer, prefix + "accept.mustbeonsameserver", null);
 	}
 	
 	public void ACCEPT_EXPIRED(ProxiedPlayer proxiedPlayer, String playerInvitation)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "accept.expired", playerInvitation);
+		I19n.sendMessage(proxiedPlayer, prefix + "accept.expired", null, playerInvitation);
 	}
 	
 	public void ACCEPT_ALREADYINPARTY(ProxiedPlayer proxiedPlayer, String playerName)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "accept.alreadyinparty", playerName);
+		I19n.sendMessage(proxiedPlayer, prefix + "accept.alreadyinparty", null, playerName);
 	}
 	
 	public void ACCEPT_ACCEPTED(ProxiedPlayer proxiedPlayer, String playerName)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "accept.accepted", playerName);
+		I19n.sendMessage(proxiedPlayer, prefix + "accept.accepted", null, playerName);
 	}
 	
 	public void REMOVE_USAGE(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "remove.usage");
+		I19n.sendMessage(proxiedPlayer, prefix + "remove.usage", null);
 	}
 	
 	public void REMOVE_YOURENOTINGROUP(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "remove.yourenotingroup");
+		I19n.sendMessage(proxiedPlayer, prefix + "remove.yourenotingroup", null);
 	}
 	
 	public void REMOVE_PLAYERNOTINGROUP(ProxiedPlayer proxiedPlayer, String partyPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "remove.playernotingroup", partyPlayer);
+		I19n.sendMessage(proxiedPlayer, prefix + "remove.playernotingroup", null, partyPlayer);
 	}
 
 	public void REMOVE_CANCELLED(ProxiedPlayer proxiedPlayer, String partyPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "remove.cancelled", partyPlayer);
+		I19n.sendMessage(proxiedPlayer, prefix + "remove.cancelled", null, partyPlayer);
 	}
 	
 	public void REMOVE_REMOVED(ProxiedPlayer proxiedPlayer, String partyPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "remove.removed", partyPlayer);
+		I19n.sendMessage(proxiedPlayer, prefix + "remove.removed", null, partyPlayer);
 	}
 	
 	public void TP_USAGE(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "tp.usage");
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.usage", null);
 	}
 	
 	public void TP_YOURENOTINGROUP(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "tp.yourenotingroup");
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.yourenotingroup", null);
 	}
 	
 	public void TP_PLAYERNOTINGROUP(ProxiedPlayer proxiedPlayer, String partyPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "tp.playernotingroup");
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.playernotingroup", null);
 	}
 	
 	public void TP_NOTACCEPTED(ProxiedPlayer proxiedPlayer, String partyPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "tp.notaccepted", partyPlayer);
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.notaccepted", null, partyPlayer);
 	}
 	
 	public void TP_NOTCONNECTED(ProxiedPlayer proxiedPlayer, String playerName)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "tp.notconnected", playerName);
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.notconnected", null, playerName);
 	}
 	
 	public void TP_UNKNOWNSERVER(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "tp.unknownserver");
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.unknownserver", null);
 	}
 	
 	public void TP_NOTLOGGED(ProxiedPlayer proxiedPlayer, String playerName)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "tp.notlogged");
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.notlogged", null);
 	}
 	
 	public void TP_TELEPORTED(ProxiedPlayer proxiedPlayer, String serverName)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "tp.teleported", serverName);
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.teleported", null, serverName);
 	}
 	
 	public void TOGGLE_USAGE(BadPlayer badPlayer)
@@ -169,27 +169,27 @@ public class PartyMessages
 	
 	public void TOGGLE(ProxiedPlayer proxiedPlayer, String type)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "toggle." + type);
+		I19n.sendMessage(proxiedPlayer, prefix + "toggle." + type, null);
 	}
 	
 	public void TOGGLE_ALREADY(ProxiedPlayer proxiedPlayer, String type)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "toggle.already", I19n.getMessage(proxiedPlayer, prefix + "toggle." + type));
+		I19n.sendMessage(proxiedPlayer, prefix + "toggle.already", null, I19n.getMessage(proxiedPlayer, prefix + "toggle." + type, null));
 	}
 	
 	public void TOGGLE_UNKNOWNTYPE(ProxiedPlayer proxiedPlayer, String type)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "toggle.unknowntype", type);
+		I19n.sendMessage(proxiedPlayer, prefix + "toggle.unknowntype", null, type);
 	}
 	
 	public void TOGGLE_WITH(ProxiedPlayer proxiedPlayer, String type)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "toggle.with", I19n.getMessage(proxiedPlayer, prefix + "toggle." + type));
+		I19n.sendMessage(proxiedPlayer, prefix + "toggle.with", null, I19n.getMessage(proxiedPlayer, prefix + "toggle." + type, null));
 	}
 	
 	public void HELP(ProxiedPlayer proxiedPlayer)
 	{
-		I19n.sendMessage(proxiedPlayer, prefix + "help");
+		I19n.sendMessage(proxiedPlayer, prefix + "help", null);
 	}
 	
 }

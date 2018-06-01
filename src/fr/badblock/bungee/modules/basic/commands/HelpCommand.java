@@ -29,7 +29,7 @@ public class HelpCommand extends BadCommand
 	public void run(CommandSender sender, String[] args)
 	{
 		// Sending help
-		I19n.sendMessage(sender, "commands.help.message", sender.getName());
+		I19n.sendMessage(sender, "commands.help.message", null, sender.getName());
 	}
 
 }

@@ -63,7 +63,6 @@ public final class BadPlayer extends BadOfflinePlayer
 	{
 		if (getDbObject() == null)
 		{
-			System.out.print("wtf?");
 			return null;
 		}
 		return getDbObject().get("lastServer").toString();
@@ -103,26 +102,23 @@ public final class BadPlayer extends BadOfflinePlayer
 		}
 	}
 
-	public void sendTranslatedOutgoingMessage(String key, Object... args)
+	public void sendTranslatedOutgoingMessage(String key, int[] indexesToTranslate, Object... args)
 	{
-		System.out.println("B");
 		if (toProxiedPlayer() != null)
 		{
-			System.out.println("C");
-			sendTranslatedLocalMessage(key, args);
+			sendTranslatedLocalMessage(key, indexesToTranslate, args);
 		}
 		else
 		{
-			System.out.println("D");
 			BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(I18n.getInstance().get(getLocale(), key, args))));
 		}
 	}
 
-	public void sendTranslatedOutgoingJsonMessage(String key, Object... args)
+	public void sendTranslatedOutgoingJsonMessage(String key, int[] indexesToTranslate, Object... args)
 	{
 		if (toProxiedPlayer() != null)
 		{
-			sendTranslatedLocalJsonMessage(key, args);
+			sendTranslatedLocalJsonMessage(key, indexesToTranslate, args);
 		}
 		else
 		{
@@ -140,7 +136,7 @@ public final class BadPlayer extends BadOfflinePlayer
 	}
 
 	@SuppressWarnings("deprecation")
-	private void sendTranslatedLocalMessage(String key, Object... args)
+	private void sendTranslatedLocalMessage(String key,  int[] indexesToTranslate, Object... args)
 	{
 		if (toProxiedPlayer() == null)
 		{

@@ -12,19 +12,19 @@ final class FriendListMessage {
     }
 
     void ERROR(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("unknown_error"));
+        p.sendTranslatedOutgoingMessage(prefix("unknown_error"), null);
     }
 
     void UNKNOWN_PLAYER(BadPlayer p, String player) {
-        p.sendTranslatedOutgoingMessage(prefix("unknown_player"), player);
+        p.sendTranslatedOutgoingMessage(prefix("unknown_player"), null, player);
     }
 
     void OPERATION_CANCELLED(BadPlayer p, String reason) {
-        p.sendTranslatedOutgoingMessage(prefix("operation_cancelled"), reason);
+        p.sendTranslatedOutgoingMessage(prefix("operation_cancelled"), null, reason);
     }
 
     void SCHIZOPHRENIA_IS_BAD(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage("schizophrenia_is_bad");
+        p.sendTranslatedOutgoingMessage("schizophrenia_is_bad", null);
     }
 
     void QUERY_SELECTOR(BadPlayer p) {
@@ -43,40 +43,40 @@ final class FriendListMessage {
     }
 
     void UNKNOWN_STATUS(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("querying.unknown"));
+        p.sendTranslatedOutgoingMessage(prefix("querying.unknown"), null);
     }
 
     void ALREADY_ACCEPT(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("querying.already_accept"));
+        p.sendTranslatedOutgoingMessage(prefix("querying.already_accept"), null);
     }
 
     void ALREADY_REFUSE(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("querying.already_refuse"));
+        p.sendTranslatedOutgoingMessage(prefix("querying.already_refuse"), null);
     }
 
     void NOW_ACCEPT(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("querying.now_accept"));
+        p.sendTranslatedOutgoingMessage(prefix("querying.now_accept"), null);
     }
 
     void NOW_REFUSE(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("querying.now_refuse"));
+        p.sendTranslatedOutgoingMessage(prefix("querying.now_refuse"), null);
     }
 
     void ALREADY_FRIEND(BadPlayer p, BadOfflinePlayer with) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.already_friend"), with.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.already_friend"), null, with.getName());
     }
 
     void REQUESTED_ACCEPT(BadOfflinePlayer p, BadPlayer requested) {
         if (p.isOnline())
-            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.requested_accept"), requested.getName());
+            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.requested_accept"), null, requested.getName());
     }
 
     void ACCEPT_REQUESTER(BadPlayer p, BadOfflinePlayer requester) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.accept_requester"), requester.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.accept_requester"), null, requester.getName());
     }
 
     void ALREADY_REQUESTED(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.already_requested"));
+        p.sendTranslatedOutgoingMessage(prefix("requests.already_requested"), null);
     }
 
     void REQUEST(BadOfflinePlayer p, BadPlayer requester) {
@@ -95,50 +95,50 @@ final class FriendListMessage {
     }
 
     void REQUEST_RECEIVED(BadPlayer p, BadOfflinePlayer receiver) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.request_received"), receiver.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.request_received"), null, receiver.getName());
     }
 
     void DO_NOT_ACCEPT_REQUESTS(BadPlayer p, BadOfflinePlayer who) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.do_not_accept_requests"), who.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.do_not_accept_requests"), null, who.getName());
     }
 
     void DECLINED_YOUR_REQUEST(BadOfflinePlayer p, BadPlayer who) {
         if (p.isOnline())
-            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.declined_your_requested"), who.getName());
+            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.declined_your_requested"), null, who.getName());
     }
 
     void REJECT_REQUEST_OF(BadPlayer p, BadOfflinePlayer of) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.reject_request_of"), of.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.reject_request_of"), null, of.getName());
     }
 
     void REMOVED_YOU_FROM_FRIENDS(BadOfflinePlayer p, BadPlayer who) {
         if (p.isOnline())
-            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.remove_you_from_friends"), who.getName());
+            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.remove_you_from_friends"), null, who.getName());
     }
 
     void NOW_NO_LONGER_FRIEND(BadPlayer p, BadOfflinePlayer with) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.now_no_longer_friend"), with.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.now_no_longer_friend"), null, with.getName());
     }
 
     void CANCEL_REQUEST_TO(BadPlayer p, BadOfflinePlayer to) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.cancel_request_to"), to.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.cancel_request_to"), null, to.getName());
     }
 
     void CANCELLED_REQUEST(BadOfflinePlayer p, BadPlayer who) {
         if (p.isOnline())
-            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.cancelled_request"), who.getName());
+            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.cancelled_request"), null, who.getName());
     }
 
     void NO_RELATIONSHIP(BadPlayer p, BadOfflinePlayer with) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.no_relationship"), with.getName());
+        p.sendTranslatedOutgoingMessage(prefix("requests.no_relationship"), null, with.getName());
     }
 
     void INCORRECT_PAGE_NUMBER(BadPlayer p, String page) {
-        p.sendTranslatedOutgoingMessage(prefix("list.incorrect_page_number"), page);
+        p.sendTranslatedOutgoingMessage(prefix("list.incorrect_page_number"), null, page);
     }
 
     void TOO_BIG_PAGE_NUMBER(BadPlayer p, Integer page) {
-        p.sendTranslatedOutgoingMessage(prefix("list.too_big_page_number"), page.toString());
+        p.sendTranslatedOutgoingMessage(prefix("list.too_big_page_number"), null, page.toString());
     }
 
 }
