@@ -38,7 +38,7 @@ public class LoginFullServerListener extends BadListener
 		if (bungeeManager.getOnlinePlayers() >= bungeeManager.getSlots())
 		{
 			// We cancel his connection to the server
-			event.cancel(badPlayer.getTranslatedMessages("bungee.login.full")[0]);
+			event.cancel(badPlayer.getTranslatedMessage("bungee.login.full", null));
 		}
 	}
 

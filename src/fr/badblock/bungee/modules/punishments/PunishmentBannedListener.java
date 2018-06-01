@@ -45,7 +45,7 @@ public class PunishmentBannedListener extends BadListener
 			// We create an empty ban message
 			String result = "";
 			// For each line of the ban message
-			for (String string : badPlayer.getTranslatedMessages("punishments.ban", 
+			for (String string : badPlayer.getTranslatedMessages("punishments.ban", null,
 					punished.buildBanTime(badPlayer.getLocale()),
 					punished.getBanReason()))
 			{

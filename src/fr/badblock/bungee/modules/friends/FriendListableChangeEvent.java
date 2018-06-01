@@ -9,8 +9,11 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class FriendListableChangeEvent extends CancellableEvent {
+public class FriendListableChangeEvent extends CancellableEvent
+{
+	
     private final BadPlayer player;
     private final FriendListable oldStatus;
     private FriendListable newStatus;
+    
 }

@@ -4,141 +4,184 @@ import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.mcjson.McJsonFactory;
-import fr.toenga.common.utils.i18n.I18n;
 
-final class FriendListMessage {
-    private String prefix(String code) {
-        return "objects.friendlist." + code;
-    }
+final class FriendListMessage
+{
 
-    void ERROR(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("unknown_error"), null);
-    }
+	private String prefix(String code)
+	{
+		return "objects.friendlist." + code;
+	}
 
-    void UNKNOWN_PLAYER(BadPlayer p, String player) {
-        p.sendTranslatedOutgoingMessage(prefix("unknown_player"), null, player);
-    }
+	void sendError(BadPlayer badPlayer)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("unknown_error"), null);
+	}
 
-    void OPERATION_CANCELLED(BadPlayer p, String reason) {
-        p.sendTranslatedOutgoingMessage(prefix("operation_cancelled"), null, reason);
-    }
+	void sendUnknownPlayer(BadPlayer badPlayer, String player)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("unknown_player"), null, player);
+	}
 
-    void SCHIZOPHRENIA_IS_BAD(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage("schizophrenia_is_bad", null);
-    }
+	void sendOperationCancelled(BadPlayer badPlayer, String reason)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("operation_cancelled"), null, reason);
+	}
 
-    void QUERY_SELECTOR(BadPlayer p) {
-        String intro = I18n.getInstance().get(p.getLocale(), "querying.selector.intro")[0];
-        String accept = I18n.getInstance().get(p.getLocale(), "querying.selector.accept")[0];
-        String accept_hover = I18n.getInstance().get(p.getLocale(), "querying.selector.accept_hover")[0];
-        String refuse = I18n.getInstance().get(p.getLocale(), "querying.selector.refuse")[0];
-        String refuse_hover = I18n.getInstance().get(p.getLocale(), "querying.selector.refuse_hover")[0];
-        McJson json = new McJsonFactory(intro).
-                finaliseAndInitNewComponent("\n\n     ").finaliseComponent().
-                initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/friend status yes").
-                finaliseAndInitNewComponent("     ").finaliseComponent().
-                initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend status no").
-                build();
-        p.sendTranslatedOutgoingMCJson(json);
-    }
+	void sendCantActOnYourself(BadPlayer badPlayer)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("cant_act_on_yourself"), null);
+	}
 
-    void UNKNOWN_STATUS(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("querying.unknown"), null);
-    }
+	void sendQuerySelector(BadPlayer badPlayer)
+	{
+		String intro = badPlayer.getTranslatedMessage("querying.selector.intro", null);
+		String accept = badPlayer.getTranslatedMessage("querying.selector.accept", null);
+		String accept_hover = badPlayer.getTranslatedMessage("querying.selector.accept_hover", null);
+		String refuse = badPlayer.getTranslatedMessage("querying.selector.refuse", null);
+		String refuse_hover = badPlayer.getTranslatedMessage("querying.selector.refuse_hover", null);
 
-    void ALREADY_ACCEPT(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("querying.already_accept"), null);
-    }
+		McJson json = new McJsonFactory(intro).
+				finaliseAndInitNewComponent("\n\n     ").finaliseComponent().
+				initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/friend status yes").
+				finaliseAndInitNewComponent("     ").finaliseComponent().
+				initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend status no").
+				build();
 
-    void ALREADY_REFUSE(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("querying.already_refuse"), null);
-    }
+		badPlayer.sendTranslatedOutgoingMCJson(json);
+	}
 
-    void NOW_ACCEPT(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("querying.now_accept"), null);
-    }
+	void sendUnknownStatus(BadPlayer badPlayer)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("querying.unknown"), null);
+	}
 
-    void NOW_REFUSE(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("querying.now_refuse"), null);
-    }
+	void sendAlreadyAccepted(BadPlayer badPlayer)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("querying.already_accepted"), null);
+	}
 
-    void ALREADY_FRIEND(BadPlayer p, BadOfflinePlayer with) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.already_friend"), null, with.getName());
-    }
+	void sendAlreadyRefused(BadPlayer badPlayer)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("querying.already_refused"), null);
+	}
 
-    void REQUESTED_ACCEPT(BadOfflinePlayer p, BadPlayer requested) {
-        if (p.isOnline())
-            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.requested_accept"), null, requested.getName());
-    }
+	void sendNowAccepted(BadPlayer badPlayer)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("querying.now_accepted"), null);
+	}
 
-    void ACCEPT_REQUESTER(BadPlayer p, BadOfflinePlayer requester) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.accept_requester"), null, requester.getName());
-    }
+	void sendNowRefused(BadPlayer badPlayer)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("querying.now_refused"), null);
+	}
 
-    void ALREADY_REQUESTED(BadPlayer p) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.already_requested"), null);
-    }
+	void sendAlreadyFriend(BadPlayer badPlayer, BadOfflinePlayer with)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("requests.already_friend"), null, with.getName());
+	}
 
-    void REQUEST(BadOfflinePlayer p, BadPlayer requester) {
-        String intro = I18n.getInstance().get(p.getLocale(), "requests.request.intro", requester.getName())[0];
-        String accept = I18n.getInstance().get(p.getLocale(), "requests.request.accept")[0];
-        String accept_hover = I18n.getInstance().get(p.getLocale(), "requests.request.accept_hover", requester.getName())[0];
-        String refuse = I18n.getInstance().get(p.getLocale(), "requests.request.refuse")[0];
-        String refuse_hover = I18n.getInstance().get(p.getLocale(), "requests.request.refuse_hover", requester.getName())[0];
-        McJson json = new McJsonFactory(intro).
-                finaliseAndInitNewComponent("\n\n     ").finaliseComponent().
-                initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/friend accept " + requester.getName()).
-                finaliseAndInitNewComponent("     ").finaliseComponent().
-                initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend accept " + requester.getName()).
-                build();
-        if (p.isOnline()) p.getOnlineBadPlayer().sendTranslatedOutgoingMCJson(json);
-    }
+	void sendRequestAccepted(BadOfflinePlayer badPlayer, BadPlayer requested)
+	{
+		if (badPlayer.isOnline())
+		{
+			badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.requested_accept"), null, requested.getName());
+		}
+	}
 
-    void REQUEST_RECEIVED(BadPlayer p, BadOfflinePlayer receiver) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.request_received"), null, receiver.getName());
-    }
+	void sendAcceptRequester(BadPlayer badPlayer, BadOfflinePlayer requester)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("requests.accept_requester"), null, requester.getName());
+	}
 
-    void DO_NOT_ACCEPT_REQUESTS(BadPlayer p, BadOfflinePlayer who) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.do_not_accept_requests"), null, who.getName());
-    }
+	void sendAlreadyRequested(BadPlayer badPlayer)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("requests.already_requested"), null);
+	}
 
-    void DECLINED_YOUR_REQUEST(BadOfflinePlayer p, BadPlayer who) {
-        if (p.isOnline())
-            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.declined_your_requested"), null, who.getName());
-    }
+	void sendRequest(BadOfflinePlayer badPlayer, BadPlayer requester)
+	{
+		String intro = badPlayer.getTranslatedMessage("requests.request.intro", null, requester.getName());
+		String accept = badPlayer.getTranslatedMessage("requests.request.accept", null);
+		String accept_hover = badPlayer.getTranslatedMessage("requests.request.accept_hover", null, requester.getName());
+		String refuse = badPlayer.getTranslatedMessage("requests.request.refuse", null);
+		String refuse_hover = badPlayer.getTranslatedMessage("requests.request.refuse_hover", null, requester.getName());
 
-    void REJECT_REQUEST_OF(BadPlayer p, BadOfflinePlayer of) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.reject_request_of"), null, of.getName());
-    }
+		McJson json = new McJsonFactory(intro).
+				finaliseAndInitNewComponent("\n\n     ").finaliseComponent().
+				initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/friend accept " + requester.getName()).
+				finaliseAndInitNewComponent("     ").finaliseComponent().
+				initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend accept " + requester.getName()).
+				build();
 
-    void REMOVED_YOU_FROM_FRIENDS(BadOfflinePlayer p, BadPlayer who) {
-        if (p.isOnline())
-            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.remove_you_from_friends"), null, who.getName());
-    }
+		if (badPlayer.isOnline())
+		{
+			badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMCJson(json);
+		}
+	}
 
-    void NOW_NO_LONGER_FRIEND(BadPlayer p, BadOfflinePlayer with) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.now_no_longer_friend"), null, with.getName());
-    }
+	void sendRequestReceived(BadPlayer badPlayer, BadOfflinePlayer receiver)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("requests.request_received"), null, receiver.getName());
+	}
 
-    void CANCEL_REQUEST_TO(BadPlayer p, BadOfflinePlayer to) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.cancel_request_to"), null, to.getName());
-    }
+	void sendDoNotAcceptRequests(BadPlayer badPlayer, BadOfflinePlayer who)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("requests.do_not_accept_requests"), null, who.getName());
+	}
 
-    void CANCELLED_REQUEST(BadOfflinePlayer p, BadPlayer who) {
-        if (p.isOnline())
-            p.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.cancelled_request"), null, who.getName());
-    }
+	void sendDeclinedYourRequest(BadOfflinePlayer badPlayer, BadPlayer who)
+	{
+		if (badPlayer.isOnline())
+		{
+			badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.declined_your_request"), null, who.getName());
+		}
+	}
 
-    void NO_RELATIONSHIP(BadPlayer p, BadOfflinePlayer with) {
-        p.sendTranslatedOutgoingMessage(prefix("requests.no_relationship"), null, with.getName());
-    }
+	void sendRejectRequestOf(BadPlayer badPlayer, BadOfflinePlayer of)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("requests.reject_request_of"), null, of.getName());
+	}
 
-    void INCORRECT_PAGE_NUMBER(BadPlayer p, String page) {
-        p.sendTranslatedOutgoingMessage(prefix("list.incorrect_page_number"), null, page);
-    }
+	void sendRemovedYouFromFriends(BadOfflinePlayer badPlayer, BadPlayer who)
+	{
+		if (badPlayer.isOnline())
+		{
+			badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.remove_you_from_friends"), null, who.getName());
+		}
+	}
 
-    void TOO_BIG_PAGE_NUMBER(BadPlayer p, Integer page) {
-        p.sendTranslatedOutgoingMessage(prefix("list.too_big_page_number"), null, page.toString());
-    }
+	void sendNowNoLongerFriends(BadPlayer badPlayer, BadOfflinePlayer with)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("requests.now_no_longer_friend"), null, with.getName());
+	}
+
+	void sendCancelRequestTo(BadPlayer badPlayer, BadOfflinePlayer to)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("requests.cancel_request_to"), null, to.getName());
+	}
+
+	void sendCancelledRequest(BadOfflinePlayer badPlayer, BadPlayer who)
+	{
+		if (badPlayer.isOnline())
+		{
+			badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.cancelled_request"), null, who.getName());
+		}
+	}
+
+	void sendNoRelationship(BadPlayer badPlayer, BadOfflinePlayer with)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("requests.no_relationship"), null, with.getName());
+	}
+
+	void sendIncorrectPageNumber(BadPlayer badPlayer, String page)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("list.incorrect_page_number"), null, page);
+	}
+
+	void sendTooBigPageNumber(BadPlayer badPlayer, Integer page)
+	{
+		badPlayer.sendTranslatedOutgoingMessage(prefix("list.too_big_page_number"), null, page.toString());
+	}
 
 }

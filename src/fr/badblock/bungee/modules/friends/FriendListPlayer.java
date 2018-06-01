@@ -12,7 +12,7 @@ import java.util.UUID;
 public final class FriendListPlayer
 {
 
-    private UUID uuid;
-    private FriendListPlayerState state;
+    private UUID					uuid;
+    private FriendListPlayerState	state;
     
 }

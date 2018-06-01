@@ -18,12 +18,12 @@ import com.mongodb.util.JSON;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.ObjectUtils;
+import fr.badblock.bungee.utils.i18n.I19n;
 import fr.toenga.common.tech.mongodb.MongoService;
 import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import fr.toenga.common.utils.bungee.Punished;
 import fr.toenga.common.utils.data.Callback;
 import fr.toenga.common.utils.general.GsonUtils;
-import fr.toenga.common.utils.i18n.I18n;
 import fr.toenga.common.utils.i18n.Locale;
 import fr.toenga.common.utils.permissions.Permissible;
 import fr.toenga.common.utils.permissions.PermissionUser;
@@ -302,9 +302,14 @@ public class BadOfflinePlayer
 		});
 	}
 
-	public String[] getTranslatedMessages(String key, Object... objects)
+	public String[] getTranslatedMessages(String key, int[] indexesToTranslate, Object... objects)
 	{
-		return I18n.getInstance().get(getLocale(), key, objects);
+		return I19n.getMessages(getLocale(), key, indexesToTranslate, objects);
+	}
+
+	public String getTranslatedMessage(String key, int[] indexesToTranslate, Object... objects)
+	{
+		return getTranslatedMessages(key, indexesToTranslate, objects)[0];
 	}
 
 	public boolean hasPermission(String permission)

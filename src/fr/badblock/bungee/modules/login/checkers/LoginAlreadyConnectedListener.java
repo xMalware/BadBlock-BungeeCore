@@ -34,7 +34,7 @@ public class LoginAlreadyConnectedListener extends BadListener
 		if (bungeeManager.hasUsername(username))
 		{
 			// We cancel the player connection with a specific message
-			event.cancel(badPlayer.getTranslatedMessages("bungee.login.alreadyconnected")[0]);
+			event.cancel(badPlayer.getTranslatedMessage("bungee.login.alreadyconnected", null));
 		}
 	}
 	
