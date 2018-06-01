@@ -40,10 +40,13 @@ public class BungeeTask extends Thread
 				return;
 			}
 			// Waiting
-			try {
+			try
+			{
 				keepAlive();
 				sleep(1000);
-			} catch (InterruptedException exception) {
+			}
+			catch (InterruptedException exception)
+			{
 				exception.printStackTrace();
 			}
 		}

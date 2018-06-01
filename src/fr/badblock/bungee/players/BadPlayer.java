@@ -22,15 +22,17 @@ import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketType;
 import fr.toenga.common.utils.general.GsonUtils;
 import fr.toenga.common.utils.general.StringUtils;
 import fr.toenga.common.utils.i18n.I18n;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 @EqualsAndHashCode(callSuper = false)
-@Data
+@Getter
+@Setter
 public final class BadPlayer extends BadOfflinePlayer
 {
 

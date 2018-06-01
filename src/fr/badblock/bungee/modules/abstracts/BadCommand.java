@@ -5,8 +5,9 @@ import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.utils.time.ThreadRunnable;
 import fr.toenga.common.utils.general.StringUtils;
 import fr.toenga.common.utils.i18n.I18n;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -21,7 +22,8 @@ import net.md_5.bungee.api.plugin.PluginManager;
  *
  */
 @EqualsAndHashCode(callSuper = false)
-@Data
+@Getter
+@Setter
 public abstract class BadCommand extends Command
 {
 
