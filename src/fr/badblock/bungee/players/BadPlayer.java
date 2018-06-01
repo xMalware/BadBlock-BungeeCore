@@ -14,6 +14,7 @@ import fr.badblock.bungee.rabbit.BadBungeeQueues;
 import fr.badblock.bungee.rabbit.datareceivers.PlayerDataUpdateSender;
 import fr.badblock.bungee.utils.ChatColorUtils;
 import fr.badblock.bungee.utils.ObjectUtils;
+import fr.badblock.bungee.utils.i18n.I19n;
 import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.mcjson.McJsonUtils;
 import fr.toenga.common.tech.rabbitmq.packet.RabbitPacket;
@@ -110,7 +111,7 @@ public final class BadPlayer extends BadOfflinePlayer
 		}
 		else
 		{
-			BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(I18n.getInstance().get(getLocale(), key, args))));
+			BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args))));
 		}
 	}
 
@@ -122,7 +123,7 @@ public final class BadPlayer extends BadOfflinePlayer
 		}
 		else
 		{
-			BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, StringUtils.toOneString(I18n.getInstance().get(getLocale(), key, args))));
+			BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args))));
 		}
 	}
 
@@ -142,7 +143,7 @@ public final class BadPlayer extends BadOfflinePlayer
 		{
 			return;
 		}
-		toProxiedPlayer().sendMessages(ChatColorUtils.translateColors('&', I18n.getInstance().get(getLocale(), key, args)));
+		toProxiedPlayer().sendMessages(ChatColorUtils.translateColors('&', I19n.getMessages(getLocale(), key, indexesToTranslate, args)));
 	}
 
 	private void sendTranslatedLocalJsonMessage(String key, Object... args)
