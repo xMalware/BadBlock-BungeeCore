@@ -221,6 +221,7 @@ public class BadOfflinePlayer
 			if (PermissionsManager.getManager() != null)
 			{
 				setPermissions(new PermissionUser(getJsonElement("permissions").getAsJsonObject()));
+				System.out.println(GsonUtils.getPrettyGson().toJson(getPermissions()));
 			}
 			try
 			{
