@@ -250,6 +250,8 @@ public class BadOfflinePlayer
 	{
 		BadBungee.log("§aCreating it...");
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		BasicDBObject obj = getSavedObject();
+		setDbObject(obj);
 		mongoService.useAsyncMongo(new MongoMethod(mongoService)
 		{
 			@Override
@@ -260,8 +262,6 @@ public class BadOfflinePlayer
 				settings = new BadPlayerSettings();
 				uniqueId = UUID.randomUUID();
 				version = 0;
-				BasicDBObject obj = getSavedObject();
-				setDbObject(obj);
 				DB db = mongoService.getDb();
 				DBCollection collection = db.getCollection("players");
 				collection.insert(obj);
