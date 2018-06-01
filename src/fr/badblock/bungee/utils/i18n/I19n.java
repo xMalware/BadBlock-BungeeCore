@@ -18,18 +18,14 @@ public class I19n
 	{
 		Object[] resultArgs = new Object[args.length];
 		System.arraycopy(args, 0, resultArgs, 0, args.length);
-		System.out.print("A");
 		if (indexesToTranslate != null && indexesToTranslate.length != 0)
 		{
-			System.out.print("B");
 			for (int indexToTranslate : indexesToTranslate)
 			{
-				System.out.print("C");
 				if (indexToTranslate > resultArgs.length - 1)
 				{
 					continue; // something gone wrong
 				}
-				System.out.print("D");
 				resultArgs[indexToTranslate] = I18n.getInstance().get(locale, resultArgs[indexToTranslate].toString())[0];
 			}
 		}
