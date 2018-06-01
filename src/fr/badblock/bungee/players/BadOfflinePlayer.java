@@ -105,27 +105,27 @@ public class BadOfflinePlayer
 		updateData("lastIp", getLastIp().toString());
 	}
 
-	public String getRawPrefix()
+	public String getRawChatPrefix()
 	{
 		Permissible permissible = getPermissions().getHighestRank("bungee", true);
 		if (permissible == null)
 		{
 			return "";
 		}
-		return permissible.getRawPrefix();
+		return permissible.getRawPrefix("prefix");
 	}
 	
-	public String getRawSuffix()
+	public String getRawChatSuffix()
 	{
 		Permissible permissible = getPermissions().getHighestRank("bungee", true);
 		if (permissible == null)
 		{
 			return "";
 		}
-		return permissible.getRawSuffix();
+		return permissible.getRawSuffix("chat");
 	}
 	
-	public String getFullName(Locale locale)
+	public String getFullChatName(Locale locale)
 	{
 		// TODO /gnick support
 		Permissible permissible = getPermissions().getHighestRank("bungee", true);
@@ -133,7 +133,7 @@ public class BadOfflinePlayer
 		{
 			return getName();
 		}
-		return permissible.getPrefix(locale) + getName() + permissible.getSuffix(locale);
+		return permissible.getPrefix(locale, "chat") + getName() + permissible.getSuffix(locale, "chat");
 	}
 
 	public void saveData() throws Exception

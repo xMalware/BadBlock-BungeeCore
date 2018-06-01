@@ -60,9 +60,9 @@ public class ChatStaffCommand extends BadCommand
 		message = ChatColor.stripColor(message);
 
 		// Init raw prefix
-		String rawPrefix = "";
+		String rawChatPrefix = "";
 		// Init raw suffix
-		String rawSuffix = "";
+		String rawChatSuffix = "";
 
 		// If the sender is a player
 		if (sender instanceof ProxiedPlayer)
@@ -72,13 +72,14 @@ public class ChatStaffCommand extends BadCommand
 			// Get BadPlayer
 			BadPlayer badPlayer = BadPlayer.get(player);
 			// Set raw prefix
-			rawPrefix = badPlayer.getRawPrefix();
+			rawChatPrefix = badPlayer.getRawChatPrefix();
 			// Set raw suffix
-			rawSuffix = badPlayer.getRawSuffix();
+			rawChatSuffix = badPlayer.getRawChatSuffix();
 		}
 
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.chatstaff", "commands.chatstaff.message", new int[] { 0,2 }, rawPrefix, sender.getName(), rawSuffix, message);
+		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.chatstaff", "commands.chatstaff.message",
+				new int[] { 0,2 }, rawChatPrefix, sender.getName(), rawChatSuffix, message);
 	}
 
 }
