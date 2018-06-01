@@ -276,7 +276,6 @@ public class BadOfflinePlayer
 
 	public boolean hasPermission(String permission)
 	{
-		System.out.println("hasPermission: " + GsonUtils.getPrettyGson().toJson(getPermissions()));
 		if (getPermissions() == null)
 		{
 			return false;
@@ -284,9 +283,10 @@ public class BadOfflinePlayer
 		return getPermissions().hasPermission("bungee", permission);
 	}
 
+	@SuppressWarnings("deprecation")
 	private String getString(String part)
 	{
-		if (getDbObject().containsField(part))
+		if (getDbObject().containsKey(part))
 		{
 			return getDbObject().get(part).toString();
 		}

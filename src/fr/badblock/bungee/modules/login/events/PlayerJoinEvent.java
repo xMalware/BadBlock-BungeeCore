@@ -20,6 +20,7 @@ public class PlayerJoinEvent extends Event
 	{
 		preLoginEvent.setCancelled(true);
 		preLoginEvent.setCancelReason(message);
+		badPlayer.remove();
 	}
 	
 	

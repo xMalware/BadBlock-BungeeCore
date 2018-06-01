@@ -15,7 +15,7 @@ public class BungeeLinkReceiver extends RabbitListener
 
 	public BungeeLinkReceiver() 
 	{
-		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_PROCESSING, RabbitListenerType.SUBSCRIBER, true);
+		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_PROCESSING, RabbitListenerType.SUBSCRIBER, false);
 		load();
 	}
 
