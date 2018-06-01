@@ -1,10 +1,10 @@
 package fr.badblock.bungee.modules.badfriends.commands;
 
+import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.abstracts.BadCommand;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.i18n.I19n;
-import fr.toenga.common.utils.general.StringUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

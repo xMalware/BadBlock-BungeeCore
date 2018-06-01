@@ -1,16 +1,17 @@
 package fr.badblock.bungee.modules.party;
 
-import com.google.gson.reflect.TypeToken;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import fr.toenga.common.utils.general.GsonUtils;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.gson.reflect.TypeToken;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+
+import fr.badblock.api.common.utils.GsonUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor

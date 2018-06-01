@@ -13,13 +13,13 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
+import fr.badblock.api.common.tech.mongodb.MongoService;
+import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
+import fr.badblock.api.common.utils.GsonUtils;
+import fr.badblock.api.common.utils.bungee.Punished;
+import fr.badblock.api.common.utils.data.Callback;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.utils.ObjectUtils;
-import fr.toenga.common.tech.mongodb.MongoService;
-import fr.toenga.common.tech.mongodb.methods.MongoMethod;
-import fr.toenga.common.utils.bungee.Punished;
-import fr.toenga.common.utils.data.Callback;
-import fr.toenga.common.utils.general.GsonUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -242,7 +242,8 @@ public final class BadIP
 	{
 		return Boolean.parseBoolean(getString(part));
 	}
-	
+
+	@SuppressWarnings("deprecation")
 	public JsonElement getJsonElement(String part)
 	{
 		//FIXME vraiment pas optimisé, à voir si il y a mieux

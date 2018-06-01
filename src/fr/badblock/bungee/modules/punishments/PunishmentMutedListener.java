@@ -1,8 +1,8 @@
 package fr.badblock.bungee.modules.punishments;
 
+import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.toenga.common.utils.bungee.Punished;
 import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;

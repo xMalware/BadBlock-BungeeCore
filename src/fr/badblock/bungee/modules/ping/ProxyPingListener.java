@@ -1,8 +1,8 @@
 package fr.badblock.bungee.modules.ping;
 
+import fr.badblock.api.common.utils.i18n.I18n;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.abstracts.BadListener;
-import fr.toenga.common.utils.i18n.I18n;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.event.EventHandler;

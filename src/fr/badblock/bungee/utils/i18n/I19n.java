@@ -1,8 +1,8 @@
 package fr.badblock.bungee.utils.i18n;
 
+import fr.badblock.api.common.utils.i18n.I18n;
+import fr.badblock.api.common.utils.i18n.Locale;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.toenga.common.utils.i18n.I18n;
-import fr.toenga.common.utils.i18n.Locale;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 

@@ -7,11 +7,11 @@ import java.net.UnknownHostException;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.players.BadIP;
 import fr.badblock.bungee.utils.NetworkUtils;
 import fr.badblock.bungee.utils.time.TimeUtils;
-import fr.toenga.common.utils.general.GsonUtils;
 
 public class AntiVPN extends Thread
 {

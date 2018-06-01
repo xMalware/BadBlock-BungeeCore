@@ -2,13 +2,13 @@ package fr.badblock.bungee.rabbit.listeners;
 
 import com.google.gson.Gson;
 
+import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
+import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListenerType;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacket;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacketType;
 import fr.badblock.bungee.link.processing.bungee.abstracts._BungeeProcessing;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
-import fr.toenga.common.tech.rabbitmq.listener.RabbitListener;
-import fr.toenga.common.tech.rabbitmq.listener.RabbitListenerType;
 
 public class BungeeLinkReceiver extends RabbitListener
 {

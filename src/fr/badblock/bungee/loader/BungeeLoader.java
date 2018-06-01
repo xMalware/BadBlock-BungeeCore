@@ -13,18 +13,18 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
+import fr.badblock.api.common.tech.mongodb.MongoConnector;
+import fr.badblock.api.common.tech.mongodb.MongoService;
+import fr.badblock.api.common.tech.rabbitmq.RabbitConnector;
+import fr.badblock.api.common.tech.rabbitmq.RabbitService;
+import fr.badblock.api.common.utils.i18n.I18n;
+import fr.badblock.api.common.utils.permissions.Permissible;
+import fr.badblock.api.common.utils.permissions.PermissionsManager;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.config.ConfigLoader;
 import fr.badblock.bungee.link.bungee.BungeeTask;
 import fr.badblock.bungee.utils.PackageUtils;
-import fr.toenga.common.tech.mongodb.MongoConnector;
-import fr.toenga.common.tech.mongodb.MongoService;
-import fr.toenga.common.tech.rabbitmq.RabbitConnector;
-import fr.toenga.common.tech.rabbitmq.RabbitService;
-import fr.toenga.common.utils.i18n.I18n;
-import fr.toenga.common.utils.permissions.Permissible;
-import fr.toenga.common.utils.permissions.PermissionsManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

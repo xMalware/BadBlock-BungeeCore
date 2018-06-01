@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-import fr.toenga.common.utils.general.GsonUtils;
+import fr.badblock.api.common.utils.GsonUtils;
 
 public class ObjectUtils
 {

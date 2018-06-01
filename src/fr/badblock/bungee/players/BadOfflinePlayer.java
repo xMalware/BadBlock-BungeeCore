@@ -15,19 +15,19 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
+import fr.badblock.api.common.tech.mongodb.MongoService;
+import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
+import fr.badblock.api.common.utils.GsonUtils;
+import fr.badblock.api.common.utils.bungee.Punished;
+import fr.badblock.api.common.utils.data.Callback;
+import fr.badblock.api.common.utils.i18n.Locale;
+import fr.badblock.api.common.utils.permissions.Permissible;
+import fr.badblock.api.common.utils.permissions.PermissionUser;
+import fr.badblock.api.common.utils.permissions.PermissionsManager;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.ObjectUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
-import fr.toenga.common.tech.mongodb.MongoService;
-import fr.toenga.common.tech.mongodb.methods.MongoMethod;
-import fr.toenga.common.utils.bungee.Punished;
-import fr.toenga.common.utils.data.Callback;
-import fr.toenga.common.utils.general.GsonUtils;
-import fr.toenga.common.utils.i18n.Locale;
-import fr.toenga.common.utils.permissions.Permissible;
-import fr.toenga.common.utils.permissions.PermissionUser;
-import fr.toenga.common.utils.permissions.PermissionsManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -334,6 +334,7 @@ public class BadOfflinePlayer
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public JsonElement getJsonElement(String part)
 	{
 		//FIXME vraiment pas optimisé, à voir si il y a mieux

@@ -5,14 +5,14 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
+import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacket;
+import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketEncoder;
+import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketMessage;
+import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketType;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
 import fr.badblock.bungee.utils.time.TimeUtils;
-import fr.toenga.common.tech.rabbitmq.packet.RabbitPacket;
-import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketEncoder;
-import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketMessage;
-import fr.toenga.common.tech.rabbitmq.packet.RabbitPacketType;
 import net.md_5.bungee.BungeeCord;
 
 public class BungeeTask extends Thread

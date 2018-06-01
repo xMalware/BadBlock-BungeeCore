@@ -2,11 +2,11 @@ package fr.badblock.bungee;
 
 import com.google.gson.Gson;
 
+import fr.badblock.api.common.tech.mongodb.MongoService;
+import fr.badblock.api.common.tech.rabbitmq.RabbitService;
 import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.loader.BungeeLoader;
 import fr.badblock.bungee.loader.BungeeUnloader;
-import fr.toenga.common.tech.mongodb.MongoService;
-import fr.toenga.common.tech.rabbitmq.RabbitService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,7 +16,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class BadBungee extends Plugin {
+public class BadBungee extends Plugin
+{
 
 	@Getter@Setter private static BadBungee instance;
 

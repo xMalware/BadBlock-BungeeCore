@@ -10,6 +10,8 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
+import fr.badblock.api.common.tech.mongodb.MongoService;
+import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.friends.events.FriendListRemoveEvent;
@@ -18,8 +20,6 @@ import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.Filter;
 import fr.badblock.bungee.utils.mongodb.SynchroMongoDBGetter;
-import fr.toenga.common.tech.mongodb.MongoService;
-import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 

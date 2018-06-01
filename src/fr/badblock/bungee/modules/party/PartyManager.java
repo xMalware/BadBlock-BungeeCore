@@ -1,13 +1,18 @@
 package fr.badblock.bungee.modules.party;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
+import fr.badblock.api.common.tech.mongodb.MongoService;
+import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
+import fr.badblock.api.common.utils.data.Callback;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
-import fr.toenga.common.tech.mongodb.MongoService;
-import fr.toenga.common.tech.mongodb.methods.MongoMethod;
-import fr.toenga.common.utils.data.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.ProxyServer;

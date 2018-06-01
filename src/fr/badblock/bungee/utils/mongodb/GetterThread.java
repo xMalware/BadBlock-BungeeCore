@@ -1,9 +1,12 @@
 package fr.badblock.bungee.utils.mongodb;
 
-import com.mongodb.*;
+import com.mongodb.DB;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
+import fr.badblock.api.common.tech.mongodb.MongoService;
+import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
 import fr.badblock.bungee.BadBungee;
-import fr.toenga.common.tech.mongodb.MongoService;
-import fr.toenga.common.tech.mongodb.methods.MongoMethod;
 
 /**
  * Local package class - Thread for get the MongoDB object synchronously

@@ -2,8 +2,8 @@ package fr.badblock.bungee.config;
 
 import java.io.File;
 
+import fr.badblock.api.common.utils.FileUtils;
 import fr.badblock.bungee.BadBungee;
-import fr.toenga.common.utils.general.FileUtils;
 
 public class ConfigLoader
 {
