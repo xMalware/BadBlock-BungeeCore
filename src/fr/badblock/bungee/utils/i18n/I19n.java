@@ -29,7 +29,7 @@ public class I19n
 				resultArgs[indexToTranslate] = I18n.getInstance().get(locale, args.toString())[0];
 			}
 		}
-		return I18n.getInstance().get(locale, key, args);
+		return I18n.getInstance().get(locale, key, resultArgs);
 	}
 	
 	public static String[] getMessages(CommandSender commandSender, String key, int[] indexesToTranslate, Object... args)
