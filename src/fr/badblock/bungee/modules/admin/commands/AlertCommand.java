@@ -1,6 +1,5 @@
 package fr.badblock.bungee.modules.admin.commands;
 
-import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.abstracts.BadCommand;
 import fr.badblock.bungee.utils.i18n.I19n;
@@ -69,7 +68,7 @@ public class AlertCommand extends BadCommand
 		else
 		{
 			// We get the pattern to put it in the message
-			message = BadBungee.getInstance().getConfig().getAlertPrefix() + message;
+			message = I19n.getMessages(sender, "commands.alert.pattern", null, message)[0];
 		}
 
 		// We send the message after processing

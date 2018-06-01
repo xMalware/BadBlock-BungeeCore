@@ -1,5 +1,6 @@
 package fr.badblock.bungee.modules.admin.commands;
 
+import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.modules.abstracts.BadCommand;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
@@ -33,7 +34,7 @@ public class EndCommand extends BadCommand
 	public void run(CommandSender sender, String[] args)
 	{
 		// Tell the player that his action has been taken into account
-		I19n.sendMessage(sender, "commands.end.message", null);
+		I19n.sendMessage(sender, "commands.end.message", null, BadBungee.getInstance().getConfig().getBungeeName());
 		// Stop the proxy server justifying the reason and the requester
 		ProxyServer.getInstance().stop("Requested by " + sender.getName());
 	}
