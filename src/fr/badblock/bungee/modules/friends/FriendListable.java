@@ -32,6 +32,7 @@ public enum FriendListable
                 return friendListable;
             }
         }
+        
         // No possibility to return, we return nothing
         return null;
     }

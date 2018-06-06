@@ -7,10 +7,28 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
+/**
+ * 
+ * Player data update receiver object
+ * 
+ * @author xMalware
+ *
+ */
 public class PlayerDataUpdateReceiver
 {
 
+	/**
+	 * Player name
+	 * @param Set the new player name
+	 * @return Returns the player name
+	 */
 	private String			playerName;
+	
+	/**
+	 * Player data
+	 * @param Set the new player data
+	 * @return Returns the new player data
+	 */
 	private JsonObject		data;
 	
 }

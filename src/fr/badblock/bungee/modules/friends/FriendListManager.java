@@ -576,6 +576,7 @@ public final class FriendListManager
 		{
 			// Send incorrect page number
 			message.sendIncorrectPageNumber(badPlayer, page);
+			// So we stop there
 			return;
 		}
 

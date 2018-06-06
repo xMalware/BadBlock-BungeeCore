@@ -17,10 +17,8 @@ public abstract class CancellableEvent extends Event implements Cancellable
 	// Cancel field
     private boolean cancelled = false;
     
-    @Getter
-    @Setter
     // Cancel reason field
-    private String cancelReason = "";
+    @Getter @Setter private String cancelReason = "";
 
     @Override
     /**

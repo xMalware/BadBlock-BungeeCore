@@ -1,5 +1,12 @@
 package fr.badblock.bungee.rabbit;
 
+/**
+ * 
+ * All BadBlock Bungee queues
+ * 
+ * @author xMalware
+ *
+ */
 public class BadBungeeQueues
 {
 
