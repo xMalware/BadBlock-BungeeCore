@@ -2,7 +2,10 @@ package fr.badblock.bungee.rabbit.listeners;
 
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListenerType;
+import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.BungeeManager;
+import fr.badblock.bungee.link.bungee.CachedPlayerToken;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
 
 /**
@@ -32,7 +35,10 @@ public class BungeeTokenReceiver extends RabbitListener
 	@Override
 	public void onPacketReceiving(String body)
 	{
-		// TODO
+		// Get cached player token
+		CachedPlayerToken cachedPlayerToken = GsonUtils.getGson().fromJson(body, CachedPlayerToken.class);
+		// Set the token
+		BungeeManager.getInstance().setToken(cachedPlayerToken);
 	}
 
 }
