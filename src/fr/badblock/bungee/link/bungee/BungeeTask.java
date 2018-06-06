@@ -15,61 +15,92 @@ import fr.badblock.bungee.rabbit.BadBungeeQueues;
 import fr.badblock.bungee.utils.time.TimeUtils;
 import net.md_5.bungee.BungeeCord;
 
+/**
+ * 
+ * Task to send data in a recurrent time frame to synchronize nodes
+ * 
+ * @author xMalware
+ *
+ */
 public class BungeeTask extends Thread
 {
 
+	/**
+	 * If the task is still running
+	 * @param New state of the task
+	 * @return If the task is still running or not
+	 */
 	public static boolean		run				= true;
+	/**
+	 * Local bungee object of the node
+	 * @param New local bungee object of the node
+	 * @return The current local bungee object of the node
+	 */
 	public static BungeeObject	bungeeObject	= new BungeeObject(BadBungee.getInstance().getConfig().getBungeeName(), getIP(), new HashMap<>(), getTimestamp());
-	
+
+	/**
+	 * Constructor of a new Bungee task
+	 * Automatic task start when instantiating
+	 */
 	public BungeeTask()
 	{
+		// Start the thread
 		this.start();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
+	/**
+	 * Data sending loop method
+	 */
 	public void run()
 	{
-		// While true
-		while (true)
+		// While the task is allowed to run
+		while (run)
 		{
-			// Useless.
-			if (!run)
-			{
-				stop();
-				return;
-			}
-			// Waiting
-			try
-			{
-				keepAlive();
-				sleep(1000);
-			}
-			catch (InterruptedException exception)
-			{
-				exception.printStackTrace();
-			}
+			// Send a keep alive packet
+			keepAlive();
+			// Sleep 1 second
+			TimeUtils.sleepInSeconds(1);
 		}
 	}
-	
+
+	/**
+	 * Get the new expire time
+	 * @return expire time in milliseconds (30+ seconds)
+	 */
 	public static long getTimestamp()
 	{
+		// Get with TimeUtils
 		return TimeUtils.nextTimeWithSeconds(30);
 	}
-	
+
+	/**
+	 * Get the current BungeeCord node IP
+	 * @return
+	 */
 	public static String getIP()
 	{
 		return BungeeCord.getInstance().config.getListeners().iterator().next().getHost().getAddress().getHostAddress();
 	}
-	
+
+	/**
+	 * Keep alive the current BungeeCord node
+	 */
 	public static void keepAlive()
 	{
+		// Get main class
 		BadBungee badBungee = BadBungee.getInstance();
+		// New map of players
 		final Map<String, BadPlayer> players = new HashMap<>();
+		// Put players in the map
 		BadPlayer.getPlayers().forEach(player -> players.put(player.getName(), player));
+		// Refresh with the new player list
 		bungeeObject.refresh(players);
+		// Get gson
 		Gson gson = badBungee.getGson();
+		// Deserialize the object
 		String jsonFormatString = gson.toJson(bungeeObject);
+		// Send KeepAlive packet
 		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, jsonFormatString), 
 				BadBungeeQueues.BUNGEE_DATA, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
 	}
