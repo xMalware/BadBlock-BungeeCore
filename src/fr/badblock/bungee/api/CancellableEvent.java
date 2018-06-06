@@ -5,24 +5,53 @@ import lombok.Setter;
 import net.md_5.bungee.api.plugin.Cancellable;
 import net.md_5.bungee.api.plugin.Event;
 
-public abstract class CancellableEvent extends Event implements Cancellable {
+/**
+ * 
+ * Cancelable event, to be used with other events
+ * @author xMalware
+ *
+ */
+public abstract class CancellableEvent extends Event implements Cancellable
+{
+	
+	// Cancel field
     private boolean cancelled = false;
+    
     @Getter
     @Setter
+    // Cancel reason field
     private String cancelReason = "";
 
     @Override
-    public boolean isCancelled() {
+    /**
+     * Returns if the event is cancelled
+     */
+    public boolean isCancelled() 
+    {
+    	// Returns cancelled field
         return cancelled;
     }
 
     @Override
-    public void setCancelled(boolean cancelled) {
+    /**
+     * Set the event as cancelled or not?
+     */
+    public void setCancelled(boolean cancelled)
+    {
+    	// Set the cancelled field
         this.cancelled = cancelled;
     }
 
-    public void cancel(String reason) {
+    /**
+     * Cancel the event with reason
+     * @param reason
+     */
+    public void cancel(String reason)
+    {
+    	// Set cancelled
         setCancelled(true);
+        // Set cancel reason
         setCancelReason(reason);
     }
+    
 }

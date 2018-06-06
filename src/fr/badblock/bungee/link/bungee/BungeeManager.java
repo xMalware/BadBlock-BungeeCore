@@ -39,15 +39,35 @@ import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 @Data
+/**
+ * BungeeCord data manager in the network
+ * 
+ * @author xMalware
+ *
+ */
 public class BungeeManager
 {
+	
+	/**
+	 * Unique BungeeManager instance
+	 * @param New BungeeManager
+	 * @return Current BungeeManager
+	 */
+	@Getter @Setter private static BungeeManager instance = new BungeeManager();
 
-	@Getter@Setter
-	private static BungeeManager instance = new BungeeManager();
-
+	/**
+	 * BungeeCord nodes
+	 */
 	private Map<String, BungeeObject> bungees = new HashMap<>();
 
+	/**
+	 * Current server ping
+	 */
 	private ServerPing			serverPing;
+	
+	/**
+	 * Number of players online, temporary variable. Very useful to avoid recalculating the number each time
+	 */
 	private int					tempOnlinePlayers;
 	private int					slots;
 	private CachedPlayerToken	token;
