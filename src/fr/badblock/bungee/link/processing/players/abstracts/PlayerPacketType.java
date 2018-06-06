@@ -4,18 +4,47 @@ import fr.badblock.bungee.link.processing.players.*;
 import lombok.Getter;
 
 @Getter
+/**
+ * 
+ * Player Packet Type
+ * 
+ * @author xMalware
+ *
+ */
 public enum PlayerPacketType
 {
 
+	/**
+	 * Send message packet type
+	 */
 	SEND_MESSAGE	  (new PlayerSendMessageProcessing()),
+	/**
+	 * Send json message packet type
+	 */
     SEND_JSON_MESSAGE (new PlayerSendJsonMessageProcessing()),
+    /**
+     * Send server packet type
+     */
 	SEND_SERVER		  (new PlayerSendServerProcessing()),
+	/**
+	 * Reload data packet type
+	 */
 	RELOAD_DATA		  (new PlayerReloadDataProcessing());
 	
+	/**
+	 * Player processing
+	 * @param Set the player processing
+	 * @return Returns the player processing
+	 */
 	private _PlayerProcessing process;
 	
+	/**
+	 * Constructor of a player packet type
+	 * @param The Player Processing
+	 */
 	PlayerPacketType(_PlayerProcessing process)
 	{
+		// Set the processing
 		this.process = process;
 	}
 	
