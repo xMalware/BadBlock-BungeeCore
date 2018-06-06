@@ -13,10 +13,12 @@ public enum FriendListPlayerState
      * The player request another player
      */
     REQUESTED,
+    
     /**
      * An other player requested this player
      */
     WAITING,
+    
     /**
      * The players are friends
      */

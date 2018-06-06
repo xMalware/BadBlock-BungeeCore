@@ -6,6 +6,13 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
+/**
+ * 
+ * BungeeCord unloader
+ * 
+ * @author xMalware
+ *
+ */
 public class BungeeUnloader
 {
 
