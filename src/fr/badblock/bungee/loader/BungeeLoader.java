@@ -24,6 +24,7 @@ import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.config.ConfigLoader;
 import fr.badblock.bungee.link.bungee.BungeeTask;
+import fr.badblock.bungee.rabbit.claimants.RabbitClaimant;
 import fr.badblock.bungee.utils.PackageUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -140,6 +141,8 @@ public class BungeeLoader
 	{
 		// Set the service
 		getBadBungee().setRabbitService(RabbitConnector.getInstance().registerService(new RabbitService("default", getConfig().getRabbitSettings())));
+		// Load claiments
+		RabbitClaimant.load();
 	}
 
 	/**

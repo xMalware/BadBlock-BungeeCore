@@ -35,4 +35,13 @@ public abstract class RabbitClaimant implements Runnable
 		TaskManager.scheduleRepeatingTask("rabbitClaimant-" + name, this, delay, repeat);
 	}
 	
+	/**
+	 * Load Rabbit claiments
+	 */
+	public static void load()
+	{
+		// Load token query
+		new BungeeTokenQuery();
+	}
+	
 }
