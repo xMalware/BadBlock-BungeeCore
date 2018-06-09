@@ -173,6 +173,7 @@ public class FriendCommand extends BadCommand
 			// We stop there
 			return;
 		}
+		
 		// Sending the request
 		FriendListManager.request(sender.getName(), args[1]);
 	}

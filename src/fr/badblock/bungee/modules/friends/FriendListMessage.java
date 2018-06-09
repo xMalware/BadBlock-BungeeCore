@@ -165,7 +165,7 @@ final class FriendListMessage
 	void sendRequestAccepted(BadOfflinePlayer badPlayer, BadPlayer requested)
 	{
 		// If the player is offline
-		if (badPlayer.isOnline())
+		if (!badPlayer.isOnline())
 		{
 			// So we stop there
 			return;
