@@ -30,7 +30,7 @@ public class VerCommand extends BadCommand
 	public void run(CommandSender sender, String[] args)
 	{
 		// Sending the message
-		I19n.sendMessage(sender, "commands.ver.message", null, sender.getName(), BadBungee.getInstance().getDescription().getVersion());
+		I19n.sendMessage(sender, "bungee.commands.ver.message", null, sender.getName(), BadBungee.getInstance().getDescription().getVersion());
 	}
 
 }

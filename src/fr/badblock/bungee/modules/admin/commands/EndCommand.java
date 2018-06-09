@@ -34,7 +34,7 @@ public class EndCommand extends BadCommand
 	public void run(CommandSender sender, String[] args)
 	{
 		// Tell the player that his action has been taken into account
-		I19n.sendMessage(sender, "commands.end.message", null, BadBungee.getInstance().getConfig().getBungeeName());
+		I19n.sendMessage(sender, "bungee.commands.end.message", null, BadBungee.getInstance().getConfig().getBungeeName());
 		// Stop the proxy server justifying the reason and the requester
 		ProxyServer.getInstance().stop("Requested by " + sender.getName());
 	}

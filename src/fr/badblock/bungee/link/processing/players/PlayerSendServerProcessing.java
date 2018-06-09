@@ -32,7 +32,7 @@ public class PlayerSendServerProcessing extends _PlayerProcessing
 		if (serverInfo == null)
 		{
 			// Unknown server
-			I19n.sendMessage(proxiedPlayer, "commands.send.unknownserver", null, serverName);
+			I19n.sendMessage(proxiedPlayer, "bungee.commands.send.unknownserver", null, serverName);
 			// We stop there
 			return;
 		}
@@ -40,7 +40,7 @@ public class PlayerSendServerProcessing extends _PlayerProcessing
 		// Connect the proxied player
 		proxiedPlayer.connect(serverInfo);
 		// You've been moved
-		I19n.sendMessage(proxiedPlayer, "commands.send.youvebeenmoved", null);
+		I19n.sendMessage(proxiedPlayer, "bungee.commands.send.youvebeenmoved", null);
 	}
 	
 }

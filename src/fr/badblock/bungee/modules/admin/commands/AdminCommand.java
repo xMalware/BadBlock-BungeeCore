@@ -17,7 +17,7 @@ import net.md_5.bungee.api.CommandSender;
  *
  *	Information about the i18n message :
  *
- *	Key: commands.admin.pattern
+ *	Key: bungee.commands.admin.pattern
  *	Value %0: Sender's name
  *	Value %1: Message
  *
@@ -51,7 +51,7 @@ public class AdminCommand extends BadCommand
 		if (args.length == 0) 
 		{
 			// A message is sent to him containing the information allowing him to take note of the use of the command.
-			I19n.sendMessage(sender, "commands.admin.usage", null);
+			I19n.sendMessage(sender, "bungee.commands.admin.usage", null);
 			// Nothing has been written from him, no argument. After we explain it to him, we stop there.
 			return;
 		}
@@ -73,7 +73,7 @@ public class AdminCommand extends BadCommand
 			// We remove the colors of the message
 			message = ChatColor.stripColor(message);
 			// We get the pattern to put it in the message
-			message = I19n.getMessages(sender, "commands.admin.pattern", null, sender.getName(), message)[0];
+			message = I19n.getMessages(sender, "bungee.commands.admin.pattern", null, sender.getName(), message)[0];
 		}
 
 		// We send the message after processing

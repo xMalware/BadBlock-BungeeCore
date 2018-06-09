@@ -21,7 +21,7 @@ final class FriendListMessage
 	 */
 	private String prefix(String code)
 	{
-		return "objects.friendlist." + code;
+		return "bungee.commands.friends." + code;
 	}
 
 	/**
@@ -73,15 +73,15 @@ final class FriendListMessage
 	void sendQuerySelector(BadPlayer badPlayer)
 	{
 		// Get the intro message
-		String intro = badPlayer.getTranslatedMessage("querying.selector.intro", null);
+		String intro = badPlayer.getTranslatedMessage(prefix("querying.selector.intro"), null);
 		// Get the accept message
-		String accept = badPlayer.getTranslatedMessage("querying.selector.accept", null);
+		String accept = badPlayer.getTranslatedMessage(prefix("querying.selector.accept"), null);
 		// Accept hover
-		String accept_hover = badPlayer.getTranslatedMessage("querying.selector.accept_hover", null);
+		String accept_hover = badPlayer.getTranslatedMessage(prefix("querying.selector.accept_hover"), null);
 		// Get the declined message
-		String refuse = badPlayer.getTranslatedMessage("querying.selector.refuse", null);
+		String refuse = badPlayer.getTranslatedMessage(prefix("querying.selector.refuse"), null);
 		// Declined hover
-		String refuse_hover = badPlayer.getTranslatedMessage("querying.selector.refuse_hover", null);
+		String refuse_hover = badPlayer.getTranslatedMessage(prefix("querying.selector.refuse_hover"), null);
 
 		// Get the McJson
 		McJson json = new McJsonFactory(intro).
@@ -95,7 +95,7 @@ final class FriendListMessage
 		badPlayer.sendTranslatedOutgoingMCJson(json);
 	}
 
-	
+
 	/**
 	 * Send unknown status
 	 * @param badPlayer
@@ -164,12 +164,15 @@ final class FriendListMessage
 	 */
 	void sendRequestAccepted(BadOfflinePlayer badPlayer, BadPlayer requested)
 	{
-		// If the player is online
+		// If the player is offline
 		if (badPlayer.isOnline())
 		{
-			// Send the message
-			badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.requested_accept"), null, requested.getName());
+			// So we stop there
+			return;
 		}
+
+		// Send the message
+		badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.requested_accept"), null, requested.getName());
 	}
 
 	/**
@@ -200,16 +203,23 @@ final class FriendListMessage
 	 */
 	void sendRequest(BadOfflinePlayer badPlayer, BadPlayer requester)
 	{
+		// If the player is offline
+		if (!badPlayer.isOnline())
+		{
+			// So we stop there
+			return;
+		}
+
 		// Get the intro
-		String intro = badPlayer.getTranslatedMessage("requests.request.intro", null, requester.getName());
+		String intro = badPlayer.getTranslatedMessage(prefix("requests.request.intro"), null, requester.getName());
 		// Get the accept message
-		String accept = badPlayer.getTranslatedMessage("requests.request.accept", null);
+		String accept = badPlayer.getTranslatedMessage(prefix("requests.request.accept"), null);
 		// Accept hover
-		String accept_hover = badPlayer.getTranslatedMessage("requests.request.accept_hover", null, requester.getName());
+		String accept_hover = badPlayer.getTranslatedMessage(prefix("requests.request.accept_hover"), null, requester.getName());
 		// Get the declined message
-		String refuse = badPlayer.getTranslatedMessage("requests.request.refuse", null);
+		String refuse = badPlayer.getTranslatedMessage(prefix("requests.request.refuse"), null);
 		// Declined hover
-		String refuse_hover = badPlayer.getTranslatedMessage("requests.request.refuse_hover", null, requester.getName());
+		String refuse_hover = badPlayer.getTranslatedMessage(prefix("requests.request.refuse_hover"), null, requester.getName());
 
 		// Create MCJson object
 		McJson json = new McJsonFactory(intro).
@@ -219,12 +229,8 @@ final class FriendListMessage
 				initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend accept " + requester.getName()).
 				build();
 
-		// If the player is online
-		if (badPlayer.isOnline())
-		{
-			// Send the translated message
-			badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMCJson(json);
-		}
+		// Send the translated message
+		badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMCJson(json);
 	}
 
 	/**
@@ -256,12 +262,15 @@ final class FriendListMessage
 	 */
 	void sendDeclinedYourRequest(BadOfflinePlayer badPlayer, BadPlayer who)
 	{
-		// If the player is online
-		if (badPlayer.isOnline())
+		// If the player is offline
+		if (!badPlayer.isOnline())
 		{
-			// Send the message
-			badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.declined_your_request"), null, who.getName());
+			// So we stop there
+			return;
 		}
+
+		// Send the message
+		badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.declined_your_request"), null, who.getName());
 	}
 
 	/**
@@ -282,12 +291,15 @@ final class FriendListMessage
 	 */
 	void sendRemovedYouFromFriends(BadOfflinePlayer badPlayer, BadPlayer who)
 	{
-		// If the player is online
-		if (badPlayer.isOnline())
+		// If the player is offline
+		if (!badPlayer.isOnline())
 		{
-			// Send the message
-			badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.remove_you_from_friends"), null, who.getName());
+			// So we stop there
+			return;
 		}
+
+		// Send the message
+		badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.remove_you_from_friends"), null, who.getName());
 	}
 
 	/**
@@ -319,12 +331,15 @@ final class FriendListMessage
 	 */
 	void sendCancelledRequest(BadOfflinePlayer badPlayer, BadPlayer who)
 	{
-		// If the player is online
-		if (badPlayer.isOnline())
+		// If the player is offline
+		if (!badPlayer.isOnline())
 		{
-			// Send the message
-			badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.cancelled_request"), null, who.getName());
+			// So we stop there
+			return;
 		}
+
+		// Send the message
+		badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMessage(prefix("requests.cancelled_request"), null, who.getName());
 	}
 
 	/**

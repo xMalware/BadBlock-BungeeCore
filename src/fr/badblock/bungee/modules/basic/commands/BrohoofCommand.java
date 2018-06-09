@@ -30,7 +30,7 @@ public class BrohoofCommand extends BadCommand
 	public void run(CommandSender sender, String[] args)
 	{
 		// Brohoof!
-		I19n.sendMessage(sender, "commands.broohof.message", null, sender.getName());
+		I19n.sendMessage(sender, "bungee.commands.broohof.message", null, sender.getName());
 	}
 
 }

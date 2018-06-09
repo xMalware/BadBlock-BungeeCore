@@ -23,7 +23,7 @@ public class PartyMessages
 	 * @param Set the prefix key
 	 * @return Returns the prefix key
 	 */
-	@Getter @Setter private String prefix = "commands.party.";
+	@Getter @Setter private String prefix = "bungee.commands.party.";
 
 	/**
 	 * Send unknown message

@@ -19,7 +19,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  *  - /friend remove/delete/cancel/supprimer/enlever/annuler
  *  - /friend list/show/lister/afficher/montrer
  * 
- * I18n key prefix: 'commands.friend.'
+ * I18n key prefix: 'bungee.commands.friend.'
  * 
  * @author xMalware
  *
@@ -28,7 +28,7 @@ public class FriendCommand extends BadCommand
 {
 
 	// I18n key prefix
-	private String prefix = "commands.friend.";
+	private String prefix = "bungee.commands.friends.";
 
 	/**
 	 * Command constructor

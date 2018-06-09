@@ -64,7 +64,7 @@ public abstract class BadCommand extends Command
 			if (!(sender instanceof ProxiedPlayer))
 			{
 				// The sender is not a player, so we let him know that he cannot execute the command.
-				sender.sendMessages(I18n.getInstance().get("commands.playersonly"));
+				sender.sendMessages(I18n.getInstance().get("bungee.commands.playersonly"));
 				// We stop there
 				return;
 			}

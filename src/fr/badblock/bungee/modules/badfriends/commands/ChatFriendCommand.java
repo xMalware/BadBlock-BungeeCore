@@ -18,7 +18,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  *	The permission required to execute this command is bungee.command.chatfriend.
  *	
  *	i18n Command Implementation :
- *	Key : commands.chatfriend.message
+ *	Key : bungee.commands.chatfriend.message
  *	Value %0 : name of the sender of the message
  * 	Value %1 : message sent
  *	
@@ -48,7 +48,7 @@ public class ChatFriendCommand extends BadCommand
 		if (args.length == 0) 
 		{
 			// A message is sent to him containing the information allowing him to take note of the use of the command.
-			I19n.sendMessage(sender, "commands.chatfriend.usage", null);
+			I19n.sendMessage(sender, "bungee.commands.chatfriend.usage", null);
 			// Nothing has been written from him, no argument. After we explain it to him, we stop there.
 			return;
 		}
@@ -78,7 +78,7 @@ public class ChatFriendCommand extends BadCommand
 		}
 
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.chatfriend", "commands.chatfriend.message",
+		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.chatfriend", "bungee.commands.chatfriend.message",
 				new int[] { 0, 2 }, rawChatPrefix, sender.getName(), rawChatSuffix, message);
 	}
 

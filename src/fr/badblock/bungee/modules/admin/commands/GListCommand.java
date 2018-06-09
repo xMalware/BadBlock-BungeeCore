@@ -12,7 +12,7 @@ import net.md_5.bungee.api.CommandSender;
  * It is available to players with the following permission: bungee.command.glist
  *
  * Response to command input:
- * Key: commands.glist.message
+ * Key: bungee.commands.glist.message
  * Value %0: Number of players currently connected to the network
  * 
  * @author xMalware
@@ -36,7 +36,7 @@ public class GListCommand extends BadCommand
 	public void run(CommandSender sender, String[] args)
 	{
 		// Sending the answer to the command with the requested information
-		I19n.sendMessage(sender, "commands.glist.message", null, BungeeManager.getInstance().getRealTimeOnlinePlayers());
+		I19n.sendMessage(sender, "bungee.commands.glist.message", null, BungeeManager.getInstance().getRealTimeOnlinePlayers());
 	}
 
 }

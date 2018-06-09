@@ -16,7 +16,7 @@ import net.md_5.bungee.api.CommandSender;
  *
  *	Information about the i18n message :
  *
- *	Key: commands.admin.pattern
+ *	Key: bungee.commands.admin.pattern
  *	Value %0: Sender's name
  *	Value %1: Message
  *
@@ -48,7 +48,7 @@ public class AlertCommand extends BadCommand
 		if (args.length == 0)
 		{
 			// A message is sent to him containing the information allowing him to take note of the use of the command.
-			I19n.sendMessage(sender, "commands.alert.usage", null);
+			I19n.sendMessage(sender, "bungee.commands.alert.usage", null);
 			// Nothing has been written from him, no argument. After we explain it to him, we stop there.
 			return;
 		}
@@ -68,7 +68,7 @@ public class AlertCommand extends BadCommand
 		else
 		{
 			// We get the pattern to put it in the message
-			message = I19n.getMessages(sender, "commands.alert.pattern", null, message)[0];
+			message = I19n.getMessages(sender, "bungee.commands.alert.pattern", null, message)[0];
 		}
 
 		// We send the message after processing
