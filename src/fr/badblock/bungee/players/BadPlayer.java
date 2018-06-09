@@ -10,7 +10,6 @@ import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketMessage;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketType;
 import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.api.common.utils.general.StringUtils;
-import fr.badblock.api.common.utils.i18n.I18n;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
@@ -220,8 +219,12 @@ public final class BadPlayer extends BadOfflinePlayer
 			return;
 		}
 
-		System.out.println(jsons);
-		
+		// TODO remove
+		for (String string : jsons)
+		{
+			System.out.println(string);
+		}
+
 		// Send json message
 		McJsonUtils.sendJsons(toProxiedPlayer(), McJsonUtils.parseMcJsons(ChatColorUtils.translateColors('&', jsons)));
 	}
