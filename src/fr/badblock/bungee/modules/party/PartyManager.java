@@ -35,7 +35,7 @@ public class PartyManager
 	 * @return Returns the current party messages instance
 	 */
 	@Getter@Setter private static PartyMessages messages = new PartyMessages();
-	
+
 	/**
 	 * Follow
 	 * @param sender
@@ -69,10 +69,10 @@ public class PartyManager
 						// So we stop there
 						return;
 					}
-					
+
 					// Get the party player
 					PartyPlayer partyPlayer = party.getPlayers().get(sender.getName());
-					
+
 					// If the party player is null
 					if (partyPlayer == null)
 					{
@@ -81,17 +81,17 @@ public class PartyManager
 						// So we stop there
 						return;
 					}
-					
+
 					// Is following
 					boolean follow = partyPlayer.isFollow();
 					// Get the message
 					String message = follow ? "disabled" : "enabled";
-					
+
 					// Send follow message
 					messages.sendFollow(sender, message);
 					// Set follow
 					partyPlayer.setFollow(!follow);
-					
+
 					// Save party
 					party.save();
 				}
@@ -99,7 +99,7 @@ public class PartyManager
 
 		});
 	}
-	
+
 	/**
 	 * Invite
 	 * @param sender
@@ -115,7 +115,7 @@ public class PartyManager
 			// We stop there
 			return;
 		}
-		
+
 		// Get invited arg
 		String invited = args[1];
 		// Get Bungee Manager
@@ -124,7 +124,15 @@ public class PartyManager
 		BadPlayer otherPlayer = bungeeManager.getBadPlayer(invited);
 		// Get the current player
 		BadPlayer currPlayer = BadPlayer.get(sender);
-		
+
+		// If he invites himself
+		if (invited.equalsIgnoreCase(sender.getName()))
+		{
+			// Send the message
+			PartyManager.getMessages().sendCantActOnYourself(sender);
+			return;
+		}
+
 		// If they're not in the same server
 		if (otherPlayer == null || !currPlayer.getLastServer().equals(otherPlayer.getLastServer()))
 		{
@@ -133,7 +141,7 @@ public class PartyManager
 			// So we stop there
 			return;
 		}
-		
+
 		// Get the party
 		PartyManager.getParty(sender.getName(), new Callback<Party>()
 		{
@@ -159,7 +167,7 @@ public class PartyManager
 				{
 					// Get the party player
 					PartyPlayer partyPlayer = party.getPartyPlayer(otherPlayer.getName());
-					
+
 					// If the party player isn't null
 					if (partyPlayer != null)
 					{
@@ -191,7 +199,7 @@ public class PartyManager
 
 		});
 	}
-	
+
 	/**
 	 * Send the invitation message
 	 * @param currentPlayer
@@ -204,7 +212,7 @@ public class PartyManager
 		// Send 'you have been invited'
 		messages.sendInviteYouHaveBeenInvited(otherPlayer, currentPlayer.getName());
 	}
-	
+
 	/**
 	 * Accept
 	 * @param sender
@@ -220,7 +228,7 @@ public class PartyManager
 			// So we stop there
 			return;
 		}
-		
+
 		// Get owner party arg
 		String ownerParty = args[1];
 		// Get BungeeManager
@@ -229,7 +237,15 @@ public class PartyManager
 		BadPlayer otherPlayer = bungeeManager.getBadPlayer(ownerParty);
 		// Get current player
 		BadPlayer currPlayer = BadPlayer.get(sender);
-		
+
+		// If he accepts himself
+		if (ownerParty.equalsIgnoreCase(sender.getName()))
+		{
+			// Send the message
+			PartyManager.getMessages().sendCantActOnYourself(sender);
+			return;
+		}
+
 		// If they're not on the same server
 		if (otherPlayer == null || !currPlayer.getLastServer().equals(otherPlayer.getLastServer()))
 		{
@@ -238,7 +254,7 @@ public class PartyManager
 			// So we stop there
 			return;
 		}
-		
+
 		// Get the party
 		PartyManager.getParty(otherPlayer.getName(), new Callback<Party>()
 		{
@@ -259,10 +275,10 @@ public class PartyManager
 					// So we stop there
 					return;
 				}
-				
+
 				// Get the party player
 				PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
-				
+
 				// If the party player is null
 				if (partyPlayer == null)
 				{
@@ -271,7 +287,7 @@ public class PartyManager
 					// So we stop there
 					return;
 				}
-				
+
 				// If the state isn't in 'waiting'
 				if (!partyPlayer.getState().equals(PartyPlayerState.WAITING))
 				{
@@ -280,7 +296,7 @@ public class PartyManager
 					// So we stop there
 					return;
 				}
-				
+
 				// Accept party player
 				party.accept(sender.getName());
 				// Send accepted message
@@ -289,7 +305,7 @@ public class PartyManager
 
 		});
 	}
-	
+
 	/**
 	 * Remove
 	 * @param sender
@@ -305,9 +321,18 @@ public class PartyManager
 			// So we stop there
 			return;
 		}
-		
+
 		// Get to remove arg
 		String toRemove = args[1];
+
+		// If he removes himself
+		if (toRemove.equalsIgnoreCase(sender.getName()))
+		{
+			// Send the message
+			PartyManager.getMessages().sendCantActOnYourself(sender);
+			return;
+		}
+
 		// Get party
 		PartyManager.getParty(sender.getName(), new Callback<Party>()
 		{
@@ -330,7 +355,7 @@ public class PartyManager
 
 				// Get the party player
 				PartyPlayer partyPlayer = party.getPartyPlayer(toRemove);
-				
+
 				// If the party player is null
 				if (partyPlayer == null)
 				{
@@ -359,7 +384,7 @@ public class PartyManager
 
 		});
 	}
-	
+
 	/**
 	 * Teleport
 	 * @param sender
@@ -375,12 +400,12 @@ public class PartyManager
 			// So we stop there
 			return;
 		}
-		
+
 		// To teleport arg
 		String toTp = args[1];
 		// Bungee manager
 		BungeeManager bungeeManager = BungeeManager.getInstance();
-		
+
 		// Get the party
 		PartyManager.getParty(sender.getName(), new Callback<Party>()
 		{
@@ -403,7 +428,7 @@ public class PartyManager
 
 				// Get party player
 				PartyPlayer partyPlayer = party.getPartyPlayer(toTp);
-				
+
 				// If the party player is null
 				if (partyPlayer == null)
 				{
@@ -424,7 +449,7 @@ public class PartyManager
 
 				// Get the BadPlayer object
 				BadPlayer badPlayer = bungeeManager.getBadPlayer(toTp);
-				
+
 				// If the BadPlayer object is null
 				if (badPlayer == null)
 				{
@@ -484,7 +509,7 @@ public class PartyManager
 
 		});
 	}
-	
+
 	/**
 	 * Toggle
 	 * @param sender
@@ -496,7 +521,7 @@ public class PartyManager
 		BadPlayer badPlayer = BungeeManager.getInstance().getBadPlayer(sender);
 		// Get settings
 		BadPlayerSettings settings = badPlayer.getSettings();
-		
+
 		// Ooh :(
 		if (args.length != 2)
 		{
@@ -505,12 +530,12 @@ public class PartyManager
 			// So we stop there
 			return;
 		}
-		
+
 		// Raw type
 		String rawType = args[1]; 
 		// Partyable
 		Partyable partyable = Partyable.getByString(rawType);
-		
+
 		// If partyable is null
 		if (partyable == null)
 		{
@@ -519,7 +544,7 @@ public class PartyManager
 			// So we stop there
 			return;
 		}
-		
+
 		// If the partyable is the same
 		if (settings.getPartyable().equals(partyable))
 		{
@@ -528,15 +553,15 @@ public class PartyManager
 			// So we stop there
 			return;
 		}
-		
+
 		// Set partyable
 		badPlayer.getSettings().setPartyable(partyable);
 		// Update settings
-        badPlayer.updateSettings();
-        // Send message
+		badPlayer.updateSettings();
+		// Send message
 		PartyManager.getMessages().sendToggleWith(sender, rawType);
 	}
-	
+
 	/**
 	 * Get the party
 	 * @param player
@@ -565,7 +590,7 @@ public class PartyManager
 				query.append("players", player.toLowerCase());
 				// Cursor
 				DBCursor cursor = collection.find(query);
-				
+
 				// If the cursor isn't null
 				if (cursor != null && cursor.hasNext())
 				{

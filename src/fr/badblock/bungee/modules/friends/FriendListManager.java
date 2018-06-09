@@ -234,7 +234,7 @@ public final class FriendListManager
 		FriendListRequestStatus status;
 
 		// If the want player is equal to the wanted player
-		if (want.equals(wanted))
+		if (want.equalsIgnoreCase(wanted))
 		{
 			// Set the status
 			status = FriendListRequestStatus.PLAYER_SCHIZOPHRENIA;
@@ -402,7 +402,7 @@ public final class FriendListManager
 		FriendListRemoveStatus status;
 
 		// If the want player remove the wanted player
-		if (want.equals(wanted))
+		if (want.equalsIgnoreCase(wanted))
 		{
 			// Set the status
 			status = FriendListRemoveStatus.PLAYER_SCHIZOPHRENIA;

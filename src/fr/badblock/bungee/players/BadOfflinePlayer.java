@@ -493,6 +493,9 @@ public class BadOfflinePlayer
 				// Ok that's right. It can be empty...
 			}
 			
+			// Set found
+			setFound(true);
+			
 		}
 		else
 		{
@@ -527,6 +530,8 @@ public class BadOfflinePlayer
 		BasicDBObject obj = getSavedObject();
 		// Set database object
 		setDbObject(obj);
+		// Set found
+		setFound(true);
 		// Use async mongo
 		mongoService.useAsyncMongo(new MongoMethod(mongoService)
 		{

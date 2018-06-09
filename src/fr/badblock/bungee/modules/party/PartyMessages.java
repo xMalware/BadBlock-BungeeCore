@@ -36,6 +36,16 @@ public class PartyMessages
 	}
 	
 	/**
+	 * Send can't act on yourself
+	 * @param The ProxiedPlayer object
+	 */
+	public void sendCantActOnYourself(ProxiedPlayer proxiedPlayer)
+	{
+		// Send message
+		I19n.sendMessage(proxiedPlayer, prefix + "cantactonyourself", null);
+	}
+	
+	/**
 	 * Send not in party message
 	 * @param The ProxiedPlayer object
 	 */
