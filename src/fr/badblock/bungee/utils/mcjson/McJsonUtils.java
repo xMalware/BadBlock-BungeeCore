@@ -13,26 +13,31 @@ import java.util.Arrays;
  */
 public class McJsonUtils {
 
-    /**
-     * Convert an undefined string array (of minecraft jsons) into a bungeecord
-     * BaseComponent[] array.
-     *
-     * @param jsons the undefined string array
-     * @return the bungeecord BaseComponent[] array
-     */
-    public static BaseComponent[][] parseMcJsons(String... jsons){
-        BaseComponent[] [] baseComponents = new BaseComponent[] []{};
-        for (int i = 0; i < jsons.length; i++) baseComponents[i] = ComponentSerializer.parse(jsons[i]);
-        return baseComponents;
-    }
+	/**
+	 * Convert an undefined string array (of minecraft jsons) into a bungeecord
+	 * BaseComponent[] array.
+	 *
+	 * @param jsons the undefined string array
+	 * @return the bungeecord BaseComponent[] array
+	 */
+	public static BaseComponent[][] parseMcJsons(String... jsons){
+		BaseComponent[] [] baseComponents = new BaseComponent[jsons.length] [jsons.length];
+		for (int i = 0; i < jsons.length; i++)
+		{
+			BaseComponent[] s = ComponentSerializer.parse(jsons[i]);
+			System.out.println(i + " : " + s);
+			baseComponents[i] = s;
+		}
+		return baseComponents;
+	}
 
-    /**
-     * Send a bungeecord BaseComponent[] array to a bungeecord ProxyiedPlayer
-     *
-     * @param p the bungeecord ProxyiedPlayer
-     * @param baseComponents the bungeecord BaseComponent[] array
-     */
-    public static void sendJsons(ProxiedPlayer p, BaseComponent[]... baseComponents) {
-        Arrays.asList(baseComponents).forEach(p::sendMessage);
-    }
+	/**
+	 * Send a bungeecord BaseComponent[] array to a bungeecord ProxyiedPlayer
+	 *
+	 * @param p the bungeecord ProxyiedPlayer
+	 * @param baseComponents the bungeecord BaseComponent[] array
+	 */
+	public static void sendJsons(ProxiedPlayer p, BaseComponent[]... baseComponents) {
+		Arrays.asList(baseComponents).forEach(p::sendMessage);
+	}
 }

@@ -222,11 +222,10 @@ final class FriendListMessage
 		String refuse_hover = badPlayer.getTranslatedMessage(prefix("requests.request.refuse_hover"), null, requester.getName());
 
 		// Create MCJson object
-		McJson json = new McJsonFactory(intro).
-				finaliseAndInitNewComponent("\n\n     ").finaliseComponent().
-				initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/friend accept " + requester.getName()).
-				finaliseAndInitNewComponent("     ").finaliseComponent().
-				initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend accept " + requester.getName()).
+		McJson json = new McJsonFactory(intro).finaliseComponent().
+				initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/friend accept " + requester.getName())
+				.finaliseComponent().
+				initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend remove " + requester.getName()).
 				build();
 
 		// Send the translated message
