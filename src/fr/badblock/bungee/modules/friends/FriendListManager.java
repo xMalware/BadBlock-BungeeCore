@@ -12,6 +12,7 @@ import com.mongodb.DBObject;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
+import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.friends.events.FriendListRemoveEvent;
@@ -77,6 +78,7 @@ public final class FriendListManager
 	 */
 	static void update(FriendList friendlist)
 	{
+		System.out.println("ok");
 		// Get the mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
@@ -95,9 +97,11 @@ public final class FriendListManager
 				// Create a new query
 				BasicDBObject query = new BasicDBObject();
 				// Add the owner in the query
-				query.put(FriendList.OWNER, friendlist.getOwner());
+				query.put(FriendList.OWNER, friendlist.getOwner().toString());
+				// Create set updater
+				BasicDBObject updater = new BasicDBObject("$set", friendlist.toObject());
 				// Update the friendlist of the owner
-				collection.update(query, friendlist.toObject());
+				collection.update(query, updater);
 			}
 		});
 	}
@@ -227,9 +231,9 @@ public final class FriendListManager
 		}
 
 		// Get the wanted player friend list
-		FriendList wantedFriendList = getFriendList(wantBadPlayer.getUniqueId());
+		FriendList wantedFriendList = getFriendList(wantedBadPlayer.getUniqueId());
 		// Get the want player friend list
-		FriendList wantFriendList = getFriendList(wantedBadPlayer.getUniqueId());
+		FriendList wantFriendList = getFriendList(wantBadPlayer.getUniqueId());
 		// Create a friend list request status
 		FriendListRequestStatus status;
 
@@ -241,34 +245,42 @@ public final class FriendListManager
 		}
 		else
 		{
+			System.out.println("A : " + GsonUtils.getGson().toJson(wantedFriendList));
 			// If the wanted player is in the list of the want player
 			if (wantedFriendList.isInList(wantBadPlayer.getUniqueId()))
 			{
+				System.out.println("B");
 				// If they're already friend
 				if (wantedFriendList.isFriend(wantBadPlayer.getUniqueId()))
 				{
+					System.out.println("C");
 					// Set the status => they're already friends
 					status = FriendListRequestStatus.PLAYERS_ALREADY_FRIENDS;
 				}
 				else
 				{
+					System.out.println("D");
 					// If he want to be friend
 					if (wantedFriendList.wantToBeFriendWith(wantBadPlayer.getUniqueId()))
 					{
+						System.out.println("E");
 						// Set the status => they're now friends
 						status = FriendListRequestStatus.PLAYERS_NOW_FRIENDS;
 					}
 					else
 					{
+						System.out.println("F");
 						// If he already requested
 						if (wantedFriendList.alreadyRequestedBy(wantBadPlayer.getUniqueId()))
 						{
+							System.out.println("G");
 							// Set the status => already requested
 							status = FriendListRequestStatus.PLAYER_ALREADY_REQUESTED;
 						}
 						// What?
 						else
 						{
+							System.out.println("H");
 							// Set the status => unknown error
 							status = FriendListRequestStatus.UNKNOWN_ERROR;
 						}
@@ -282,7 +294,10 @@ public final class FriendListManager
 			else
 			{
 				// If the friend listable status is YES
-				if (wantedBadPlayer.getSettings().getFriendListable().equals(FriendListable.YES))
+				if (wantedBadPlayer.getSettings() == null ||
+						wantedBadPlayer.getSettings().getFriendListable() == null || 
+						(wantedBadPlayer.getSettings() != null && 
+						FriendListable.YES.equals(wantedBadPlayer.getSettings().getFriendListable())))
 				{
 					// Set the status => receive request
 					status = FriendListRequestStatus.PLAYER_RECEIVE_REQUEST;
@@ -339,10 +354,12 @@ public final class FriendListManager
 			// Receive request
 		case PLAYER_RECEIVE_REQUEST:
 			// Send the request
+			System.out.println(wantedFriendList.getOwner() + " / " + wantBadPlayer.getUniqueId());
 			wantedFriendList.request(wantBadPlayer.getUniqueId());
 			// Send the message
 			message.sendRequest(wantedBadPlayer, wantBadPlayer);
 			// Requested!
+			System.out.println(wantFriendList.getOwner() + " / " + wantedBadPlayer.getUniqueId());
 			wantFriendList.requested(wantedBadPlayer.getUniqueId());
 			// Send the message
 			message.sendRequestReceived(wantBadPlayer, wantedBadPlayer);
@@ -411,6 +428,8 @@ public final class FriendListManager
 		else
 		{
 			// If the wanted player is in the friend list etc.
+			System.out.println("wanted: " + wantedFriendList.toObject().toString() + " / " + wantBadPlayer.getUniqueId());
+			System.out.println("want: " + wantFriendList.toObject().toString() + " / " + wantedBadPlayer.getUniqueId());
 			if (wantedFriendList.isInList(wantBadPlayer.getUniqueId()) || wantFriendList.isInList(wantedBadPlayer.getUniqueId()))
 			{
 				// If they're friends
@@ -424,7 +443,7 @@ public final class FriendListManager
 					// If he want to be friend
 					if (wantedFriendList.wantToBeFriendWith(wantBadPlayer.getUniqueId()))
 					{
-						// Set the status => request declind
+						// Set the status => request declined
 						status = FriendListRemoveStatus.PLAYER_REQUEST_DECLINED;
 					}
 					else

@@ -210,7 +210,7 @@ public class Party
 			object.put("_id", uuid);
 		}
 		// Put the player map
-		object.put("players", GsonUtils.getGson().toJson(players, collectionType));
+		object.put("players", players);
 
 		// Returns the object
 		return object;

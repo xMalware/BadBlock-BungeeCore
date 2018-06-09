@@ -220,6 +220,8 @@ public final class BadPlayer extends BadOfflinePlayer
 			return;
 		}
 
+		System.out.println(jsons);
+		
 		// Send json message
 		McJsonUtils.sendJsons(toProxiedPlayer(), McJsonUtils.parseMcJsons(ChatColorUtils.translateColors('&', jsons)));
 	}

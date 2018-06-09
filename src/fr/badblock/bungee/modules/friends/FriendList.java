@@ -3,6 +3,7 @@ package fr.badblock.bungee.modules.friends;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import com.google.gson.reflect.TypeToken;
@@ -213,7 +214,15 @@ public final class FriendList
 			object.put(OWNER, owner.toString());
 		}
 		// We put the friendlist in the object
-		object.put(PLAYERS, GsonUtils.getGson().toJson(players, collectionType));
+		Map<String, DBObject> map = new HashMap<>();
+		// For each data
+		for (Entry<UUID, FriendListPlayer> entry : players.entrySet())
+		{
+			// Put in a map
+			map.put(entry.getKey().toString(), entry.getValue().toObject());
+		}
+		// Put the map
+		object.put(PLAYERS, map);
 		// Return the database object
 		return object;
 	}

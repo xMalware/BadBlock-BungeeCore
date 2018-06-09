@@ -1,10 +1,13 @@
 package fr.badblock.bungee.modules.friends;
 
+import java.util.UUID;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
@@ -32,5 +35,21 @@ public final class FriendListPlayer
      * @return Returns the friendlist player state
      */
     private FriendListPlayerState	state;
+    
+    /**
+     * Convert to object
+     * @return
+     */
+    public DBObject toObject()
+    {
+    	// Create new database object
+    	BasicDBObject dbObject = new BasicDBObject();
+    	// Add unique id
+    	dbObject.put("uuid", getUuid().toString());
+    	// Add state
+    	dbObject.put("state", getState().name());
+    	// Returns the database object
+    	return dbObject;
+    }
     
 }
