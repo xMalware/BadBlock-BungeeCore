@@ -402,38 +402,38 @@ final class FriendListMessage
 	 */
 	void sendOfflineList(BadPlayer badPlayer, BadOfflinePlayer player)
 	{
-		String disconnected_state = badPlayer.getTranslatedMessage(prefix("list.disconnected_state"), null,
+		String disconnected_state = badPlayer.getTranslatedMessage(prefix("list.disconnected_state"), new int[] { 0 },
 				player.getName());
-		String disconnected_state_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_state_hover"), null,
+		String disconnected_state_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_state_hover"), new int[] { 0 },
 				player.getName());
 		
-		String disconnected_intro = badPlayer.getTranslatedMessage(prefix("list.disconnected_intro"), null,
+		String disconnected_intro = badPlayer.getTranslatedMessage(prefix("list.disconnected_intro"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
-		String disconnected_intro_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_intro_hover"), null,
-				player.getRawChatPrefix(), player.getName());
-
-		String disconnected_space1 = badPlayer.getTranslatedMessage(prefix("list.disconnected_space1"), null,
+		String disconnected_intro_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_intro_hover"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 
-		String disconnected_pm = badPlayer.getTranslatedMessage(prefix("list.disconnected_pm"), null,
-				player.getRawChatPrefix(), player.getName());
-		String disconnected_pm_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_pm_hover"), null,
+		String disconnected_space1 = badPlayer.getTranslatedMessage(prefix("list.disconnected_space1"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 
-		String disconnected_space2 = badPlayer.getTranslatedMessage(prefix("list.disconnected_space2"), null,
+		String disconnected_pm = badPlayer.getTranslatedMessage(prefix("list.disconnected_pm"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String disconnected_pm_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_pm_hover"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+
+		String disconnected_space2 = badPlayer.getTranslatedMessage(prefix("list.disconnected_space2"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 		
-		String disconnected_party = badPlayer.getTranslatedMessage(prefix("list.disconnected_party"), null,
+		String disconnected_party = badPlayer.getTranslatedMessage(prefix("list.disconnected_party"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
-		String disconnected_party_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_party_hover"), null,
+		String disconnected_party_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_party_hover"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 
-		String disconnected_space3 = badPlayer.getTranslatedMessage(prefix("list.disconnected_space3"), null,
+		String disconnected_space3 = badPlayer.getTranslatedMessage(prefix("list.disconnected_space3"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 		
-		String delete = badPlayer.getTranslatedMessage(prefix("list.delete"), null,
+		String delete = badPlayer.getTranslatedMessage(prefix("list.delete"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
-		String delete_hover = badPlayer.getTranslatedMessage(prefix("list.delete_hover"), null,
+		String delete_hover = badPlayer.getTranslatedMessage(prefix("list.delete_hover"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 	
 		// Create MCJson object
@@ -451,45 +451,145 @@ final class FriendListMessage
 	}
 	
 	/**
+	 * Send requested list
+	 * @param badPlayer
+	 * @param page
+	 */
+	void sendRequestedList(BadPlayer badPlayer, BadOfflinePlayer player)
+	{
+		String requested_state = badPlayer.getTranslatedMessage(prefix("list.requested_state"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String requested_state_hover = badPlayer.getTranslatedMessage(prefix("list.requested_state_hover"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		
+		String requested_intro = badPlayer.getTranslatedMessage(prefix("list.requested_intro"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String requested_intro_hover = badPlayer.getTranslatedMessage(prefix("list.requested_intro_hover"), null);
+
+		String requested_space1 = badPlayer.getTranslatedMessage(prefix("list.requested_space1"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+
+		String requested_info = badPlayer.getTranslatedMessage(prefix("list.requested_info"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String requested_info_hover = badPlayer.getTranslatedMessage(prefix("list.requested_info_hover"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+
+		String requested_space2 = badPlayer.getTranslatedMessage(prefix("list.requested_space2"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		
+		String cancel = badPlayer.getTranslatedMessage(prefix("list.cancel"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String cancel_hover = badPlayer.getTranslatedMessage(prefix("list.cancel_hover"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+	
+		// Create MCJson object
+		McJson json = new McJsonFactory(requested_state).setHoverText(requested_state_hover).
+				finaliseComponent().initNewComponent(requested_intro).setHoverText(requested_intro_hover).
+				finaliseComponent().initNewComponent(requested_space1).finaliseComponent().
+				initNewComponent(requested_info).setHoverText(requested_info_hover).finaliseComponent().
+				initNewComponent(requested_space2).finaliseComponent().initNewComponent(cancel).
+				setHoverText(cancel_hover).setClickCommand("/friend cancel " + player.getName()).build();
+
+		// Send the translated message
+		badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMCJson(json);
+	}
+	
+	/**
+	 * Send waiting list
+	 * @param badPlayer
+	 * @param page
+	 */
+	void sendWaitingList(BadPlayer badPlayer, BadOfflinePlayer player)
+	{
+		String waiting_state = badPlayer.getTranslatedMessage(prefix("list.waiting_state"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String waiting_state_hover = badPlayer.getTranslatedMessage(prefix("list.waiting_state_hover"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		
+		String waiting_intro = badPlayer.getTranslatedMessage(prefix("list.waiting_intro"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String waiting_intro_hover = badPlayer.getTranslatedMessage(prefix("list.waiting_intro_hover"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+
+		String waiting_space1 = badPlayer.getTranslatedMessage(prefix("list.waiting_space1"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+
+		String waiting_info = badPlayer.getTranslatedMessage(prefix("list.waiting_info"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String waiting_info_hover = badPlayer.getTranslatedMessage(prefix("list.waiting_info_hover"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+
+		String waiting_space2 = badPlayer.getTranslatedMessage(prefix("list.waiting_space2"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+
+		String accept = badPlayer.getTranslatedMessage(prefix("list.accept"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String accept_hover = badPlayer.getTranslatedMessage(prefix("list.accept_hover"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+
+		String waiting_space3 = badPlayer.getTranslatedMessage(prefix("list.waiting_space3"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		
+		String decline = badPlayer.getTranslatedMessage(prefix("list.decline"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String decline_hover = badPlayer.getTranslatedMessage(prefix("list.decline_hover"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+	
+		// Create MCJson object
+		McJson json = new McJsonFactory(waiting_state).setHoverText(waiting_state_hover).
+				finaliseComponent().initNewComponent(waiting_intro).setHoverText(waiting_intro_hover).
+				finaliseComponent().initNewComponent(waiting_space1).finaliseComponent().
+				initNewComponent(waiting_info).setHoverText(waiting_info_hover).finaliseComponent().
+				initNewComponent(waiting_space2).finaliseComponent().initNewComponent(accept).
+				setHoverText(accept_hover).setClickCommand("/friend accept " + player.getName()).
+				finaliseComponent().initNewComponent(waiting_space3).finaliseComponent().
+				initNewComponent(decline).setHoverText(decline_hover).
+				setClickCommand("/friend remove " + player.getName()).build();
+
+		// Send the translated message
+		badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMCJson(json);
+	}
+	
+	/**
 	 * Send online list
 	 * @param badPlayer
 	 * @param page
 	 */
 	void sendOnlineList(BadPlayer badPlayer, BadPlayer player)
 	{
-		String connected_state = badPlayer.getTranslatedMessage(prefix("list.connected_state"), null,
-				player.getName());
-		String connected_state_hover = badPlayer.getTranslatedMessage(prefix("list.connected_state_hover"), null,
-				player.getName());
+		String connected_state = badPlayer.getTranslatedMessage(prefix("list.connected_state"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+		String connected_state_hover = badPlayer.getTranslatedMessage(prefix("list.connected_state_hover"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
 		
-		String connected_intro = badPlayer.getTranslatedMessage(prefix("list.connected_intro"), null,
+		String connected_intro = badPlayer.getTranslatedMessage(prefix("list.connected_intro"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
-		String connected_intro_hover = badPlayer.getTranslatedMessage(prefix("list.connected_intro_hover"), null,
-				player.getRawChatPrefix(), player.getName());
-
-		String connected_space1 = badPlayer.getTranslatedMessage(prefix("list.connected_space1"), null,
+		String connected_intro_hover = badPlayer.getTranslatedMessage(prefix("list.connected_intro_hover"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 
-		String connected_pm = badPlayer.getTranslatedMessage(prefix("list.connected_pm"), null,
+		String connected_space1 = badPlayer.getTranslatedMessage(prefix("list.connected_space1"), new int[] { 0 },
+				player.getRawChatPrefix(), player.getName());
+
+		String connected_pm = badPlayer.getTranslatedMessage(prefix("list.connected_pm"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName(), player.getCurrentServer());
-		String connected_pm_hover = badPlayer.getTranslatedMessage(prefix("list.connected_pm_hover"), null,
+		String connected_pm_hover = badPlayer.getTranslatedMessage(prefix("list.connected_pm_hover"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName(), player.getCurrentServer(),
 				player.getVersion());
 
-		String connected_space2 = badPlayer.getTranslatedMessage(prefix("list.connected_space2"), null,
+		String connected_space2 = badPlayer.getTranslatedMessage(prefix("list.connected_space2"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 		
-		String connected_party = badPlayer.getTranslatedMessage(prefix("list.connected_party"), null,
+		String connected_party = badPlayer.getTranslatedMessage(prefix("list.connected_party"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
-		String connected_party_hover = badPlayer.getTranslatedMessage(prefix("list.connected_party_hover"), null,
+		String connected_party_hover = badPlayer.getTranslatedMessage(prefix("list.connected_party_hover"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 
-		String connected_space3 = badPlayer.getTranslatedMessage(prefix("list.connected_space3"), null,
+		String connected_space3 = badPlayer.getTranslatedMessage(prefix("list.connected_space3"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 		
-		String delete = badPlayer.getTranslatedMessage(prefix("list.delete"), null,
+		String delete = badPlayer.getTranslatedMessage(prefix("list.delete"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
-		String delete_hover = badPlayer.getTranslatedMessage(prefix("list.delete_hover"), null,
+		String delete_hover = badPlayer.getTranslatedMessage(prefix("list.delete_hover"), new int[] { 0 },
 				player.getRawChatPrefix(), player.getName());
 	
 		// Create MCJson object
@@ -506,6 +606,16 @@ final class FriendListMessage
 
 		// Send the translated message
 		badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMCJson(json);
+	}
+
+	/**
+	 * Send no friends
+	 * @param badPlayer
+	 */
+	public void sendNoFriends(BadPlayer badPlayer)
+	{
+		// Send message
+		badPlayer.sendTranslatedOutgoingMessage(prefix("list.nofriends"), null);
 	}
 
 }

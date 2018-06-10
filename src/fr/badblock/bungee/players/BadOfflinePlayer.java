@@ -231,7 +231,7 @@ public class BadOfflinePlayer
 		BadOfflinePlayer badOfflinePlayer = new BadOfflinePlayer(uuid, false);
 		// Data not found?
 		if (!badOfflinePlayer.isFound())
-		{
+		{    
 			// Returns null
 			return null;
 		}
@@ -517,10 +517,10 @@ public class BadOfflinePlayer
 		{
 			// Set database object by casting a 'basic DBObject'
 			setDbObject((BasicDBObject) cursor.next());
-			// Log => already exists!
-			BadBungee.log("§c" + getName() + " exists in the player table.");
 			// Set name
 			setName(getString("realName"));
+			// Log => already exists!
+			BadBungee.log("§c" + getName() + " exists in the player table.");
 			// Set last IP
 			setLastIp(getString("lastIp"));
 			// Set unique ID

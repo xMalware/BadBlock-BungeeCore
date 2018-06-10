@@ -1,8 +1,10 @@
 package fr.badblock.bungee.modules.friends;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import com.mongodb.BasicDBObject;
@@ -18,7 +20,6 @@ import fr.badblock.bungee.modules.friends.events.FriendListRemoveEvent;
 import fr.badblock.bungee.modules.friends.events.FriendListRequestEvent;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.badblock.bungee.utils.Filter;
 import fr.badblock.bungee.utils.mongodb.SynchroMongoDBGetter;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
@@ -192,7 +193,7 @@ public final class FriendListManager
 
 		// Set the new status in the settings
 		player.getSettings().setFriendListable(event.getNewStatus());
-		
+
 		// Update the settings
 		player.updateSettings();
 
@@ -549,14 +550,16 @@ public final class FriendListManager
 	 * @param BadOfflinePlayer object
 	 * @return friend list
 	 */
-	public static List<BadOfflinePlayer> getFriends(BadPlayer badPlayer)
+	public static Map<BadOfflinePlayer, FriendListPlayer> getFriends(BadPlayer badPlayer)
 	{
 		// Get the friend list
 		Map<UUID, FriendListPlayer> players = getFriendList(badPlayer.getUniqueId()).getPlayers();
 		// Create a new friend list
-		List<BadOfflinePlayer> friends = new ArrayList<>();
+		Map<BadOfflinePlayer, FriendListPlayer> friends = new HashMap<>();
+		// Get BungeeManager object
+		BungeeManager bungeeManager = BungeeManager.getInstance();
 		// Put all friends
-		Filter.filterSetStatic(e -> players.get(e).getState() == FriendListPlayerState.ACCEPTED, players.keySet()).forEach(e -> friends.add(BungeeManager.getInstance().getBadOfflinePlayer(e)));
+		players.entrySet().forEach(player -> friends.put(bungeeManager.getBadOfflinePlayer(player.getKey()), player.getValue()));
 		// Returns friend list
 		return friends;
 	}
@@ -587,9 +590,20 @@ public final class FriendListManager
 		}
 
 		// Get all friends
-		List<BadOfflinePlayer> friends = getFriends(badPlayer);
+		Map<BadOfflinePlayer, FriendListPlayer> friends = getFriends(badPlayer);
+
+		// If he has no friends
+		if (friends == null || (friends != null && friends.isEmpty()))
+		{
+			// Send no friends
+			message.sendNoFriends(badPlayer);
+			// So we stop there
+			return;
+		}
+
 		// Get page numbers
 		int pages = (int) Math.ceil((double) friends.size() / 10.0);
+		
 		// Incorrect page number
 		if (i > pages)
 		{
@@ -602,21 +616,66 @@ public final class FriendListManager
 			BungeeManager bungeeManager = BungeeManager.getInstance();
 			// Send the message
 			message.sendIntroList(badPlayer);
+			// As a list
+			List<Entry<BadOfflinePlayer, FriendListPlayer>> list = new ArrayList<>(friends.entrySet());
+			// For each
 			for (int l = (i - 1) * 10; l < i * 10; l++)
 			{
-				if (friends.size() - 1 <= l) break;
-				BadOfflinePlayer friend = friends.get(l);
-				// If the player is offline
-				if (!bungeeManager.hasUsername(friend.getName()))
+				System.out.println("A : " + (friends.size() - 1) + " / " + l);
+				// Exception case
+				if (friends.size() - 1 < l) break;
+				// Get the entry
+				Entry<BadOfflinePlayer, FriendListPlayer> friend = list.get(l);
+				// If friend is null
+				if (friend == null)
 				{
-					// Send offline list
-					message.sendOfflineList(badPlayer, friend);
+					// So we stop there
+					break;
 				}
-				// If the player is online
-				else
+				// Get the friend data
+				FriendListPlayer friendListPlayer = friend.getValue();
+				System.out.println("B");
+				// If the friend list player is null
+				if (friendListPlayer == null)
 				{
-					// Send online list
-					message.sendOnlineList(badPlayer, bungeeManager.getBadPlayer(friend.getName()));
+					// So we stop there
+					continue;
+				}
+				System.out.println("C");
+				// Get the frienship state
+				FriendListPlayerState state = friendListPlayer.getState();
+				// If the friendship state is accepted
+				if (FriendListPlayerState.ACCEPTED.equals(state))
+				{
+					System.out.println("D");
+					// If the player is offline
+					if (!bungeeManager.hasUsername(friend.getKey().getName()))
+					{
+						System.out.println("E");
+						// Send offline list
+						message.sendOfflineList(badPlayer, friend.getKey());
+					}
+					// If the player is online
+					else
+					{
+						System.out.println("F");
+						// Send online list
+						message.sendOnlineList(badPlayer, bungeeManager.getBadPlayer(friend.getKey().getName()));
+					}
+				}
+				// If the friendship state is 'requested'
+				else if (FriendListPlayerState.REQUESTED.equals(state))
+				{
+					System.out.println("G");
+					// Send requested list
+					message.sendRequestedList(badPlayer, friend.getKey());
+				}
+				// If the friendship state is 'waiting'
+				else if (FriendListPlayerState.WAITING.equals(state))
+				{
+					System.out.println("H");
+					// Send waiting list
+					message.sendWaitingList(badPlayer, friend.getKey());
 				}
 			}
 			// Send footer
