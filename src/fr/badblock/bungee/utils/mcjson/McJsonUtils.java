@@ -25,7 +25,6 @@ public class McJsonUtils {
 		for (int i = 0; i < jsons.length; i++)
 		{
 			BaseComponent[] s = ComponentSerializer.parse(jsons[i]);
-			System.out.println(i + " : " + s);
 			baseComponents[i] = s;
 		}
 		return baseComponents;

@@ -276,7 +276,7 @@ public class BungeeManager
 	}
 
 	/**
-	 * Get a BadOfflinePlayer object from the network with a ProxiedPlayer object
+	 * Get a BadOfflinePlayer object from the network
 	 * @param username
 	 * @return a BadOfflinePlayer object
 	 */
@@ -290,6 +290,23 @@ public class BungeeManager
 		}
 		// Returns the BadOfflinePlayer object
 		return BadOfflinePlayer.get(name);
+	}
+
+	/**
+	 * Get a BadOfflinePlayer object from the network
+	 * @param UUID
+	 * @return a BadOfflinePlayer object
+	 */
+	public BadOfflinePlayer getBadOfflinePlayer(UUID uuid)
+	{
+		// If the user is online
+		if (getBadPlayer(uuid) != null)
+		{
+			// Returns the BadPlayer
+			return getBadPlayer(uuid);
+		}
+		// Returns the BadOfflinePlayer object
+		return BadOfflinePlayer.get(uuid);
 	}
 
 	@SuppressWarnings("deprecation")

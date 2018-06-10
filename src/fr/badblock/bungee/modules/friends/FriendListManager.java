@@ -12,7 +12,6 @@ import com.mongodb.DBObject;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
-import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.friends.events.FriendListRemoveEvent;
@@ -78,7 +77,6 @@ public final class FriendListManager
 	 */
 	static void update(FriendList friendlist)
 	{
-		System.out.println("ok");
 		// Get the mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
@@ -176,7 +174,7 @@ public final class FriendListManager
 		}
 
 		// If the old status is the same as the new status.
-		if (event.getOldStatus().equals(event.getNewStatus()))
+		if (event.getOldStatus() != null && event.getOldStatus().equals(event.getNewStatus()))
 		{
 			// If the new status is equal to YES
 			if (event.getNewStatus().equals(FriendListable.YES))
@@ -194,6 +192,7 @@ public final class FriendListManager
 
 		// Set the new status in the settings
 		player.getSettings().setFriendListable(event.getNewStatus());
+		
 		// Update the settings
 		player.updateSettings();
 
@@ -245,42 +244,34 @@ public final class FriendListManager
 		}
 		else
 		{
-			System.out.println("A : " + GsonUtils.getGson().toJson(wantedFriendList));
 			// If the wanted player is in the list of the want player
 			if (wantedFriendList.isInList(wantBadPlayer.getUniqueId()))
 			{
-				System.out.println("B");
 				// If they're already friend
 				if (wantedFriendList.isFriend(wantBadPlayer.getUniqueId()))
 				{
-					System.out.println("C");
 					// Set the status => they're already friends
 					status = FriendListRequestStatus.PLAYERS_ALREADY_FRIENDS;
 				}
 				else
 				{
-					System.out.println("D");
 					// If he want to be friend
 					if (wantedFriendList.wantToBeFriendWith(wantBadPlayer.getUniqueId()))
 					{
-						System.out.println("E");
 						// Set the status => they're now friends
 						status = FriendListRequestStatus.PLAYERS_NOW_FRIENDS;
 					}
 					else
 					{
-						System.out.println("F");
 						// If he already requested
 						if (wantedFriendList.alreadyRequestedBy(wantBadPlayer.getUniqueId()))
 						{
-							System.out.println("G");
 							// Set the status => already requested
 							status = FriendListRequestStatus.PLAYER_ALREADY_REQUESTED;
 						}
 						// What?
 						else
 						{
-							System.out.println("H");
 							// Set the status => unknown error
 							status = FriendListRequestStatus.UNKNOWN_ERROR;
 						}
@@ -354,12 +345,10 @@ public final class FriendListManager
 			// Receive request
 		case PLAYER_RECEIVE_REQUEST:
 			// Send the request
-			System.out.println(wantedFriendList.getOwner() + " / " + wantBadPlayer.getUniqueId());
 			wantedFriendList.request(wantBadPlayer.getUniqueId());
 			// Send the message
 			message.sendRequest(wantedBadPlayer, wantBadPlayer);
 			// Requested!
-			System.out.println(wantFriendList.getOwner() + " / " + wantedBadPlayer.getUniqueId());
 			wantFriendList.requested(wantedBadPlayer.getUniqueId());
 			// Send the message
 			message.sendRequestReceived(wantBadPlayer, wantedBadPlayer);
@@ -428,8 +417,6 @@ public final class FriendListManager
 		else
 		{
 			// If the wanted player is in the friend list etc.
-			System.out.println("wanted: " + wantedFriendList.toObject().toString() + " / " + wantBadPlayer.getUniqueId());
-			System.out.println("want: " + wantFriendList.toObject().toString() + " / " + wantedBadPlayer.getUniqueId());
 			if (wantedFriendList.isInList(wantBadPlayer.getUniqueId()) || wantFriendList.isInList(wantedBadPlayer.getUniqueId()))
 			{
 				// If they're friends
@@ -559,17 +546,17 @@ public final class FriendListManager
 
 	/**
 	 * Get the friend list
-	 * @param BadPlayer object
+	 * @param BadOfflinePlayer object
 	 * @return friend list
 	 */
-	public static List<BadPlayer> getFriends(BadPlayer badPlayer)
+	public static List<BadOfflinePlayer> getFriends(BadPlayer badPlayer)
 	{
 		// Get the friend list
 		Map<UUID, FriendListPlayer> players = getFriendList(badPlayer.getUniqueId()).getPlayers();
 		// Create a new friend list
-		List<BadPlayer> friends = new ArrayList<>();
+		List<BadOfflinePlayer> friends = new ArrayList<>();
 		// Put all friends
-		Filter.filterSetStatic(e -> players.get(e).getState() == FriendListPlayerState.ACCEPTED, players.keySet()).forEach(e -> friends.add(BungeeManager.getInstance().getBadPlayer(e)));
+		Filter.filterSetStatic(e -> players.get(e).getState() == FriendListPlayerState.ACCEPTED, players.keySet()).forEach(e -> friends.add(BungeeManager.getInstance().getBadOfflinePlayer(e)));
 		// Returns friend list
 		return friends;
 	}
@@ -600,26 +587,40 @@ public final class FriendListManager
 		}
 
 		// Get all friends
-		List<BadPlayer> friends = getFriends(badPlayer);
+		List<BadOfflinePlayer> friends = getFriends(badPlayer);
 		// Get page numbers
-		int pages = friends.size() / 10;
+		int pages = (int) Math.ceil((double) friends.size() / 10.0);
 		// Incorrect page number
-		if (pages > 1 && i > pages)
+		if (i > pages)
 		{
 			// Send too big page number message
 			message.sendTooBigPageNumber(badPlayer, i);
 		}
 		else
 		{
+			// Get BungeeManager
+			BungeeManager bungeeManager = BungeeManager.getInstance();
 			// Send the message
-			//TODO header
+			message.sendIntroList(badPlayer);
 			for (int l = (i - 1) * 10; l < i * 10; l++)
 			{
 				if (friends.size() - 1 <= l) break;
-				//BadPlayer friend = friends.get(l);
-				//TODO friend list value
+				BadOfflinePlayer friend = friends.get(l);
+				// If the player is offline
+				if (!bungeeManager.hasUsername(friend.getName()))
+				{
+					// Send offline list
+					message.sendOfflineList(badPlayer, friend);
+				}
+				// If the player is online
+				else
+				{
+					// Send online list
+					message.sendOnlineList(badPlayer, bungeeManager.getBadPlayer(friend.getName()));
+				}
 			}
-			//TODO footer
+			// Send footer
+			message.sendFooterList(badPlayer);
 		}
 	}
 

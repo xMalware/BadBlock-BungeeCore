@@ -29,18 +29,21 @@ public class BungeeObject
 	 * @return Current name of the BungeeCord node
 	 */
 	private String					name;
+	
 	/**
 	 * IP of the BungeeCord node
 	 * @param New IP of the BungeeCord node
 	 * @return Current IP of the BungeeCord name
 	 */
 	private String 		 			ip;
+	
 	/**
 	 * Player list of the BungeeCord node
 	 * @param New Player list of the BungeeCord node
 	 * @return Current Player list of the BungeeCord node
 	 */
 	private Map<String, BadPlayer>	usernames;
+	
 	/**
 	 * Expiry timestamp of the BungeeCord node
 	 * @param New expiry timestamp of the BungeeCord node

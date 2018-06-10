@@ -84,10 +84,9 @@ final class FriendListMessage
 		String refuse_hover = badPlayer.getTranslatedMessage(prefix("querying.selector.refuse_hover"), null);
 
 		// Get the McJson
-		McJson json = new McJsonFactory(intro).
-				finaliseAndInitNewComponent("\n\n     ").finaliseComponent().
-				initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/friend status yes").
-				finaliseAndInitNewComponent("     ").finaliseComponent().
+		McJson json = new McJsonFactory(intro).finaliseComponent().
+				initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/friend status yes")
+				.finaliseComponent().
 				initNewComponent(refuse).setHoverText(refuse_hover).setClickCommand("/friend status no").
 				build();
 
@@ -372,6 +371,141 @@ final class FriendListMessage
 	{
 		// Send message
 		badPlayer.sendTranslatedOutgoingMessage(prefix("list.too_big_page_number"), null, page.toString());
+	}
+
+	/**
+	 * Send intro list
+	 * @param badPlayer
+	 * @param page
+	 */
+	void sendIntroList(BadPlayer badPlayer)
+	{
+		// Send message
+		badPlayer.sendTranslatedOutgoingMessage(prefix("list.intro"), null);
+	}
+
+	/**
+	 * Send footer list
+	 * @param badPlayer
+	 * @param page
+	 */
+	void sendFooterList(BadPlayer badPlayer)
+	{
+		// Send message
+		badPlayer.sendTranslatedOutgoingMessage(prefix("list.footer"), null);
+	}
+
+	/**
+	 * Send offline list
+	 * @param badPlayer
+	 * @param page
+	 */
+	void sendOfflineList(BadPlayer badPlayer, BadOfflinePlayer player)
+	{
+		String disconnected_state = badPlayer.getTranslatedMessage(prefix("list.disconnected_state"), null,
+				player.getName());
+		String disconnected_state_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_state_hover"), null,
+				player.getName());
+		
+		String disconnected_intro = badPlayer.getTranslatedMessage(prefix("list.disconnected_intro"), null,
+				player.getRawChatPrefix(), player.getName());
+		String disconnected_intro_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_intro_hover"), null,
+				player.getRawChatPrefix(), player.getName());
+
+		String disconnected_space1 = badPlayer.getTranslatedMessage(prefix("list.disconnected_space1"), null,
+				player.getRawChatPrefix(), player.getName());
+
+		String disconnected_pm = badPlayer.getTranslatedMessage(prefix("list.disconnected_pm"), null,
+				player.getRawChatPrefix(), player.getName());
+		String disconnected_pm_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_pm_hover"), null,
+				player.getRawChatPrefix(), player.getName());
+
+		String disconnected_space2 = badPlayer.getTranslatedMessage(prefix("list.disconnected_space2"), null,
+				player.getRawChatPrefix(), player.getName());
+		
+		String disconnected_party = badPlayer.getTranslatedMessage(prefix("list.disconnected_party"), null,
+				player.getRawChatPrefix(), player.getName());
+		String disconnected_party_hover = badPlayer.getTranslatedMessage(prefix("list.disconnected_party_hover"), null,
+				player.getRawChatPrefix(), player.getName());
+
+		String disconnected_space3 = badPlayer.getTranslatedMessage(prefix("list.disconnected_space3"), null,
+				player.getRawChatPrefix(), player.getName());
+		
+		String delete = badPlayer.getTranslatedMessage(prefix("list.delete"), null,
+				player.getRawChatPrefix(), player.getName());
+		String delete_hover = badPlayer.getTranslatedMessage(prefix("list.delete_hover"), null,
+				player.getRawChatPrefix(), player.getName());
+	
+		// Create MCJson object
+		McJson json = new McJsonFactory(disconnected_state).setHoverText(disconnected_state_hover).
+				finaliseComponent().initNewComponent(disconnected_intro).setHoverText(disconnected_intro_hover).
+				finaliseComponent().initNewComponent(disconnected_space1).finaliseComponent().
+				initNewComponent(disconnected_pm).setHoverText(disconnected_pm_hover).finaliseComponent().
+				initNewComponent(disconnected_space2).finaliseComponent().initNewComponent(disconnected_party).
+				setHoverText(disconnected_party_hover).finaliseComponent().initNewComponent(disconnected_space3).
+				finaliseComponent().initNewComponent(delete).setHoverText(delete_hover).
+				setClickCommand("/friend remove " + player.getName()).build();
+
+		// Send the translated message
+		badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMCJson(json);
+	}
+	
+	/**
+	 * Send online list
+	 * @param badPlayer
+	 * @param page
+	 */
+	void sendOnlineList(BadPlayer badPlayer, BadPlayer player)
+	{
+		String connected_state = badPlayer.getTranslatedMessage(prefix("list.connected_state"), null,
+				player.getName());
+		String connected_state_hover = badPlayer.getTranslatedMessage(prefix("list.connected_state_hover"), null,
+				player.getName());
+		
+		String connected_intro = badPlayer.getTranslatedMessage(prefix("list.connected_intro"), null,
+				player.getRawChatPrefix(), player.getName());
+		String connected_intro_hover = badPlayer.getTranslatedMessage(prefix("list.connected_intro_hover"), null,
+				player.getRawChatPrefix(), player.getName());
+
+		String connected_space1 = badPlayer.getTranslatedMessage(prefix("list.connected_space1"), null,
+				player.getRawChatPrefix(), player.getName());
+
+		String connected_pm = badPlayer.getTranslatedMessage(prefix("list.connected_pm"), null,
+				player.getRawChatPrefix(), player.getName(), player.getCurrentServer());
+		String connected_pm_hover = badPlayer.getTranslatedMessage(prefix("list.connected_pm_hover"), null,
+				player.getRawChatPrefix(), player.getName(), player.getCurrentServer(),
+				player.getVersion());
+
+		String connected_space2 = badPlayer.getTranslatedMessage(prefix("list.connected_space2"), null,
+				player.getRawChatPrefix(), player.getName());
+		
+		String connected_party = badPlayer.getTranslatedMessage(prefix("list.connected_party"), null,
+				player.getRawChatPrefix(), player.getName());
+		String connected_party_hover = badPlayer.getTranslatedMessage(prefix("list.connected_party_hover"), null,
+				player.getRawChatPrefix(), player.getName());
+
+		String connected_space3 = badPlayer.getTranslatedMessage(prefix("list.connected_space3"), null,
+				player.getRawChatPrefix(), player.getName());
+		
+		String delete = badPlayer.getTranslatedMessage(prefix("list.delete"), null,
+				player.getRawChatPrefix(), player.getName());
+		String delete_hover = badPlayer.getTranslatedMessage(prefix("list.delete_hover"), null,
+				player.getRawChatPrefix(), player.getName());
+	
+		// Create MCJson object
+		McJson json = new McJsonFactory(connected_state).setHoverText(connected_state_hover).
+				finaliseComponent().initNewComponent(connected_intro).setHoverText(connected_intro_hover).
+				finaliseComponent().initNewComponent(connected_space1).finaliseComponent().
+				initNewComponent(connected_pm).setHoverText(connected_pm_hover).
+				setClickSuggest("/msg " + player.getName() + " ").finaliseComponent().
+				initNewComponent(connected_space2).finaliseComponent().initNewComponent(connected_party).
+				setHoverText(connected_party_hover).setClickCommand("/party invite " + player.getName()).
+				finaliseComponent().initNewComponent(connected_space3).finaliseComponent().
+				initNewComponent(delete).setHoverText(delete_hover).
+				setClickCommand("/friend remove " + player.getName()).build();
+
+		// Send the translated message
+		badPlayer.getOnlineBadPlayer().sendTranslatedOutgoingMCJson(json);
 	}
 
 }

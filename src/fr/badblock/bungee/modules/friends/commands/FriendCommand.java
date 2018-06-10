@@ -1,8 +1,8 @@
 package fr.badblock.bungee.modules.friends.commands;
 
-import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.abstracts.BadCommand;
 import fr.badblock.bungee.modules.friends.FriendListManager;
+import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -150,12 +150,12 @@ public class FriendCommand extends BadCommand
 		if (args.length < 2)
 		{
 			// So we show him a status selector
-			FriendListManager.showStatusSelector(BungeeManager.getInstance().getBadPlayer(sender));
+			FriendListManager.showStatusSelector(BadPlayer.get(sender));
 			// We stop there
 			return;
 		}
 		// We change the authorization status of his friends
-		FriendListManager.setQueryable(BungeeManager.getInstance().getBadPlayer(sender), args[1]);
+		FriendListManager.setQueryable(BadPlayer.get(sender), args[1]);
 	}
 
 	/**
@@ -208,12 +208,12 @@ public class FriendCommand extends BadCommand
 		if (args.length < 2)
 		{
 			// We show him the first page of his friends list
-			FriendListManager.showFriendList(BungeeManager.getInstance().getBadPlayer(sender));
+			FriendListManager.showFriendList(BadPlayer.get(sender));
 			// We stop there
 			return;
 		}
 		// We show the friend list
-		FriendListManager.showFriendList(BungeeManager.getInstance().getBadPlayer(sender), args[1]);
+		FriendListManager.showFriendList(BadPlayer.get(sender), args[1]);
 	}
 
 }

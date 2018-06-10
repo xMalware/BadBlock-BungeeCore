@@ -219,12 +219,6 @@ public final class BadPlayer extends BadOfflinePlayer
 			return;
 		}
 
-		// TODO remove
-		for (String string : jsons)
-		{
-			System.out.println(string);
-		}
-
 		// Send json message
 		McJsonUtils.sendJsons(toProxiedPlayer(), McJsonUtils.parseMcJsons(ChatColorUtils.translateColors('&', jsons)));
 	}

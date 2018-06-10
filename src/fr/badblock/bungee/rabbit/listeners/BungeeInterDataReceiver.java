@@ -45,6 +45,7 @@ public class BungeeInterDataReceiver extends RabbitListener
 		BungeeObject bungeeObject = gson.fromJson(body, BungeeObject.class);
 		// Add the Bungee object
 		BungeeManager.getInstance().add(bungeeObject);
+		
 	}
 
 }

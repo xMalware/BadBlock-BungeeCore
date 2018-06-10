@@ -13,6 +13,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.WriteResult;
 import com.mongodb.util.JSON;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
@@ -29,12 +30,14 @@ import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.ObjectUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
 import fr.badblock.bungee.utils.time.TimeUtils;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 @EqualsAndHashCode(callSuper = false)
-@Data
+@Getter
+@Setter
 /**
  * 
  * BadOfflinePlayer
@@ -145,6 +148,24 @@ public class BadOfflinePlayer
 		loadData(true);
 	}
 
+
+	/**
+	 * Constructor
+	 * @param Unique ID
+	 * @param Auto-create?
+	 */
+	public BadOfflinePlayer(UUID uuid, boolean create)
+	{
+		// Set unique id
+		setUniqueId(uuid);
+		// Set callback
+		setCallback(callback);
+		// Set loaded callbacks
+		setLoadedCallbacks(new ArrayList<>());
+		// Load data & create
+		loadData(create);
+	}
+
 	/**
 	 * Register loaded callback
 	 * @param Callback to register
@@ -185,6 +206,29 @@ public class BadOfflinePlayer
 	{
 		// New object
 		BadOfflinePlayer badOfflinePlayer = new BadOfflinePlayer(name, false);
+		// Data not found?
+		if (!badOfflinePlayer.isFound())
+		{
+			// Returns null
+			return null;
+		}
+		else
+		{
+			// Returns the object
+			return badOfflinePlayer;
+		}
+	}
+
+
+	/**
+	 * Get a BadOfflinePlayer object
+	 * @param UUID
+	 * @return a BadOfflinePlayer object
+	 */
+	public static BadOfflinePlayer get(UUID uuid)
+	{
+		// New object
+		BadOfflinePlayer badOfflinePlayer = new BadOfflinePlayer(uuid, false);
 		// Data not found?
 		if (!badOfflinePlayer.isFound())
 		{
@@ -413,10 +457,10 @@ public class BadOfflinePlayer
 
 				// Sleep 100 milliseconds
 				TimeUtils.sleep(100);
-				
+
 				// Load data
 				loadData(true);
-				
+
 				// If callback isn't null
 				if (callback != null)
 				{
@@ -448,8 +492,20 @@ public class BadOfflinePlayer
 	{
 		// New query
 		BasicDBObject query = new BasicDBObject();
-		// Query lower case name
-		query.append("name", getName().toLowerCase());
+		
+		// If the username isn't null
+		if (getName() != null)
+		{
+			// Add it to the query
+			query.append("name", getName().toLowerCase());
+		}
+		// If the unique ID isn't null
+		else if (getUniqueId() != null)
+		{
+			// Add it to the query
+			query.append("uniqueId", getUniqueId().toString().toLowerCase());
+		}
+		
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Get database collection
@@ -473,14 +529,14 @@ public class BadOfflinePlayer
 			setSettings(new BadPlayerSettings(getJsonElement("settings").getAsJsonObject()));
 			// Set punished
 			setPunished(new Punished(getJsonElement("punish").getAsJsonObject()));
-			
+
 			// If the permission manager exists
 			if (PermissionsManager.getManager() != null)
 			{
 				// Set permissions
 				setPermissions(new PermissionUser(getJsonElement("permissions").getAsJsonObject()));
 			}
-			
+
 			// Try to?
 			try
 			{
@@ -492,16 +548,16 @@ public class BadOfflinePlayer
 			{
 				// Ok that's right. It can be empty...
 			}
-			
+
 			// Set found
 			setFound(true);
-			
+
 		}
 		else
 		{
 			// Log => data doesn't exist
 			BadBungee.log(getName() + " doesn't exist in the player table.");
-			
+
 			// If we are allowed to create data
 			if (create)
 			{
@@ -546,7 +602,7 @@ public class BadOfflinePlayer
 				// Set new permission object
 				permissions = new PermissionUser(new HashMap<>(), new ArrayList<>());
 				// Set new settins
-				settings = new BadPlayerSettings();
+				settings = new BadPlayerSettings(new JsonObject());
 				// Set a random unique ID
 				uniqueId = UUID.randomUUID();
 				// Set the version
@@ -677,7 +733,7 @@ public class BadOfflinePlayer
 		// Put the user version
 		object.put("version", "0");
 		// TODO?
-		
+
 		// Returns the saved object
 		return object;
 	}

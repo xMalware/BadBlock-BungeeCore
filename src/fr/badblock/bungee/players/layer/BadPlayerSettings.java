@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
  * @author xMalware
  *
  */
-public final class BadPlayerSettings
+public class BadPlayerSettings
 {
 
 	/**
@@ -31,27 +31,16 @@ public final class BadPlayerSettings
 	public FriendListable	friendListable;
 
 	/**
-	 * Default values for each player
-	 */
-	public BadPlayerSettings()
-	{
-		// Set default partyable
-		partyable = Partyable.WITH_EVERYONE;
-		// Set default friend listable
-		friendListable = FriendListable.YES;
-	}
-
-	/**
 	 * Constructor
 	 * @param a JsonObject
 	 */
 	public BadPlayerSettings(JsonObject jsonObject)
 	{
 		// If the object has "partyable"
-		if (jsonObject.has("partyable"))
+		if (jsonObject.has("partyable") && !jsonObject.get("partyable").isJsonNull())
 		{
 			// Set the partyable
-			partyable = Partyable.getByString(jsonObject.get("partyable").toString());
+			partyable = Partyable.getByString(jsonObject.get("partyable").getAsString());
 		}
 		// Or
 		else
@@ -60,10 +49,10 @@ public final class BadPlayerSettings
 			partyable = Partyable.WITH_EVERYONE;
 		}
 		// If the object has "friendListable"
-		if (jsonObject.has("friendListable"))
+		if (jsonObject.has("friendListable") && !jsonObject.get("friendListable").isJsonNull())
 		{
 			// Set the friend listable
-			friendListable = FriendListable.getByString(jsonObject.get("friendListable").toString());
+			friendListable = FriendListable.getByString(jsonObject.get("friendListable").getAsString());
 		}
 		else
 		{
@@ -81,11 +70,11 @@ public final class BadPlayerSettings
 		// Create new DBObject
 		BasicDBObject query = new BasicDBObject();
 		// Put partyable
-		query.put("partyable", partyable.name());
+		query.put("partyable", partyable != null ? partyable.name() : null);
 		// Put friend listable
-		query.put("friendListable", friendListable.name());
+		query.put("friendListable", friendListable != null ? friendListable.name() : null);
 		// Returns DBObject
 		return query;
 	}
-	
+
 }
