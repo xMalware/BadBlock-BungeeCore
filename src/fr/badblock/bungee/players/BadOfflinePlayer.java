@@ -26,6 +26,7 @@ import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
 import fr.badblock.api.common.utils.permissions.PermissionsManager;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.ObjectUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
@@ -755,7 +756,7 @@ public class BadOfflinePlayer
 	public boolean isOnline()
 	{
 		// Existing in the map?
-		return BadPlayer.has(getName());
+		return BungeeManager.getInstance().hasUsername(getName());
 	}
 
 	/**
@@ -764,8 +765,22 @@ public class BadOfflinePlayer
 	 */
 	public BadPlayer getOnlineBadPlayer()
 	{
-		// If he's online, returns the BadPlayer object
-		return isOnline() ? BadPlayer.get(getName()) : null;
+		// If he's offline, returns null
+		if (!isOnline())
+		{
+			// Returns null
+			return null;
+		}
+		
+		// If he's online on this node
+		if (BadPlayer.has(getName().toLowerCase()))
+		{
+			// Returns the local player
+			return BadPlayer.get(getName());
+		}
+		
+		// Returns the BadPlayer object
+		return BungeeManager.getInstance().getBadPlayer(getName().toLowerCase());
 	}
 
 }

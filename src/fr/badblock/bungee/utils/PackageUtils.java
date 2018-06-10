@@ -7,8 +7,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
-import fr.badblock.bungee.modules.abstracts.BadCommand;
 import fr.badblock.bungee.modules.abstracts.BadListener;
+import fr.badblock.bungee.modules.commands.BadCommand;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class PackageUtils {

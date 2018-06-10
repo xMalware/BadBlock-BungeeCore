@@ -173,21 +173,25 @@ public class BungeeLoader
 		{
 			// Instanciate listeners/commmands
 			PackageUtils.instanciateListeners(getBadBungee(),
-					"fr.badblock.bungee.rabbit.listeners", // Rabbit listeners
-					
-					"fr.badblock.bungee.modules.admin.commands",
-					"fr.badblock.bungee.modules.badfriends.commands",
-					"fr.badblock.bungee.modules.basic.commands",
-					"fr.badblock.bungee.modules.friends.commands",
+					// Rabbit listeners
+					"fr.badblock.bungee.rabbit.listeners",
+
+					// Commands
+					"fr.badblock.bungee.modules.commands.admin",
+					"fr.badblock.bungee.modules.commands.badfriends",
+					"fr.badblock.bungee.modules.commands.basic",
+					"fr.badblock.bungee.modules.commands.basic.friends",
+					"fr.badblock.bungee.modules.commands.basic.party",
+					"fr.badblock.bungee.modules.commands.modo",
+					"fr.badblock.bungee.modules.commands.staff",
+
+					// Login
 					"fr.badblock.bungee.modules.login.antivpn",
 					"fr.badblock.bungee.modules.login.checkers",
 					"fr.badblock.bungee.modules.login.datamanager",
-					"fr.badblock.bungee.modules.modo.commands",
-					"fr.badblock.bungee.modules.party.commands",
 					"fr.badblock.bungee.modules.permissions",
-					"fr.badblock.bungee.modules.ping",
 					"fr.badblock.bungee.modules.punishments",
-					"fr.badblock.bungee.modules.staff.commands"
+					"fr.badblock.bungee.modules.ping"
 					);
 		}
 		// Error case
