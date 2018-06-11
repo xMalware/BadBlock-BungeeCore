@@ -166,6 +166,30 @@ public class Party
 	}
 
 	/**
+	 * Set user role
+	 * @param name
+	 * @param partyPlayerRole
+	 */
+	public void setRole(PartyPlayer partyPlayer, PartyPlayerRole partyPlayerRole)
+	{
+		// Null player
+		assert partyPlayer == null;
+		// Unknown player
+		assert !players.containsKey(partyPlayer.getName().toLowerCase());
+		// Unknown role
+		assert partyPlayerRole == null;
+		
+		// Set player role
+		partyPlayer.setRole(partyPlayerRole);
+		
+		// Put in map
+		players.put(partyPlayer.getName().toLowerCase(), partyPlayer);
+		
+		// Save the party
+		save();
+	}
+	
+	/**
 	 * Removethe player
 	 * @param Username
 	 */

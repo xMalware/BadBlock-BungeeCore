@@ -826,4 +826,54 @@ public class PartyMessages
 		I19n.sendMessage(proxiedPlayer, prefix + "remove.notenoughpermissions", null);
 	}
 
+	/**
+	 * Send modo usage
+	 * @param proxiedPlayer
+	 */
+	public void sendModoUsage(ProxiedPlayer proxiedPlayer)
+	{
+		// Send username
+		I19n.sendMessage(proxiedPlayer, prefix + "modo.usage", null);
+	}
+
+	/**
+	 * Send modo player not in group
+	 * @param proxiedPlayer
+	 */
+	public void sendModoPlayerNotInGroup(ProxiedPlayer proxiedPlayer)
+	{
+		// Send username
+		I19n.sendMessage(proxiedPlayer, prefix + "modo.playernotingroup", null);
+	}
+
+	/**
+	 * Send modo player not accepted
+	 * @param proxiedPlayer
+	 */
+	public void sendModoNotAccepted(ProxiedPlayer proxiedPlayer, String playerName)
+	{
+		// Send username
+		I19n.sendMessage(proxiedPlayer, prefix + "modo.notaccepted", null, playerName);
+	}
+
+	/**
+	 * Send modo set default
+	 * @param proxiedPlayer
+	 */
+	public void sendModoSetDefault(ProxiedPlayer proxiedPlayer, String playerName)
+	{
+		// Send username
+		I19n.sendMessage(proxiedPlayer, prefix + "modo.setdefault", null, playerName);
+	}
+	
+	/**
+	 * Send modo set modo
+	 * @param proxiedPlayer
+	 */
+	public void sendModoSetModo(ProxiedPlayer proxiedPlayer, String playerName)
+	{
+		// Send username
+		I19n.sendMessage(proxiedPlayer, prefix + "modo.setmodo", null, playerName);
+	}
+
 }

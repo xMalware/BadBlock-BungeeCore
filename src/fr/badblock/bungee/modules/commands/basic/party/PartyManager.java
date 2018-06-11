@@ -546,7 +546,7 @@ public class PartyManager
 					// So we stop there
 					return;
 				}
-				
+
 				// Get the BadPlayer object
 				BadPlayer badPlayer = BadPlayer.get(sender.getName());
 
@@ -558,7 +558,7 @@ public class PartyManager
 					// So we stop there
 					return;
 				}
-				
+
 				// Get the party player
 				PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
 
@@ -570,7 +570,7 @@ public class PartyManager
 					// So we stop there
 					return;
 				}
-				
+
 				// If the state isn't accepted
 				if (!partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
 				{
@@ -774,6 +774,126 @@ public class PartyManager
 				sender.connect(serverInfo);
 				// Send message
 				PartyManager.getMessages().sendTpTeleported(sender, badPlayer.getName());
+			}
+
+		});
+	}
+
+	/**
+	 * Set modo
+	 * @param sender
+	 * @param args
+	 */
+	public static void modo(ProxiedPlayer sender, String[] args)
+	{
+		// Ooh :(
+		if (args.length != 2)
+		{
+			// Send message
+			PartyManager.getMessages().sendModoUsage(sender);
+			// So we stop there
+			return;
+		}
+
+		// Raw type
+		String rawType = args[1];
+
+		// Get the party
+		PartyManager.getParty(sender.getName(), new Callback<Party>()
+		{
+
+			/**
+			 * When we receive the data
+			 */
+			@Override
+			public void done(Party party, Throwable error)
+			{
+
+				// If the party is null
+				if (party == null)
+				{
+					// Send message
+					PartyManager.getMessages().sendYouAreNotInParty(sender);
+					// So we stop there
+					return;
+				}
+
+				// Get current party player
+				PartyPlayer currentPartyPlayer = party.getPartyPlayer(sender.getName());
+
+				// If the current party player is null
+				if (currentPartyPlayer == null)
+				{
+					// Send message
+					PartyManager.getMessages().sendYouAreNotInParty(sender);
+					// So we stop there
+					return;
+				}
+				
+				// Get party player
+				PartyPlayer partyPlayer = party.getPartyPlayer(rawType);
+
+				// If the party player is null
+				if (partyPlayer == null)
+				{
+					// Send message
+					PartyManager.getMessages().sendModoPlayerNotInGroup(sender);
+					// So we stop there
+					return;
+				}
+				
+				// Player not accepted yet in group
+				if (!partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
+				{
+					// Send message
+					PartyManager.getMessages().sendModoNotAccepted(sender, rawType);
+					// So we stop there
+					return;
+				}
+				
+				// If the current party player isn't admin
+				if (!currentPartyPlayer.getRole().equals(PartyPlayerRole.ADMIN))
+				{
+					// Send message
+					PartyManager.getMessages().sendNotEnoughPermissions(sender);
+					// So we stop there
+					return;
+				}
+
+				// If he's acting on himself
+				if (currentPartyPlayer.getName().equalsIgnoreCase(sender.getName()))
+				{
+					// Send message
+					PartyManager.getMessages().sendTpCantActOnYourself(sender);
+					// So we stop there
+					return;
+				}
+				
+				// If the current party player isn't admin
+				if (partyPlayer.getRole().equals(PartyPlayerRole.ADMIN))
+				{
+					// Send message
+					PartyManager.getMessages().sendNotEnoughPermissions(sender);
+					// So we stop there
+					return;
+				}
+
+				// If the current party player is moderator
+				if (partyPlayer.getRole().equals(PartyPlayerRole.MODO))
+				{
+					// Set default
+					party.setRole(partyPlayer, PartyPlayerRole.DEFAULT);
+					// Send message
+					PartyManager.getMessages().sendModoSetDefault(sender, partyPlayer.getName());
+					// So we stop there
+					return;
+				}
+				
+				// Set moderator
+				party.setRole(partyPlayer, PartyPlayerRole.MODO);
+				// Send message
+				PartyManager.getMessages().sendModoSetModo(sender, partyPlayer.getName());
+				
 			}
 
 		});

@@ -139,7 +139,7 @@ public class FriendCommand extends BadCommand
 	}
 
 	/**
-	 * Change the permission to add as a friend
+	 * Change the mod state
 	 * @param sender
 	 * @param args
 	 */

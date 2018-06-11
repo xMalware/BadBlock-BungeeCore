@@ -102,6 +102,12 @@ public class PartyCommand extends BadCommand
 			PartyManager.remove(proxiedPlayer, args);
 			break;
 			
+		// Set as modo
+		case "modo":
+		case "mod":
+			PartyManager.modo(proxiedPlayer, args);
+			break;
+			
 		// List
 		case "list":
 		case "liste":
