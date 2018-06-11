@@ -141,6 +141,16 @@ public class PartyManager
 			// So we stop there
 			return;
 		}
+		
+		// Set a flag name
+		String flagName = "party_invite_" + invited;
+		
+		// If the flag exists
+		if (currPlayer.getFlags().has(flagName))
+		{
+			// So we stop there
+			return;
+		}
 
 		// Get the party
 		PartyManager.getParty(sender.getName(), new Callback<Party>()
@@ -187,6 +197,8 @@ public class PartyManager
 					// Null party player
 					else
 					{
+						// Add flag
+						currPlayer.getFlags().set(flagName, 60 * 2 * 1000);
 						// Invite the party player
 						party.invite(otherPlayer.getName(), PartyPlayerRole.DEFAULT);
 						// Send the message

@@ -209,8 +209,15 @@ public class Party
 			// Put the unique id
 			object.put("_id", uuid);
 		}
+		
+		// Create a map
+		Map<String, DBObject> map = new HashMap<>();
+		
+		// Put all players in the map
+		players.entrySet().forEach(entry -> map.put(entry.getKey(), entry.getValue().toObject()));
+		
 		// Put the player map
-		object.put("players", players);
+		object.put("players", map);
 
 		// Returns the object
 		return object;

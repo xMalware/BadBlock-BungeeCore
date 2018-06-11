@@ -21,7 +21,7 @@ import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketEncoder;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketMessage;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketType;
-import fr.badblock.api.common.utils.general.GlobalFlags;
+import fr.badblock.api.common.utils.flags.GlobalFlags;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacket;
 import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacketType;

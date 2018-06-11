@@ -9,6 +9,7 @@ import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketEncoder;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketMessage;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketType;
 import fr.badblock.api.common.utils.GsonUtils;
+import fr.badblock.api.common.utils.flags.FlagObject;
 import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
@@ -47,7 +48,12 @@ public final class BadPlayer extends BadOfflinePlayer
 	 * @param Set the new BadPlayer map
 	 * @return Returns the new BadPlayer map
 	 */
-	private static Map<String, BadPlayer> maps 			= new HashMap<>();
+	private static Map<String, BadPlayer>	maps 			= new HashMap<>();
+	
+	/**
+	 * Temp flags
+	 */
+	private FlagObject						flags;
 
 	/**
 	 * Constructor

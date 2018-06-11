@@ -1,5 +1,8 @@
 package fr.badblock.bungee.modules.commands.basic.party;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,7 +56,30 @@ public class PartyPlayer
 	 */
 	public PartyPlayer(String name, PartyPlayerRole role, PartyPlayerState state)
 	{
+		// use constructor with lombok (with follow as default)
 		this(name, role, state, true);
+	}
+	
+	/**
+	 * Returns the object as a database object
+	 * @return A database object
+	 */
+	public DBObject toObject()
+	{
+		// Create a basic database object
+		BasicDBObject dbObject = new BasicDBObject();
+		
+		// Put the name
+		dbObject.put("name", getName());
+		// Put the role
+		dbObject.put("role", role != null ? role.name() : null);
+		// Put the state
+		dbObject.put("state", state != null ? state.name() : null);
+		// Put the follow state
+		dbObject.put("follow", follow);
+		
+		// Returns the database object
+		return dbObject;
 	}
 	
 }
