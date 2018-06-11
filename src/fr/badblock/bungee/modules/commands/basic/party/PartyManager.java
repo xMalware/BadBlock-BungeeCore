@@ -167,6 +167,8 @@ public class PartyManager
 				// If party is null
 				if (party == null)
 				{
+					// Set flag
+					currPlayer.getFlags().set(flagName, 60 * 2 * 1000);
 					// Create party
 					party = new Party(sender.getName(), invited);
 					// Insert into the database
@@ -199,7 +201,7 @@ public class PartyManager
 					// Null party player
 					else
 					{
-						// Add flag
+						// Set flag
 						currPlayer.getFlags().set(flagName, 60 * 2 * 1000);
 						// Invite the party player
 						party.invite(otherPlayer.getName(), PartyPlayerRole.DEFAULT);
@@ -283,8 +285,6 @@ public class PartyManager
 				if (party == null)
 				{
 					// Send expire message
-					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
-					// Send another expire message..
 					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
 					// So we stop there
 					return;
@@ -600,8 +600,12 @@ public class PartyManager
 				DBCollection collection = db.getCollection("parties");
 				// Create empty query
 				BasicDBObject query = new BasicDBObject();
+				// Create a player query
+				BasicDBObject playerQuery = new BasicDBObject();
+				// Append player name
+				playerQuery.append("name", player.toLowerCase());
 				// Append player map
-				query.append("players", player.toLowerCase());
+				query.append("players", playerQuery);
 				// Cursor
 				DBCursor cursor = collection.find(query);
 

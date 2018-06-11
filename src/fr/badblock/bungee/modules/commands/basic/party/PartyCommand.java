@@ -100,6 +100,7 @@ public class PartyCommand extends BadCommand
 		case "supprimer":
 		case "kick":
 			PartyManager.remove(proxiedPlayer, args);
+			break;
 		
 		// Teleport a player
 		case "tp":
@@ -107,6 +108,7 @@ public class PartyCommand extends BadCommand
 		case "connect":
 		case "c":
 			PartyManager.tp(proxiedPlayer, args);
+			break;
 
 		// Unknown subcommand
 		default:
