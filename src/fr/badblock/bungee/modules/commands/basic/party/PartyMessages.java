@@ -306,7 +306,7 @@ public class PartyMessages
 	public void sendTpNotLogged(ProxiedPlayer proxiedPlayer, String playerName)
 	{
 		// Send message
-		I19n.sendMessage(proxiedPlayer, prefix + "tp.notlogged", null);
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.notlogged", null, playerName);
 	}
 	
 	/**
@@ -327,27 +327,24 @@ public class PartyMessages
 	public void sendToggleUsage(BadPlayer badPlayer)
 	{
 		// Get the intro message
-		String intro = badPlayer.getTranslatedMessage(prefix + "toggle.intro", null);
+		String intro = badPlayer.getTranslatedMessage(prefix + "toggle.set.intro", null);
 		// Get 'with_everyone' message
-		String with_everyone = badPlayer.getTranslatedMessage(prefix + "toggle.with_everyone", null);
+		String with_everyone = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_everyone", null);
 		// Get 'with_everyone_hover' message
-		String with_everyone_hover = badPlayer.getTranslatedMessage(prefix + "toggle.with_everyone_hover", null);
+		String with_everyone_hover = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_everyone_hover", null);
 		// Get 'with_only_his_friends' message
-		String with_only_his_friends = badPlayer.getTranslatedMessage(prefix + "toggle.with_only_his_friends", null);
+		String with_only_his_friends = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_only_his_friends", null);
 		// Get 'with_only_his_friends_hover' message
-		String with_only_his_friends_hover = badPlayer.getTranslatedMessage(prefix + "toggle.with_only_his_friends_hover", null);
+		String with_only_his_friends_hover = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_only_his_friends_hover", null);
 		// Get 'with_nobody' message
-		String with_nobody = badPlayer.getTranslatedMessage(prefix + "toggle.with_nobody", null);
+		String with_nobody = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_nobody", null);
 		// Get 'with_nobody_hover' message
-		String with_nobody_hover = badPlayer.getTranslatedMessage(prefix + "toggle.with_nobody_hover", null);
+		String with_nobody_hover = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_nobody_hover", null);
 		
 		// Create McJson message
-		McJson json = new McJsonFactory(intro).
-				finaliseAndInitNewComponent("\n\n     ").finaliseComponent().
-				initNewComponent(with_everyone).setHoverText(with_everyone_hover).setClickCommand("/party toggle with_everyone").
-				finaliseAndInitNewComponent("     ").finaliseComponent().
-				initNewComponent(with_only_his_friends).setHoverText(with_only_his_friends_hover).setClickCommand("/party toggle with_only_his_friends").
-				finaliseAndInitNewComponent("     ").finaliseComponent().
+		McJson json = new McJsonFactory(intro).finaliseComponent().
+				initNewComponent(with_everyone).setHoverText(with_everyone_hover).setClickCommand("/party toggle with_everyone").finaliseComponent().
+				initNewComponent(with_only_his_friends).setHoverText(with_only_his_friends_hover).setClickCommand("/party toggle with_only_his_friends").finaliseComponent().
 				initNewComponent(with_nobody).setHoverText(with_nobody_hover).setClickCommand("/party toggle with_nobody").
 				build();
 		
@@ -374,7 +371,8 @@ public class PartyMessages
 	public void sendToggleAlready(ProxiedPlayer proxiedPlayer, String type)
 	{
 		// Send message
-		I19n.sendMessage(proxiedPlayer, prefix + "toggle.already", null, I19n.getMessage(proxiedPlayer, prefix + "toggle." + type, null));
+		I19n.sendMessage(proxiedPlayer, prefix + "toggle.already", new int[] { 0 },
+				I19n.getMessage(proxiedPlayer, prefix + "toggle." + type, null));
 	}
 	
 	/**

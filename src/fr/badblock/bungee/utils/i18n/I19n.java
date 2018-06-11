@@ -3,6 +3,7 @@ package fr.badblock.bungee.utils.i18n;
 import fr.badblock.api.common.utils.i18n.I18n;
 import fr.badblock.api.common.utils.i18n.Locale;
 import fr.badblock.bungee.players.BadPlayer;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -26,7 +27,7 @@ public class I19n
 				{
 					continue; // something gone wrong
 				}
-				resultArgs[indexToTranslate] = I18n.getInstance().get(locale, resultArgs[indexToTranslate].toString())[0];
+				resultArgs[indexToTranslate] = ChatColor.translateAlternateColorCodes('&', I18n.getInstance().get(locale, resultArgs[indexToTranslate].toString())[0]);
 			}
 		}
 		return I18n.getInstance().get(locale, key, resultArgs);

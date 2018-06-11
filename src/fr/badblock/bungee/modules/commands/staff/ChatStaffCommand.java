@@ -56,7 +56,7 @@ public class ChatStaffCommand extends BadCommand
 		// The message is retrieved by attaching each word of the message
 		String message = StringUtils.join(args, " ");
 
-		// The colors on the message are removed
+		// The colors in the message are removed
 		message = ChatColor.stripColor(message);
 
 		// Init raw prefix
