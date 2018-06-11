@@ -1,5 +1,7 @@
 package fr.badblock.bungee.modules.commands.basic.party;
 
+import java.util.Map.Entry;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -71,13 +73,25 @@ public class PartyManager
 					}
 
 					// Get the party player
-					PartyPlayer partyPlayer = party.getPlayers().get(sender.getName());
+					PartyPlayer partyPlayer = party.getPlayers().get(sender.getName().toLowerCase());
+
+					// Get BadPlayer
+					BadPlayer badPlayer = BadPlayer.get(sender);
+
+					// If the bad player is null
+					if (badPlayer == null)
+					{
+						// Send a message
+						messages.sendErrorOccurred(sender, 2);
+						// So we stop there
+						return;
+					}
 
 					// If the party player is null
 					if (partyPlayer == null)
 					{
 						// Send a message
-						messages.sendErrorOccurred(sender, 2);
+						messages.sendErrorOccurred(sender, 3);
 						// So we stop there
 						return;
 					}
@@ -89,6 +103,12 @@ public class PartyManager
 
 					// Send follow message
 					messages.sendFollow(sender, message);
+
+					// Send broadcast message
+					party.getPlayers().entrySet().parallelStream().filter(entry -> entry.getValue().getState().equals(PartyPlayerState.ACCEPTED) &&
+							BungeeManager.getInstance().hasUsername(entry.getKey())).forEach(entry -> 
+							PartyManager.getMessages().sendFollowBroadcast(BungeeManager.getInstance().getBadPlayer(entry.getKey()), sender.getName(), message));
+
 					// Set follow
 					partyPlayer.setFollow(!follow);
 
@@ -132,7 +152,7 @@ public class PartyManager
 			PartyManager.getMessages().sendCantActOnYourself(sender);
 			return;
 		}
-		
+
 		// If they're not in the same server
 		if (otherPlayer == null || !currPlayer.getCurrentServer().equals(otherPlayer.getCurrentServer()))
 		{
@@ -141,10 +161,10 @@ public class PartyManager
 			// So we stop there
 			return;
 		}
-		
+
 		// Set a flag name
 		String flagName = "party_invite_" + invited;
-		
+
 		// If the flag exists
 		if (currPlayer.getFlags().has(flagName))
 		{
@@ -321,6 +341,73 @@ public class PartyManager
 	}
 
 	/**
+	 * Leave
+	 * @param sender
+	 * @param args
+	 */
+	public static void leave(ProxiedPlayer sender, String[] args)
+	{
+		// Todo
+		PartyManager.getParty(sender.getName(), new Callback<Party>()
+		{
+
+			/**
+			 * When we receive the data
+			 */
+			@Override
+			public void done(Party party, Throwable error)
+			{
+
+				// If the party is null
+				if (party == null)
+				{
+					// Send message
+					PartyManager.getMessages().sendRemoveYouAreNotInGroup(sender);
+					// So we stop there
+					return;
+				}
+
+				// Get the party player
+				PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
+
+				// If the player is admin
+				if (partyPlayer.getRole().equals(PartyPlayerRole.ADMIN))
+				{
+					// Broadcast
+					party.getPlayers().entrySet().parallelStream().filter(entry -> entry.getValue().getState().equals(PartyPlayerState.ACCEPTED) &&
+							BungeeManager.getInstance().hasUsername(entry.getKey())).forEach(entry -> 
+							PartyManager.getMessages().sendOwnerQuit(BungeeManager.getInstance().getBadPlayer(entry.getKey()), sender.getName()));
+					// Delete the party
+					party.remove();
+					// So we stop there
+					return;
+				}
+
+				// Remove player
+				party.remove(sender.getName());
+
+				// Send message
+				if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
+				{
+					// Send remove message
+					PartyManager.getMessages().sendLeaveLeft(sender);
+					// Broadcast
+					party.getPlayers().entrySet().parallelStream().filter(entry -> entry.getValue().getState().equals(PartyPlayerState.ACCEPTED) &&
+							BungeeManager.getInstance().hasUsername(entry.getKey())).forEach(entry ->
+							PartyManager.getMessages().sendLeaveLeftOther(BungeeManager.getInstance().getBadPlayer(entry.getKey()), sender.getName()));
+				}
+				else
+				{
+					// Send cancelled message
+					PartyManager.getMessages().sendRemoveCancelled(sender, partyPlayer.getName());
+				}
+
+			}
+
+		});
+	}
+
+	/**
 	 * Remove
 	 * @param sender
 	 * @param args
@@ -370,11 +457,41 @@ public class PartyManager
 				// Get the party player
 				PartyPlayer partyPlayer = party.getPartyPlayer(toRemove);
 
+				// Get current party player
+				PartyPlayer currentPartyPlayer = party.getPartyPlayer(sender.getName());
+
+				// If the current party player is null
+				if (currentPartyPlayer == null)
+				{
+					// Send message
+					PartyManager.getMessages().sendErrorOccurred(sender, 1);
+					// So we stop there
+					return;
+				}
+
 				// If the party player is null
 				if (partyPlayer == null)
 				{
 					// Send message
 					PartyManager.getMessages().sendRemovePlayerNotInGroup(sender, toRemove);
+					// So we stop there
+					return;
+				}
+
+				// If the player is modo
+				if (!currentPartyPlayer.getRole().equals(PartyPlayerRole.MODO) && !currentPartyPlayer.getRole().equals(PartyPlayerRole.ADMIN))
+				{
+					// Send message
+					PartyManager.getMessages().sendNotEnoughPermissions(sender);
+					// So we stop there
+					return;
+				}
+
+				// Check permission
+				if (currentPartyPlayer.getRole().equals(PartyPlayerRole.MODO) && !partyPlayer.getRole().equals(PartyPlayerRole.DEFAULT))
+				{
+					// Send message
+					PartyManager.getMessages().sendNotEnoughPermissions(sender);
 					// So we stop there
 					return;
 				}
@@ -385,15 +502,132 @@ public class PartyManager
 				// Send message
 				if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
 				{
-					// Send cancelled message
-					PartyManager.getMessages().sendRemoveCancelled(sender, partyPlayer.getName());
+					// Send remove message
+					PartyManager.getMessages().sendRemoveRemoved(sender, partyPlayer.getName());
+					// Broadcast
+					party.getPlayers().entrySet().parallelStream().filter(entry -> entry.getValue().getState().equals(PartyPlayerState.ACCEPTED) &&
+							BungeeManager.getInstance().hasUsername(entry.getKey())).forEach(entry ->
+							PartyManager.getMessages().sendRemovedBroadcast(BungeeManager.getInstance().getBadPlayer(entry.getKey()), partyPlayer.getName(),
+									sender.getName()));
 				}
 				else
 				{
-					// Send removed message
-					PartyManager.getMessages().sendRemoveRemoved(sender, partyPlayer.getName());
+					// Send cancelled message
+					PartyManager.getMessages().sendRemoveCancelled(sender, partyPlayer.getName());
 				}
 
+			}
+
+		});
+	}
+
+	/**
+	 * Send party list
+	 * @param sender
+	 */
+	public static void list(ProxiedPlayer sender)
+	{
+		// Get party
+		PartyManager.getParty(sender.getName(), new Callback<Party>()
+		{
+
+			/**
+			 * When we receive the data
+			 */
+			@Override
+			public void done(Party party, Throwable error)
+			{
+
+				// If the party is null
+				if (party == null)
+				{
+					// Send message
+					PartyManager.getMessages().sendYouAreNotInParty(sender);
+					// So we stop there
+					return;
+				}
+				
+				// Get the BadPlayer object
+				BadPlayer badPlayer = BadPlayer.get(sender.getName());
+
+				// If the BadPlayer object is null
+				if (badPlayer == null)
+				{
+					// Send message
+					PartyManager.getMessages().sendErrorOccurred(sender, 1);
+					// So we stop there
+					return;
+				}
+				
+				// Get the party player
+				PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
+
+				// If the current party player is null
+				if (partyPlayer == null)
+				{
+					// Send message
+					PartyManager.getMessages().sendErrorOccurred(sender, 2);
+					// So we stop there
+					return;
+				}
+				
+				// If the state isn't accepted
+				if (!partyPlayer.getState().equals(PartyPlayerState.ACCEPTED))
+				{
+					// Send message
+					PartyManager.getMessages().sendYouAreNotInParty(sender);
+					// So we stop there
+					return;
+				}
+
+				// Send intro list
+				PartyManager.getMessages().sendIntroList(sender, party.getPlayers().size());
+
+				// For each player
+				for (Entry<String, PartyPlayer> players : party.getPlayers().entrySet())
+				{
+					// Create canRemove var
+					boolean canRemove = false;
+
+					// If the player role is admin
+					if (partyPlayer.getRole().equals(PartyPlayerRole.ADMIN))
+					{
+						// So he can remove
+						canRemove = true;
+					}
+
+					// If the player role is modo & the other player isn't modo/admin
+					if (partyPlayer.getRole().equals(PartyPlayerRole.MODO) && players.getValue().getRole().equals(PartyPlayerRole.DEFAULT))
+					{
+						// So he can remove
+						canRemove = true;
+					}
+
+					// If the player role is admin
+					if (players.getValue().getRole().equals(PartyPlayerRole.ADMIN))
+					{
+						// Send admin party list
+						PartyManager.getMessages().sendPartyListAdmin(badPlayer, canRemove, players.getValue().getName(), players.getValue().isFollow());
+					}
+					// If the player role is modo
+					else if (players.getValue().getRole().equals(PartyPlayerRole.MODO))
+					{
+						// Send modo party list
+						PartyManager.getMessages().sendPartyListModo(badPlayer, canRemove, players.getValue().getName(), players.getValue().isFollow());
+					}
+					// If the player state is waiting
+					else if (players.getValue().getState().equals(PartyPlayerState.WAITING))
+					{
+						// Send waiting party list
+						PartyManager.getMessages().sendPartyListWaiting(badPlayer, canRemove, players.getValue().getName());
+					}
+					// If the player state is accepted
+					else if (players.getValue().getState().equals(PartyPlayerState.ACCEPTED))
+					{
+						// Send accepted party list
+						PartyManager.getMessages().sendPartyListAccepted(badPlayer, canRemove, players.getValue().getName(), players.getValue().isFollow());
+					}
+				}
 			}
 
 		});
@@ -462,6 +696,9 @@ public class PartyManager
 				}
 
 				// Get the BadPlayer object
+				BadPlayer currPlayer = bungeeManager.getBadPlayer(sender.getName());
+
+				// Get the BadPlayer object
 				BadPlayer badPlayer = bungeeManager.getBadPlayer(toTp);
 
 				// If the BadPlayer object is null
@@ -473,11 +710,20 @@ public class PartyManager
 					return;
 				}
 
-				// Get last server
-				String lastServer = badPlayer.getLastServer();
+				// If he's acting on himself
+				if (currPlayer.getName().equalsIgnoreCase(sender.getName()))
+				{
+					// Send message
+					PartyManager.getMessages().sendTpCantActOnYourself(sender);
+					// So we stop there
+					return;
+				}
+
+				// Get current server
+				String currentServer = badPlayer.getCurrentServer();
 
 				// Unknown server to teleport (null)
-				if (lastServer == null)
+				if (currentServer == null)
 				{
 					// Send message
 					PartyManager.getMessages().sendTpUnknownServer(sender);
@@ -486,7 +732,7 @@ public class PartyManager
 				}
 
 				// Unknown server to teleport (empty)
-				if (lastServer.isEmpty())
+				if (currentServer.isEmpty())
 				{
 					// Send message
 					PartyManager.getMessages().sendTpUnknownServer(sender);
@@ -504,13 +750,22 @@ public class PartyManager
 				}
 
 				// Get server
-				ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(lastServer);
+				ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(currentServer);
 
 				// Unknown server
 				if (serverInfo == null)
 				{
 					// Send message
 					PartyManager.getMessages().sendTpUnknownServer(sender);
+					// So we stop there
+					return;
+				}
+
+				// If he's on the same server
+				if (currPlayer.getCurrentServer() != null && currPlayer.getCurrentServer().equals(currentServer))
+				{
+					// Send message
+					PartyManager.getMessages().sendTpSameServer(sender, badPlayer.getName());
 					// So we stop there
 					return;
 				}
@@ -599,13 +854,7 @@ public class PartyManager
 				// Get the collection
 				DBCollection collection = db.getCollection("parties");
 				// Create empty query
-				BasicDBObject query = new BasicDBObject();
-				// Create a player query
-				BasicDBObject playerQuery = new BasicDBObject();
-				// Append player name
-				playerQuery.append("name", player.toLowerCase());
-				// Append player map
-				query.append("players", playerQuery);
+				DBObject query = new BasicDBObject("players." + player.toLowerCase(), new BasicDBObject("$exists", true));
 				// Cursor
 				DBCursor cursor = collection.find(query);
 
@@ -653,6 +902,39 @@ public class PartyManager
 	}
 
 	/**
+	 * Remove party data
+	 * @param party
+	 */
+	public static void delete(Party party)
+	{
+		// Mongo service
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		// Use async mongo
+		mongoService.useAsyncMongo(new MongoMethod(mongoService)
+		{
+			/**
+			 * Asynchronously
+			 */
+			@Override
+			public void run(MongoService mongoService)
+			{
+				// Get the database
+				DB db = mongoService.getDb();
+				// Get the collection
+				DBCollection collection = db.getCollection("parties");
+				// New query
+				BasicDBObject query = new BasicDBObject();
+
+				// Set the id
+				query.put("uuid", party.getUuid());
+
+				// Update in the collection
+				collection.remove(query);
+			}
+		});
+	}
+
+	/**
 	 * Update party data
 	 * @param party
 	 */
@@ -677,10 +959,13 @@ public class PartyManager
 				BasicDBObject query = new BasicDBObject();
 
 				// Set the id
-				query.put("_id", party.getUuid());
+				query.put("uuid", party.getUuid());
+
+				// Set the updater as a setter
+				BasicDBObject updater = new BasicDBObject("$set", party.toObject());
 
 				// Update in the collection
-				collection.update(query, party.toObject());
+				collection.update(query, updater);
 			}
 		});
 	}

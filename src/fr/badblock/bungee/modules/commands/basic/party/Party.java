@@ -3,6 +3,7 @@ package fr.badblock.bungee.modules.commands.basic.party;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
@@ -51,6 +52,8 @@ public class Party
 	 */
 	public Party(String leader)
 	{
+		// Set UUID
+		uuid = UUID.randomUUID().toString();
 		// Create a new map
 		players = new HashMap<>();
 		// Add the leader as admin
@@ -77,7 +80,7 @@ public class Party
 	public Party(DBObject dbObject)
 	{
 		// Set the unique id
-		uuid = dbObject.get("_id").toString();
+		uuid = dbObject.get("uuid").toString();
 		// Set the player map
 		players = GsonUtils.getGson().fromJson(dbObject.get("players").toString(), collectionType);
 	}
@@ -191,6 +194,22 @@ public class Party
 		// Update the party
 		PartyManager.update(this);
 	}
+	
+	/**
+	 * Remove the party
+	 */
+	public void remove()
+	{
+		// If the unique id is null
+		if (uuid == null)
+		{
+			// So we stop there
+			return;
+		}
+		
+		// Remove the party
+		PartyManager.delete(this);
+	}
 
 	/**
 	 * To object
@@ -207,7 +226,7 @@ public class Party
 		if (uuid != null)
 		{
 			// Put the unique id
-			object.put("_id", uuid);
+			object.put("uuid", uuid);
 		}
 		
 		// Create a map

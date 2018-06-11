@@ -37,7 +37,16 @@ public class I19n
 	{
 		if (commandSender instanceof ProxiedPlayer)
 		{
-			Locale locale = BadPlayer.get((ProxiedPlayer) commandSender).getLocale();
+			BadPlayer badPlayer = BadPlayer.get((ProxiedPlayer) commandSender);
+			Locale locale = null;
+			if (badPlayer != null)
+			{
+				locale = badPlayer.getLocale();
+			}
+			else
+			{
+				locale = Locale.FRENCH_FRANCE;
+			}
 			return getMessages(locale, key, indexesToTranslate, args);
 		}
 		return getMessages(I18n.getDefaultLocale(), key, indexesToTranslate, args);

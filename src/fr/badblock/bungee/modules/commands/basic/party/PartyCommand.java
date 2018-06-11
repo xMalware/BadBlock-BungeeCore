@@ -101,6 +101,19 @@ public class PartyCommand extends BadCommand
 		case "kick":
 			PartyManager.remove(proxiedPlayer, args);
 			break;
+			
+		// List
+		case "list":
+		case "liste":
+			PartyManager.list(proxiedPlayer);
+			break;
+			
+		// Leave
+		case "leave":
+		case "quit":
+		case "quitter":
+			PartyManager.leave(proxiedPlayer, args);
+			break;
 		
 		// Teleport a player
 		case "tp":

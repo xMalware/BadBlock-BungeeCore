@@ -1,5 +1,6 @@
 package fr.badblock.bungee.modules.commands.basic.party;
 
+import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.i18n.I19n;
 import fr.badblock.bungee.utils.mcjson.McJson;
@@ -56,6 +57,280 @@ public class PartyMessages
 	}
 
 	/**
+	 * Send party list admin
+	 * @param Can remove the player
+	 * @param The ProxiedPlayer object
+	 * @param The player name
+	 * @param Follow
+	 */
+	public void sendPartyListAdmin(BadPlayer badPlayer, boolean canRemove, String playerName, boolean follow)
+	{
+		// Create the state name
+		String stateName = "";
+		// Create state message
+		String state = "";
+		// Create state hover
+		String state_hover = "";
+
+		// If he's online
+		if (BungeeManager.getInstance().hasUsername(playerName))
+		{
+			// Set as online
+			stateName = "online";
+		}
+		else
+		{
+			// Set as offline
+			stateName = "offline";
+		}
+
+		// Set state
+		state = badPlayer.getTranslatedMessage(prefix + "list." + stateName, null, playerName);
+		// Set state hover
+		state_hover = badPlayer.getTranslatedMessage(prefix + "list." + stateName + "_hover", null, playerName);
+
+		// Get the admin message
+		String admin = badPlayer.getTranslatedMessage(prefix + "list.admin", null, playerName);
+		// Get 'follow_hover' message
+		String mfollow = badPlayer.getTranslatedMessage(prefix + "list." + (!follow ? "dont" : "") + "follow", null, playerName);
+		// Get 'decline' message
+		String mfollow_hover = badPlayer.getTranslatedMessage(prefix + "list." + (!follow ? "dont" : "") + "follow_hover", null, playerName);
+
+		// Create McJson message
+		McJsonFactory jsonFactory = new McJsonFactory(state).setHoverText(state_hover).finaliseComponent().initNewComponent(admin).finaliseComponent().
+				initNewComponent(mfollow).setHoverText(mfollow_hover).finaliseComponent();
+
+		// If he can remove
+		if (canRemove)
+		{
+			// Create spacer message
+			String spacer = badPlayer.getTranslatedMessage(prefix + "list.spacer", null);
+			// Create remove message
+			String remove = badPlayer.getTranslatedMessage(prefix + "list.remove", null, playerName);
+			// Create remove hover message
+			String remove_hover = badPlayer.getTranslatedMessage(prefix + "list.remove_hover", null, playerName);
+			// Set command
+			String command = badPlayer.getName().equalsIgnoreCase(playerName) ? "/party leave" : "/party remove " + playerName;
+			// Append to the message
+			jsonFactory = jsonFactory.initNewComponent(spacer).finaliseComponent().initNewComponent(remove).setHoverText(remove_hover)
+					.setClickCommand(command).finaliseComponent();
+		}
+
+		// Build
+		McJson json = jsonFactory.build();
+
+		// Send the translated message
+		badPlayer.sendTranslatedOutgoingMCJson(json);
+	}
+
+	/**
+	 * Send party list modo
+	 * @param Can remove the player
+	 * @param The ProxiedPlayer object
+	 * @param The player name
+	 * @param Follow
+	 */
+	public void sendPartyListModo(BadPlayer badPlayer, boolean canRemove, String playerName, boolean follow)
+	{
+		// Create the state name
+		String stateName = "";
+		// Create state message
+		String state = "";
+		// Create state hover
+		String state_hover = "";
+
+		// If he's online
+		if (BungeeManager.getInstance().hasUsername(playerName))
+		{
+			// Set as online
+			stateName = "online";
+		}
+		else
+		{
+			// Set as offline
+			stateName = "offline";
+		}
+
+		// Set state
+		state = badPlayer.getTranslatedMessage(prefix + "list." + stateName, null, playerName);
+		// Set state hover
+		state_hover = badPlayer.getTranslatedMessage(prefix + "list." + stateName + "_hover", null, playerName);
+
+		// Get the modo message
+		String modo = badPlayer.getTranslatedMessage(prefix + "list.modo", null, playerName);
+		// Get 'follow_hover' message
+		String mfollow = badPlayer.getTranslatedMessage(prefix + "list.follow", null, playerName);
+		// Get 'decline' message
+		String mfollow_hover = badPlayer.getTranslatedMessage(prefix + "list.follow_hover", null, playerName);
+
+		// Create McJson message
+		McJsonFactory jsonFactory = new McJsonFactory(state).setHoverText(state_hover).finaliseComponent().initNewComponent(modo).finaliseComponent().
+				initNewComponent(mfollow).setHoverText(mfollow_hover).finaliseComponent();
+
+		// If he can remove
+		if (canRemove)
+		{
+			// Create spacer message
+			String spacer = badPlayer.getTranslatedMessage(prefix + "list.spacer", null);
+			// Create remove message
+			String remove = badPlayer.getTranslatedMessage(prefix + "list.remove", null, playerName);
+			// Create remove hover message
+			String remove_hover = badPlayer.getTranslatedMessage(prefix + "list.remove_hover", null, playerName);
+			// Set command
+			String command = badPlayer.getName().equalsIgnoreCase(playerName) ? "/party leave" : "/party remove " + playerName;
+			// Append to the message
+			jsonFactory = jsonFactory.initNewComponent(spacer).finaliseComponent().initNewComponent(remove).setHoverText(remove_hover)
+					.setClickCommand(command).finaliseComponent();
+		}
+
+		// Build
+		McJson json = jsonFactory.build();
+
+		// Send the translated message
+		badPlayer.sendTranslatedOutgoingMCJson(json);
+	}
+
+	/**
+	 * Send party list waiting
+	 * @param Can remove the player
+	 * @param The ProxiedPlayer object
+	 * @param The player name
+	 * @param Follow
+	 */
+	public void sendPartyListWaiting(BadPlayer badPlayer, boolean canRemove, String playerName)
+	{
+		// Create the state name
+		String stateName = "";
+		// Create state message
+		String state = "";
+		// Create state hover
+		String state_hover = "";
+
+		// If he's online
+		if (BungeeManager.getInstance().hasUsername(playerName))
+		{
+			// Set as online
+			stateName = "online";
+		}
+		else
+		{
+			// Set as offline
+			stateName = "offline";
+		}
+
+		// Set state
+		state = badPlayer.getTranslatedMessage(prefix + "list." + stateName, null, playerName);
+		// Set state hover
+		state_hover = badPlayer.getTranslatedMessage(prefix + "list." + stateName + "_hover", null, playerName);
+
+		// Get the waiting message
+		String waiting = badPlayer.getTranslatedMessage(prefix + "list.waiting", null, playerName);
+
+		// Create McJson message
+		McJsonFactory jsonFactory = new McJsonFactory(state).setHoverText(state_hover).finaliseComponent().initNewComponent(waiting).finaliseComponent();
+
+		// If he can remove
+		if (canRemove)
+		{
+			// Create spacer message
+			String spacer = badPlayer.getTranslatedMessage(prefix + "list.spacer", null);
+			// Create remove message
+			String remove = badPlayer.getTranslatedMessage(prefix + "list.cancel", null, playerName);
+			// Create remove hover message
+			String remove_hover = badPlayer.getTranslatedMessage(prefix + "list.cancel_hover", null, playerName);
+			// Set command
+			String command = badPlayer.getName().equalsIgnoreCase(playerName) ? "/party leave" : "/party remove " + playerName;
+			// Append to the message
+			jsonFactory = jsonFactory.initNewComponent(spacer).finaliseComponent().initNewComponent(remove).setHoverText(remove_hover)
+					.setClickCommand(command).finaliseComponent();
+		}
+
+		// Build
+		McJson json = jsonFactory.build();
+
+		// Send the translated message
+		badPlayer.sendTranslatedOutgoingMCJson(json);
+	}
+
+	/**
+	 * Send party list accepted
+	 * @param Can remove the player
+	 * @param The ProxiedPlayer object
+	 * @param The player name
+	 * @param Follow
+	 */
+	public void sendPartyListAccepted(BadPlayer badPlayer, boolean canRemove, String playerName, boolean follow)
+	{
+		// Create the state name
+		String stateName = "";
+		// Create state message
+		String state = "";
+		// Create state hover
+		String state_hover = "";
+
+		// If he's online
+		if (BungeeManager.getInstance().hasUsername(playerName))
+		{
+			// Set as online
+			stateName = "online";
+		}
+		else
+		{
+			// Set as offline
+			stateName = "offline";
+		}
+
+		// Set state
+		state = badPlayer.getTranslatedMessage(prefix + "list." + stateName, null, playerName);
+		// Set state hover
+		state_hover = badPlayer.getTranslatedMessage(prefix + "list." + stateName + "_hover", null, playerName);
+
+		// Get the accepted message
+		String accepted = badPlayer.getTranslatedMessage(prefix + "list.accepted", null, playerName);
+		// Get 'follow_hover' message
+		String mfollow = badPlayer.getTranslatedMessage(prefix + "list.follow", null, playerName);
+		// Get 'decline' message
+		String mfollow_hover = badPlayer.getTranslatedMessage(prefix + "list.follow_hover", null, playerName);
+
+		// Create McJson message
+		McJsonFactory jsonFactory = new McJsonFactory(state).setHoverText(state_hover).finaliseComponent().initNewComponent(accepted).finaliseComponent().
+				initNewComponent(mfollow).setHoverText(mfollow_hover).finaliseComponent();
+
+		// If he can remove
+		if (canRemove)
+		{
+			// Create spacer message
+			String spacer = badPlayer.getTranslatedMessage(prefix + "list.spacer", null);
+			// Create remove message
+			String remove = badPlayer.getTranslatedMessage(prefix + "list.remove", null, playerName);
+			// Create remove hover message
+			String remove_hover = badPlayer.getTranslatedMessage(prefix + "list.remove_hover", null, playerName);
+			// Set command
+			String command = badPlayer.getName().equalsIgnoreCase(playerName) ? "/party leave" : "/party remove " + playerName;
+			// Append to the message
+			jsonFactory = jsonFactory.initNewComponent(spacer).finaliseComponent().initNewComponent(remove).setHoverText(remove_hover)
+					.setClickCommand(command).finaliseComponent();
+		}
+
+		// Build
+		McJson json = jsonFactory.build();
+
+		// Send the translated message
+		badPlayer.sendTranslatedOutgoingMCJson(json);
+	}
+
+	/**
+	 * Send party list admin
+	 * @param The ProxiedPlayer object
+	 * @param The error code
+	 */
+	public void sendIntroList(ProxiedPlayer proxiedPlayer, int count)
+	{
+		// Send message
+		I19n.sendMessage(proxiedPlayer, prefix + "list.intro", null, count);
+	}
+
+	/**
 	 * Send error occurred
 	 * @param The ProxiedPlayer object
 	 * @param The error code
@@ -75,6 +350,17 @@ public class PartyMessages
 	{
 		// Send message
 		I19n.sendMessage(proxiedPlayer, prefix + "follow." + followType, null);
+	}
+
+	/**
+	 * Send follow broadcast
+	 * @param The ProxiedPlayer object
+	 * @param The Follow Type
+	 */
+	public void sendFollowBroadcast(BadPlayer badPlayer, String playerName, String followType)
+	{
+		// Send message
+		badPlayer.sendTranslatedOutgoingMessage(prefix + "follow.broadcast." + followType, null, playerName);
 	}
 
 	/**
@@ -149,7 +435,7 @@ public class PartyMessages
 		// Create McJson message
 		McJson json = new McJsonFactory(intro).finaliseComponent().
 				initNewComponent(accept).setHoverText(accept_hover).setClickCommand("/party accept " + byPlayer).finaliseComponent().
-				initNewComponent(decline).setHoverText(decline_hover).setClickCommand("/party remove " + byPlayer).finaliseComponent().
+				initNewComponent(decline).setHoverText(decline_hover).setClickCommand("/party leave").finaliseComponent().
 				build();
 
 		// Send the translated message
@@ -252,6 +538,50 @@ public class PartyMessages
 	}
 
 	/**
+	 * Send removed broadcast
+	 * @param The ProxiedPlayer object
+	 * @param Deleted
+	 * @param Deleter
+	 */
+	public void sendRemovedBroadcast(BadPlayer badPlayer, String deleted, String deleter)
+	{
+		// Send message
+		badPlayer.sendTranslatedOutgoingMessage(prefix + "remove.broadcast", null, deleted, deleter);
+	}
+
+	/**
+	 * Send leave left
+	 * @param The ProxiedPlayer object
+	 */
+	public void sendLeaveLeft(ProxiedPlayer proxiedPlayer)
+	{
+		// Send message
+		I19n.sendMessage(proxiedPlayer, prefix + "leave.left", null);
+	}
+
+	/**
+	 * Send leave left other
+	 * @param The ProxiedPlayer object
+	 * @param Party player username
+	 */
+	public void sendLeaveLeftOther(BadPlayer badPlayer, String partyPlayer)
+	{
+		// Send message
+		badPlayer.sendTranslatedOutgoingMessage(prefix + "leave.leftother", null, partyPlayer);
+	}
+
+	/**
+	 * Send owner quit
+	 * @param The BadPlayer object
+	 * @param Party owner username
+	 */
+	public void sendOwnerQuit(BadPlayer badPlayer, String partyPlayer)
+	{
+		// Send message
+		badPlayer.sendTranslatedOutgoingMessage(prefix + "leave.ownerquit", null, partyPlayer);
+	}
+
+	/**
 	 * Send remove 'removed'
 	 * @param The ProxiedPlayer object
 	 * @param Party player username
@@ -290,7 +620,7 @@ public class PartyMessages
 	public void sendTpPlayerNotInGroup(ProxiedPlayer proxiedPlayer, String partyPlayer)
 	{
 		// Send message
-		I19n.sendMessage(proxiedPlayer, prefix + "tp.playernotingroup", null);
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.playernotingroup", null, partyPlayer);
 	}
 
 	/**
@@ -326,6 +656,26 @@ public class PartyMessages
 	}
 
 	/**
+	 * Send tp can't act on yourself
+	 * @param The ProxiedPlayer object
+	 */
+	public void sendTpCantActOnYourself(ProxiedPlayer proxiedPlayer)
+	{
+		// Send message
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.cantactonyourself", null);
+	}
+
+	/**
+	 * Send tp same server
+	 * @param The ProxiedPlayer object
+	 */
+	public void sendTpSameServer(ProxiedPlayer proxiedPlayer, String playerName)
+	{
+		// Send message
+		I19n.sendMessage(proxiedPlayer, prefix + "tp.sameserver", null, playerName);
+	}
+
+	/**
 	 * Send tp not logged
 	 * @param The ProxiedPlayer object
 	 * @param Username
@@ -357,6 +707,38 @@ public class PartyMessages
 		String intro = badPlayer.getTranslatedMessage(prefix + "toggle.set.intro", null);
 		// Get 'with_everyone' message
 		String with_everyone = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_everyone", null);
+		// Get 'with_everyone_hover' message
+		String with_everyone_hover = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_everyone_hover", null);
+		// Get 'with_only_his_friends' message
+		String with_only_his_friends = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_only_his_friends", null);
+		// Get 'with_only_his_friends_hover' message
+		String with_only_his_friends_hover = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_only_his_friends_hover", null);
+		// Get 'with_nobody' message
+		String with_nobody = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_nobody", null);
+		// Get 'with_nobody_hover' message
+		String with_nobody_hover = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_nobody_hover", null);
+
+		// Create McJson message
+		McJson json = new McJsonFactory(intro).finaliseComponent().
+				initNewComponent(with_everyone).setHoverText(with_everyone_hover).setClickCommand("/party toggle with_everyone").finaliseComponent().
+				initNewComponent(with_only_his_friends).setHoverText(with_only_his_friends_hover).setClickCommand("/party toggle with_only_his_friends").finaliseComponent().
+				initNewComponent(with_nobody).setHoverText(with_nobody_hover).setClickCommand("/party toggle with_nobody").
+				build();
+
+		// Send the translated message
+		badPlayer.sendTranslatedOutgoingMCJson(json);
+	}
+
+	/**
+	 * Send list
+	 * @param The BadPlayer object
+	 */
+	public void sendList(BadPlayer badPlayer)
+	{
+		// Get the intro message
+		String intro = badPlayer.getTranslatedMessage(prefix + "list.set.intro", null);
+		// Get 'with_everyone' message
+		String with_everyone = badPlayer.getTranslatedMessage(prefix + "list.set.with_everyone", null);
 		// Get 'with_everyone_hover' message
 		String with_everyone_hover = badPlayer.getTranslatedMessage(prefix + "toggle.set.with_everyone_hover", null);
 		// Get 'with_only_his_friends' message
@@ -432,6 +814,16 @@ public class PartyMessages
 	{
 		// Send username
 		I19n.sendMessage(proxiedPlayer, prefix + "help", null);
+	}
+
+	/**
+	 * Send not enough permissions
+	 * @param The ProxiedPlayer object
+	 */
+	public void sendNotEnoughPermissions(ProxiedPlayer proxiedPlayer)
+	{
+		// Send username
+		I19n.sendMessage(proxiedPlayer, prefix + "remove.notenoughpermissions", null);
 	}
 
 }
