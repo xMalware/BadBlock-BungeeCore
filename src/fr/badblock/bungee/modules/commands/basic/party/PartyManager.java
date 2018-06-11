@@ -132,9 +132,9 @@ public class PartyManager
 			PartyManager.getMessages().sendCantActOnYourself(sender);
 			return;
 		}
-
+		
 		// If they're not in the same server
-		if (otherPlayer == null || !currPlayer.getLastServer().equals(otherPlayer.getLastServer()))
+		if (otherPlayer == null || !currPlayer.getCurrentServer().equals(otherPlayer.getCurrentServer()))
 		{
 			// Send the message
 			PartyManager.getMessages().sendAcceptMustBeOnSameServer(sender);
@@ -247,7 +247,7 @@ public class PartyManager
 		}
 
 		// If they're not on the same server
-		if (otherPlayer == null || !currPlayer.getLastServer().equals(otherPlayer.getLastServer()))
+		if (otherPlayer == null || !currPlayer.getCurrentServer().equals(otherPlayer.getCurrentServer()))
 		{
 			// Send the message
 			PartyManager.getMessages().sendAcceptMustBeOnSameServer(sender);
