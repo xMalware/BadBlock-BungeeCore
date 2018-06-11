@@ -148,6 +148,8 @@ public class PartyManager
 		// If the flag exists
 		if (currPlayer.getFlags().has(flagName))
 		{
+			// Send a message
+			PartyManager.getMessages().sendInviteWait(sender);
 			// So we stop there
 			return;
 		}

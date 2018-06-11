@@ -96,6 +96,16 @@ public class PartyMessages
 		// Send message
 		I19n.sendMessage(proxiedPlayer, prefix + "invite.alreadyinparty", null);
 	}
+
+	/**
+	 * Send invite wait
+	 * @param The ProxiedPlayer object
+	 */
+	public void sendInviteWait(ProxiedPlayer proxiedPlayer)
+	{
+		// Send message
+		I19n.sendMessage(proxiedPlayer, prefix + "invite.wait", null);
+	}
 	
 	/**
 	 * Send invite already invited
