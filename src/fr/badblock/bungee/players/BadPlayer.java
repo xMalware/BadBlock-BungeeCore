@@ -53,7 +53,7 @@ public final class BadPlayer extends BadOfflinePlayer
 	/**
 	 * Temp flags
 	 */
-	private FlagObject						flags;
+	private FlagObject						flags			= new FlagObject();
 
 	/**
 	 * Constructor
