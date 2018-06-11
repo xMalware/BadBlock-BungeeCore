@@ -837,7 +837,7 @@ public class PartyManager
 				if (partyPlayer == null)
 				{
 					// Send message
-					PartyManager.getMessages().sendModoPlayerNotInGroup(sender);
+					PartyManager.getMessages().sendModoPlayerNotInGroup(sender, rawType);
 					// So we stop there
 					return;
 				}
@@ -861,10 +861,10 @@ public class PartyManager
 				}
 
 				// If he's acting on himself
-				if (currentPartyPlayer.getName().equalsIgnoreCase(sender.getName()))
+				if (partyPlayer.getName().equalsIgnoreCase(sender.getName()))
 				{
 					// Send message
-					PartyManager.getMessages().sendTpCantActOnYourself(sender);
+					PartyManager.getMessages().sendCantActOnYourself(sender);
 					// So we stop there
 					return;
 				}

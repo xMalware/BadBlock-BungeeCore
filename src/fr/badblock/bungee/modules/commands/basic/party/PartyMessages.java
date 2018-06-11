@@ -839,11 +839,12 @@ public class PartyMessages
 	/**
 	 * Send modo player not in group
 	 * @param proxiedPlayer
+	 * @param playerName
 	 */
-	public void sendModoPlayerNotInGroup(ProxiedPlayer proxiedPlayer)
+	public void sendModoPlayerNotInGroup(ProxiedPlayer proxiedPlayer, String playerName)
 	{
 		// Send username
-		I19n.sendMessage(proxiedPlayer, prefix + "modo.playernotingroup", null);
+		I19n.sendMessage(proxiedPlayer, prefix + "modo.playernotingroup", null, playerName);
 	}
 
 	/**
