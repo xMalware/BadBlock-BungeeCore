@@ -5,13 +5,17 @@ package fr.badblock.bungee.utils.time;
  *
  * @author RedSpri
  */
-public interface ThreadRunnable {
+public interface ThreadRunnable
+{
+	
     /**
      * Run a ThreadRunnable object
      *
      * @param threadRunnable the ThreadRunnable
      */
-    static void run(ThreadRunnable threadRunnable) {
+    static void run(ThreadRunnable threadRunnable)
+    {
+    	// Run the thread runnable
         threadRunnable.run();
     }
 
@@ -20,7 +24,9 @@ public interface ThreadRunnable {
      *
      * @param runnable the ThreadRunnable
      */
-    static void runRunnable(Runnable runnable) {
+    static void runRunnable(Runnable runnable) 
+    {
+    	// Run the runnable
         run(runnable::run);
     }
 
@@ -33,13 +39,22 @@ public interface ThreadRunnable {
     /**
      * Run the content in a thread
      */
-    default void run() {
+    default void run()
+    {
+    	// Create a thread
         new Thread() {
+        	/**
+        	 * Run
+        	 */
             @Override
-            public void run() {
+            public void run()
+            {
+            	// Run
                 super.run();
+                // And process content
                 content();
             }
+            // Start the thread
         }.start();
     }
 }

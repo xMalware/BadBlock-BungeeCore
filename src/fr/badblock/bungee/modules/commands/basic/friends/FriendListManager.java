@@ -50,7 +50,7 @@ public final class FriendListManager
 	 * @param unique ID
 	 * @return
 	 */
-	private static synchronized FriendList getFriendList(UUID player)
+	public static synchronized FriendList getFriendList(UUID player)
 	{
 		// Empty query
 		BasicDBObject query = new BasicDBObject();

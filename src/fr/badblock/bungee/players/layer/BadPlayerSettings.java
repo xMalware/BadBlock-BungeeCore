@@ -5,6 +5,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 import fr.badblock.bungee.modules.commands.basic.friends.FriendListable;
+import fr.badblock.bungee.modules.commands.basic.msg.PMPrivacy;
 import fr.badblock.bungee.modules.commands.basic.party.Partyable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,6 +30,10 @@ public class BadPlayerSettings
 	 * Is FriendListable by who ?
 	 */
 	public FriendListable	friendListable;
+	/**
+	 * PM Privacy
+	 */
+	public PMPrivacy		pmPrivacy;
 
 	/**
 	 * Constructor
@@ -48,6 +53,7 @@ public class BadPlayerSettings
 			// Default partyable
 			partyable = Partyable.WITH_EVERYONE;
 		}
+		
 		// If the object has "friendListable"
 		if (jsonObject.has("friendListable") && !jsonObject.get("friendListable").isJsonNull())
 		{
@@ -58,6 +64,18 @@ public class BadPlayerSettings
 		{
 			// Default friend listable
 			friendListable = FriendListable.YES;
+		}
+		
+		// If the object has "pmPrivacy"
+		if (jsonObject.has("pmPrivacy") && !jsonObject.get("pmPrivacy").isJsonNull())
+		{
+			// Set pmPrivacy
+			pmPrivacy = PMPrivacy.getByString(jsonObject.get("pmPrivacy").getAsString());
+		}
+		else
+		{
+			// Default pm privacy
+			pmPrivacy = PMPrivacy.WITH_EVERYONE;
 		}
 	}
 

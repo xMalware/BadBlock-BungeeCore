@@ -12,7 +12,6 @@ import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
-import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.modules.commands.BadCommand;
 import fr.badblock.bungee.modules.commands.basic.friends.FriendList;
 import fr.badblock.bungee.modules.commands.basic.friends.FriendListManager;
@@ -36,7 +35,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public class MsgCommand extends BadCommand
+public class RCommand extends BadCommand
 {
 
 	// I18n key prefix
@@ -45,10 +44,9 @@ public class MsgCommand extends BadCommand
 	/**
 	 * Command constructor
 	 */
-	public MsgCommand()
+	public RCommand()
 	{
-		super("msg", null, "whisper", "m", "mp", "w", "tellraw", "tell", "minecraft:tell", "minecraft:tellraw",
-				"minecraft:whisper", "minecraft:w", "pm");
+		super("r", null, "reply");
 		// Allow access to the command for players only
 		this.setForPlayersOnly(true);
 	}
@@ -63,7 +61,7 @@ public class MsgCommand extends BadCommand
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 
 		// If no argument has been entered
-		if (args.length < 2)
+		if (args.length < 1)
 		{
 			// We give him help.
 			help(sender);
@@ -102,8 +100,17 @@ public class MsgCommand extends BadCommand
 			return;
 		}
 
+		// If the player is null
+		if (badPlayer.getTmpLastMessagePlayer() == null)
+		{
+			// Send a message
+			badPlayer.sendTranslatedOutgoingMessage(prefix + "nobodytoreply", null);
+			// So we stop there
+			return;
+		}
+
 		// Get the player name
-		String playerName = args[0];
+		String playerName = badPlayer.getTmpLastMessagePlayer();
 
 		// If he's sending a message to himself
 		if (sender.getName().equalsIgnoreCase(playerName))
@@ -285,12 +292,6 @@ public class MsgCommand extends BadCommand
 
 			// Send the message
 			selectedBadPlayer.sendTranslatedOutgoingMCJson(json);
-
-			// Set reply
-			selectedBadPlayer.setTmpLastMessagePlayer(sender.getName());
-			
-			// Update this data!
-			selectedBadPlayer.sendOnlineTempSyncUpdate();
 		}
 		else
 		{
@@ -298,12 +299,8 @@ public class MsgCommand extends BadCommand
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "offline", null, badOfflinePlayer.getName());
 		}
 
-		// Set reply
-		badPlayer.setTmpLastMessagePlayer(badOfflinePlayer.getName());
-
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		
 		// Use async mongo
 		mongoService.useAsyncMongo(new MongoMethod(mongoService)
 		{
@@ -364,12 +361,6 @@ public class MsgCommand extends BadCommand
 		{
 			// Increment index
 			i++;
-			// If the index is 1
-			if (i == 1)
-			{
-				// So we don't care
-				continue;
-			}
 			// Spacer
 			String spacer = " ";
 			// If the args are the same

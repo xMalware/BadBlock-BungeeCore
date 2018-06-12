@@ -13,6 +13,7 @@ import fr.badblock.api.common.utils.flags.FlagObject;
 import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
+import fr.badblock.bungee.link.bungee.BungeeTask;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
 import fr.badblock.bungee.rabbit.BadBungeeQueues;
@@ -54,6 +55,11 @@ public final class BadPlayer extends BadOfflinePlayer
 	 * Temp flags
 	 */
 	private FlagObject						flags			= new FlagObject();
+	
+	/**
+	 * Last message player (tmp var)
+	 */
+	private String							tmpLastMessagePlayer;
 
 	/**
 	 * Constructor
@@ -317,6 +323,15 @@ public final class BadPlayer extends BadOfflinePlayer
 		// Returns the name
 		return proxiedPlayer != null && proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null ? proxiedPlayer.getServer().getInfo().getName() : null;
 	}
+	
+	/**
+	 * Send an online/temp sync update
+	 */
+	public void sendOnlineTempSyncUpdate()
+	{
+		// Send the packet
+		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.BADPLAYER_UPDATE, GsonUtils.getGson().toJson(this)));
+	}
 
 	/**
 	 * Put the player in the map
@@ -391,6 +406,19 @@ public final class BadPlayer extends BadOfflinePlayer
 	{
 		// Get the map values
 		return maps.values();
+	}
+
+	/**
+	 * Put the BadPlayer object
+	 * @param badPlayer
+	 */
+	public static void put(BadPlayer badPlayer)
+	{
+		// Put in map
+		maps.put(badPlayer.getName(), badPlayer);
+		
+		// Keep alive update
+		BungeeTask.keepAlive();
 	}
 
 }

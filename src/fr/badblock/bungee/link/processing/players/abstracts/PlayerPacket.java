@@ -23,12 +23,14 @@ public class PlayerPacket
 	 * @return The username of the playerPacket
 	 */
 	private String				playerName;
+	
 	/**
 	 * Player packet type
 	 * @param Set the player packet type of the playerPacket
 	 * @return The player packet type of the playerPacket
 	 */
 	private PlayerPacketType	type;
+	
 	/**
 	 * Content
 	 * @param Set the content of the playerPacket

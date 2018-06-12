@@ -1,6 +1,10 @@
 package fr.badblock.bungee.link.processing.players.abstracts;
 
-import fr.badblock.bungee.link.processing.players.*;
+import fr.badblock.bungee.link.processing.players.PlayerReloadDataProcessing;
+import fr.badblock.bungee.link.processing.players.PlayerSendBadPlayerUpdateProcessing;
+import fr.badblock.bungee.link.processing.players.PlayerSendJsonMessageProcessing;
+import fr.badblock.bungee.link.processing.players.PlayerSendMessageProcessing;
+import fr.badblock.bungee.link.processing.players.PlayerSendServerProcessing;
 import lombok.Getter;
 
 @Getter
@@ -17,19 +21,27 @@ public enum PlayerPacketType
 	/**
 	 * Send message packet type
 	 */
-	SEND_MESSAGE	  (new PlayerSendMessageProcessing()),
+	SEND_MESSAGE		(new PlayerSendMessageProcessing()),
+	
 	/**
 	 * Send json message packet type
 	 */
-    SEND_JSON_MESSAGE (new PlayerSendJsonMessageProcessing()),
+    SEND_JSON_MESSAGE	(new PlayerSendJsonMessageProcessing()),
+    
     /**
      * Send server packet type
      */
-	SEND_SERVER		  (new PlayerSendServerProcessing()),
+	SEND_SERVER			(new PlayerSendServerProcessing()),
+	
 	/**
 	 * Reload data packet type
 	 */
-	RELOAD_DATA		  (new PlayerReloadDataProcessing());
+	RELOAD_DATA			(new PlayerReloadDataProcessing()),
+	
+	/**
+	 * Send BadPlayer update packet type
+	 */
+	BADPLAYER_UPDATE	(new PlayerSendBadPlayerUpdateProcessing());
 	
 	/**
 	 * Player processing

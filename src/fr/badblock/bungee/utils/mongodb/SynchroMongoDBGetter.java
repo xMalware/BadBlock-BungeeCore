@@ -13,60 +13,115 @@ import lombok.Data;
 @Data
 public class SynchroMongoDBGetter
 {
-	
-    private DBObject 			dbObject				= null;
-    private String 				collectionName;
-    private BasicDBObject		query;
-    private boolean				done;
-    private	Thread				thread;
 
-    public SynchroMongoDBGetter(String collectionname, BasicDBObject query)
-    {
-        this.collectionName = collectionname;
-        this.query = query;
-        this.thread = Thread.currentThread();
-    }
-    
-    /**
-     * Start a thread if the value is not setted and wait the thread's answer
-     * if the object is already finded, return it.
-     *
-     * @see fr.badblock.bungee.utils.mongodb.GetterThread
-     * @return the object retrieved by the thread: the DBObject if it was found, or null otherwise
-     */
-    public DBObject getDbObject()
-    {
-        if (dbObject == null) new GetterThread(this).start();
-        synchronized (getThread())
-        {
-        	try
-        	{
-        		getThread().wait();
+	/**
+	 * Database object
+	 * @param Set the new database obect
+	 * @return Returns the current database object
+	 */
+	private DBObject 			dbObject				= null;
+
+	/**
+	 * Collection name
+	 * @param Set the new collection name
+	 * @return Returns the current collection name
+	 */
+	private String 				collectionName;
+
+	/**
+	 * Query
+	 * @param Set the new query
+	 * @return Returns the current query
+	 */
+	private BasicDBObject		query;
+
+	/**
+	 * Done
+	 * @param Set if it's get!
+	 * @return Returns if it's get
+	 */
+	private boolean				done;
+
+	/**
+	 * Thread
+	 * @param Set the new thread
+	 * @return Returns the current thread
+	 */
+	private	Thread				thread;
+
+	/**
+	 * Constructor
+	 * @param Collection nmae
+	 * @param Query
+	 */
+	public SynchroMongoDBGetter(String collectionname, BasicDBObject query)
+	{
+		// Set the collection name
+		this.collectionName = collectionname;
+		// Set the query
+		this.query = query;
+		// Set the thread
+		this.thread = Thread.currentThread();
+	}
+
+	/**
+	 * Start a thread if the value is not set and wait the thread's answer
+	 * if the object is already found, return it.
+	 *
+	 * @see fr.badblock.bungee.utils.mongodb.GetterThread
+	 * @return the object retrieved by the thread: the DBObject if it was found, or null otherwise
+	 */
+	public DBObject getDbObject()
+	{
+		// If the database object is null
+		if (dbObject == null)
+		{
+			// Create a new getter thread
+			new GetterThread(this).start();
+		}
+		
+		// Synchronized with the requested thread
+		synchronized (getThread())
+		{
+			// Try to
+			try
+			{
+				// Wait
+				getThread().wait();
 			}
-        	catch (InterruptedException exception)
-        	{
+			// In case we can't
+			catch (InterruptedException exception)
+			{
+				// So print a stacktrace
 				exception.printStackTrace();
 			}
-        }
-        return dbObject;
-    }
+		}
+		
+		// Returns the database object
+		return dbObject;
+	}
 
-    /**
-     * Clear the current getted value. So when the SynchroMongoDBGetter#getDbObject()
-     * method is called, the object will be retrieved from the database.
-     */
-    public void clearCache()
-    {
-        dbObject = null;
-    }
+	/**
+	 * Clear the current getted value. So when the SynchroMongoDBGetter#getDbObject()
+	 * method is called, the object will be retrieved from the database.
+	 */
+	public void clearCache()
+	{
+		// DbObject => null
+		dbObject = null;
+	}
 
-    void setDbObject(DBObject dbObject)
-    {
-        this.dbObject = dbObject;
-        synchronized (getThread())
-        {
-        	getThread().notify();
-        }
-    }
-    
+	void setDbObject(DBObject dbObject)
+	{
+		// Set the database object
+		this.dbObject = dbObject;
+		
+		// Synchronize with the thread
+		synchronized (getThread())
+		{
+			// Notify it
+			getThread().notify();
+		}
+	}
+
 }

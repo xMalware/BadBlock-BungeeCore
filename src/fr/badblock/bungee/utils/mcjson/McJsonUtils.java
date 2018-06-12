@@ -11,7 +11,8 @@ import java.util.Arrays;
  *
  * @author RedSpri
  */
-public class McJsonUtils {
+public class McJsonUtils
+{
 
 	/**
 	 * Convert an undefined string array (of minecraft jsons) into a bungeecord
@@ -20,13 +21,21 @@ public class McJsonUtils {
 	 * @param jsons the undefined string array
 	 * @return the bungeecord BaseComponent[] array
 	 */
-	public static BaseComponent[][] parseMcJsons(String... jsons){
+	public static BaseComponent[][] parseMcJsons(String... jsons)
+	{
+		// Create new base componsent array
 		BaseComponent[] [] baseComponents = new BaseComponent[jsons.length] [jsons.length];
+
+		// For each json
 		for (int i = 0; i < jsons.length; i++)
 		{
+			// Get base component
 			BaseComponent[] s = ComponentSerializer.parse(jsons[i]);
+			// Set in array
 			baseComponents[i] = s;
 		}
+
+		// Returns the base component
 		return baseComponents;
 	}
 
@@ -36,7 +45,10 @@ public class McJsonUtils {
 	 * @param p the bungeecord ProxyiedPlayer
 	 * @param baseComponents the bungeecord BaseComponent[] array
 	 */
-	public static void sendJsons(ProxiedPlayer p, BaseComponent[]... baseComponents) {
+	public static void sendJsons(ProxiedPlayer p, BaseComponent[]... baseComponents)
+	{
+		// Send message
 		Arrays.asList(baseComponents).forEach(p::sendMessage);
 	}
+
 }

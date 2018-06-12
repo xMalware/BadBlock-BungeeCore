@@ -14,6 +14,7 @@ import java.util.Set;
  */
 public class ArraysUtils
 {
+	
 	/**
 	 * Permet de filtrer une liste de cha�ne de caract�re en fonction du d�but
 	 * 

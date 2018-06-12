@@ -3,22 +3,68 @@ package fr.badblock.bungee.utils.mcjson;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/*
+ * 
+ * Attributes of a McJson message
+ * 
+ * @author xMalware
+ * 
+ */
 @AllArgsConstructor
 @Getter
-public enum McJsonAttribute {
-    TEXT("text", "text", 0),
-    WEBSITE("site", "open_url", 1),
-    SUGGEST("insert", "suggest_command", 1),
-    EXECUTE("do", "run_command", 1),
-    HOVER("hover", "show_text", 2);
+public enum McJsonAttribute
+{
 
-    private String decodetag, mcjsontag;
-    private int type;
+	/**
+	 * Text attribute
+	 */
+	TEXT("text", "text", 0),
 
-    public McJsonAttribute get(String decodetag) {
-        for (McJsonAttribute attribute : values())
-            if (attribute.getDecodetag().equalsIgnoreCase(decodetag)) return attribute;
-        return null;
-    }
+	/**
+	 * Website attribute
+	 */
+	WEBSITE("site", "open_url", 1),
+
+	/**
+	 * Suggest attribute
+	 */
+	SUGGEST("insert", "suggest_command", 1),
+
+	/*
+	 * Execute attribute
+	 */
+	EXECUTE("do", "run_command", 1),
+
+	/**
+	 * Hover attribute
+	 */
+	HOVER("hover", "show_text", 2);
+
+	// Tags
+	private String decodetag, mcjsontag;
+
+	// Type
+	private int type;
+
+	/**
+	 * Get a McJson attribute
+	 * @param with the decode tag
+	 * @return the mcJson attribute
+	 */
+	public McJsonAttribute get(String decodetag)
+	{
+		// For each
+		for (McJsonAttribute attribute : values())
+		{
+			// If the name is the same
+			if (attribute.getDecodetag().equalsIgnoreCase(decodetag))
+			{
+				// Returns the attribute
+				return attribute;
+			}
+		}
+		// Returns null
+		return null;
+	}
 
 }

@@ -552,6 +552,9 @@ public class BadOfflinePlayer
 
 			// Set found
 			setFound(true);
+			
+			// Set loaded
+			setLoaded(true);
 
 		}
 		else
@@ -564,12 +567,18 @@ public class BadOfflinePlayer
 			{
 				// Insert data
 				insert();
+				
+				// Set loaded
+				setLoaded(true);
 			}
 			// If we're not allowed to create data
 			else
 			{
 				// Not found..
 				setFound(false);
+				
+				// Set loaded
+				setLoaded(true);
 			}
 		}
 	}
