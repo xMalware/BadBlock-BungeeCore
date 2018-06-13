@@ -15,7 +15,7 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.BanReason;
+import fr.badblock.bungee.modules.commands.modo.objects.BanReasonType;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.DateUtils;
@@ -60,7 +60,7 @@ public class BanCommand extends AbstractModCommand {
 
 			boolean hasReason = false;
 
-			for (BanReason banReason : BanReason.values()) {
+			for (BanReasonType banReason : BanReasonType.values()) {
 				if (!sender.hasPermission(getPermission() + "." + banReason.getName())) {
 					continue;
 				}
@@ -102,7 +102,7 @@ public class BanCommand extends AbstractModCommand {
 		boolean isKey = true;
 		String rawBanReason = args[2];
 
-		BanReason banReason = BanReason.getFromString(rawBanReason);
+		BanReasonType banReason = BanReasonType.getFromString(rawBanReason);
 
 		if (banReason == null) {
 			if (!sender.hasPermission(getPermission() + ".custom")) {
