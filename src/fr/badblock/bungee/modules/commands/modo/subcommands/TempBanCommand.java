@@ -47,22 +47,20 @@ public class TempBanCommand extends AbstractModCommand {
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 		isPlayer = isPlayer && proxiedPlayer != null && badPlayer != null;
 
-		if (isPlayer && badPlayer.getFlags().has("tryban"))
-		{
+		if (isPlayer && badPlayer.getFlags().has("tryban")) {
 			return;
 		}
-		
+
 		badPlayer.getFlags().set("tryban", 500);
 
 		boolean isKey = true;
-		
+
 		String banReason = args[2];
 		String rawTime = args[3];
-		
+
 		long time = Time.MILLIS_SECOND.matchTime(rawTime);
-		
-		if (time == 0L)
-		{
+
+		if (time == 0L) {
 			I19n.sendMessage(sender, getPrefix("notgoodtime"), null);
 			return;
 		}
@@ -109,8 +107,9 @@ public class TempBanCommand extends AbstractModCommand {
 				exception.printStackTrace();
 			}
 		}
-		
-		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(), rawTime, banReason);
+
+		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
+				rawTime, banReason);
 	}
 
 	public boolean canBeBanned(CommandSender sender, String playerName) {

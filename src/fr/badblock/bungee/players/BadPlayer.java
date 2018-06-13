@@ -320,7 +320,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 
 		// Send a translated MCJson message
 		BungeeManager.getInstance()
-		.sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, mcjson.toString()));
+				.sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, mcjson.toString()));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -354,7 +354,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Returns the name
 		return proxiedPlayer != null && proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
 				? proxiedPlayer.getServer().getInfo().getName()
-						: null;
+				: null;
 	}
 
 	/**
@@ -372,9 +372,9 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// We create an empty ban message
 		StringBuilder stringBuilder = new StringBuilder();
 		// For each line of the ban message
-		for (String string : getTranslatedMessages("punishments.ban", new int[] { 1 },
-				Time.MILLIS_SECOND.toFrench(getPunished().getBan().getExpire() - System.currentTimeMillis(),
-						Time.SECOND, Time.YEAR), getPunished().getBan().getReason())) {
+		for (String string : getTranslatedMessages("punishments.ban", new int[] { 1 }, Time.MILLIS_SECOND
+				.toFrench(getPunished().getBan().getExpire() - System.currentTimeMillis(), Time.SECOND, Time.YEAR),
+				getPunished().getBan().getReason())) {
 			// We add it to the final ban message
 			stringBuilder.append(string + "\n");
 		}

@@ -14,33 +14,37 @@ import lombok.Data;
  * @author xMalware
  *
  */
-public class BanIndex
-{
+public class BanIndex {
 
 	/**
 	 * Index
-	 * @param Set the new index
+	 * 
+	 * @param Set
+	 *            the new index
 	 * @return Returns the current index
 	 */
-	private	int		index;
-	
+	private int index;
+
 	/**
 	 * Time
-	 * @param Set the new time
+	 * 
+	 * @param Set
+	 *            the new time
 	 * @return Returns the current time
 	 */
-	private long	time;
-	
+	private long time;
+
 	/**
 	 * Constructor
-	 * @param Database object
+	 * 
+	 * @param Database
+	 *            object
 	 */
-	public BanIndex(DBObject dbObject)
-	{
+	public BanIndex(DBObject dbObject) {
 		// Set index
 		index = Integer.parseInt(dbObject.get("index").toString());
 		// Set time
 		time = Long.parseLong(dbObject.get("time").toString());
 	}
-	
+
 }
