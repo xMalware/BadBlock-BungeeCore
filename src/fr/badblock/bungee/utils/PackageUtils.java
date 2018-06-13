@@ -47,17 +47,6 @@ public class PackageUtils {
 		}
 	}
 
-	/**
-	 * pourquoi pas faire ? public static void
-	 * instantiateListenersAlternative(Plugin plugin, String... paths) { String
-	 * prefix = plugin.getClass().getPackage().getName(); for (String s : paths) {
-	 * Class<?> clazz; try { clazz = Class.forName(prefix + s); if (clazz != null) {
-	 * if(inheritFrom(clazz, BadListener.class) || inheritFrom(clazz,
-	 * RabbitListener.class) || inheritFrom(clazz, BadCommand.class)) {
-	 * instanciate(clazz); } } } catch (Exception exception) {
-	 * exception.printStackTrace(); } } }
-	 */
-
 	private static boolean inheritFrom(Class<?> clazz, Class<?> from) {
 		while (clazz != Object.class) {
 			if (clazz == from)
