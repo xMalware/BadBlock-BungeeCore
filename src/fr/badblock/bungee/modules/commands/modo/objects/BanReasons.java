@@ -62,6 +62,8 @@ public class BanReasons {
 		DBCollection dbCollection = mongoService.getDb().getCollection("players");
 		// Create database query
 		DBObject query = new BasicDBObject();
+		// Add ban type
+		query.put("type", "ban");
 		// Get data
 		DBCursor cursor = dbCollection.find(query);
 		// If there's data
