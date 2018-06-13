@@ -11,6 +11,7 @@ import fr.badblock.api.common.utils.bungee.PunishType;
 import fr.badblock.api.common.utils.bungee.Punishment;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
+import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
@@ -114,8 +115,8 @@ public class BanCommand extends AbstractModCommand {
 		UUID uuid = UUID.randomUUID();
 
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(),
-				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), -1L, DateUtils.getHourDate(), reason,
-				isKey, new String[] {}, sender.getName(), punisherIp);
+				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), TimeUtils.nextTime(Time.YEAR.convert(1L, Time.MILLIS_SECOND)),
+				DateUtils.getHourDate(), reason, isKey, new String[] {}, sender.getName(), punisherIp);
 
 		BadBungee badBungee = BadBungee.getInstance();
 
@@ -148,6 +149,8 @@ public class BanCommand extends AbstractModCommand {
 				exception.printStackTrace();
 			}
 		}
+		
+		I19n.sendMessage(sender, getPrefix("banned"), null, badOfflinePlayer.getName());
 	}
 
 	public boolean canBeBanned(CommandSender sender, String playerName) {
