@@ -11,7 +11,7 @@ import java.util.Set;
  *
  * @param <T>
  *            the type of object to be filtered
- * @author RedSpri
+ * @author xMalware
  */
 public interface Filter<T> {
 
