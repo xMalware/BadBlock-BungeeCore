@@ -1,12 +1,12 @@
 package fr.badblock.bungee.rabbit.listeners;
 
+import fr.badblock.api.common.sync.bungee.BadBungeeQueues;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListenerType;
 import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.bungee.CachedPlayerToken;
-import fr.badblock.bungee.rabbit.BadBungeeQueues;
 
 /**
  * 

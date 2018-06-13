@@ -2,12 +2,12 @@ package fr.badblock.bungee.rabbit.listeners;
 
 import com.google.gson.Gson;
 
+import fr.badblock.api.common.sync.bungee.BadBungeeQueues;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListenerType;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeLocalManager;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.badblock.bungee.rabbit.BadBungeeQueues;
 import fr.badblock.bungee.rabbit.datareceivers.PlayerDataUpdateReceiver;
 
 /**

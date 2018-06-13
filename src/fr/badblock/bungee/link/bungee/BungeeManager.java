@@ -16,6 +16,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
+import fr.badblock.api.common.sync.bungee.BadBungeeQueues;
 import fr.badblock.api.common.sync.bungee.packets.BungeePacket;
 import fr.badblock.api.common.sync.bungee.packets.BungeePacketType;
 import fr.badblock.api.common.tech.mongodb.MongoService;
@@ -28,7 +29,6 @@ import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.badblock.bungee.rabbit.BadBungeeQueues;
 import fr.badblock.bungee.utils.Filter;
 import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.time.TimeUtils;
