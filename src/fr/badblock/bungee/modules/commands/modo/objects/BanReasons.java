@@ -15,27 +15,45 @@ import lombok.Setter;
 
 /**
  * 
+ * Ban Reasons
  * 
- * 
- * @author root
+ * @author xMalware
  *
  */
 public class BanReasons
 {
 
-	@Getter @Setter
-	private static BanReasons instance = new BanReasons();
+	/**
+	 * Instance
+	 * @param Set the new instance
+	 * @return Returns the current instance
+	 */
+	@Getter @Setter private static BanReasons instance = new BanReasons();
 	
+	/**
+	 * Ban reasons
+	 * @param Set the new ban reasons
+	 * @return Returns the current ban reasons
+	 */
 	private Map<String, BanReason>	banReasons;
 	
+	/**
+	 * Constructor
+	 */
 	public BanReasons()
 	{
+		// Create a map!
 		banReasons = new HashMap<>();
+		// Load
 		load();
 	}
 	
+	/**
+	 * Load
+	 */
 	public void load()
 	{
+		// Get the mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Get database collection
 		DBCollection dbCollection = mongoService.getDb().getCollection("players");
