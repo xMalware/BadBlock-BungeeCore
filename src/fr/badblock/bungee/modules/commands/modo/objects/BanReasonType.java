@@ -1,6 +1,6 @@
 package fr.badblock.bungee.modules.commands.modo.objects;
 
-public enum BanReason {
+public enum BanReasonType {
 
 	CHEATING,
 
@@ -28,8 +28,8 @@ public enum BanReason {
 		return name().toLowerCase();
 	}
 
-	public static BanReason getFromString(String string) {
-		for (BanReason banReason : values()) {
+	public static BanReasonType getFromString(String string) {
+		for (BanReasonType banReason : values()) {
 			if (banReason.name().equalsIgnoreCase(string)) {
 				return banReason;
 			}
