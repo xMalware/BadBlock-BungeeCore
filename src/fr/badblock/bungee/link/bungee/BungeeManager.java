@@ -17,6 +17,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 import fr.badblock.api.common.sync.bungee.BadBungeeQueues;
+import fr.badblock.api.common.sync.bungee.BungeeUtils;
 import fr.badblock.api.common.sync.bungee.packets.BungeePacket;
 import fr.badblock.api.common.sync.bungee.packets.BungeePacketType;
 import fr.badblock.api.common.tech.mongodb.MongoService;
@@ -424,11 +425,8 @@ public class BungeeManager {
 	public void sendPacket(BungeePacket bungeePacket) {
 		// Get main class
 		BadBungee badBungee = BadBungee.getInstance();
-		// Deserialize the bungee packet
-		String json = badBungee.getGson().toJson(bungeePacket);
-		// Send the packet over RabbitMQ
-		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, json),
-				BadBungeeQueues.BUNGEE_PROCESSING, true, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
+		// Use BungeeUtils
+		BungeeUtils.sendBungeePacket(badBungee.getRabbitService(), bungeePacket);
 	}
 
 	/**
