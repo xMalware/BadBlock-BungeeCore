@@ -15,26 +15,23 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.BanReason;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.DateUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
-import fr.badblock.bungee.utils.mcjson.McJson;
-import fr.badblock.bungee.utils.mcjson.McJsonFactory;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class BanCommand extends AbstractModCommand {
+public class TempBanCommand extends AbstractModCommand {
 
-	public BanCommand() {
-		super("ban", new String[] { "b" });
+	public TempBanCommand() {
+		super("tempban", new String[] { "tban", "tb" });
 	}
 
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		if (args.length != 2 && args.length != 3) {
-			// /m ban <pseudo>
+		if (args.length != 4) {
+			// /m ban <pseudo> <temps> <raison>
 			I19n.sendMessage(sender, getPrefix("usage"), null);
 			return;
 		}
@@ -50,48 +47,6 @@ public class BanCommand extends AbstractModCommand {
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 		isPlayer = isPlayer && proxiedPlayer != null && badPlayer != null;
 
-		if (args.length == 2) {
-			
-			if (isPlayer) {
-				badPlayer.sendTranslatedOutgoingMessage(getPrefix("select_intro"), null, playerName);
-			} else {
-				I19n.sendMessage(sender, getPrefix("select_intro"), null, playerName);
-			}
-
-			boolean hasReason = false;
-
-			for (BanReason banReason : BanReason.values()) {
-				if (!sender.hasPermission(getPermission() + "." + banReason.getName())) {
-					continue;
-				}
-
-				hasReason = true;
-
-				if (isPlayer) {
-					// Get the intro message
-					String intro = badPlayer.getTranslatedMessage(getPrefix("reason_intro"), null);
-					// Get the reason message
-					String reason = badPlayer.getTranslatedMessage(getPrefix("reason." + banReason.getName()), null);
-
-					// Get the McJson
-					McJson json = new McJsonFactory(intro).finaliseComponent().initNewComponent(reason)
-							.setHoverText(reason).setClickCommand("/m ban " + playerName + " " + banReason.getName())
-							.finaliseComponent().build();
-
-					// Send the message
-					badPlayer.sendTranslatedOutgoingMCJson(json);
-				} else {
-					I19n.sendMessage(sender, getPrefix("reason." + banReason.getName()), null);
-				}
-			}
-
-			if (!hasReason) {
-				I19n.sendMessage(sender, getPrefix("noreason"), null);
-			}
-
-			return;
-		}
-		
 		if (isPlayer && badPlayer.getFlags().has("tryban"))
 		{
 			return;
@@ -100,29 +55,27 @@ public class BanCommand extends AbstractModCommand {
 		badPlayer.getFlags().set("tryban", 500);
 
 		boolean isKey = true;
-		String rawBanReason = args[2];
-
-		BanReason banReason = BanReason.getFromString(rawBanReason);
-
-		if (banReason == null) {
-			if (!sender.hasPermission(getPermission() + ".custom")) {
-				I19n.sendMessage(sender, getPrefix("unknownreason"), null);
-				return;
-			}
-
-			isKey = false;
+		
+		String banReason = args[2];
+		String rawTime = args[3];
+		
+		long time = Time.MILLIS_SECOND.matchTime(rawTime);
+		
+		if (time == 0L)
+		{
+			I19n.sendMessage(sender, getPrefix("notgoodtime"), null);
+			return;
 		}
 
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
-		String reason = isKey ? getPrefix("reason." + banReason.getName()) : rawBanReason;
 		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
 
 		UUID uuid = UUID.randomUUID();
 
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(),
-				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), TimeUtils.nextTime(Time.YEAR.convert(1L, Time.MILLIS_SECOND)),
-				DateUtils.getHourDate(), reason, isKey, new String[] {}, sender.getName(), punisherIp);
+				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), TimeUtils.nextTime(time),
+				DateUtils.getHourDate(), banReason, isKey, new String[] {}, sender.getName(), punisherIp);
 
 		BadBungee badBungee = BadBungee.getInstance();
 
@@ -157,7 +110,7 @@ public class BanCommand extends AbstractModCommand {
 			}
 		}
 		
-		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(), reason);
+		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(), rawTime, banReason);
 	}
 
 	public boolean canBeBanned(CommandSender sender, String playerName) {

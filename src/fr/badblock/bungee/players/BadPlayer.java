@@ -11,6 +11,7 @@ import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketType;
 import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.api.common.utils.flags.FlagObject;
 import fr.badblock.api.common.utils.general.StringUtils;
+import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.bungee.BungeeTask;
@@ -319,7 +320,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 
 		// Send a translated MCJson message
 		BungeeManager.getInstance()
-				.sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, mcjson.toString()));
+		.sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, mcjson.toString()));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -353,7 +354,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Returns the name
 		return proxiedPlayer != null && proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
 				? proxiedPlayer.getServer().getInfo().getName()
-				: null;
+						: null;
 	}
 
 	/**
@@ -371,10 +372,11 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// We create an empty ban message
 		StringBuilder stringBuilder = new StringBuilder();
 		// For each line of the ban message
-		for (String string : getTranslatedMessages("punishments.ban", null, getPunished().buildBanTime(getLocale()),
-				getPunished().getBan().getReason())) {
+		for (String string : getTranslatedMessages("punishments.ban", new int[] { 1 },
+				Time.MILLIS_SECOND.toFrench(getPunished().getBan().getExpire() - System.currentTimeMillis(),
+						Time.SECOND, Time.YEAR), getPunished().getBan().getReason())) {
 			// We add it to the final ban message
-			stringBuilder.append(string + System.lineSeparator());
+			stringBuilder.append(string + "\n");
 		}
 
 		// Returns the ban message
@@ -397,7 +399,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 		StringBuilder stringBuilder = new StringBuilder();
 		// For each line of the mute message
 		for (String string : getTranslatedMessages("punishments.mute", null, getPunished().buildMuteTime(getLocale()),
-				getPunished().getMute().getReason())) {
+				ChatColor.stripColor(getPunished().getMute().getReason()))) {
 			// We add it to the final ban message
 			stringBuilder.append(string + System.lineSeparator());
 		}
