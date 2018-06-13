@@ -264,62 +264,94 @@ public class BanCommand extends AbstractModCommand
 	 * @return
 	 */
 	public boolean canBeBanned(CommandSender sender, String playerName) {
+		// If the banner is a player
 		boolean bannerPlayer = sender instanceof ProxiedPlayer;
 
+		// Get the target player
 		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
 
+		// If he doesn't exist
 		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound()) {
+			// Send a message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
+			// So we stop there
 			return false;
 		}
 
+		// If the player is already banned
 		if (badOfflinePlayer.getPunished().isBan()) {
+			// Send a message
 			I19n.sendMessage(sender, getPrefix("alreadybanned"), null, badOfflinePlayer.getName());
+			// So we stop there
 			return false;
 		}
 
+		// If the banner is a player
 		if (bannerPlayer) {
+			// Get the banner
 			BadPlayer badPlayer = BadPlayer.get((ProxiedPlayer) sender);
 
+			// If the banner is null
 			if (badPlayer == null) {
+				// Send an error message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 1);
+				// So we stop there
 				return false;
 			}
 
+			// Get the banner permissions
 			PermissionUser perm = badPlayer.getPermissions();
 
+			// If the banner doesn't have any permissions
 			if (perm == null) {
+				// Send a message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 2);
+				// So we stop there
 				return false;
 			}
 
+			// Get the highest banner rank
 			Permissible permissible = perm.getHighestRank("bungee", false);
 
+			// If the permissible is null
 			if (permissible == null) {
+				// Send a message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 3);
+				// So we stop there
 				return false;
 			}
 
+			// Get the target permissions
 			PermissionUser targetPerm = badOfflinePlayer.getPermissions();
 
+			// If the target player doesn't have any permissions
 			if (targetPerm == null) {
+				// So we stop there
 				return true;
 			}
 
+			// Get the highest target rank
 			Permissible targetPermissible = targetPerm.getHighestRank("bungee", false);
 
+			// If the permissible is null
 			if (targetPermissible == null) {
+				// So we stop there
 				return true;
 			}
 
+			// If the banner has a higher rank than the target player (or a bypass)
 			if (permissible.getPower() > targetPermissible.getPower()
 					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
+				// So we stop there
 				return true;
 			}
 
+			// Not enough permission message
 			I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, badOfflinePlayer.getName());
+			// Returns false
 			return false;
 		} else {
+			// Returns true
 			return true;
 		}
 	}
