@@ -13,6 +13,13 @@ import fr.badblock.bungee.BadBungee;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 
+ * 
+ * 
+ * @author root
+ *
+ */
 public class BanReasons
 {
 
