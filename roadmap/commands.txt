@@ -1,0 +1,46 @@
+ToDo BadBlockBungee:
+
+
+- Commands:
+/bab
+/bban
+/bpardon
+/btempban
+/badfilter (/bf)
+/connect
+/enablechat
+/ghostconnect
+/greports
+/onlinestaff
+/rconnect
+/report
+/scale
+/spymsg
+/track
+/ban
+/banip
+/kick
+/mute
+/sanction
+/tempban
+/tempbanip
+/unban
+/unbanip
+/unmute
+/warn
+/msg
+/r
+/addserver
+/anim
+/cbreport
+/gwhitelist
+/removeserver
+/done
+/gnick
+/fkick
+/modo
+/thx
+/rnick
+/cheat
+/cl
+T - /btps
