@@ -733,7 +733,6 @@ public class BadOfflinePlayer {
 		// Put the settings
 		object.put("settings", settings.getDBObject());
 		// Put the punish object
-		System.out.println("punish: " + punished.getDBObject());
 		object.put("punish", punished.getDBObject());
 		// Put the permissions
 		object.put("permissions", permissions.getDBObject());
