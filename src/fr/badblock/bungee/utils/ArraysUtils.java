@@ -10,6 +10,8 @@ import java.util.Set;
  * Classe contenant plusieurs m�thodes utiles pour l'utilisation des tableaux et
  * listes
  * 
+ * TODO: better comments
+ * 
  * @author LeLanN
  */
 public class ArraysUtils {
