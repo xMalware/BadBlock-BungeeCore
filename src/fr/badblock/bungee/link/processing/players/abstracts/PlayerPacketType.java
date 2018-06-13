@@ -1,11 +1,5 @@
 package fr.badblock.bungee.link.processing.players.abstracts;
 
-import fr.badblock.bungee.link.processing.players.PlayerKickProcessing;
-import fr.badblock.bungee.link.processing.players.PlayerReloadDataProcessing;
-import fr.badblock.bungee.link.processing.players.PlayerSendBadPlayerUpdateProcessing;
-import fr.badblock.bungee.link.processing.players.PlayerSendJsonMessageProcessing;
-import fr.badblock.bungee.link.processing.players.PlayerSendMessageProcessing;
-import fr.badblock.bungee.link.processing.players.PlayerSendServerProcessing;
 import lombok.Getter;
 
 @Getter
@@ -21,32 +15,32 @@ public enum PlayerPacketType {
 	/**
 	 * Send message packet type
 	 */
-	SEND_MESSAGE(new PlayerSendMessageProcessing()),
+	SEND_MESSAGE(),
 
 	/**
 	 * Send json message packet type
 	 */
-	SEND_JSON_MESSAGE(new PlayerSendJsonMessageProcessing()),
+	SEND_JSON_MESSAGE(),
 
 	/**
 	 * Send server packet type
 	 */
-	SEND_SERVER(new PlayerSendServerProcessing()),
+	SEND_SERVER(),
 
 	/**
 	 * Reload data packet type
 	 */
-	RELOAD_DATA(new PlayerReloadDataProcessing()),
+	RELOAD_DATA(),
 
 	/**
 	 * Send BadPlayer update packet type
 	 */
-	BADPLAYER_UPDATE(new PlayerSendBadPlayerUpdateProcessing()),
+	BADPLAYER_UPDATE(),
 
 	/**
 	 * Player kick packet type
 	 */
-	KICK(new PlayerKickProcessing());
+	KICK();
 
 	/**
 	 * Player processing
@@ -58,14 +52,13 @@ public enum PlayerPacketType {
 	private _PlayerProcessing process;
 
 	/**
-	 * Constructor of a player packet type
-	 * 
-	 * @param The
-	 *            Player Processing
+	 * Set the process
+	 * @param process
 	 */
-	PlayerPacketType(_PlayerProcessing process) {
-		// Set the processing
+	public void setProcess(_PlayerProcessing process)
+	{
+		// Set the process
 		this.process = process;
 	}
-
+	
 }

@@ -16,6 +16,8 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
+import fr.badblock.api.common.sync.bungee.packets.BungeePacket;
+import fr.badblock.api.common.sync.bungee.packets.BungeePacketType;
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketEncoder;
@@ -23,8 +25,6 @@ import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketMessage;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketType;
 import fr.badblock.api.common.utils.flags.GlobalFlags;
 import fr.badblock.bungee.BadBungee;
-import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacket;
-import fr.badblock.bungee.link.processing.bungee.abstracts.BungeePacketType;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;

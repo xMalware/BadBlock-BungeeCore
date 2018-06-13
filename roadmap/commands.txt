@@ -2,11 +2,6 @@ ToDo BadBlockBungee:
 
 
 - Commands:
-/bab
-/bban
-/bpardon
-/btempban
-/badfilter (/bf)
 /connect
 /enablechat
 /ghostconnect
@@ -17,19 +12,13 @@ ToDo BadBlockBungee:
 /scale
 /spymsg
 /track
-/ban
-/banip
 /kick
 /mute
 /sanction
 /tempban
-/tempbanip
 /unban
-/unbanip
 /unmute
 /warn
-/msg
-/r
 /addserver
 /anim
 /cbreport
@@ -43,4 +32,8 @@ ToDo BadBlockBungee:
 /rnick
 /cheat
 /cl
+
+T - /ban
 T - /btps
+T - /msg
+T - /r

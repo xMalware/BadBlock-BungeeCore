@@ -2,8 +2,9 @@ package fr.badblock.bungee.link.processing.bungee;
 
 import java.util.logging.Level;
 
+import fr.badblock.api.common.sync.bungee._BungeeProcessing;
+import fr.badblock.api.common.sync.bungee.packets.BungeePacketType;
 import fr.badblock.bungee.BadBungee;
-import fr.badblock.bungee.link.processing.bungee.abstracts._BungeeProcessing;
 
 /**
  * 
@@ -29,6 +30,11 @@ public class BungeeLogProcessing extends _BungeeProcessing {
 			// Log it
 			BadBungee.getInstance().getLogger().log(Level.INFO, string);
 		}
+	}
+
+	@Override
+	public BungeePacketType getPacketType() {
+		return BungeePacketType.LOG;
 	}
 
 }

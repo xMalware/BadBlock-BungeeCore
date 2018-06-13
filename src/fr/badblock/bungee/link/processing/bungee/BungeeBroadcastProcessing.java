@@ -1,6 +1,7 @@
 package fr.badblock.bungee.link.processing.bungee;
 
-import fr.badblock.bungee.link.processing.bungee.abstracts._BungeeProcessing;
+import fr.badblock.api.common.sync.bungee._BungeeProcessing;
+import fr.badblock.api.common.sync.bungee.packets.BungeePacketType;
 import net.md_5.bungee.api.ProxyServer;
 
 /**
@@ -26,6 +27,11 @@ public class BungeeBroadcastProcessing extends _BungeeProcessing {
 			// Broadcast it
 			ProxyServer.getInstance().broadcast(string);
 		}
+	}
+
+	@Override
+	public BungeePacketType getPacketType() {
+		return BungeePacketType.BROADCAST;
 	}
 
 }

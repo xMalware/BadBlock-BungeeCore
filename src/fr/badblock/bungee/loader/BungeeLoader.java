@@ -170,6 +170,9 @@ public class BungeeLoader {
 			PackageUtils.instanciateListeners(getBadBungee(),
 					// Rabbit listeners
 					"fr.badblock.bungee.rabbit.listeners",
+					
+					// Bungee processing
+					"fr.badblock.bungee.link.processing.bungee",
 
 					// Commands
 					"fr.badblock.bungee.modules.commands.admin", "fr.badblock.bungee.modules.commands.badfriends",
