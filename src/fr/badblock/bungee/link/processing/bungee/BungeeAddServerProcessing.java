@@ -3,10 +3,10 @@ package fr.badblock.bungee.link.processing.bungee;
 import java.net.InetSocketAddress;
 
 import fr.badblock.api.common.sync.bungee._BungeeProcessing;
+import fr.badblock.api.common.sync.bungee.objects.ServerObject;
 import fr.badblock.api.common.sync.bungee.packets.BungeePacketType;
 import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.bungee.BadBungee;
-import fr.badblock.bungee.link.processing.bungee.objects.ServerObject;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ServerInfo;
 
