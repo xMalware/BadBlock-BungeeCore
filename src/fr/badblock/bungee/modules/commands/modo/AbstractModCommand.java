@@ -13,11 +13,10 @@ public abstract class AbstractModCommand {
 
 	public abstract void run(CommandSender sender, String[] args);
 
-	public String getPermission()
-	{
+	public String getPermission() {
 		return "bungee.command.mod." + getName();
 	}
-	
+
 	public String getPrefix(String name) {
 		return "bungee.commands.mod." + getName() + "." + name;
 	}

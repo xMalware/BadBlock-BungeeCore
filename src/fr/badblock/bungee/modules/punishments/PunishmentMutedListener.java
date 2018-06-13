@@ -58,12 +58,7 @@ public class PunishmentMutedListener extends BadListener {
 		if (punished.isMute()) {
 			// So we cancel the message
 			event.setCancelled(true);
-			// For each message in the mute notification
-			for (String string : badPlayer.getTranslatedMessages("punishments.muted", null,
-					punished.buildMuteTime(badPlayer.getLocale()), punished.getMute().getReason())) {
-				// So we send the line to the player
-				badPlayer.sendOutgoingMessage(string);
-			}
+			badPlayer.sendOutgoingMessage(badPlayer.getMuteMessage());
 		}
 	}
 

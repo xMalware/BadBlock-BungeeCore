@@ -70,12 +70,9 @@ public class MCommand extends BadCommand {
 				}
 			}
 			if (command != null) {
-				if (sender.hasPermission(command.getPermission()))
-				{
+				if (sender.hasPermission(command.getPermission())) {
 					command.run(sender, args);
-				}
-				else
-				{
+				} else {
 					I19n.sendMessage(sender, prefix + "notenoughpermissions", null);
 				}
 			} else {

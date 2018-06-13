@@ -37,6 +37,7 @@ public class BadBungeeConfig {
 	 * @return Alert prefix
 	 * @deprecated i18n
 	 */
+	@Deprecated
 	@Getter
 	@Setter
 	private String alertPrefix;

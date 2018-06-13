@@ -570,7 +570,7 @@ public final class FriendListManager {
 		}
 
 		// Get page numbers
-		int pages = (int) Math.ceil((double) friends.size() / 10.0);
+		int pages = (int) Math.ceil(friends.size() / 10.0);
 
 		// Incorrect page number
 		if (i > pages) {

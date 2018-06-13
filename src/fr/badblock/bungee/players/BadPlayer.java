@@ -148,7 +148,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public void sendOutgoingMessage(String... messages) {
 		// If the player is logged on this local node
-		if (toProxiedPlayer() != null) {
+		if (!isOnThisNode()) {
 			// Send a local message
 			sendLocalMessage(messages);
 			// So we stop there
@@ -169,7 +169,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	private void sendLocalMessage(String... messages) {
 		// If the player isn't logged on this local node
-		if (toProxiedPlayer() == null) {
+		if (!isOnThisNode()) {
 			// So we stop there
 			return;
 		}
@@ -189,7 +189,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public void sendTranslatedOutgoingMessage(String key, int[] indexesToTranslate, Object... args) {
 		// If the player is logged on this local node
-		if (toProxiedPlayer() != null) {
+		if (isOnThisNode()) {
 			// Send a local translated message
 			sendTranslatedLocalMessage(key, indexesToTranslate, args);
 			// So we stop there
@@ -212,7 +212,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public void sendTranslatedOutgoingJsonMessage(String key, int[] indexesToTranslate, Object... args) {
 		// If the player is logged on this local node
-		if (toProxiedPlayer() != null) {
+		if (isOnThisNode()) {
 			// Send a local translated Json message
 			sendTranslatedLocalJsonMessage(key, indexesToTranslate, args);
 			// So we stop there
@@ -231,7 +231,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	private void sendLocalJsonMessage(String... jsons) {
 		// If the player isn't logged on this local node
-		if (toProxiedPlayer() == null) {
+		if (!isOnThisNode()) {
 			// So we stop there
 			return;
 		}
@@ -252,7 +252,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	private void sendTranslatedLocalMessage(String key, int[] indexesToTranslate, Object... args) {
 		// If the player isn't logged on this local node
-		if (toProxiedPlayer() == null) {
+		if (!isOnThisNode()) {
 			// So we stop there
 			return;
 		}
@@ -273,7 +273,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	private void sendTranslatedLocalJsonMessage(String key, int[] indexesToTranslate, Object... args) {
 		// If the player isn't logged on this local node
-		if (toProxiedPlayer() == null) {
+		if (!isOnThisNode()) {
 			// So we stop there
 			return;
 		}
@@ -289,8 +289,8 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 * @param jsons
 	 */
 	public void sendOutgoingJsonMessage(String... jsons) {
-		// If the player is logged on this locale node
-		if (toProxiedPlayer() != null) {
+		// If the player is logged on this local node
+		if (isOnThisNode()) {
 			// Send a local json message
 			sendLocalJsonMessage(jsons);
 			// So we stop there
@@ -310,7 +310,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public void sendTranslatedOutgoingMCJson(McJson mcjson) {
 		// If the player is logged on this locale node
-		if (toProxiedPlayer() != null) {
+		if (isOnThisNode()) {
 			// Send a local MCJson message
 			sendLocalJsonMessage(mcjson.toString());
 			// So we stop there
@@ -320,6 +320,26 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Send a translated MCJson message
 		BungeeManager.getInstance()
 				.sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, mcjson.toString()));
+	}
+
+	@SuppressWarnings("deprecation")
+	/**
+	 * Kick the player
+	 * 
+	 * @param kick
+	 *            message
+	 */
+	public void kick(String message) {
+		// If the player is on this node
+		if (isOnThisNode()) {
+			// Disconnect the player
+			toProxiedPlayer().disconnect(getBanMessage());
+			// So we stop there
+			return;
+		}
+
+		// Send the packet
+		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.KICK, getBanMessage()));
 	}
 
 	/**
@@ -334,6 +354,56 @@ public final class BadPlayer extends BadOfflinePlayer {
 		return proxiedPlayer != null && proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
 				? proxiedPlayer.getServer().getInfo().getName()
 				: null;
+	}
+
+	/**
+	 * Get the ban message
+	 * 
+	 * @return Returns the ban message
+	 */
+	public String getBanMessage() {
+		// If the punish is null
+		if (getPunished() == null) {
+			// Returns null
+			return null;
+		}
+
+		// We create an empty ban message
+		StringBuilder stringBuilder = new StringBuilder();
+		// For each line of the ban message
+		for (String string : getTranslatedMessages("punishments.ban", null, getPunished().buildBanTime(getLocale()),
+				getPunished().getBan().getReason())) {
+			// We add it to the final ban message
+			stringBuilder.append(string + System.lineSeparator());
+		}
+
+		// Returns the ban message
+		return stringBuilder.toString();
+	}
+
+	/**
+	 * Get the mute message
+	 * 
+	 * @return Returns the mute message
+	 */
+	public String[] getMuteMessage() {
+		// If the punish is null
+		if (getPunished() == null) {
+			// Returns null
+			return null;
+		}
+
+		// We create an empty mute message
+		StringBuilder stringBuilder = new StringBuilder();
+		// For each line of the mute message
+		for (String string : getTranslatedMessages("punishments.mute", null, getPunished().buildMuteTime(getLocale()),
+				getPunished().getMute().getReason())) {
+			// We add it to the final ban message
+			stringBuilder.append(string + System.lineSeparator());
+		}
+
+		// Returns the ban message
+		return stringBuilder.toString().split(System.lineSeparator());
 	}
 
 	/**
@@ -363,6 +433,15 @@ public final class BadPlayer extends BadOfflinePlayer {
 		maps.remove(getName());
 		// Global logging
 		BungeeManager.getInstance().log(ChatColor.RED + getName() + " is now disconnected.");
+	}
+
+	/**
+	 * If the player is on this node
+	 * 
+	 * @return
+	 */
+	public boolean isOnThisNode() {
+		return toProxiedPlayer() != null;
 	}
 
 	/**

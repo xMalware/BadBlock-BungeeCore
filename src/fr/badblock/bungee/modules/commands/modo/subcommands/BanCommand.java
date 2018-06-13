@@ -8,7 +8,6 @@ import com.mongodb.DBCollection;
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.utils.TimeUtils;
 import fr.badblock.api.common.utils.bungee.PunishType;
-import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.api.common.utils.bungee.Punishment;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
@@ -41,8 +40,7 @@ public class BanCommand extends AbstractModCommand {
 
 		String playerName = args[1];
 
-		if (!canBeBanned(sender, playerName))
-		{
+		if (!canBeBanned(sender, playerName)) {
 			return;
 		}
 
@@ -54,52 +52,44 @@ public class BanCommand extends AbstractModCommand {
 		if (args.length == 2) {
 			I19n.sendMessage(sender, getPrefix("intro"), null);
 
-			if (isPlayer)
-			{
+			if (isPlayer) {
 				badPlayer.sendTranslatedOutgoingMessage(getPrefix("select_intro"), null, playerName);
-			}
-			else
-			{
+			} else {
 				I19n.sendMessage(sender, getPrefix("select_intro"), null, playerName);
 			}
 
 			boolean hasReason = false;
 
-			for (BanReason banReason : BanReason.values())
-			{
-				if (!sender.hasPermission(getPermission() + "." + banReason.getName()))
-				{
+			for (BanReason banReason : BanReason.values()) {
+				if (!sender.hasPermission(getPermission() + "." + banReason.getName())) {
 					continue;
 				}
 
 				hasReason = true;
 
-				if (isPlayer)
-				{
+				if (isPlayer) {
 					// Get the intro message
 					String intro = badPlayer.getTranslatedMessage(getPrefix("reason_intro"), null);
 					// Get the reason message
 					String reason = badPlayer.getTranslatedMessage(getPrefix("reason." + banReason.getName()), null);
 
 					// Get the McJson
-					McJson json = new McJsonFactory(intro).finaliseComponent().initNewComponent(reason).setHoverText(reason)
-							.setClickCommand("/m ban " + playerName + " " + banReason.getName()).finaliseComponent().build();
+					McJson json = new McJsonFactory(intro).finaliseComponent().initNewComponent(reason)
+							.setHoverText(reason).setClickCommand("/m ban " + playerName + " " + banReason.getName())
+							.finaliseComponent().build();
 
 					// Send the message
 					badPlayer.sendTranslatedOutgoingMCJson(json);
-				}
-				else
-				{
+				} else {
 					I19n.sendMessage(sender, getPrefix("reason." + banReason.getName()), null);
 				}
 			}
 
-			if (!hasReason)
-			{
+			if (!hasReason) {
 				I19n.sendMessage(sender, getPrefix("noreason"), null);
 			}
 
-			return;			
+			return;
 		}
 
 		boolean isKey = true;
@@ -107,10 +97,8 @@ public class BanCommand extends AbstractModCommand {
 
 		BanReason banReason = BanReason.getFromString(rawBanReason);
 
-		if (banReason == null)
-		{
-			if (!sender.hasPermission(getPermission() + ".custom"))
-			{
+		if (banReason == null) {
+			if (!sender.hasPermission(getPermission() + ".custom")) {
 				I19n.sendMessage(sender, getPrefix("unknownreason"), null);
 				return;
 			}
@@ -125,8 +113,9 @@ public class BanCommand extends AbstractModCommand {
 
 		UUID uuid = UUID.randomUUID();
 
-		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(), badOfflinePlayer.getLastIp(), PunishType.BAN,
-				TimeUtils.time(), -1L, DateUtils.getHourDate(), reason, isKey, new String[] {}, sender.getName(), punisherIp);
+		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(),
+				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), -1L, DateUtils.getHourDate(), reason,
+				isKey, new String[] {}, sender.getName(), punisherIp);
 
 		BadBungee badBungee = BadBungee.getInstance();
 
@@ -138,108 +127,86 @@ public class BanCommand extends AbstractModCommand {
 
 		collection.insert(punishment.toObject());
 
-		Punished punished = badOfflinePlayer.getPunished();
-
-		if (punished != null)
-		{
-			punished.setBan(punishment);
+		if (badOfflinePlayer.getPunished() != null) {
+			badOfflinePlayer.getPunished().setBan(punishment);
 		}
 
-		if (badOfflinePlayer.isOnline())
-		{
+		if (badOfflinePlayer.isOnline()) {
 			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
 			targetPlayer.sendOnlineTempSyncUpdate();
-			try
-			{
+			try {
 				targetPlayer.saveData();
-			}
-			catch (Exception exception)
-			{	
+			} catch (Exception exception) {
 				exception.printStackTrace();
 			}
-		}
-		else
-		{
-			try
-			{
+
+			targetPlayer.kick(targetPlayer.getBanMessage());
+		} else {
+			try {
 				badOfflinePlayer.saveData();
-			}
-			catch (Exception exception)
-			{	
+			} catch (Exception exception) {
 				exception.printStackTrace();
 			}
 		}
 	}
 
-	public boolean canBeBanned(CommandSender sender, String playerName)
-	{
+	public boolean canBeBanned(CommandSender sender, String playerName) {
 		boolean bannerPlayer = sender instanceof ProxiedPlayer;
 
 		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
 
-		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound())
-		{
+		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound()) {
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			return false;
 		}
 
-		if (badOfflinePlayer.getPunished().isBan())
-		{
+		if (badOfflinePlayer.getPunished().isBan()) {
 			I19n.sendMessage(sender, getPrefix("alreadybanned"), null, badOfflinePlayer.getName());
 			return false;
 		}
 
-		if (bannerPlayer)
-		{
+		if (bannerPlayer) {
 			BadPlayer badPlayer = BadPlayer.get((ProxiedPlayer) sender);
 
-			if (badPlayer == null)
-			{
+			if (badPlayer == null) {
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 1);
 				return false;
 			}
 
 			PermissionUser perm = badPlayer.getPermissions();
 
-			if (perm == null)
-			{
+			if (perm == null) {
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 2);
 				return false;
 			}
 
 			Permissible permissible = perm.getHighestRank("bungee", false);
 
-			if (permissible == null)
-			{
+			if (permissible == null) {
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 3);
 				return false;
 			}
 
 			PermissionUser targetPerm = badOfflinePlayer.getPermissions();
 
-			if (targetPerm == null)
-			{
+			if (targetPerm == null) {
 				return true;
 			}
 
-			Permissible	targetPermissible = targetPerm.getHighestRank("bungee", false);
+			Permissible targetPermissible = targetPerm.getHighestRank("bungee", false);
 
-			if (targetPermissible == null)
-			{
+			if (targetPermissible == null) {
 				return true;
 			}
 
-			if (permissible.getPower() > targetPermissible.getPower() ||
-					badPlayer.hasPermission(getPermission() + ".bypasspower"))
-			{
+			if (permissible.getPower() > targetPermissible.getPower()
+					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
 				return true;
 			}
 
 			I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, badOfflinePlayer.getName());
 			return false;
-		}
-		else
-		{
+		} else {
 			return true;
 		}
 	}

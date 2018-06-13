@@ -83,6 +83,7 @@ public class TPS implements Runnable {
 		// Create a new thread
 		new Thread("TPS check") {
 			// On run
+			@Override
 			public void run() {
 				// While true
 				while (true) {

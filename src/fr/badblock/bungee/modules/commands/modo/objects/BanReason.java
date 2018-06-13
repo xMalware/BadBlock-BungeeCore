@@ -1,16 +1,15 @@
 package fr.badblock.bungee.modules.commands.modo.objects;
 
-public enum BanReason
-{
+public enum BanReason {
 
 	CHEATING,
-	
+
 	COMPROMISED_ACCOUNT,
 
 	ADVERTISING,
 
 	INAPPROPRIATE_NAME_OR_SKIN,
-	
+
 	INAPPROPRIATE_BEHAVIOUR,
 
 	VERBAL_ABUSE,
@@ -24,22 +23,18 @@ public enum BanReason
 	ANTI_GAMING,
 
 	EXPLOIT;
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return name().toLowerCase();
 	}
-	
-	public static BanReason getFromString(String string)
-	{
-		for (BanReason banReason : values())
-		{
-			if (banReason.name().equalsIgnoreCase(string))
-			{
+
+	public static BanReason getFromString(String string) {
+		for (BanReason banReason : values()) {
+			if (banReason.name().equalsIgnoreCase(string)) {
 				return banReason;
 			}
 		}
 		return null;
 	}
-	
+
 }

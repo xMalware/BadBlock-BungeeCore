@@ -13,7 +13,6 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.WriteResult;
 import com.mongodb.util.JSON;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
@@ -368,9 +367,11 @@ public class BadOfflinePlayer {
 				// Query name
 				query.put("name", getName().toLowerCase());
 
+				System.out.println(getSavedObject().toJson());
+
 				// Updater with all data to set
-				BasicDBObject updater = new BasicDBObject("$set", getDbObject());
-				
+				BasicDBObject updater = new BasicDBObject("$set", getSavedObject());
+
 				// Update data
 				collection.update(query, updater);
 			}
@@ -732,6 +733,7 @@ public class BadOfflinePlayer {
 		// Put the settings
 		object.put("settings", settings.getDBObject());
 		// Put the punish object
+		System.out.println("punish: " + punished.getDBObject());
 		object.put("punish", punished.getDBObject());
 		// Put the permissions
 		object.put("permissions", permissions.getDBObject());

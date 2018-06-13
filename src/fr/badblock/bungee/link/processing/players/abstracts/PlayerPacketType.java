@@ -1,5 +1,6 @@
 package fr.badblock.bungee.link.processing.players.abstracts;
 
+import fr.badblock.bungee.link.processing.players.PlayerKickProcessing;
 import fr.badblock.bungee.link.processing.players.PlayerReloadDataProcessing;
 import fr.badblock.bungee.link.processing.players.PlayerSendBadPlayerUpdateProcessing;
 import fr.badblock.bungee.link.processing.players.PlayerSendJsonMessageProcessing;
@@ -40,7 +41,12 @@ public enum PlayerPacketType {
 	/**
 	 * Send BadPlayer update packet type
 	 */
-	BADPLAYER_UPDATE(new PlayerSendBadPlayerUpdateProcessing());
+	BADPLAYER_UPDATE(new PlayerSendBadPlayerUpdateProcessing()),
+
+	/**
+	 * Player kick packet type
+	 */
+	KICK(new PlayerKickProcessing());
 
 	/**
 	 * Player processing

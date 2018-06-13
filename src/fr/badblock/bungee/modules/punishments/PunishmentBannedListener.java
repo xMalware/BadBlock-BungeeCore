@@ -37,16 +37,8 @@ public class PunishmentBannedListener extends BadListener {
 
 		// If the player is still banned
 		if (punished.isBan()) {
-			// We create an empty ban message
-			String result = "";
-			// For each line of the ban message
-			for (String string : badPlayer.getTranslatedMessages("punishments.ban", null,
-					punished.buildBanTime(badPlayer.getLocale()), punished.getBan().getReason())) {
-				// We add it to the final ban message
-				result += string + System.lineSeparator();
-			}
 			// We cancel the player's connection with the ban message
-			event.cancel(result);
+			event.cancel(badPlayer.getBanMessage());
 		}
 	}
 
