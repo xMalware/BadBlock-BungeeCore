@@ -19,49 +19,59 @@ import net.md_5.bungee.BungeeCord;
  * @author xMalware
  * 
  */
-public class TPS implements Runnable
-{
+public class TPS implements Runnable {
 
 	/**
 	 * TPS
-	 * @param Set the new TPS
+	 * 
+	 * @param Set
+	 *            the new TPS
 	 * @return Returns the current TPS
 	 */
-	@Getter @Setter private static double		tps		= 0.0D;
+	@Getter
+	@Setter
+	private static double tps = 0.0D;
 
 	/**
 	 * Queue
-	 * @param Set the new queue
+	 * 
+	 * @param Set
+	 *            the new queue
 	 * @return Returns the current queue
 	 */
-	private static Queue<Double>				queue 	= Queues.newLinkedBlockingDeque();
+	private static Queue<Double> queue = Queues.newLinkedBlockingDeque();
 
 	/**
 	 * Time
-	 * @param Set the new time
+	 * 
+	 * @param Set
+	 *            the new time
 	 * @return Returns the current time
 	 */
-	private long				time;
+	private long time;
 
 	/**
 	 * Sec
-	 * @param Set the new sec
+	 * 
+	 * @param Set
+	 *            the new sec
 	 * @return Returns the current sec
 	 */
-	private long				sec;
+	private long sec;
 
 	/**
 	 * NB
-	 * @param Set the new nb
+	 * 
+	 * @param Set
+	 *            the new nb
 	 * @return Returns the current nb
 	 */
-	private int 				nb;
+	private int nb;
 
 	/*
 	 * TPS Constructor
 	 */
-	public TPS()
-	{
+	public TPS() {
 		// Set the time
 		this.time = System.currentTimeMillis() + 1_000L;
 		// Set the time
@@ -71,17 +81,13 @@ public class TPS implements Runnable
 		BungeeCord.getInstance().getScheduler().schedule(BadBungee.getInstance(), this, 0L, 50, TimeUnit.MILLISECONDS);
 
 		// Create a new thread
-		new Thread("TPS check")
-		{
+		new Thread("TPS check") {
 			// On run
-			public void run()
-			{
+			public void run() {
 				// While true
-				while(true)
-				{
+				while (true) {
 					// If the time is over the last (expired)
-					if (System.currentTimeMillis() > time)
-					{
+					if (System.currentTimeMillis() > time) {
 						// Set the new time (1s)
 						time = System.currentTimeMillis() + 1_000L;
 						// Get the lost TPS
@@ -108,13 +114,11 @@ public class TPS implements Runnable
 	 * Run
 	 */
 	@Override
-	public void run()
-	{
+	public void run() {
 		// Get difference
 		double v = System.currentTimeMillis() - sec;
 		// 1 tick = 50ms
-		if (v > 50)
-		{
+		if (v > 50) {
 			// Set the diff
 			nb += v - 50;
 		}
@@ -124,45 +128,43 @@ public class TPS implements Runnable
 
 	/**
 	 * Round a number
+	 * 
 	 * @param value
 	 * @param places
 	 * @return
 	 */
-	public static double round(double value, int places)
-	{
+	public static double round(double value, int places) {
 		// Problem with place number
-		if (places < 0)
-		{
+		if (places < 0) {
 			// Throw an exception
 			throw new IllegalArgumentException();
 		}
 
 		// Create a BigDecimal
 		BigDecimal bd = new BigDecimal(value);
-		// Scale & round half_up 
+		// Scale & round half_up
 		bd = bd.setScale(places, RoundingMode.HALF_UP);
 		// Get double value
 		return bd.doubleValue();
 	}
 
 	/**
-	 * Get lost milliseconds
-	 * (lag factor)
+	 * Get lost milliseconds (lag factor)
+	 * 
 	 * @return
 	 */
-	public static double getLostMilliseconds()
-	{
+	public static double getLostMilliseconds() {
 		// Returns the lost ms (with TPS)
 		return (20D - TPS.tps) * 50D;
 	}
 
 	/**
 	 * Get lost milliseconds
+	 * 
 	 * @param tps
 	 * @return
 	 */
-	public static double getLostMilliseconds(double tps)
-	{
+	public static double getLostMilliseconds(double tps) {
 		// Returns the lost ms (with given TPS)
 		return (20D - tps) * 50D;
 	}

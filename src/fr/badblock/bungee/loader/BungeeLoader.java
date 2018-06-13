@@ -38,28 +38,32 @@ import lombok.EqualsAndHashCode;
  * @author xMalware
  *
  */
-public class BungeeLoader
-{
+public class BungeeLoader {
 
 	/**
 	 * BadBungee instance
-	 * @param Set the new BadBungee instance
+	 * 
+	 * @param Set
+	 *            the new BadBungee instance
 	 * @return Returns the current BadBungee instance
 	 */
-	private BadBungee		badBungee;
+	private BadBungee badBungee;
 	/**
 	 * BadBungeeConfig instance
-	 * @param Set the new BadBungee config
+	 * 
+	 * @param Set
+	 *            the new BadBungee config
 	 * @return Returns the current BadBungee config
 	 */
-	private BadBungeeConfig	config;
+	private BadBungeeConfig config;
 
 	/**
 	 * Constructor
-	 * @param Current BadBungee object
+	 * 
+	 * @param Current
+	 *            BadBungee object
 	 */
-	public BungeeLoader(BadBungee badBungee)
-	{
+	public BungeeLoader(BadBungee badBungee) {
 		// Set the BadBungee object
 		setBadBungee(badBungee);
 		// Set the instance
@@ -85,8 +89,7 @@ public class BungeeLoader
 	/**
 	 * Set the instance of BadBungee
 	 */
-	private void setInstance()
-	{
+	private void setInstance() {
 		// Singleton :)
 		BadBungee.setInstance(getBadBungee());
 	}
@@ -94,8 +97,7 @@ public class BungeeLoader
 	/**
 	 * Set Gson objects
 	 */
-	private void setGson()
-	{
+	private void setGson() {
 		// Basic Gson
 		getBadBungee().setGson(new Gson());
 		// Pretty-printing Gson
@@ -105,8 +107,7 @@ public class BungeeLoader
 	/**
 	 * Load the configuration
 	 */
-	private void loadConfig()
-	{
+	private void loadConfig() {
 		// Set the configuration
 		setConfig(new ConfigLoader().load());
 		// Set to BadBungee class
@@ -116,19 +117,16 @@ public class BungeeLoader
 	/**
 	 * Load i18n
 	 */
-	private void loadI18n()
-	{
+	private void loadI18n() {
 		// Get the folder
 		File i18n = new File(getBadBungee().getDataFolder(), "i18n/");
 		// Try to
-		try
-		{
+		try {
 			// Load i18n
 			I18n.getInstance().load(i18n);
 		}
 		// Error case
-		catch (Exception exception)
-		{
+		catch (Exception exception) {
 			// Print the error in logs
 			exception.printStackTrace();
 		}
@@ -137,10 +135,10 @@ public class BungeeLoader
 	/**
 	 * Load RabbitMQ
 	 */
-	private void loadRabbit()
-	{
+	private void loadRabbit() {
 		// Set the service
-		getBadBungee().setRabbitService(RabbitConnector.getInstance().registerService(new RabbitService("default", getConfig().getRabbitSettings())));
+		getBadBungee().setRabbitService(RabbitConnector.getInstance()
+				.registerService(new RabbitService("default", getConfig().getRabbitSettings())));
 		// Load claiments
 		RabbitClaimant.load();
 	}
@@ -148,17 +146,16 @@ public class BungeeLoader
 	/**
 	 * Load MongoDB
 	 */
-	private void loadMongo()
-	{
+	private void loadMongo() {
 		// Set the service
-		getBadBungee().setMongoService(MongoConnector.getInstance().registerService(new MongoService("default", getConfig().getMongoSettings())));
+		getBadBungee().setMongoService(MongoConnector.getInstance()
+				.registerService(new MongoService("default", getConfig().getMongoSettings())));
 	}
 
 	/**
 	 * Load BungeeLinker
 	 */
-	private void loadBungeeLinker()
-	{
+	private void loadBungeeLinker() {
 		// Instanciate the task
 		new BungeeTask();
 	}
@@ -166,38 +163,27 @@ public class BungeeLoader
 	/**
 	 * Load listeners
 	 */
-	private void loadListeners()
-	{
+	private void loadListeners() {
 		// Try to?
-		try
-		{
+		try {
 			// Instanciate listeners/commmands
 			PackageUtils.instanciateListeners(getBadBungee(),
 					// Rabbit listeners
 					"fr.badblock.bungee.rabbit.listeners",
 
 					// Commands
-					"fr.badblock.bungee.modules.commands.admin",
-					"fr.badblock.bungee.modules.commands.badfriends",
-					"fr.badblock.bungee.modules.commands.basic",
-					"fr.badblock.bungee.modules.commands.basic.friends",
-					"fr.badblock.bungee.modules.commands.basic.msg",
-					"fr.badblock.bungee.modules.commands.basic.party",
-					"fr.badblock.bungee.modules.commands.modo",
-					"fr.badblock.bungee.modules.commands.staff",
+					"fr.badblock.bungee.modules.commands.admin", "fr.badblock.bungee.modules.commands.badfriends",
+					"fr.badblock.bungee.modules.commands.basic", "fr.badblock.bungee.modules.commands.basic.friends",
+					"fr.badblock.bungee.modules.commands.basic.msg", "fr.badblock.bungee.modules.commands.basic.party",
+					"fr.badblock.bungee.modules.commands.modo", "fr.badblock.bungee.modules.commands.staff",
 
 					// Login
-					"fr.badblock.bungee.modules.login.antivpn",
-					"fr.badblock.bungee.modules.login.checkers",
-					"fr.badblock.bungee.modules.login.datamanager",
-					"fr.badblock.bungee.modules.permissions",
-					"fr.badblock.bungee.modules.punishments",
-					"fr.badblock.bungee.modules.ping"
-					);
+					"fr.badblock.bungee.modules.login.antivpn", "fr.badblock.bungee.modules.login.checkers",
+					"fr.badblock.bungee.modules.login.datamanager", "fr.badblock.bungee.modules.permissions",
+					"fr.badblock.bungee.modules.punishments", "fr.badblock.bungee.modules.ping");
 		}
 		// Error case
-		catch (IOException exception)
-		{
+		catch (IOException exception) {
 			// Print the error in logs
 			exception.printStackTrace();
 		}
@@ -206,8 +192,7 @@ public class BungeeLoader
 	/**
 	 * Load permissions
 	 */
-	private void loadPermissions()
-	{
+	private void loadPermissions() {
 		// Get the mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Get the database object
@@ -221,8 +206,7 @@ public class BungeeLoader
 		// Create a new permission map
 		Map<String, Permissible> groups = new HashMap<>();
 		// For each data
-		while (cursor.hasNext())
-		{
+		while (cursor.hasNext()) {
 			// Get the data
 			DBObject dbObject = cursor.next();
 			// Deserialize the data object

@@ -17,58 +17,65 @@ import lombok.EqualsAndHashCode;
  * @author xMalware
  *
  */
-public class PartyPlayer
-{
+public class PartyPlayer {
 
 	/**
 	 * Username
-	 * @param Set the username
+	 * 
+	 * @param Set
+	 *            the username
 	 * @return Returns the username
 	 */
-	private String				name;
-	
+	private String name;
+
 	/**
 	 * Role
-	 * @param Set the role
+	 * 
+	 * @param Set
+	 *            the role
 	 * @return Returns the role
 	 */
-	private PartyPlayerRole		role;
-	
+	private PartyPlayerRole role;
+
 	/**
 	 * State
-	 * @param Set the state
+	 * 
+	 * @param Set
+	 *            the state
 	 * @return Returns the state
 	 */
-	private PartyPlayerState	state;
-	
+	private PartyPlayerState state;
+
 	/**
 	 * Follow
-	 * @param Set the follow bool
+	 * 
+	 * @param Set
+	 *            the follow bool
 	 * @return Returns the follow bool
 	 */
-	private boolean				follow	= true;
-	
+	private boolean follow = true;
+
 	/**
 	 * Constructor
+	 * 
 	 * @param Username
 	 * @param Role
 	 * @param State
 	 */
-	public PartyPlayer(String name, PartyPlayerRole role, PartyPlayerState state)
-	{
+	public PartyPlayer(String name, PartyPlayerRole role, PartyPlayerState state) {
 		// use constructor with lombok (with follow as default)
 		this(name, role, state, true);
 	}
-	
+
 	/**
 	 * Returns the object as a database object
+	 * 
 	 * @return A database object
 	 */
-	public DBObject toObject()
-	{
+	public DBObject toObject() {
 		// Create a basic database object
 		BasicDBObject dbObject = new BasicDBObject();
-		
+
 		// Put the name
 		dbObject.put("name", getName());
 		// Put the role
@@ -77,9 +84,9 @@ public class PartyPlayer
 		dbObject.put("state", state != null ? state.name() : null);
 		// Put the follow state
 		dbObject.put("follow", follow);
-		
+
 		// Returns the database object
 		return dbObject;
 	}
-	
+
 }

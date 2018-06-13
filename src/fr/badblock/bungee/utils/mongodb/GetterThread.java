@@ -10,26 +10,28 @@ import fr.badblock.bungee.BadBungee;
 
 /**
  * Local package class - Thread to get the MongoDB object synchronously
+ * 
  * @see SynchroMongoDBGetter
  *
  * @author RedSpri
  */
-class GetterThread extends Thread
-{
+class GetterThread extends Thread {
 
 	/**
 	 * Getter
-	 * @param Set the new getter
+	 * 
+	 * @param Set
+	 *            the new getter
 	 * @return Returns the current getter
 	 */
 	SynchroMongoDBGetter getter;
 
 	/**
 	 * Constructor of GetterThread class
+	 * 
 	 * @param synchroMongoDBGetter
 	 */
-	public GetterThread(SynchroMongoDBGetter synchroMongoDBGetter)
-	{
+	public GetterThread(SynchroMongoDBGetter synchroMongoDBGetter) {
 		this.getter = synchroMongoDBGetter;
 	}
 
@@ -37,20 +39,17 @@ class GetterThread extends Thread
 	 * Run
 	 */
 	@Override
-	public void run()
-	{
+	public void run() {
 		// Get Mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 
 		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService)
-		{
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 			/**
 			 * Run
 			 */
 			@Override
-			public void run(MongoService mongoService)
-			{
+			public void run(MongoService mongoService) {
 				// Get the database
 				DB db = mongoService.getDb();
 
@@ -58,16 +57,13 @@ class GetterThread extends Thread
 				DBCursor cursor = db.getCollection(getter.getCollectionName()).find(getter.getQuery());
 
 				// If there is a result
-				if (cursor != null && cursor.hasNext())
-				{
+				if (cursor != null && cursor.hasNext()) {
 					// Get the database object
 					DBObject dbObject = cursor.next();
 
 					// Set the database object
 					getter.setDbObject(dbObject);
-				}
-				else
-				{
+				} else {
 					// Set a null object
 					getter.setDbObject(null);
 				}

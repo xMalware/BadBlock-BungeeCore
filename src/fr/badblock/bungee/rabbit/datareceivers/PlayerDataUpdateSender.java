@@ -14,21 +14,24 @@ import lombok.Data;
  * @author xMalware
  *
  */
-public class PlayerDataUpdateSender
-{
+public class PlayerDataUpdateSender {
 
 	/**
 	 * Player name
-	 * @param Set the new player name
+	 * 
+	 * @param Set
+	 *            the new player name
 	 * @return Returns the current player name
 	 */
-	private String			playerName;
-	
+	private String playerName;
+
 	/**
 	 * Player data
-	 * @param Set the new player data
+	 * 
+	 * @param Set
+	 *            the new player data
 	 * @return Returns the current player data
 	 */
-	private JsonObject		data;
-	
+	private JsonObject data;
+
 }

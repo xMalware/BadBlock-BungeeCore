@@ -17,29 +17,32 @@ import net.md_5.bungee.api.plugin.Event;
  * @author xMalware
  *
  */
-public class PlayerJoinEvent extends Event
-{
+public class PlayerJoinEvent extends Event {
 
 	/**
 	 * BadPlayer
-	 * @param Set the BadPlayer object
+	 * 
+	 * @param Set
+	 *            the BadPlayer object
 	 * @return Returns the BadPlayer object
 	 */
-	private BadPlayer 	  badPlayer;
-	
+	private BadPlayer badPlayer;
+
 	/**
 	 * PreLoginEvent
-	 * @param Set the PreLoginEvent object
+	 * 
+	 * @param Set
+	 *            the PreLoginEvent object
 	 * @return Returns the PreLoginEvent object
 	 */
 	private PreLoginEvent preLoginEvent;
 
 	/**
 	 * Cancel the message
+	 * 
 	 * @param message
 	 */
-	public void cancel(String message)
-	{
+	public void cancel(String message) {
 		// Cancelled
 		preLoginEvent.setCancelled(true);
 		// Set the cancel reason
@@ -47,5 +50,5 @@ public class PlayerJoinEvent extends Event
 		// Remove the BadPlayer
 		badPlayer.remove();
 	}
-	
+
 }

@@ -14,20 +14,23 @@ import lombok.EqualsAndHashCode;
  * @author xMalware
  *
  */
-public class BungeePacket
-{
+public class BungeePacket {
 
 	/**
 	 * Bungee packet type
-	 * @param Set the new Bungee packet type
+	 * 
+	 * @param Set
+	 *            the new Bungee packet type
 	 * @return Returns the current Bungee packet type
 	 */
-	private BungeePacketType	type;
+	private BungeePacketType type;
 	/**
 	 * Bungee packet content
-	 * @param Set the new Bungee packet contnet
+	 * 
+	 * @param Set
+	 *            the new Bungee packet contnet
 	 * @return Returns the current Bungee packet content
 	 */
-	private String				content;
-	
+	private String content;
+
 }

@@ -35,8 +35,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public class RCommand extends BadCommand
-{
+public class RCommand extends BadCommand {
 
 	// I18n key prefix
 	private String prefix = "bungee.commands.msg.";
@@ -44,8 +43,7 @@ public class RCommand extends BadCommand
 	/**
 	 * Command constructor
 	 */
-	public RCommand()
-	{
+	public RCommand() {
 		super("r", null, "reply");
 		// Allow access to the command for players only
 		this.setForPlayersOnly(true);
@@ -55,14 +53,12 @@ public class RCommand extends BadCommand
 	 * Method called when using the command
 	 */
 	@Override
-	public void run(CommandSender sender, String[] args)
-	{
+	public void run(CommandSender sender, String[] args) {
 		// We get the player from the sender
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 
 		// If no argument has been entered
-		if (args.length < 1)
-		{
+		if (args.length < 1) {
 			// We give him help.
 			help(sender);
 			// We stop there.
@@ -75,34 +71,32 @@ public class RCommand extends BadCommand
 
 	/**
 	 * Sending help to the player
+	 * 
 	 * @param sender
 	 */
-	private void help(CommandSender sender)
-	{
+	private void help(CommandSender sender) {
 		// Send help
 		I19n.sendMessage(sender, prefix + "help", null);
 	}
 
 	/**
 	 * Send a message
+	 * 
 	 * @param sender
 	 * @param args
 	 */
-	private void msg(ProxiedPlayer sender, String[] args)
-	{
+	private void msg(ProxiedPlayer sender, String[] args) {
 		// Get the BadPlayer object
 		BadPlayer badPlayer = BadPlayer.get(sender);
 
 		// If BadPlayer is null
-		if (badPlayer == null)
-		{
+		if (badPlayer == null) {
 			// So we stop there
 			return;
 		}
 
 		// If the player is null
-		if (badPlayer.getTmpLastMessagePlayer() == null)
-		{
+		if (badPlayer.getTmpLastMessagePlayer() == null) {
 			// Send a message
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "nobodytoreply", null);
 			// So we stop there
@@ -113,8 +107,7 @@ public class RCommand extends BadCommand
 		String playerName = badPlayer.getTmpLastMessagePlayer();
 
 		// If he's sending a message to himself
-		if (sender.getName().equalsIgnoreCase(playerName))
-		{
+		if (sender.getName().equalsIgnoreCase(playerName)) {
 			// Send a message
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "cantsendtoyourself", null);
 			// So we stop there
@@ -125,11 +118,9 @@ public class RCommand extends BadCommand
 		String message = getMessage(args);
 
 		// If the punished object isn't null
-		if (badPlayer.getPunished() != null)
-		{
+		if (badPlayer.getPunished() != null) {
 			// If the player is muted
-			if (badPlayer.getPunished().isMute())
-			{
+			if (badPlayer.getPunished().isBan()) {
 				// Send mute message
 				badPlayer.sendTranslatedOutgoingMessage(prefix + "youaremute", null);
 				// So we stop there
@@ -144,8 +135,7 @@ public class RCommand extends BadCommand
 		BadOfflinePlayer badOfflinePlayer = bungeeManager.getBadOfflinePlayer(playerName);
 
 		// If the object is null or isn't loaded
-		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded())
-		{
+		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded()) {
 			// Send the unknown player message
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "unknownplayer", null, playerName);
 			// So we stop there
@@ -156,8 +146,7 @@ public class RCommand extends BadCommand
 		String globalFlagKey = "mp";
 
 		// If the flag exists
-		if (badPlayer.getFlags().has(globalFlagKey))
-		{
+		if (badPlayer.getFlags().has(globalFlagKey)) {
 			// Send message
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "pleasewait", null);
 			// So we stop there
@@ -168,49 +157,43 @@ public class RCommand extends BadCommand
 		badPlayer.getFlags().set(globalFlagKey, 500);
 
 		// If the setting object isn't null
-		if (badOfflinePlayer.getSettings() != null)
-		{
+		if (badOfflinePlayer.getSettings() != null) {
 			// Get the pm privacy
 			PMPrivacy pmPrivacy = badOfflinePlayer.getSettings().getPmPrivacy();
 			// If the pm privacy isn't null and if the player doesn't have the permission
-			if (pmPrivacy != null && !badPlayer.hasPermission("bungee.command.msg.bypass"))
-			{
+			if (pmPrivacy != null && !badPlayer.hasPermission("bungee.command.msg.bypass")) {
 				// If the pm privacy is set to nobody
-				if (pmPrivacy.equals(PMPrivacy.WITH_NOBODY))
-				{
+				if (pmPrivacy.equals(PMPrivacy.WITH_NOBODY)) {
 					// Send a message
 					badPlayer.sendTranslatedOutgoingMessage(prefix + "dontacceptpm", null, badOfflinePlayer.getName());
 					// So we stop there
 					return;
 				}
 				// If the pm privacy is set to friends only
-				if (pmPrivacy.equals(PMPrivacy.WITH_ONLY_HIS_FRIENDS))
-				{
+				if (pmPrivacy.equals(PMPrivacy.WITH_ONLY_HIS_FRIENDS)) {
 					// Create a friend boolean
 					boolean friends = false;
 					// Get the friend list
 					FriendList friendList = FriendListManager.getFriendList(badOfflinePlayer.getUniqueId());
 					// If the friend list isn't null
-					if (friendList != null)
-					{
+					if (friendList != null) {
 						// If the player is in the list
-						if (friendList.getPlayers().containsKey(badPlayer.getUniqueId()))
-						{
+						if (friendList.getPlayers().containsKey(badPlayer.getUniqueId())) {
 							// Get the friend list player object
 							FriendListPlayer friendListPlayer = friendList.getPlayers().get(badPlayer.getUniqueId());
 							// If the friendship state is set to ACCEPTED
-							if (friendListPlayer != null && friendListPlayer.getState().equals(FriendListPlayerState.ACCEPTED))
-							{
+							if (friendListPlayer != null
+									&& friendListPlayer.getState().equals(FriendListPlayerState.ACCEPTED)) {
 								// So they're friends
 								friends = true;
 							}
 						}
 					}
 					// If they're not friends
-					if (!friends)
-					{
+					if (!friends) {
 						// Send a message
-						badPlayer.sendTranslatedOutgoingMessage(prefix + "dontacceptpmfriends", null, badOfflinePlayer.getName());
+						badPlayer.sendTranslatedOutgoingMessage(prefix + "dontacceptpmfriends", null,
+								badOfflinePlayer.getName());
 						// So we stop there
 						return;
 					}
@@ -219,11 +202,9 @@ public class RCommand extends BadCommand
 		}
 
 		// If the punished object isn't null
-		if (badOfflinePlayer.getPunished() != null)
-		{
+		if (badOfflinePlayer.getPunished() != null) {
 			// If the receiver is muted
-			if (badOfflinePlayer.getPunished().isMute())
-			{
+			if (badOfflinePlayer.getPunished().isMute()) {
 				// Send a message
 				badPlayer.sendTranslatedOutgoingMessage(prefix + "heismuted", null, badOfflinePlayer.getName());
 				// So we stop there
@@ -235,8 +216,7 @@ public class RCommand extends BadCommand
 		String color = ChatColor.translateAlternateColorCodes('&', message);
 
 		// Check if the colored message isn't the same
-		if (!color.equals(message))
-		{
+		if (!color.equals(message)) {
 			// Send a message
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "antihackcolor", null, badOfflinePlayer.getName());
 			// So we stop there
@@ -249,28 +229,27 @@ public class RCommand extends BadCommand
 		// Get the intro message
 		String Dintro = badPlayer.getTranslatedMessage(prefix + "send.intro", null);
 		// Get the message
-		String Dmessage = badPlayer.getTranslatedMessage(prefix + "send.message", new int[] { 0, 2}, badPlayer.getRawChatPrefix(), badPlayer.getName(),
-				badPlayer.getRawChatSuffix(), message);
+		String Dmessage = badPlayer.getTranslatedMessage(prefix + "send.message", new int[] { 0, 2 },
+				badPlayer.getRawChatPrefix(), badPlayer.getName(), badPlayer.getRawChatSuffix(), message);
 		// Get the message hover
-		String Dmessage_hover = badPlayer.getTranslatedMessage(prefix + "send.message_hover", new int[] { 0, 2}, 
-				badOfflinePlayer.getRawChatPrefix(), badOfflinePlayer.getName(), badOfflinePlayer.getRawChatSuffix(), message);
+		String Dmessage_hover = badPlayer.getTranslatedMessage(prefix + "send.message_hover", new int[] { 0, 2 },
+				badOfflinePlayer.getRawChatPrefix(), badOfflinePlayer.getName(), badOfflinePlayer.getRawChatSuffix(),
+				message);
 
 		// Get the McJson
-		McJson json = new McJsonFactory(Dintro).finaliseComponent().initNewComponent(Dmessage).setHoverText(Dmessage_hover)
-				.setClickSuggest("/msg " + badOfflinePlayer.getName() + " ").build();
+		McJson json = new McJsonFactory(Dintro).finaliseComponent().initNewComponent(Dmessage)
+				.setHoverText(Dmessage_hover).setClickSuggest("/msg " + badOfflinePlayer.getName() + " ").build();
 
 		// Send the message
 		badPlayer.sendTranslatedOutgoingMCJson(json);
 
 		// If the receiver is online
-		if (online)
-		{
+		if (online) {
 			// Get the selected BadPlayer
 			BadPlayer selectedBadPlayer = badOfflinePlayer.getOnlineBadPlayer();
 
 			// If the selected BadPlayer object is null
-			if (selectedBadPlayer == null)
-			{
+			if (selectedBadPlayer == null) {
 				// Send the unknown player message
 				badPlayer.sendTranslatedOutgoingMessage(prefix + "unknownplayer", null, badOfflinePlayer.getName());
 				// So we stop there
@@ -280,11 +259,12 @@ public class RCommand extends BadCommand
 			// Get the intro message
 			Dintro = selectedBadPlayer.getTranslatedMessage(prefix + "receive.intro", null);
 			// Get the message
-			Dmessage = selectedBadPlayer.getTranslatedMessage(prefix + "receive.message", new int[] { 0, 2},
+			Dmessage = selectedBadPlayer.getTranslatedMessage(prefix + "receive.message", new int[] { 0, 2 },
 					badPlayer.getRawChatPrefix(), badPlayer.getName(), badPlayer.getRawChatSuffix(), message);
 			// Get the message hover
-			Dmessage_hover = selectedBadPlayer.getTranslatedMessage(prefix + "receive.message_hover", new int[] { 0, 2},
-					badPlayer.getRawChatPrefix(), badPlayer.getName(), badPlayer.getRawChatSuffix(), message);
+			Dmessage_hover = selectedBadPlayer.getTranslatedMessage(prefix + "receive.message_hover",
+					new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), badPlayer.getName(), badPlayer.getRawChatSuffix(),
+					message);
 
 			// Get the McJson
 			json = new McJsonFactory(Dintro).finaliseComponent().initNewComponent(Dmessage).setHoverText(Dmessage_hover)
@@ -292,9 +272,7 @@ public class RCommand extends BadCommand
 
 			// Send the message
 			selectedBadPlayer.sendTranslatedOutgoingMCJson(json);
-		}
-		else
-		{
+		} else {
 			// Send offline warn message
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "offline", null, badOfflinePlayer.getName());
 		}
@@ -302,14 +280,12 @@ public class RCommand extends BadCommand
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService)
-		{
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 			/**
 			 * Use asynchronously
 			 */
 			@Override
-			public void run(MongoService mongoService)
-			{
+			public void run(MongoService mongoService) {
 				// Get the database
 				DB db = mongoService.getDb();
 				// Get the collection
@@ -347,25 +323,23 @@ public class RCommand extends BadCommand
 
 	/**
 	 * Get a message with args
+	 * 
 	 * @param args
 	 * @return
 	 */
-	private String getMessage(String[] args)
-	{
+	private String getMessage(String[] args) {
 		// Create a StringBuilder
 		StringBuilder stringBuilder = new StringBuilder();
 		// Index
 		int i = 0;
 		// For each arg
-		for (String arg : args)
-		{
+		for (String arg : args) {
 			// Increment index
 			i++;
 			// Spacer
 			String spacer = " ";
 			// If the args are the same
-			if (args.length == i)
-			{
+			if (args.length == i) {
 				// Empty spacer
 				spacer = "";
 			}

@@ -16,7 +16,8 @@ import net.md_5.bungee.api.plugin.PluginManager;
 
 /**
  * 
- * Abstract class that makes it easier to create commands on the server without actually having to save them.
+ * Abstract class that makes it easier to create commands on the server without
+ * actually having to save them.
  * 
  * @author xMalware
  *
@@ -24,27 +25,27 @@ import net.md_5.bungee.api.plugin.PluginManager;
 @EqualsAndHashCode(callSuper = false)
 @Getter
 @Setter
-public abstract class BadCommand extends Command
-{
+public abstract class BadCommand extends Command {
 
-	// Boolean that lets you know if the command is only allowed for players or also for the console.
+	// Boolean that lets you know if the command is only allowed for players or also
+	// for the console.
 	private boolean forPlayersOnly;
 
 	/**
 	 * Typical command builder
-	 * @param name > name of the command
+	 * 
+	 * @param name
+	 *            > name of the command
 	 */
-	public BadCommand(String name)
-	{
-		// Sends the name of the command to the superclass 
+	public BadCommand(String name) {
+		// Sends the name of the command to the superclass
 		super(name);
 		// Load the command when it is instantiated.
 		this.load();
 	}
 
-	public BadCommand(String name, String permission, String... aliases)
-	{
-		// Sends the details of the command to the superclass 
+	public BadCommand(String name, String permission, String... aliases) {
+		// Sends the details of the command to the superclass
 		super(name, permission, aliases);
 		// Load the command when it is instantiated.
 		this.load();
@@ -55,28 +56,29 @@ public abstract class BadCommand extends Command
 	 * Method executed when the command is sended
 	 */
 	@Override
-	public void execute(CommandSender sender, String[] args)
-	{
+	public void execute(CommandSender sender, String[] args) {
 		// If this command is for players only
-		if (isForPlayersOnly())
-		{
+		if (isForPlayersOnly()) {
 			// So we check if the sender isn't a player
-			if (!(sender instanceof ProxiedPlayer))
-			{
-				// The sender is not a player, so we let him know that he cannot execute the command.
+			if (!(sender instanceof ProxiedPlayer)) {
+				// The sender is not a player, so we let him know that he cannot execute the
+				// command.
 				sender.sendMessages(I18n.getInstance().get("bungee.commands.playersonly"));
 				// We stop there
 				return;
 			}
 		}
 		// Logging
-		BungeeManager.getInstance().log(sender.getName() + " issued command /" + getName() + " " + StringUtils.join(args, " "));
+		BungeeManager.getInstance()
+				.log(sender.getName() + " issued command /" + getName() + " " + StringUtils.join(args, " "));
 		// Execute the command in a separate thread
-        ThreadRunnable.run(() -> BadCommand.this.run(sender, args));
+		ThreadRunnable.run(() -> BadCommand.this.run(sender, args));
 	}
 
 	/**
-	 * Abstract method that allows BadBlock commands to differentiate themselves from others by being implemented in the classes of commands
+	 * Abstract method that allows BadBlock commands to differentiate themselves
+	 * from others by being implemented in the classes of commands
+	 * 
 	 * @param sender
 	 * @param args
 	 */
@@ -85,8 +87,7 @@ public abstract class BadCommand extends Command
 	/**
 	 * Registration of the command
 	 */
-	private void load()
-	{
+	private void load() {
 		// We get the plugin manager
 		PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
 		// We register the command

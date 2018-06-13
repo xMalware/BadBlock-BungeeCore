@@ -11,23 +11,21 @@ import net.md_5.bungee.api.CommandSender;
  * @author xMalware
  *
  */
-public class HelpCommand extends BadCommand
-{
-	
+public class HelpCommand extends BadCommand {
+
 	/**
 	 * Command constructor
 	 */
-	public HelpCommand()
-	{
-		super("help", "", "?", "bukkit:help", "minecraft:help", "craftbukkit:help", "bukkit:?", "minecraft:?", "craftbukkit:?");
+	public HelpCommand() {
+		super("help", "", "?", "bukkit:help", "minecraft:help", "craftbukkit:help", "bukkit:?", "minecraft:?",
+				"craftbukkit:?");
 	}
-	
+
 	/**
 	 * Method called when using the command
 	 */
 	@Override
-	public void run(CommandSender sender, String[] args)
-	{
+	public void run(CommandSender sender, String[] args) {
 		// Sending help
 		I19n.sendMessage(sender, "bungee.commands.help.message", null, sender.getName());
 	}

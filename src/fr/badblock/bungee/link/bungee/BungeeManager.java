@@ -45,15 +45,18 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public class BungeeManager
-{
+public class BungeeManager {
 
 	/**
 	 * Unique BungeeManager instance
-	 * @param New BungeeManager
+	 * 
+	 * @param New
+	 *            BungeeManager
 	 * @return Current BungeeManager
 	 */
-	@Getter @Setter private static BungeeManager instance = new BungeeManager();
+	@Getter
+	@Setter
+	private static BungeeManager instance = new BungeeManager();
 
 	/**
 	 * BungeeCord nodes
@@ -63,54 +66,57 @@ public class BungeeManager
 	/**
 	 * Current server ping
 	 */
-	private ServerPing			serverPing;
+	private ServerPing serverPing;
 
 	/**
-	 * Number of players online, temporary variable. Very useful to avoid recalculating the number each time
+	 * Number of players online, temporary variable. Very useful to avoid
+	 * recalculating the number each time
 	 */
-	private int					tempOnlinePlayers;
+	private int tempOnlinePlayers;
 	/**
 	 * Current slots
 	 */
-	private int					slots;
+	private int slots;
 	/**
 	 * Cached player token
 	 */
-	private CachedPlayerToken	token;
+	private CachedPlayerToken token;
 
 	/**
 	 * Add a BungeeCord node
-	 * @param received bungee object
+	 * 
+	 * @param received
+	 *            bungee object
 	 */
-	public void add(BungeeObject bungeeObject)
-	{
+	public void add(BungeeObject bungeeObject) {
 		// Add in the map
 		bungees.put(bungeeObject.getName(), bungeeObject);
 	}
 
 	/**
 	 * Send a message in all BungeeCord logs.
-	 * @param message to send
+	 * 
+	 * @param message
+	 *            to send
 	 */
-	public void log(String message)
-	{
+	public void log(String message) {
 		// Send the packet with the BungeePacket layer
 		sendPacket(new BungeePacket(BungeePacketType.LOG, message));
 	}
 
 	/**
 	 * Send a message to all players on the whole network
-	 * @param array of all messages to send
+	 * 
+	 * @param array
+	 *            of all messages to send
 	 */
-	public void broadcast(String... messages)
-	{
+	public void broadcast(String... messages) {
 		// Create a new string builder
 		StringBuilder stringBuilder = new StringBuilder();
 		// Create an iterator with messages
 		Iterator<String> iterator = Arrays.asList(messages).iterator();
 		// On each message
-		while (iterator.hasNext())
-		{
+		while (iterator.hasNext()) {
 			// Get the message
 			String message = iterator.next();
 			// Add in the string builder
@@ -122,129 +128,167 @@ public class BungeeManager
 
 	/**
 	 * Send a message to all players with specific permission
-	 * @param the permission
-	 * @param all messages
+	 * 
+	 * @param the
+	 *            permission
+	 * @param all
+	 *            messages
 	 */
-	public void targetedBrodcast(String permission, String... messages)
-	{
+	public void targetedBrodcast(String permission, String... messages) {
 		// Get logged players, filter with the permision and send the message
-		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingMessage(messages));
+		getLoggedPlayers(player -> player.hasPermission(permission))
+				.forEach(player -> player.sendOutgoingMessage(messages));
 	}
 
 	/**
-	 * Send a message to all players with specific permission and a translated message
-	 * @param the permission
-	 * @param the message key
-	 * @param array of indexes to translate
-	 * @param message arguments
+	 * Send a message to all players with specific permission and a translated
+	 * message
+	 * 
+	 * @param the
+	 *            permission
+	 * @param the
+	 *            message key
+	 * @param array
+	 *            of indexes to translate
+	 * @param message
+	 *            arguments
 	 */
-	public void targetedTranslatedBroadcast(String permission, String key, int[] indexesToTranslate, Object... args)
-	{
-		// Get logged players, filter with the permission and send the translated message
-		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMessage(key, indexesToTranslate, args));
+	public void targetedTranslatedBroadcast(String permission, String key, int[] indexesToTranslate, Object... args) {
+		// Get logged players, filter with the permission and send the translated
+		// message
+		getLoggedPlayers(player -> player.hasPermission(permission))
+				.forEach(player -> player.sendTranslatedOutgoingMessage(key, indexesToTranslate, args));
 	}
 
 	/**
 	 * Send a JSON message to all players with specific permission
-	 * @param the permission
-	 * @param all messages
+	 * 
+	 * @param the
+	 *            permission
+	 * @param all
+	 *            messages
 	 */
-	public void targetedJsonBrodcast(String permission, String... messages)
-	{
+	public void targetedJsonBrodcast(String permission, String... messages) {
 		// Get logged players, filter with the permission and send the JSON message
-		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendOutgoingJsonMessage(messages));
+		getLoggedPlayers(player -> player.hasPermission(permission))
+				.forEach(player -> player.sendOutgoingJsonMessage(messages));
 	}
 
 	/**
 	 * Send a translated JSON message to all players with a specific permission
-	 * @param the permission
-	 * @param the message key
-	 * @param array of indexes to translate
-	 * @param message arguments
+	 * 
+	 * @param the
+	 *            permission
+	 * @param the
+	 *            message key
+	 * @param array
+	 *            of indexes to translate
+	 * @param message
+	 *            arguments
 	 */
-	public void targetedTranslatedJsonBroadcast(String permission, String key, int[] indexesToTranslate, Object... args)
-	{
-		// Get logged players, filter with the permission and send the translated JSON message
-		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, indexesToTranslate, args));
+	public void targetedTranslatedJsonBroadcast(String permission, String key, int[] indexesToTranslate,
+			Object... args) {
+		// Get logged players, filter with the permission and send the translated JSON
+		// message
+		getLoggedPlayers(player -> player.hasPermission(permission))
+				.forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, indexesToTranslate, args));
 	}
 
 	/**
 	 * Send a translated MCJson message to all players with a specific permission
-	 * @param the permission
-	 * @param mcJson object
+	 * 
+	 * @param the
+	 *            permission
+	 * @param mcJson
+	 *            object
 	 */
-	public void targetedTranslatedMCJsonBroadcast(String permission, McJson mcJson)
-	{
-		// Get logged players, filter with the permission and send the translated MCJson object (message)
-		getLoggedPlayers(player -> player.hasPermission(permission)).forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
+	public void targetedTranslatedMCJsonBroadcast(String permission, McJson mcJson) {
+		// Get logged players, filter with the permission and send the translated MCJson
+		// object (message)
+		getLoggedPlayers(player -> player.hasPermission(permission))
+				.forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
 	}
 
 	/**
-	 * Send messages to all players with a custom filter 
-	 * @param the filter
-	 * @param all messages
+	 * Send messages to all players with a custom filter
+	 * 
+	 * @param the
+	 *            filter
+	 * @param all
+	 *            messages
 	 */
-	public void targetedBrodcast(Filter<BadPlayer> filter, String... messages)
-	{
+	public void targetedBrodcast(Filter<BadPlayer> filter, String... messages) {
 		// Filter the logged players and send them messages
 		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingMessage(messages));
 	}
 
 	/**
 	 * Send translated message to all players with custom filter
+	 * 
 	 * @param filter
-	 * @param message key
-	 * @param indexes to translate
-	 * @param message args
+	 * @param message
+	 *            key
+	 * @param indexes
+	 *            to translate
+	 * @param message
+	 *            args
 	 */
-	public void targetedTranslatedBroadcast(Filter<BadPlayer> filter, String key, int[] indexesToTranslate, Object... args)
-	{
+	public void targetedTranslatedBroadcast(Filter<BadPlayer> filter, String key, int[] indexesToTranslate,
+			Object... args) {
 		// Filter the logged players and send them translated messages
-		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMessage(key, indexesToTranslate, args));
+		filter.filterList(getLoggedPlayers())
+				.forEach(player -> player.sendTranslatedOutgoingMessage(key, indexesToTranslate, args));
 	}
 
 	/**
 	 * Send JSON messages to all players with custom filter
+	 * 
 	 * @param filter
-	 * @param all messages
+	 * @param all
+	 *            messages
 	 */
-	public void targetedJsonBrodcast(Filter<BadPlayer> filter, String... messages)
-	{
+	public void targetedJsonBrodcast(Filter<BadPlayer> filter, String... messages) {
 		// Filter the logged players and send them a JSON message
 		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendOutgoingJsonMessage(messages));
 	}
 
 	/**
 	 * Send translated JSON message to all players with custom filter
+	 * 
 	 * @param filter
-	 * @param the message key
-	 * @param the indexes to translate
-	 * @param the message args
+	 * @param the
+	 *            message key
+	 * @param the
+	 *            indexes to translate
+	 * @param the
+	 *            message args
 	 */
-	public void targetedTranslatedJsonBroadcast(Filter<BadPlayer> filter, String key, int[] indexesToTranslate, Object... args)
-	{
+	public void targetedTranslatedJsonBroadcast(Filter<BadPlayer> filter, String key, int[] indexesToTranslate,
+			Object... args) {
 		// Filter the logged players and send them a tranlated JSON message
-		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, indexesToTranslate, args));
+		filter.filterList(getLoggedPlayers())
+				.forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, indexesToTranslate, args));
 	}
 
 	/**
 	 * Send a translated MCJson message to all players with custom filter
+	 * 
 	 * @param filter
-	 * @param mcJson object
+	 * @param mcJson
+	 *            object
 	 */
-	public void targetedTranslatedMCJsonBroadcast(Filter<BadPlayer> filter, McJson mcJson)
-	{
+	public void targetedTranslatedMCJsonBroadcast(Filter<BadPlayer> filter, McJson mcJson) {
 		// Filter the logged players and send them a translated MCJson message
 		filter.filterList(getLoggedPlayers()).forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
 	}
 
 	/**
 	 * Get a BadPlayer object from the network with an username
+	 * 
 	 * @param playerName
 	 * @return a BadPlayer object
 	 */
-	public BadPlayer getBadPlayer(String name)
-	{
+	public BadPlayer getBadPlayer(String name) {
 		// Get the logged players with the name
 		List<BadPlayer> list = getLoggedPlayers(p -> p.getName().equalsIgnoreCase(name));
 		// Returns BadPlayer object if the list isn't empty
@@ -253,11 +297,12 @@ public class BungeeManager
 
 	/**
 	 * Get a BadPlayer object from the network with a universally unique identifier
-	 * @param the universally unique identifier
+	 * 
+	 * @param the
+	 *            universally unique identifier
 	 * @return a BadPlayer object
 	 */
-	public BadPlayer getBadPlayer(UUID uuid)
-	{
+	public BadPlayer getBadPlayer(UUID uuid) {
 		// Get the logged players with the universally unique identifier
 		List<BadPlayer> list = getLoggedPlayers(p -> p.getUniqueId().toString().equalsIgnoreCase(uuid.toString()));
 		// Returns BadPlayer object if the list isn't empty
@@ -266,25 +311,24 @@ public class BungeeManager
 
 	/**
 	 * Get a BadPlayer object from the network with a ProxiedPlayer object
-	 * @param proxiedPlayer 
+	 * 
+	 * @param proxiedPlayer
 	 * @return a BadPlayer object
 	 */
-	public BadPlayer getBadPlayer(ProxiedPlayer proxiedPlayer)
-	{
+	public BadPlayer getBadPlayer(ProxiedPlayer proxiedPlayer) {
 		// Get from the local map
 		return BadPlayer.get(proxiedPlayer);
 	}
 
 	/**
 	 * Get a BadOfflinePlayer object from the network
+	 * 
 	 * @param username
 	 * @return a BadOfflinePlayer object
 	 */
-	public BadOfflinePlayer getBadOfflinePlayer(String name)
-	{
+	public BadOfflinePlayer getBadOfflinePlayer(String name) {
 		// If the user is online
-		if (getBadPlayer(name) != null)
-		{
+		if (getBadPlayer(name) != null) {
 			// Returns the BadPlayer
 			return getBadPlayer(name);
 		}
@@ -294,14 +338,13 @@ public class BungeeManager
 
 	/**
 	 * Get a BadOfflinePlayer object from the network
+	 * 
 	 * @param UUID
 	 * @return a BadOfflinePlayer object
 	 */
-	public BadOfflinePlayer getBadOfflinePlayer(UUID uuid)
-	{
+	public BadOfflinePlayer getBadOfflinePlayer(UUID uuid) {
 		// If the user is online
-		if (getBadPlayer(uuid) != null)
-		{
+		if (getBadPlayer(uuid) != null) {
 			// Returns the BadPlayer
 			return getBadPlayer(uuid);
 		}
@@ -312,13 +355,12 @@ public class BungeeManager
 	@SuppressWarnings("deprecation")
 	/**
 	 * Generate the server ping by using network data
+	 * 
 	 * @return a ServerPing object
 	 */
-	public ServerPing generatePing()
-	{
+	public ServerPing generatePing() {
 		// If a server ping has already been created recently
-		if (serverPing != null && GlobalFlags.has(serverPing))
-		{
+		if (serverPing != null && GlobalFlags.has(serverPing)) {
 			// Returns the current server ping
 			return serverPing;
 		}
@@ -335,8 +377,7 @@ public class BungeeManager
 		// Find all data with an empty query
 		DBCursor cursor = collection.find(query);
 		// For each data
-		while (cursor.hasNext())
-		{
+		while (cursor.hasNext()) {
 			// Get it
 			DBObject dbObject = cursor.next();
 			// Get deserialize object
@@ -360,87 +401,90 @@ public class BungeeManager
 
 	/**
 	 * Send a player packet
-	 * @param player packet object
+	 * 
+	 * @param player
+	 *            packet object
 	 */
-	public void sendPacket(PlayerPacket playerPacket)
-	{
+	public void sendPacket(PlayerPacket playerPacket) {
 		// Get main class
 		BadBungee badBungee = BadBungee.getInstance();
 		// Deserialize the player packet
 		String json = badBungee.getGson().toJson(playerPacket);
 		// Send the packet over RabbitMQ
-		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, json), 
+		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, json),
 				BadBungeeQueues.PLAYER_PROCESSING, true, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
 	}
 
 	/**
 	 * Send a bungee packet
-	 * @param bungee packet object
+	 * 
+	 * @param bungee
+	 *            packet object
 	 */
-	public void sendPacket(BungeePacket bungeePacket)
-	{
+	public void sendPacket(BungeePacket bungeePacket) {
 		// Get main class
 		BadBungee badBungee = BadBungee.getInstance();
 		// Deserialize the bungee packet
 		String json = badBungee.getGson().toJson(bungeePacket);
 		// Send the packet over RabbitMQ
-		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, json), 
+		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, json),
 				BadBungeeQueues.BUNGEE_PROCESSING, true, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
 	}
 
 	/**
 	 * Get the logged players with a predicate
-	 * @param predicate (filtering)
+	 * 
+	 * @param predicate
+	 *            (filtering)
 	 * @return list of online BadPlayer with filters
 	 */
-	public List<BadPlayer> getLoggedPlayers(Predicate<BadPlayer> predicate)
-	{
+	public List<BadPlayer> getLoggedPlayers(Predicate<BadPlayer> predicate) {
 		// New array list
 		List<BadPlayer> badPlayers = new ArrayList<>();
 		// Get all bungee
-		bungees.values().parallelStream().forEach(
-				bungee -> 
-				// Add all online BadPlayer with a predicate (custom filter)
-				badPlayers.addAll(bungee.getUsernames().values().parallelStream().filter(player -> player.isLogged() && predicate.test(player)).collect(Collectors.toList())));
+		bungees.values().parallelStream().forEach(bungee ->
+		// Add all online BadPlayer with a predicate (custom filter)
+		badPlayers.addAll(bungee.getUsernames().values().parallelStream()
+				.filter(player -> player.isLogged() && predicate.test(player)).collect(Collectors.toList())));
 		// Return the array list
 		return badPlayers;
 	}
 
 	/**
 	 * Get logged players
+	 * 
 	 * @return
 	 */
-	public List<BadPlayer> getLoggedPlayers()
-	{
+	public List<BadPlayer> getLoggedPlayers() {
 		// Use the getLoggedPlayers() with a predicate which is always true
 		return getLoggedPlayers(a -> true);
 	}
 
 	/**
 	 * If an username exists in the online network
-	 * @param username of the player
+	 * 
+	 * @param username
+	 *            of the player
 	 * @return if the player is online or not
 	 */
-	public boolean hasUsername(String name)
-	{
+	public boolean hasUsername(String name) {
 		// Get the lower player username
 		final String toLowerName = name.toLowerCase();
 		// Get the count of players with this username on the network
-		long count = bungees.values().parallelStream().filter(bungee -> 
-		bungee.getUsernames().keySet().parallelStream().filter(n -> n.toLowerCase().equals(toLowerName)).count() > 0).count();
+		long count = bungees.values().parallelStream().filter(bungee -> bungee.getUsernames().keySet().parallelStream()
+				.filter(n -> n.toLowerCase().equals(toLowerName)).count() > 0).count();
 		// Returns if the count is more than 0
 		return count > 0;
 	}
 
 	/**
 	 * Get the online player count in realtime
+	 * 
 	 * @return
 	 */
-	public int getRealTimeOnlinePlayers()
-	{
+	public int getRealTimeOnlinePlayers() {
 		// If the token is null or if the token has expired
-		if (token == null || token.isExpired())
-		{
+		if (token == null || token.isExpired()) {
 			// So we regenerate it
 			token = CachedPlayerToken.generateToken();
 		}
@@ -450,13 +494,12 @@ public class BungeeManager
 
 	/**
 	 * Get the online player count with cache time (to avoid compute-spamming)
+	 * 
 	 * @return the online player count
 	 */
-	public int getOnlinePlayers()
-	{
+	public int getOnlinePlayers() {
 		// If the flag is valid
-		if (GlobalFlags.has("onlinePlayers"))
-		{
+		if (GlobalFlags.has("onlinePlayers")) {
 			// So we return the cached online player count
 			return tempOnlinePlayers;
 		}
@@ -468,11 +511,11 @@ public class BungeeManager
 
 	/**
 	 * If a Bungee object stills valid
+	 * 
 	 * @param bungeeObject
 	 * @return if the Bungee object stills valid or not
 	 */
-	public boolean isValid(BungeeObject bungeeObject)
-	{
+	public boolean isValid(BungeeObject bungeeObject) {
 		// Check with the timestamp
 		return TimeUtils.isValid(bungeeObject.getTimestamp());
 	}

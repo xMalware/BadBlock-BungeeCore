@@ -8,48 +8,48 @@ import net.md_5.bungee.api.plugin.Event;
 /**
  * 
  * Cancelable event, to be used with other events
+ * 
  * @author xMalware
  *
  */
-public abstract class CancellableEvent extends Event implements Cancellable
-{
-	
+public abstract class CancellableEvent extends Event implements Cancellable {
+
 	// Cancel field
-    private boolean cancelled = false;
-    
-    // Cancel reason field
-    @Getter @Setter private String cancelReason = "";
+	private boolean cancelled = false;
 
-    @Override
-    /**
-     * Returns if the event is cancelled
-     */
-    public boolean isCancelled() 
-    {
-    	// Returns cancelled field
-        return cancelled;
-    }
+	// Cancel reason field
+	@Getter
+	@Setter
+	private String cancelReason = "";
 
-    @Override
-    /**
-     * Set the event as cancelled or not?
-     */
-    public void setCancelled(boolean cancelled)
-    {
-    	// Set the cancelled field
-        this.cancelled = cancelled;
-    }
+	@Override
+	/**
+	 * Returns if the event is cancelled
+	 */
+	public boolean isCancelled() {
+		// Returns cancelled field
+		return cancelled;
+	}
 
-    /**
-     * Cancel the event with reason
-     * @param reason
-     */
-    public void cancel(String reason)
-    {
-    	// Set cancelled
-        setCancelled(true);
-        // Set cancel reason
-        setCancelReason(reason);
-    }
-    
+	@Override
+	/**
+	 * Set the event as cancelled or not?
+	 */
+	public void setCancelled(boolean cancelled) {
+		// Set the cancelled field
+		this.cancelled = cancelled;
+	}
+
+	/**
+	 * Cancel the event with reason
+	 * 
+	 * @param reason
+	 */
+	public void cancel(String reason) {
+		// Set cancelled
+		setCancelled(true);
+		// Set cancel reason
+		setCancelReason(reason);
+	}
+
 }

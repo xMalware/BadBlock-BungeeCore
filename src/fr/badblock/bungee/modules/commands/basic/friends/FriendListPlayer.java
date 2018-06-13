@@ -19,37 +19,40 @@ import lombok.EqualsAndHashCode;
  * @author xMalware
  *
  */
-public final class FriendListPlayer
-{
+public final class FriendListPlayer {
 
 	/**
 	 * Unique ID of the player
-	 * @param Set the unique ID
+	 * 
+	 * @param Set
+	 *            the unique ID
 	 * @return Returns the unique ID
 	 */
-    private UUID					uuid;
-    
-    /**
-     * Friendlist player state
-     * @param Set the friendlist player state
-     * @return Returns the friendlist player state
-     */
-    private FriendListPlayerState	state;
-    
-    /**
-     * Convert to object
-     * @return
-     */
-    public DBObject toObject()
-    {
-    	// Create new database object
-    	BasicDBObject dbObject = new BasicDBObject();
-    	// Add unique id
-    	dbObject.put("uuid", getUuid().toString());
-    	// Add state
-    	dbObject.put("state", getState().name());
-    	// Returns the database object
-    	return dbObject;
-    }
-    
+	private UUID uuid;
+
+	/**
+	 * Friendlist player state
+	 * 
+	 * @param Set
+	 *            the friendlist player state
+	 * @return Returns the friendlist player state
+	 */
+	private FriendListPlayerState state;
+
+	/**
+	 * Convert to object
+	 * 
+	 * @return
+	 */
+	public DBObject toObject() {
+		// Create new database object
+		BasicDBObject dbObject = new BasicDBObject();
+		// Add unique id
+		dbObject.put("uuid", getUuid().toString());
+		// Add state
+		dbObject.put("state", getState().name());
+		// Returns the database object
+		return dbObject;
+	}
+
 }

@@ -9,39 +9,42 @@ import fr.badblock.bungee.utils.time.TaskManager;
  * @author xMalware
  *
  */
-public abstract class RabbitClaimant implements Runnable
-{
+public abstract class RabbitClaimant implements Runnable {
 
 	/**
 	 * Constructor with only a delay
-	 * @param Claimant name
-	 * @param Delay (milliseconds)
+	 * 
+	 * @param Claimant
+	 *            name
+	 * @param Delay
+	 *            (milliseconds)
 	 */
-	public RabbitClaimant(String name, long delay)
-	{
+	public RabbitClaimant(String name, long delay) {
 		// Run the task
 		TaskManager.scheduleDelayedTask("rabbitClaimant-" + name, this, delay);
 	}
-	
+
 	/**
 	 * Constructor with a delay & repeat time
-	 * @param Claimant name
-	 * @param Delay (milliseconds)
-	 * @param Repeat (milliseconds)
+	 * 
+	 * @param Claimant
+	 *            name
+	 * @param Delay
+	 *            (milliseconds)
+	 * @param Repeat
+	 *            (milliseconds)
 	 */
-	public RabbitClaimant(String name, long delay, long repeat)
-	{
+	public RabbitClaimant(String name, long delay, long repeat) {
 		// Run the task
 		TaskManager.scheduleRepeatingTask("rabbitClaimant-" + name, this, delay, repeat);
 	}
-	
+
 	/**
 	 * Load Rabbit claiments
 	 */
-	public static void load()
-	{
+	public static void load() {
 		// Load token query
 		new BungeeTokenQuery();
 	}
-	
+
 }

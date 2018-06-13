@@ -46,99 +46,122 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public class BadOfflinePlayer
-{
+public class BadOfflinePlayer {
 
 	/**
 	 * Name
-	 * @param Set the new username
+	 * 
+	 * @param Set
+	 *            the new username
 	 * @return Returns the current username
 	 */
-	private 			String						name;
+	private String name;
 
 	/**
 	 * Last IP
-	 * @param Set the last IP
+	 * 
+	 * @param Set
+	 *            the last IP
 	 * @return Returns the last IP
 	 */
-	private				String						lastIp;
+	private String lastIp;
 
 	/**
 	 * Unique ID
-	 * @param Set the unique ID
+	 * 
+	 * @param Set
+	 *            the unique ID
 	 * @return Returns the unique ID
 	 */
-	private 			UUID						uniqueId;
+	private UUID uniqueId;
 
 	/**
 	 * Database object
-	 * @param Set the database object
+	 * 
+	 * @param Set
+	 *            the database object
 	 * @return Returns the database object
 	 */
-	private 			BasicDBObject	  			dbObject;
+	private BasicDBObject dbObject;
 
 	/**
 	 * Callback
-	 * @param Set the callback
+	 * 
+	 * @param Set
+	 *            the callback
 	 * @return Returns the callback
 	 */
-	private transient	Callback<BadOfflinePlayer>	callback;
+	private transient Callback<BadOfflinePlayer> callback;
 
 	/**
 	 * Loaded callbacks
-	 * @param Set the loaded callbacks
+	 * 
+	 * @param Set
+	 *            the loaded callbacks
 	 * @return Returns the loaded callbacks
 	 */
-	private transient	List<Callback<BadPlayer>> 	loadedCallbacks;
+	private transient List<Callback<BadPlayer>> loadedCallbacks;
 
 	/**
 	 * Loaded
-	 * @param Set if data is loaded
+	 * 
+	 * @param Set
+	 *            if data is loaded
 	 * @return Returns if data is loaded
 	 */
-	private 			boolean						loaded;
+	private boolean loaded;
 
 	/**
 	 * Permissions
-	 * @param Set the permissions
+	 * 
+	 * @param Set
+	 *            the permissions
 	 * @return Returns the permissions
 	 */
-	private 			PermissionUser				permissions;
+	private PermissionUser permissions;
 
 	/**
 	 * Punished
-	 * @param Set the punished object
+	 * 
+	 * @param Set
+	 *            the punished object
 	 * @return Returns the punished object
 	 */
-	private 			Punished					punished;
+	private Punished punished;
 
 	/**
 	 * Settings
-	 * @param Set the settings
+	 * 
+	 * @param Set
+	 *            the settings
 	 * @return Returns the settings
 	 */
-	private				BadPlayerSettings			settings;
+	private BadPlayerSettings settings;
 
 	/**
 	 * Version
-	 * @param Set the version
+	 * 
+	 * @param Set
+	 *            the version
 	 * @return Returns the version
 	 */
-	private 			int							version;
+	private int version;
 
 	/**
 	 * Found
-	 * @param Set if data was found
+	 * 
+	 * @param Set
+	 *            if data was found
 	 * @return Returns if data was found
 	 */
-	private				boolean						found				= false;
+	private boolean found = false;
 
 	/**
 	 * Constructor (auto-create)
+	 * 
 	 * @param Username
 	 */
-	public BadOfflinePlayer(String name)
-	{
+	public BadOfflinePlayer(String name) {
 		// Set username
 		setName(name);
 		// Set callback
@@ -149,14 +172,14 @@ public class BadOfflinePlayer
 		loadData(true);
 	}
 
-
 	/**
 	 * Constructor
-	 * @param Unique ID
+	 * 
+	 * @param Unique
+	 *            ID
 	 * @param Auto-create?
 	 */
-	public BadOfflinePlayer(UUID uuid, boolean create)
-	{
+	public BadOfflinePlayer(UUID uuid, boolean create) {
 		// Set unique id
 		setUniqueId(uuid);
 		// Set callback
@@ -169,17 +192,17 @@ public class BadOfflinePlayer
 
 	/**
 	 * Register loaded callback
-	 * @param Callback to register
+	 * 
+	 * @param Callback
+	 *            to register
 	 */
-	public void registerLoadedCallback(Callback<BadPlayer> callback)
-	{
+	public void registerLoadedCallback(Callback<BadPlayer> callback) {
 		// If the player is loaded
-		if (isLoaded())
-		{
+		if (isLoaded()) {
 			// So we call back!
 			callback.done((BadPlayer) this, null);
 			// We stop there
-			return;	
+			return;
 		}
 		// Add a callback
 		getLoadedCallbacks().add(callback);
@@ -187,11 +210,11 @@ public class BadOfflinePlayer
 
 	/**
 	 * Constructor
+	 * 
 	 * @param Username
 	 * @param Auto-create?
 	 */
-	public BadOfflinePlayer(String name, boolean create)
-	{
+	public BadOfflinePlayer(String name, boolean create) {
 		// Set name
 		setName(name);
 		// Load data (create or not?)
@@ -200,44 +223,37 @@ public class BadOfflinePlayer
 
 	/**
 	 * Get a BadOfflinePlayer object
+	 * 
 	 * @param Username
 	 * @return a BadOfflinePlayer object
 	 */
-	public static BadOfflinePlayer get(String name)
-	{
+	public static BadOfflinePlayer get(String name) {
 		// New object
 		BadOfflinePlayer badOfflinePlayer = new BadOfflinePlayer(name, false);
 		// Data not found?
-		if (!badOfflinePlayer.isFound())
-		{
+		if (!badOfflinePlayer.isFound()) {
 			// Returns null
 			return null;
-		}
-		else
-		{
+		} else {
 			// Returns the object
 			return badOfflinePlayer;
 		}
 	}
 
-
 	/**
 	 * Get a BadOfflinePlayer object
+	 * 
 	 * @param UUID
 	 * @return a BadOfflinePlayer object
 	 */
-	public static BadOfflinePlayer get(UUID uuid)
-	{
+	public static BadOfflinePlayer get(UUID uuid) {
 		// New object
 		BadOfflinePlayer badOfflinePlayer = new BadOfflinePlayer(uuid, false);
 		// Data not found?
-		if (!badOfflinePlayer.isFound())
-		{    
+		if (!badOfflinePlayer.isFound()) {
 			// Returns null
 			return null;
-		}
-		else
-		{
+		} else {
 			// Returns the object
 			return badOfflinePlayer;
 		}
@@ -246,8 +262,7 @@ public class BadOfflinePlayer
 	/**
 	 * Update settings
 	 */
-	public void updateSettings()
-	{
+	public void updateSettings() {
 		// Update settings
 		updateData("settings", settings.getDBObject());
 	}
@@ -255,8 +270,7 @@ public class BadOfflinePlayer
 	/**
 	 * Update version
 	 */
-	public void updateVersion()
-	{
+	public void updateVersion() {
 		// Update version
 		updateData("version", getVersion());
 	}
@@ -264,23 +278,21 @@ public class BadOfflinePlayer
 	/**
 	 * Update last IP
 	 */
-	public void updateLastIp()
-	{
+	public void updateLastIp() {
 		// Update last IP
 		updateData("lastIp", getLastIp().toString());
 	}
 
 	/**
 	 * Get raw chat prefix
+	 * 
 	 * @return a String
 	 */
-	public String getRawChatPrefix()
-	{
+	public String getRawChatPrefix() {
 		// Get permissible object
 		Permissible permissible = getPermissions().getHighestRank("bungee", true);
 		// If permissible object is null
-		if (permissible == null)
-		{
+		if (permissible == null) {
 			// Returns an empty string
 			return "";
 		}
@@ -290,15 +302,14 @@ public class BadOfflinePlayer
 
 	/**
 	 * Get raw chat suffix
+	 * 
 	 * @return a String
 	 */
-	public String getRawChatSuffix()
-	{
+	public String getRawChatSuffix() {
 		// Get permissible object
 		Permissible permissible = getPermissions().getHighestRank("bungee", true);
 		// If premissible object is null
-		if (permissible == null)
-		{
+		if (permissible == null) {
 			// Returns an empty string
 			return "";
 		}
@@ -308,17 +319,17 @@ public class BadOfflinePlayer
 
 	/**
 	 * Get full chat name
-	 * @param Locale shown
+	 * 
+	 * @param Locale
+	 *            shown
 	 * @return
 	 */
-	public String getFullChatName(Locale locale)
-	{
+	public String getFullChatName(Locale locale) {
 		// TODO /gnick support
 		// Get permissible object
 		Permissible permissible = getPermissions().getHighestRank("bungee", true);
 		// If permissible object is null
-		if (permissible == null)
-		{
+		if (permissible == null) {
 			// Returns only the name
 			return getName();
 		}
@@ -328,27 +339,25 @@ public class BadOfflinePlayer
 
 	/**
 	 * Save data
-	 * @throws Exception in case the data isn't loaded
+	 * 
+	 * @throws Exception
+	 *             in case the data isn't loaded
 	 */
-	public void saveData() throws Exception
-	{
+	public void saveData() throws Exception {
 		// If the data isn't loaded
-		if (!isLoaded())
-		{
+		if (!isLoaded()) {
 			// Throw an exception
 			throw new Exception("Trying to save data with unloaded data.");
 		}
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService)
-		{
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 			/**
 			 * Run asynchronously
 			 */
 			@Override
-			public void run(MongoService mongoService)
-			{
+			public void run(MongoService mongoService) {
 				// Get database
 				DB db = mongoService.getDb();
 				// Get database collection
@@ -359,8 +368,11 @@ public class BadOfflinePlayer
 				// Query name
 				query.put("name", getName().toLowerCase());
 
+				// Updater with all data to set
+				BasicDBObject updater = new BasicDBObject("$set", getDbObject());
+				
 				// Update data
-				collection.update(query, getDbObject());
+				collection.update(query, updater);
 			}
 
 		});
@@ -368,41 +380,38 @@ public class BadOfflinePlayer
 
 	/**
 	 * Merge data
-	 * @param base object
+	 * 
+	 * @param base
+	 *            object
 	 * @param toAdd
 	 * @param basePoint
 	 * @return
 	 */
-	public DBObject mergeData(DBObject base, JsonObject toAdd, boolean basePoint)
-	{
+	public DBObject mergeData(DBObject base, JsonObject toAdd, boolean basePoint) {
 		// For each object to add
-		for (final Entry<String, JsonElement> entry : toAdd.entrySet())
-		{
+		for (final Entry<String, JsonElement> entry : toAdd.entrySet()) {
 			// Get object key
 			String key = entry.getKey();
 			// Get element
 			JsonElement element = toAdd.get(key);
 			// If it's not a JsonObject
-			if (!base.containsField(key) || !element.isJsonObject())
-			{
+			if (!base.containsField(key) || !element.isJsonObject()) {
 				// Put JsonObject
 				base.put(key, element);
 				// Returns the base object
 				return base;
 			}
 			// If it's a JsonObject
-			else
-			{
+			else {
 				// Try to?
-				try
-				{
+				try {
 					// Merge DBObject
-					DBObject dbObject = mergeData(ObjectUtils.toDbObject(base.get(key)), element.getAsJsonObject(), false);
+					DBObject dbObject = mergeData(ObjectUtils.toDbObject(base.get(key)), element.getAsJsonObject(),
+							false);
 					// Put the DBObject into base
 					base.put(key, dbObject);
 					// If this is the base point
-					if (basePoint)
-					{
+					if (basePoint) {
 						// Save data
 						saveData();
 					}
@@ -410,8 +419,7 @@ public class BadOfflinePlayer
 					return dbObject;
 				}
 				// Error case
-				catch (Exception error)
-				{
+				catch (Exception error) {
 					// Print stack trace to logs
 					error.printStackTrace();
 				}
@@ -423,22 +431,20 @@ public class BadOfflinePlayer
 
 	/**
 	 * Update data
+	 * 
 	 * @param key
 	 * @param value
 	 */
-	public void updateData(String key, Object value)
-	{
+	public void updateData(String key, Object value) {
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService)
-		{
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 			/**
 			 * Run asynchronously
 			 */
 			@Override
-			public void run(MongoService mongoService)
-			{
+			public void run(MongoService mongoService) {
 				// Get database
 				DB db = mongoService.getDb();
 				// Get database collection
@@ -463,8 +469,7 @@ public class BadOfflinePlayer
 				loadData(true);
 
 				// If callback isn't null
-				if (callback != null)
-				{
+				if (callback != null) {
 					// Call back
 					callback.done(BadOfflinePlayer.this, null);
 					// Remove the callback
@@ -477,36 +482,39 @@ public class BadOfflinePlayer
 
 	/**
 	 * Update the last server
-	 * @param The ProxiedPlayer object
+	 * 
+	 * @param The
+	 *            ProxiedPlayer object
 	 */
-	public void updateLastServer(ProxiedPlayer proxiedPlayer)
-	{
+	public void updateLastServer(ProxiedPlayer proxiedPlayer) {
 		// Update data
-		updateData("lastServer", proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null ? proxiedPlayer.getServer().getInfo().getName() : "");
+		updateData("lastServer",
+				proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
+						? proxiedPlayer.getServer().getInfo().getName()
+						: "");
 	}
 
 	/**
 	 * Load data
-	 * @param Create if data doesn't exist
+	 * 
+	 * @param Create
+	 *            if data doesn't exist
 	 */
-	protected void loadData(boolean create)
-	{
+	protected void loadData(boolean create) {
 		// New query
 		BasicDBObject query = new BasicDBObject();
-		
+
 		// If the username isn't null
-		if (getName() != null)
-		{
+		if (getName() != null) {
 			// Add it to the query
 			query.append("name", getName().toLowerCase());
 		}
 		// If the unique ID isn't null
-		else if (getUniqueId() != null)
-		{
+		else if (getUniqueId() != null) {
 			// Add it to the query
 			query.append("uniqueId", getUniqueId().toString().toLowerCase());
 		}
-		
+
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Get database collection
@@ -514,8 +522,7 @@ public class BadOfflinePlayer
 		// Get data
 		DBCursor cursor = dbCollection.find(query);
 		// If there's data
-		if (cursor.hasNext())
-		{
+		if (cursor.hasNext()) {
 			// Set database object by casting a 'basic DBObject'
 			setDbObject((BasicDBObject) cursor.next());
 			// Set name
@@ -532,51 +539,44 @@ public class BadOfflinePlayer
 			setPunished(new Punished(getJsonElement("punish").getAsJsonObject()));
 
 			// If the permission manager exists
-			if (PermissionsManager.getManager() != null)
-			{
+			if (PermissionsManager.getManager() != null) {
 				// Set permissions
 				setPermissions(new PermissionUser(getJsonElement("permissions").getAsJsonObject()));
 			}
 
 			// Try to?
-			try
-			{
+			try {
 				// Set the version by parsing integer
 				setVersion(Integer.valueOf(getString("version")));
 			}
 			// Error case
-			catch (Exception error)
-			{
+			catch (Exception error) {
 				// Ok that's right. It can be empty...
 			}
 
 			// Set found
 			setFound(true);
-			
+
 			// Set loaded
 			setLoaded(true);
 
-		}
-		else
-		{
+		} else {
 			// Log => data doesn't exist
 			BadBungee.log(getName() + " doesn't exist in the player table.");
 
 			// If we are allowed to create data
-			if (create)
-			{
+			if (create) {
 				// Insert data
 				insert();
-				
+
 				// Set loaded
 				setLoaded(true);
 			}
 			// If we're not allowed to create data
-			else
-			{
+			else {
 				// Not found..
 				setFound(false);
-				
+
 				// Set loaded
 				setLoaded(true);
 			}
@@ -586,12 +586,21 @@ public class BadOfflinePlayer
 	/**
 	 * Insert data
 	 */
-	private void insert()
-	{
+	private void insert() {
 		// Log => create data
 		BadBungee.log("§aCreating it...");
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		// Set new punished object
+		punished = new Punished();
+		// Set new permission object
+		permissions = new PermissionUser(new HashMap<>(), new ArrayList<>());
+		// Set new settins
+		settings = new BadPlayerSettings(new JsonObject());
+		// Set a random unique ID
+		uniqueId = UUID.randomUUID();
+		// Set the version
+		version = 0;
 		// Get saved object
 		BasicDBObject obj = getSavedObject();
 		// Set database object
@@ -599,24 +608,12 @@ public class BadOfflinePlayer
 		// Set found
 		setFound(true);
 		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService)
-		{
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 			/**
 			 * Run asynchronously
 			 */
 			@Override
-			public void run(MongoService mongoService)
-			{
-				// Set new punished object
-				punished = new Punished();
-				// Set new permission object
-				permissions = new PermissionUser(new HashMap<>(), new ArrayList<>());
-				// Set new settins
-				settings = new BadPlayerSettings(new JsonObject());
-				// Set a random unique ID
-				uniqueId = UUID.randomUUID();
-				// Set the version
-				version = 0;
+			public void run(MongoService mongoService) {
 				// Get database
 				DB db = mongoService.getDb();
 				// Get database collection
@@ -631,40 +628,44 @@ public class BadOfflinePlayer
 
 	/**
 	 * Get translated messages
-	 * @param Message key
-	 * @param Indexes to translate
+	 * 
+	 * @param Message
+	 *            key
+	 * @param Indexes
+	 *            to translate
 	 * @param Arguments
 	 * @return
 	 */
-	public String[] getTranslatedMessages(String key, int[] indexesToTranslate, Object... objects)
-	{
+	public String[] getTranslatedMessages(String key, int[] indexesToTranslate, Object... objects) {
 		// Get from our layer
 		return I19n.getMessages(getLocale(), key, indexesToTranslate, objects);
 	}
 
 	/**
 	 * Get a translated message
-	 * @param Message key
-	 * @param Indexes to translate
+	 * 
+	 * @param Message
+	 *            key
+	 * @param Indexes
+	 *            to translate
 	 * @param Arguments
 	 * @return
 	 */
-	public String getTranslatedMessage(String key, int[] indexesToTranslate, Object... objects)
-	{
+	public String getTranslatedMessage(String key, int[] indexesToTranslate, Object... objects) {
 		// Use another method
 		return getTranslatedMessages(key, indexesToTranslate, objects)[0];
 	}
 
 	/**
 	 * If the player has the permission
-	 * @param Permission to check
+	 * 
+	 * @param Permission
+	 *            to check
 	 * @return Returns if the player has the requested permission
 	 */
-	public boolean hasPermission(String permission)
-	{
+	public boolean hasPermission(String permission) {
 		// No permisisons
-		if (getPermissions() == null)
-		{
+		if (getPermissions() == null) {
 			// So he don't have the permision
 			return false;
 		}
@@ -675,19 +676,16 @@ public class BadOfflinePlayer
 	@SuppressWarnings("deprecation")
 	/**
 	 * Get a string from the database object
+	 * 
 	 * @param Field
 	 * @return a String
 	 */
-	private String getString(String part)
-	{
+	private String getString(String part) {
 		// If the database object contains the key
-		if (getDbObject().containsKey(part))
-		{
+		if (getDbObject().containsKey(part) && getDbObject().get(part) != null) {
 			// Returns the data as a string
 			return getDbObject().get(part).toString();
-		}
-		else
-		{
+		} else {
 			// Returns an empty string
 			return "";
 		}
@@ -696,23 +694,20 @@ public class BadOfflinePlayer
 	@SuppressWarnings("deprecation")
 	/**
 	 * Get JsonElement from the database object
+	 * 
 	 * @param part
 	 * @return
 	 */
-	public JsonElement getJsonElement(String part)
-	{
+	public JsonElement getJsonElement(String part) {
 		// If the database object contains the key
-		if (getDbObject().containsField(part))
-		{
+		if (getDbObject().containsField(part)) {
 			// Serialize the data
 			String serialize = JSON.serialize(getDbObject().get(part));
 			// Deserialize as a JsonElement
 			JsonElement jsonElement = GsonUtils.toJsonElement(serialize);
 			// Returns the element
 			return jsonElement;
-		}
-		else
-		{
+		} else {
 			// Returns a new JsonObject
 			return new JsonObject();
 		}
@@ -720,10 +715,10 @@ public class BadOfflinePlayer
 
 	/**
 	 * Get saved object
+	 * 
 	 * @return a BasicDBObject object
 	 */
-	public BasicDBObject getSavedObject()
-	{
+	public BasicDBObject getSavedObject() {
 		// Create a new BasicDBObject object
 		BasicDBObject object = new BasicDBObject();
 		// Put the lower-case name
@@ -738,7 +733,7 @@ public class BadOfflinePlayer
 		object.put("settings", settings.getDBObject());
 		// Put the punish object
 		object.put("punish", punished.getDBObject());
-		// Put the permissions 
+		// Put the permissions
 		object.put("permissions", permissions.getDBObject());
 		// Put the user version
 		object.put("version", "0");
@@ -750,44 +745,42 @@ public class BadOfflinePlayer
 
 	/**
 	 * Get player locale
+	 * 
 	 * @return a Locale object
 	 */
-	public Locale getLocale()
-	{
+	public Locale getLocale() {
 		// Get from the database object
 		return ObjectUtils.getOr(getDbObject(), "locale", Locale.FRENCH_FRANCE);
 	}
 
 	/**
 	 * If this player is online
+	 * 
 	 * @return
 	 */
-	public boolean isOnline()
-	{
+	public boolean isOnline() {
 		// Existing in the map?
 		return BungeeManager.getInstance().hasUsername(getName());
 	}
 
 	/**
 	 * Get the online BadPlayer
+	 * 
 	 * @return
 	 */
-	public BadPlayer getOnlineBadPlayer()
-	{
+	public BadPlayer getOnlineBadPlayer() {
 		// If he's offline, returns null
-		if (!isOnline())
-		{
+		if (!isOnline()) {
 			// Returns null
 			return null;
 		}
-		
+
 		// If he's online on this node
-		if (BadPlayer.has(getName().toLowerCase()))
-		{
+		if (BadPlayer.has(getName().toLowerCase())) {
 			// Returns the local player
 			return BadPlayer.get(getName());
 		}
-		
+
 		// Returns the BadPlayer object
 		return BungeeManager.getInstance().getBadPlayer(getName().toLowerCase());
 	}

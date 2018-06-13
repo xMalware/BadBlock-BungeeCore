@@ -12,25 +12,24 @@ import net.md_5.bungee.event.EventPriority;
 
 /**
  * 
- * The purpose of this class is to load the player's data to the connection and warn other proxies to synchronize the data.
- * It also sends a special event when the player logs in to add actions when a player tries to log in.
+ * The purpose of this class is to load the player's data to the connection and
+ * warn other proxies to synchronize the data. It also sends a special event
+ * when the player logs in to add actions when a player tries to log in.
  * 
  * @author xMalware
  *
  */
-public class PreLoginLoadPlayerListener extends BadListener
-{
+public class PreLoginLoadPlayerListener extends BadListener {
 
 	/**
 	 * When a player joins the server
+	 * 
 	 * @param event
 	 */
-	@EventHandler (priority = EventPriority.LOWEST)
-	public void onPreLogin(PreLoginEvent event)
-	{
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPreLogin(PreLoginEvent event) {
 		// If the connection attempt is cancelled first
-		if (event.isCancelled())
-		{
+		if (event.isCancelled()) {
 			// So we stop there
 			return;
 		}
@@ -38,8 +37,7 @@ public class PreLoginLoadPlayerListener extends BadListener
 		// Get bungee manager
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 		// If the server ping null
-		if (bungeeManager.getServerPing() == null)
-		{
+		if (bungeeManager.getServerPing() == null) {
 			// Generate the server ping to init slots/players values
 			// to avoid "this server is fucking full!"
 			bungeeManager.generatePing();

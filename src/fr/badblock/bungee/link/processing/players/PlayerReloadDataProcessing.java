@@ -12,19 +12,17 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public class PlayerReloadDataProcessing extends _PlayerProcessing
-{
+public class PlayerReloadDataProcessing extends _PlayerProcessing {
 
 	@Override
 	/**
 	 * Processing
 	 */
-	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket)
-	{
+	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket) {
 		// Get the local bad player
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 		// Reload the bad player data
 		badPlayer.reload();
 	}
-	
+
 }

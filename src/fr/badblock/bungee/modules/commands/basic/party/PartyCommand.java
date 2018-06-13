@@ -8,43 +8,35 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * 
  * Allows to create groups to be able to play together, between friends
  * 
- * List of subcommands:
- *  - /party help/?/aide
- *  - /party follow/suivi/suivre
- *  - /party toggle
- *  - /party invite/create/creer/inviter/add/ajouter
- *  - /party accept/accepter
- *  - /party remove/delete/erase/supprimer/kick
- *  - /party tp/teleport/connect/c
+ * List of subcommands: - /party help/?/aide - /party follow/suivi/suivre -
+ * /party toggle - /party invite/create/creer/inviter/add/ajouter - /party
+ * accept/accepter - /party remove/delete/erase/supprimer/kick - /party
+ * tp/teleport/connect/c
  * 
  * @author xMalware
  *
  */
-public class PartyCommand extends BadCommand
-{
-	
+public class PartyCommand extends BadCommand {
+
 	/**
 	 * Command constructor
 	 */
-	public PartyCommand()
-	{
+	public PartyCommand() {
 		super("party", null, "groupe", "pa", "gr");
 		// Allow access to the command for players only
 		this.setForPlayersOnly(true);
 	}
-	
+
 	/**
 	 * Method called when using the command
 	 */
 	@Override
-	public void run(CommandSender sender, String[] args)
-	{
+	public void run(CommandSender sender, String[] args) {
 		// We get the player from the sender
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 
 		// If no argument has been entered
-		if (args.length == 0)
-		{
+		if (args.length == 0) {
 			// We give him help.
 			help(proxiedPlayer);
 			// We stop there.
@@ -55,28 +47,27 @@ public class PartyCommand extends BadCommand
 		String subCommand = args[0];
 
 		// We're checking the subcommand
-		switch (subCommand)
-		{
-		
+		switch (subCommand) {
+
 		// Request for help
 		case "help":
 		case "?":
 		case "aide":
 			help(proxiedPlayer);
 			break;
-			
+
 		// Follow the party
 		case "follow":
 		case "suivi":
 		case "suivre":
 			PartyManager.follow(proxiedPlayer);
 			break;
-			
+
 		// Toggle parties
 		case "toggle":
 			PartyManager.toggle(proxiedPlayer, args);
 			break;
-		
+
 		// Invite a player
 		case "invite":
 		case "create":
@@ -86,13 +77,13 @@ public class PartyCommand extends BadCommand
 		case "ajouter":
 			PartyManager.invite(proxiedPlayer, args);
 			break;
-			
+
 		// Accept a player
 		case "accept":
 		case "accepter":
 			PartyManager.accept(proxiedPlayer, args);
 			break;
-			
+
 		// Remove a player
 		case "remove":
 		case "delete":
@@ -101,26 +92,26 @@ public class PartyCommand extends BadCommand
 		case "kick":
 			PartyManager.remove(proxiedPlayer, args);
 			break;
-			
+
 		// Set as modo
 		case "modo":
 		case "mod":
 			PartyManager.modo(proxiedPlayer, args);
 			break;
-			
+
 		// List
 		case "list":
 		case "liste":
 			PartyManager.list(proxiedPlayer);
 			break;
-			
+
 		// Leave
 		case "leave":
 		case "quit":
 		case "quitter":
 			PartyManager.leave(proxiedPlayer, args);
 			break;
-		
+
 		// Teleport a player
 		case "tp":
 		case "teleport":
@@ -138,20 +129,20 @@ public class PartyCommand extends BadCommand
 
 	/**
 	 * Unknown subcommand
+	 * 
 	 * @param sender
 	 */
-	public void unknown(ProxiedPlayer sender)
-	{
+	public void unknown(ProxiedPlayer sender) {
 		// We tell him this command doesn't exist.
 		PartyManager.getMessages().sendUnknownMessage(sender);
 	}
 
 	/**
 	 * Sending help
+	 * 
 	 * @param sender
 	 */
-	public void help(ProxiedPlayer sender)
-	{
+	public void help(ProxiedPlayer sender) {
 		// We give him the list of subcommands
 		PartyManager.getMessages().sendHelp(sender);
 	}

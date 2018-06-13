@@ -11,30 +11,30 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
  * 
- *	Command to send messages between members of the administration (with a specific permission, the persons in charge can also have it).
- *	This command should be used like this: /adminchat <message>
- *	
- *	This command broadcasts a message with permission filtering, i.e. it sends a message to all players with specific permission to this command, on all bungees.
- *	The permission required to execute this command is bungee.command.adminchat.
- *	
- *	i18n Command Implementation :
- *	Key : bungee.commands.adminchat.message
- *	Value %0 : name of the sender of the message
- * 	Value %1 : message sent
- *	
- *	The colors sent by the user are deleted, to avoid formatting by the user using colors, bold or italics...
+ * Command to send messages between members of the administration (with a
+ * specific permission, the persons in charge can also have it). This command
+ * should be used like this: /adminchat <message>
  * 
- * 	@author xMalware
+ * This command broadcasts a message with permission filtering, i.e. it sends a
+ * message to all players with specific permission to this command, on all
+ * bungees. The permission required to execute this command is
+ * bungee.command.adminchat.
+ * 
+ * i18n Command Implementation : Key : bungee.commands.adminchat.message Value
+ * %0 : name of the sender of the message Value %1 : message sent
+ * 
+ * The colors sent by the user are deleted, to avoid formatting by the user
+ * using colors, bold or italics...
+ * 
+ * @author xMalware
  *
  */
-public class AdminChatCommand extends BadCommand
-{
+public class AdminChatCommand extends BadCommand {
 
 	/**
 	 * Command constructor
 	 */
-	public AdminChatCommand()
-	{
+	public AdminChatCommand() {
 		super("adminchat", "bungee.command.adminchat", "ac");
 	}
 
@@ -42,14 +42,14 @@ public class AdminChatCommand extends BadCommand
 	 * Method called when using the command
 	 */
 	@Override
-	public void run(CommandSender sender, String[] args)
-	{
+	public void run(CommandSender sender, String[] args) {
 		// If no argument has been entered, i.e. the user's message
-		if (args.length == 0) 
-		{
-			// A message is sent to him containing the information allowing him to take note of the use of the command.
+		if (args.length == 0) {
+			// A message is sent to him containing the information allowing him to take note
+			// of the use of the command.
 			I19n.sendMessage(sender, "bungee.commands.adminchat.usage", null);
-			// Nothing has been written from him, no argument. After we explain it to him, we stop there.
+			// Nothing has been written from him, no argument. After we explain it to him,
+			// we stop there.
 			return;
 		}
 
@@ -65,8 +65,7 @@ public class AdminChatCommand extends BadCommand
 		String rawChatSuffix = "";
 
 		// If the sender is a player
-		if (sender instanceof ProxiedPlayer)
-		{
+		if (sender instanceof ProxiedPlayer) {
 			// Get player
 			ProxiedPlayer player = (ProxiedPlayer) sender;
 			// Get BadPlayer
@@ -78,8 +77,9 @@ public class AdminChatCommand extends BadCommand
 		}
 
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.adminchat", "bungee.commands.adminchat.message",
-				new int[] { 0, 2 }, rawChatPrefix, sender.getName(), rawChatSuffix, message);
+		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.adminchat",
+				"bungee.commands.adminchat.message", new int[] { 0, 2 }, rawChatPrefix, sender.getName(), rawChatSuffix,
+				message);
 	}
 
 }

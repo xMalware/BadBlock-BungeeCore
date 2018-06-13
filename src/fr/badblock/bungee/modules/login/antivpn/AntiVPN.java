@@ -20,30 +20,27 @@ import fr.badblock.bungee.utils.time.TimeUtils;
  * @author xMalware
  *
  */
-public class AntiVPN extends Thread
-{
+public class AntiVPN extends Thread {
 
 	/**
 	 * AntiVPN instance
 	 */
-	public static AntiVPN	instance		= new AntiVPN();
+	public static AntiVPN instance = new AntiVPN();
 
 	/**
 	 * VPN queue
 	 */
-	private Queue<String>	vpn				= new LinkedBlockingQueue<>();
-	
+	private Queue<String> vpn = new LinkedBlockingQueue<>();
+
 	/**
 	 * API key
 	 */
-	private String			apiKey			= BadBungee.getInstance().getConfig().getIpHubApiKey();
+	private String apiKey = BadBungee.getInstance().getConfig().getIpHubApiKey();
 
 	/**
-	 * Constructor
-	 * Starts the module as soon as it is instantiated
+	 * Constructor Starts the module as soon as it is instantiated
 	 */
-	public AntiVPN()
-	{
+	public AntiVPN() {
 		// Start
 		start();
 	}
@@ -52,25 +49,20 @@ public class AntiVPN extends Thread
 	/**
 	 * Run
 	 */
-	public void run()
-	{
+	public void run() {
 		// Always running
-		while (true)
-		{
+		while (true) {
 			// While the queue isn't empty
-			while (!vpn.isEmpty())
-			{
+			while (!vpn.isEmpty()) {
 				// Try to
-				try
-				{
+				try {
 					// Get the IP
 					String ip = vpn.poll();
 					// Check the IP
 					work(ip);
 				}
 				// Error case
-				catch (Exception error)
-				{
+				catch (Exception error) {
 					// Print the stack trace
 					error.printStackTrace();
 				}
@@ -84,15 +76,14 @@ public class AntiVPN extends Thread
 
 	/**
 	 * Work the IP
+	 * 
 	 * @param ip
 	 * @return
 	 * @throws UnknownHostException
 	 */
-	private boolean work(String ip) throws UnknownHostException
-	{
+	private boolean work(String ip) throws UnknownHostException {
 		// If the IP is local
-		if (isThisLocal(InetAddress.getByName(ip)))
-		{
+		if (isThisLocal(InetAddress.getByName(ip))) {
 			// Accepted
 			return true;
 		}
@@ -101,8 +92,7 @@ public class AntiVPN extends Thread
 		BadIP badIp = new BadIP(ip);
 
 		// If it's a VPN
-		if (badIp.isVpn())
-		{
+		if (badIp.isVpn()) {
 			// Declined
 			return false;
 		}
@@ -116,8 +106,7 @@ public class AntiVPN extends Thread
 		IPHubObject object = GsonUtils.getGson().fromJson(sourceCode, IPHubObject.class);
 
 		// If it's a VPN
-		if (object != null && object.getBlock() == 1)
-		{
+		if (object != null && object.getBlock() == 1) {
 			// Set as a VPN
 			badIp.setVpn(true);
 			// Update the VPN
@@ -132,37 +121,34 @@ public class AntiVPN extends Thread
 
 	/**
 	 * Add the IP to the check queue
+	 * 
 	 * @param ip
 	 */
-	public void addToCheck(String ip)
-	{
+	public void addToCheck(String ip) {
 		// Add the IP to the check queue
 		vpn.add(ip);
 	}
 
 	/**
 	 * If the address is local
+	 * 
 	 * @param addr
 	 * @return
 	 */
-	public boolean isThisLocal(InetAddress addr)
-	{
+	public boolean isThisLocal(InetAddress addr) {
 		// Check if the address is a valid special local or loop back
-		if (addr.isAnyLocalAddress() || addr.isLoopbackAddress())
-		{
+		if (addr.isAnyLocalAddress() || addr.isLoopbackAddress()) {
 			// Yes
 			return true;
 		}
 
 		// Check if the address is defined on any interface
-		try
-		{
+		try {
 			// Defined on any interface?
 			return NetworkInterface.getByInetAddress(addr) != null;
 		}
 		// Error case
-		catch (SocketException e)
-		{
+		catch (SocketException e) {
 			// No
 			return false;
 		}
@@ -170,10 +156,10 @@ public class AntiVPN extends Thread
 
 	/**
 	 * Get the AntiVPN instance
+	 * 
 	 * @return
 	 */
-	public static AntiVPN getInstance()
-	{
+	public static AntiVPN getInstance() {
 		return instance;
 	}
 

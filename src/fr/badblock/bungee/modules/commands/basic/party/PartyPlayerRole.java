@@ -7,22 +7,21 @@ package fr.badblock.bungee.modules.commands.basic.party;
  * @author xMalware
  *
  */
-public enum PartyPlayerRole
-{
+public enum PartyPlayerRole {
 
 	/**
 	 * Default role
 	 */
 	DEFAULT,
-	
+
 	/**
 	 * Modo role
 	 */
 	MODO,
-	
+
 	/**
 	 * Admin role
 	 */
-    ADMIN
+	ADMIN
 
 }

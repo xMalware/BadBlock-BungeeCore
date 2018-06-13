@@ -11,28 +11,31 @@ import lombok.Setter;
  *
  */
 @Getter
-public class McJsonElement
-{
+public class McJsonElement {
 
 	/**
 	 * Attribute
-	 * @param Set the new attribute
+	 * 
+	 * @param Set
+	 *            the new attribute
 	 * @return Returns the current attribute
 	 */
 	private McJsonAttribute attribute;
 
 	/**
 	 * Value
-	 * @param Set the new value
+	 * 
+	 * @param Set
+	 *            the new value
 	 * @return Returns the current value
 	 */
-	@Setter private String value;
+	@Setter
+	private String value;
 
 	/*
 	 * Element constructor
 	 */
-	public McJsonElement(McJsonAttribute attribute, String value)
-	{
+	public McJsonElement(McJsonAttribute attribute, String value) {
 		// set the attribute
 		this.attribute = attribute;
 		// set the value
@@ -41,21 +44,21 @@ public class McJsonElement
 
 	/**
 	 * Another element constructor
+	 * 
 	 * @param attribute
 	 */
-	public McJsonElement(McJsonAttribute attribute)
-	{
+	public McJsonElement(McJsonAttribute attribute) {
 		// use the first constructor
 		this(attribute, "");
 	}
 
 	/**
 	 * To String method
+	 * 
 	 * @return Returns a string
 	 */
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		// New StrinBuilder
 		StringBuilder mcjson = new StringBuilder();
 
@@ -63,20 +66,17 @@ public class McJsonElement
 		mcjson.append("\"");
 
 		// If the attribute type is 0
-		if (attribute.getType() == 0) 
-		{
+		if (attribute.getType() == 0) {
 			// So append the mc json tag
 			mcjson.append(attribute.getMcjsontag());
 		}
 		// If the attribute type is 1
-		else if (attribute.getType() == 1)
-		{
+		else if (attribute.getType() == 1) {
 			// So append the click event tag
 			mcjson.append("clickEvent");
 		}
 		// If the attribute type is 2
-		else if (attribute.getType() == 2)
-		{
+		else if (attribute.getType() == 2) {
 			// So append the hover event
 			mcjson.append("hoverEvent");
 		}
@@ -85,8 +85,7 @@ public class McJsonElement
 		mcjson.append("\":");
 
 		// If the attribute type is higher than 0
-		if (attribute.getType() > 0)
-		{
+		if (attribute.getType() > 0) {
 			// Append the action of the tag
 			mcjson.append("{\"action\":\"" + attribute.getMcjsontag() + "\",\"value\":");
 		}
@@ -95,14 +94,13 @@ public class McJsonElement
 		mcjson.append("\"" + getValue().replace("\"", "\\\"") + "\"");
 
 		// If the attribute is higher than 0
-		if (attribute.getType() > 0)
-		{
+		if (attribute.getType() > 0) {
 			// Append
 			mcjson.append("}");
 		}
-		
+
 		// Returns the string
 		return mcjson.toString();
 	}
-	
+
 }

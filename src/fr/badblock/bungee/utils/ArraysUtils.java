@@ -12,9 +12,8 @@ import java.util.Set;
  * 
  * @author LeLanN
  */
-public class ArraysUtils
-{
-	
+public class ArraysUtils {
+
 	/**
 	 * Permet de filtrer une liste de cha�ne de caract�re en fonction du d�but
 	 * 

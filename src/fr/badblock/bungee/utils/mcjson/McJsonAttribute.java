@@ -12,8 +12,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum McJsonAttribute
-{
+public enum McJsonAttribute {
 
 	/**
 	 * Text attribute
@@ -48,17 +47,16 @@ public enum McJsonAttribute
 
 	/**
 	 * Get a McJson attribute
-	 * @param with the decode tag
+	 * 
+	 * @param with
+	 *            the decode tag
 	 * @return the mcJson attribute
 	 */
-	public McJsonAttribute get(String decodetag)
-	{
+	public McJsonAttribute get(String decodetag) {
 		// For each
-		for (McJsonAttribute attribute : values())
-		{
+		for (McJsonAttribute attribute : values()) {
 			// If the name is the same
-			if (attribute.getDecodetag().equalsIgnoreCase(decodetag))
-			{
+			if (attribute.getDecodetag().equalsIgnoreCase(decodetag)) {
 				// Returns the attribute
 				return attribute;
 			}

@@ -10,47 +10,68 @@ import lombok.Setter;
 
 /**
  * 
- * This class is serializable. It contains all necessary configurations for the network
+ * This class is serializable. It contains all necessary configurations for the
+ * network
+ * 
  * @author xMalware
  *
  */
-public class BadBungeeConfig
-{
+public class BadBungeeConfig {
 
 	/**
 	 * Unique bungee name.
-	 * @param The new bungee name
+	 * 
+	 * @param The
+	 *            new bungee name
 	 * @return The unique bungee name
 	 */
-	@Getter @Setter private String			bungeeName;
-	
+	@Getter
+	@Setter
+	private String bungeeName;
+
 	/**
 	 * Alert prefix.
-	 * @param The new alert prefix
+	 * 
+	 * @param The
+	 *            new alert prefix
 	 * @return Alert prefix
 	 * @deprecated i18n
 	 */
-	@Getter @Setter private String			alertPrefix;
-	
+	@Getter
+	@Setter
+	private String alertPrefix;
+
 	/**
 	 * API key from IPHub to check VPNs
-	 * @param New IPHub API key
+	 * 
+	 * @param New
+	 *            IPHub API key
 	 * @return Current IPHub API key
 	 */
-	@Getter @Setter private String			ipHubApiKey;
-	
+	@Getter
+	@Setter
+	private String ipHubApiKey;
+
 	/**
 	 * Rabbit settings to connect the network
-	 * @param New Rabbit settings
+	 * 
+	 * @param New
+	 *            Rabbit settings
 	 * @return Current rabbit settings
 	 */
-	@Getter @Setter private RabbitSettings	rabbitSettings;
-	
+	@Getter
+	@Setter
+	private RabbitSettings rabbitSettings;
+
 	/**
 	 * Mongo settings to connect the network
-	 * @param New Mongo settings
+	 * 
+	 * @param New
+	 *            Mongo settings
 	 * @return Current mongo settings
 	 */
-	@Getter @Setter private MongoSettings	mongoSettings;
-	
+	@Getter
+	@Setter
+	private MongoSettings mongoSettings;
+
 }

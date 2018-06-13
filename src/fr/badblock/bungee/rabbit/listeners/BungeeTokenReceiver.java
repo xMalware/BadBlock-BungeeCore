@@ -10,21 +10,21 @@ import fr.badblock.bungee.rabbit.BadBungeeQueues;
 
 /**
  * 
- * The purpose of this class is to listen to BungeeCord tokens to synchronize players' calculations.
+ * The purpose of this class is to listen to BungeeCord tokens to synchronize
+ * players' calculations.
  * 
  * @author xMalware
  *
  */
-public class BungeeTokenReceiver extends RabbitListener
-{
+public class BungeeTokenReceiver extends RabbitListener {
 
 	/**
 	 * Constructor
 	 */
-	public BungeeTokenReceiver() 
-	{
+	public BungeeTokenReceiver() {
 		// Super!
-		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_TOKEN_RESULT, RabbitListenerType.SUBSCRIBER, true);
+		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_TOKEN_RESULT,
+				RabbitListenerType.SUBSCRIBER, true);
 		// Load the listener
 		load();
 	}
@@ -33,8 +33,7 @@ public class BungeeTokenReceiver extends RabbitListener
 	 * When we receive a packet
 	 */
 	@Override
-	public void onPacketReceiving(String body)
-	{
+	public void onPacketReceiving(String body) {
 		// Get cached player token
 		CachedPlayerToken cachedPlayerToken = GsonUtils.getGson().fromJson(body, CachedPlayerToken.class);
 		// Set the token

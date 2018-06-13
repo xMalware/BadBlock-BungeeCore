@@ -7,13 +7,13 @@ package fr.badblock.bungee.link.processing.bungee.abstracts;
  * @author xMalware
  *
  */
-public abstract class _BungeeProcessing
-{
-	
+public abstract class _BungeeProcessing {
+
 	/**
 	 * Message processing
+	 * 
 	 * @param message
 	 */
 	public abstract void done(String message);
-	
+
 }

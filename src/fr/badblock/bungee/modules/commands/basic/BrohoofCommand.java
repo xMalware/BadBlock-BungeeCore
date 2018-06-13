@@ -6,20 +6,17 @@ import net.md_5.bungee.api.CommandSender;
 
 /**
  * 
- * This command is a reference to My Little Pony.
- * Usage: /brohoof
+ * This command is a reference to My Little Pony. Usage: /brohoof
  * 
  * @author xMalware
  *
  */
-public class BrohoofCommand extends BadCommand
-{
+public class BrohoofCommand extends BadCommand {
 
 	/**
 	 * Command constructor
 	 */
-	public BrohoofCommand()
-	{
+	public BrohoofCommand() {
 		super("brohoof", "", ")");
 	}
 
@@ -27,8 +24,7 @@ public class BrohoofCommand extends BadCommand
 	 * Method called when using the command
 	 */
 	@Override
-	public void run(CommandSender sender, String[] args)
-	{
+	public void run(CommandSender sender, String[] args) {
 		// Brohoof!
 		I19n.sendMessage(sender, "bungee.commands.broohof.message", null, sender.getName());
 	}

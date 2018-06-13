@@ -14,28 +14,33 @@ import lombok.EqualsAndHashCode;
  * @author xMalware
  *
  */
-public class PlayerPacket
-{
+public class PlayerPacket {
 
 	/**
 	 * Player name (username)
-	 * @param Set the username of the playerPacket
+	 * 
+	 * @param Set
+	 *            the username of the playerPacket
 	 * @return The username of the playerPacket
 	 */
-	private String				playerName;
-	
+	private String playerName;
+
 	/**
 	 * Player packet type
-	 * @param Set the player packet type of the playerPacket
+	 * 
+	 * @param Set
+	 *            the player packet type of the playerPacket
 	 * @return The player packet type of the playerPacket
 	 */
-	private PlayerPacketType	type;
-	
+	private PlayerPacketType type;
+
 	/**
 	 * Content
-	 * @param Set the content of the playerPacket
+	 * 
+	 * @param Set
+	 *            the content of the playerPacket
 	 * @return The content of the playerPacket
 	 */
-	private String				content;
-	
+	private String content;
+
 }

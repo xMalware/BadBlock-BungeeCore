@@ -15,19 +15,17 @@ import net.md_5.bungee.event.EventPriority;
  * @author xMalware
  *
  */
-public class CheckVPNListener extends BadListener
-{
+public class CheckVPNListener extends BadListener {
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	/**
-	 * When the player joins the server 
+	 * When the player joins the server
+	 * 
 	 * @param event
 	 */
-	public void onPlayerJoinEvent(PlayerJoinEvent event)
-	{
+	public void onPlayerJoinEvent(PlayerJoinEvent event) {
 		// Create a new thread
-		ThreadRunnable.run(() -> 
-		{
+		ThreadRunnable.run(() -> {
 			// Get the connection
 			Connection connection = event.getPreLoginEvent().getConnection();
 			// Get the IP

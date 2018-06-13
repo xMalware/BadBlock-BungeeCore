@@ -12,21 +12,20 @@ import fr.badblock.bungee.link.processing.bungee.abstracts._BungeeProcessing;
  * @author root
  *
  */
-public class BungeeLogProcessing extends _BungeeProcessing
-{
+public class BungeeLogProcessing extends _BungeeProcessing {
 
 	@Override
 	/**
 	 * 
 	 * Bungee message processing
-	 * @param Messages to log
+	 * 
+	 * @param Messages
+	 *            to log
 	 *
 	 */
-	public void done(String message)
-	{
+	public void done(String message) {
 		// For each message
-		for (String string : message.split(System.lineSeparator()))
-		{
+		for (String string : message.split(System.lineSeparator())) {
 			// Log it
 			BadBungee.getInstance().getLogger().log(Level.INFO, string);
 		}

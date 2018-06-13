@@ -10,8 +10,7 @@ import lombok.Getter;
  * @author xMalware
  *
  */
-public class McJson
-{
+public class McJson {
 
 	/**
 	 * Compoonents
@@ -20,10 +19,10 @@ public class McJson
 
 	/**
 	 * Constructor of McJson
+	 * 
 	 * @param components
 	 */
-	public McJson(McJsonComponent... components)
-	{
+	public McJson(McJsonComponent... components) {
 		// Set the components
 		this.components = components;
 	}
@@ -32,29 +31,26 @@ public class McJson
 	/**
 	 * To string method?
 	 */
-	public String toString()
-	{
+	public String toString() {
 		// Create a string builder
 		StringBuilder mcjson = new StringBuilder();
 		// Append to the string builder
 		mcjson.append("[");
-		
+
 		// For each component
-		for (int i = 0; i < components.length; i++) 
-		{
+		for (int i = 0; i < components.length; i++) {
 			// If it's not the first
-			if (i > 0)
-			{
+			if (i > 0) {
 				// Add a separator
 				mcjson.append(",");
 			}
 			// Append the component
 			mcjson.append(components[i]);
 		}
-		
+
 		// Append?
 		mcjson.append("]");
-		
+
 		// Returns the string
 		return mcjson.toString();
 	}

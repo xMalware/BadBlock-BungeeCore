@@ -22,28 +22,30 @@ import net.md_5.bungee.BungeeCord;
  * @author xMalware
  *
  */
-public class BungeeTask extends Thread
-{
+public class BungeeTask extends Thread {
 
 	/**
 	 * If the task is still running
-	 * @param New state of the task
+	 * 
+	 * @param New
+	 *            state of the task
 	 * @return If the task is still running or not
 	 */
-	public static boolean		run				= true;
+	public static boolean run = true;
 	/**
 	 * Local bungee object of the node
-	 * @param New local bungee object of the node
+	 * 
+	 * @param New
+	 *            local bungee object of the node
 	 * @return The current local bungee object of the node
 	 */
-	public static BungeeObject	bungeeObject	= new BungeeObject(BadBungee.getInstance().getConfig().getBungeeName(), getIP(), new HashMap<>(), getTimestamp());
+	public static BungeeObject bungeeObject = new BungeeObject(BadBungee.getInstance().getConfig().getBungeeName(),
+			getIP(), new HashMap<>(), getTimestamp());
 
 	/**
-	 * Constructor of a new Bungee task
-	 * Automatic task start when instantiating
+	 * Constructor of a new Bungee task Automatic task start when instantiating
 	 */
-	public BungeeTask()
-	{
+	public BungeeTask() {
 		// Start the thread
 		this.start();
 	}
@@ -52,11 +54,9 @@ public class BungeeTask extends Thread
 	/**
 	 * Data sending loop method
 	 */
-	public void run()
-	{
+	public void run() {
 		// While the task is allowed to run
-		while (run)
-		{
+		while (run) {
 			// Send a keep alive packet
 			keepAlive();
 			// Sleep 1 second
@@ -66,28 +66,27 @@ public class BungeeTask extends Thread
 
 	/**
 	 * Get the new expire time
+	 * 
 	 * @return expire time in milliseconds (30+ seconds)
 	 */
-	public static long getTimestamp()
-	{
+	public static long getTimestamp() {
 		// Get with TimeUtils
 		return TimeUtils.nextTimeWithSeconds(30);
 	}
 
 	/**
 	 * Get the current BungeeCord node IP
+	 * 
 	 * @return
 	 */
-	public static String getIP()
-	{
+	public static String getIP() {
 		return BungeeCord.getInstance().config.getListeners().iterator().next().getHost().getAddress().getHostAddress();
 	}
 
 	/**
 	 * Keep alive the current BungeeCord node
 	 */
-	public static void keepAlive()
-	{
+	public static void keepAlive() {
 		// Get main class
 		BadBungee badBungee = BadBungee.getInstance();
 		// New map of players
@@ -101,7 +100,7 @@ public class BungeeTask extends Thread
 		// Deserialize the object
 		String jsonFormatString = gson.toJson(bungeeObject);
 		// Send KeepAlive packet
-		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, jsonFormatString), 
+		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, jsonFormatString),
 				BadBungeeQueues.BUNGEE_DATA, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
 	}
 

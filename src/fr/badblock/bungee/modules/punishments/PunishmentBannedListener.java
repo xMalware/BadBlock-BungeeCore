@@ -9,46 +9,39 @@ import net.md_5.bungee.event.EventPriority;
 
 /**
  * 
- * The purpose of this class is to block players from logging in if they are banned
+ * The purpose of this class is to block players from logging in if they are
+ * banned
  * 
  * @author xMalware
  *
  */
-public class PunishmentBannedListener extends BadListener
-{
+public class PunishmentBannedListener extends BadListener {
 
 	/**
 	 * When a player joins the server
+	 * 
 	 * @param event
 	 */
-	@EventHandler (priority = EventPriority.LOW)
-	public void onPlayerJoinEvent(PlayerJoinEvent event)
-	{
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerJoinEvent(PlayerJoinEvent event) {
 		// Getting the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// Getting punishment information
 		Punished punished = badPlayer.getPunished();
-		
+
 		// If there is no information of punishments
-		if (punished == null)
-		{
+		if (punished == null) {
 			// So we stop there
 			return;
 		}
-		
-		// If there is no information of punishment
-		punished.checkEnd();
-		
+
 		// If the player is still banned
-		if (punished.isBan())
-		{
+		if (punished.isBan()) {
 			// We create an empty ban message
 			String result = "";
 			// For each line of the ban message
 			for (String string : badPlayer.getTranslatedMessages("punishments.ban", null,
-					punished.buildBanTime(badPlayer.getLocale()),
-					punished.getBanReason()))
-			{
+					punished.buildBanTime(badPlayer.getLocale()), punished.getBan().getReason())) {
 				// We add it to the final ban message
 				result += string + System.lineSeparator();
 			}

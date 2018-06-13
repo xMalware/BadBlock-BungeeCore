@@ -10,34 +10,34 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public abstract class _PlayerProcessing
-{
-	
+public abstract class _PlayerProcessing {
+
 	/**
 	 * Work with player packets
-	 * @param player packet object
+	 * 
+	 * @param player
+	 *            packet object
 	 */
-	public void work(PlayerPacket playerPacket)
-	{
+	public void work(PlayerPacket playerPacket) {
 		// Get the proxied player from the player packet
 		ProxiedPlayer proxiedPlayer = getProxiedPlayerByPacket(playerPacket);
 		// If the player isn't online on this node
-		if (proxiedPlayer == null)
-		{
+		if (proxiedPlayer == null) {
 			// So we stop there
 			return;
 		}
 		// Work
 		done(proxiedPlayer, playerPacket);
 	}
-	
+
 	/**
 	 * Get the proxied player by getting the packet
-	 * @param player packet object
+	 * 
+	 * @param player
+	 *            packet object
 	 * @return the proxied player
 	 */
-	protected ProxiedPlayer getProxiedPlayerByPacket(PlayerPacket playerPacket)
-	{
+	protected ProxiedPlayer getProxiedPlayerByPacket(PlayerPacket playerPacket) {
 		// Getting the player name
 		String playerName = playerPacket.getPlayerName();
 		// Get BungeeCord Instance
@@ -45,12 +45,15 @@ public abstract class _PlayerProcessing
 		// Get the ProxiedPlayer object with the playr name
 		return bungeeCord.getPlayer(playerName);
 	}
-	
+
 	/**
 	 * Message processing
-	 * @param The ProxiedPlayer object
-	 * @param The PlayerPacket object
+	 * 
+	 * @param The
+	 *            ProxiedPlayer object
+	 * @param The
+	 *            PlayerPacket object
 	 */
 	public abstract void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket);
-	
+
 }

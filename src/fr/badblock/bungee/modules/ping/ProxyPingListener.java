@@ -15,24 +15,22 @@ import net.md_5.bungee.event.EventPriority;
  * @author xMalware
  * 
  */
-public class ProxyPingListener extends BadListener
-{
+public class ProxyPingListener extends BadListener {
 
 	/**
 	 * When someone ping the server
+	 * 
 	 * @param event
 	 */
 	@SuppressWarnings("deprecation")
-	@EventHandler (priority = EventPriority.HIGHEST)
-	public void onProxyPing(ProxyPingEvent event)
-	{
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onProxyPing(ProxyPingEvent event) {
 		// We get the bungee manager
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 		// Generate a ping
 		ServerPing serverPing = bungeeManager.generatePing();
 		// If the server ping is null
-		if (serverPing == null)
-		{
+		if (serverPing == null) {
 			// We set a basic response
 			serverPing = event.getResponse();
 			serverPing.getPlayers().setMax(0);

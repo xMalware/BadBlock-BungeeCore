@@ -10,39 +10,37 @@ import net.md_5.bungee.event.EventPriority;
 
 /**
  * 
- * The purpose of this class is to remove the player when he disconnects and 
- * to resynchronize with all the proxies.
+ * The purpose of this class is to remove the player when he disconnects and to
+ * resynchronize with all the proxies.
  * 
  * @author xMalware
  *
  */
-public class QuitListener extends BadListener
-{
+public class QuitListener extends BadListener {
 
 	/**
 	 * When the player disconnects from the server
+	 * 
 	 * @param event
 	 */
-	@EventHandler (priority = EventPriority.HIGHEST)
-	public void onPlayerDisconnect(PlayerDisconnectEvent event)
-	{
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerDisconnect(PlayerDisconnectEvent event) {
 		// We get the player
 		ProxiedPlayer player = event.getPlayer();
 		// We get the BadPlayer object
 		BadPlayer badPlayer = BadPlayer.get(player);
-		
+
 		// If the BadPlayer object is null
-		if (badPlayer == null)
-		{
+		if (badPlayer == null) {
 			// So we stop there
 			return;
 		}
-		
+
 		// We remove the BadPlayer object
 		badPlayer.remove();
-		
+
 		// We synchronize all the other proxies
 		BungeeTask.keepAlive();
 	}
-	
+
 }

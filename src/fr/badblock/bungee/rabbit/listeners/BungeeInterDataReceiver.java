@@ -11,22 +11,21 @@ import fr.badblock.bungee.rabbit.BadBungeeQueues;
 
 /**
  * 
- * The purpose of this class is to listen to all the data
- * that is sent between all the BungeeCord nodes to synchronize.
+ * The purpose of this class is to listen to all the data that is sent between
+ * all the BungeeCord nodes to synchronize.
  * 
  * @author xMalware
  *
  */
-public class BungeeInterDataReceiver extends RabbitListener
-{
+public class BungeeInterDataReceiver extends RabbitListener {
 
 	/**
 	 * Constructor
 	 */
-	public BungeeInterDataReceiver() 
-	{
+	public BungeeInterDataReceiver() {
 		// Super!
-		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_DATA, RabbitListenerType.SUBSCRIBER, false);
+		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_DATA, RabbitListenerType.SUBSCRIBER,
+				false);
 		// Load the listener
 		load();
 	}
@@ -35,8 +34,7 @@ public class BungeeInterDataReceiver extends RabbitListener
 	 * When we receive a packet
 	 */
 	@Override
-	public void onPacketReceiving(String body)
-	{
+	public void onPacketReceiving(String body) {
 		// Get the main class
 		BadBungee badBungee = BadBungee.getInstance();
 		// Get Gson object
@@ -45,7 +43,7 @@ public class BungeeInterDataReceiver extends RabbitListener
 		BungeeObject bungeeObject = gson.fromJson(body, BungeeObject.class);
 		// Add the Bungee object
 		BungeeManager.getInstance().add(bungeeObject);
-		
+
 	}
 
 }

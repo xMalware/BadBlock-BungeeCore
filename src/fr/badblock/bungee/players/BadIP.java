@@ -34,71 +34,87 @@ import lombok.Data;
  * @author xMalware
  *
  */
-public final class BadIP
-{
+public final class BadIP {
 
 	/**
 	 * IP
-	 * @param Set the IP
+	 * 
+	 * @param Set
+	 *            the IP
 	 * @return Returns the IP
 	 */
-	private 			String						ip;
-	
+	private String ip;
+
 	/**
 	 * DBObject
-	 * @param Set the DBObject
+	 * 
+	 * @param Set
+	 *            the DBObject
 	 * @return Returns the DBObject
 	 */
-	private transient	DBObject	  				dbObject;
-	
+	private transient DBObject dbObject;
+
 	/**
 	 * Callback
-	 * @param Set the callback
+	 * 
+	 * @param Set
+	 *            the callback
 	 * @return Returns the callback
 	 */
-	private transient	Callback<BadIP>				callback;
-	
+	private transient Callback<BadIP> callback;
+
 	/**
 	 * Loaded callbacks
-	 * @param Set the loaded callbacks
+	 * 
+	 * @param Set
+	 *            the loaded callbacks
 	 * @return Returns the loaded callbacks
 	 */
-	private transient	List<Callback<BadIP>> 		loadedCallbacks;
+	private transient List<Callback<BadIP>> loadedCallbacks;
 
 	/**
 	 * Loaded
-	 * @param Set if loaded
+	 * 
+	 * @param Set
+	 *            if loaded
 	 * @return Returns if loaded
 	 */
-	private 			boolean						loaded;
-	
+	private boolean loaded;
+
 	/**
 	 * VPN
-	 * @param Set if VPN
+	 * 
+	 * @param Set
+	 *            if VPN
 	 * @return Returns if VPN
 	 */
-	private 			boolean						vpn;
-	
+	private boolean vpn;
+
 	/**
 	 * Found
-	 * @param Set if found
+	 * 
+	 * @param Set
+	 *            if found
 	 * @return Returns if found
 	 */
-	private 			boolean						found;
+	private boolean found;
 
 	/**
 	 * Punished
-	 * @param Set punished
+	 * 
+	 * @param Set
+	 *            punished
 	 * @return Returns punished
 	 */
-	private 			Punished					punished;
+	private Punished punished;
 
 	/**
 	 * Constructor
-	 * @param IP address
+	 * 
+	 * @param IP
+	 *            address
 	 */
-	public BadIP(String ip)
-	{
+	public BadIP(String ip) {
 		// Set IP address
 		setIp(ip);
 		// Set callback
@@ -111,13 +127,12 @@ public final class BadIP
 
 	/**
 	 * Register loaded callbacks
+	 * 
 	 * @param Callback
 	 */
-	public void registerLoadedCallback(Callback<BadIP> callback)
-	{
+	public void registerLoadedCallback(Callback<BadIP> callback) {
 		// If it's loaded
-		if (isLoaded())
-		{
+		if (isLoaded()) {
 			// Ok, call back
 			callback.done(this, null);
 			// We stop there
@@ -127,13 +142,14 @@ public final class BadIP
 		getLoadedCallbacks().add(callback);
 	}
 
-	/**+
-	 * Constructor
-	 * @param IP address
+	/**
+	 * + Constructor
+	 * 
+	 * @param IP
+	 *            address
 	 * @param Create
 	 */
-	public BadIP(String ip, boolean create)
-	{
+	public BadIP(String ip, boolean create) {
 		// Set IP address
 		setIp(ip);
 		// Load data
@@ -142,21 +158,19 @@ public final class BadIP
 
 	/**
 	 * Get BadIP object
-	 * @param IP address
+	 * 
+	 * @param IP
+	 *            address
 	 * @return the BadIP object
 	 */
-	public static BadIP get(String ip)
-	{
+	public static BadIP get(String ip) {
 		// Create a BadIP
 		BadIP badIp = new BadIP(ip, false);
 		// If it's not found
-		if (!badIp.isFound())
-		{
+		if (!badIp.isFound()) {
 			// Returns null
 			return null;
-		}
-		else
-		{
+		} else {
 			// Returns BadIP object
 			return badIp;
 		}
@@ -165,35 +179,31 @@ public final class BadIP
 	/**
 	 * Update VPN object
 	 */
-	public void updateVPN()
-	{
+	public void updateVPN() {
 		// Update data
 		updateData("vpn", isVpn());
 	}
 
 	/**
 	 * Save data
+	 * 
 	 * @throws Exception
 	 */
-	public void saveData() throws Exception
-	{
+	public void saveData() throws Exception {
 		// If it's not loaded
-		if (!isLoaded())
-		{
+		if (!isLoaded()) {
 			// Exception!
 			throw new Exception("Trying to save data with unloaded data.");
 		}
 		// Mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService)
-		{
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 			/**
 			 * Run asynchronously
 			 */
 			@Override
-			public void run(MongoService mongoService)
-			{
+			public void run(MongoService mongoService) {
 				// Get database
 				DB db = mongoService.getDb();
 				// Get collection
@@ -203,7 +213,7 @@ public final class BadIP
 
 				// Put IP in query
 				query.put("ip", getIp().toLowerCase());
-				
+
 				// Update data
 				collection.update(query, getDbObject());
 			}
@@ -213,41 +223,38 @@ public final class BadIP
 
 	/**
 	 * Merge data
-	 * @param Base DBObject
+	 * 
+	 * @param Base
+	 *            DBObject
 	 * @param toAdd
 	 * @param basePoint
 	 * @return
 	 */
-	public DBObject mergeData(DBObject base, JsonObject toAdd, boolean basePoint)
-	{
+	public DBObject mergeData(DBObject base, JsonObject toAdd, boolean basePoint) {
 		// For each element to add
-		for (final Entry<String, JsonElement> entry : toAdd.entrySet())
-		{
+		for (final Entry<String, JsonElement> entry : toAdd.entrySet()) {
 			// Get key
 			String key = entry.getKey();
 			// Get element
 			JsonElement element = toAdd.get(key);
 			// If it's not a json object
-			if (!base.containsField(key) || !element.isJsonObject())
-			{
+			if (!base.containsField(key) || !element.isJsonObject()) {
 				// Put the element in the base object
 				base.put(key, element);
 				// Returns the base
 				return base;
 			}
 			// If it's a json object
-			else
-			{
+			else {
 				// Try to?
-				try
-				{
+				try {
 					// Merge data from the DBObject
-					DBObject dbObject = mergeData(ObjectUtils.toDbObject(base.get(key)), element.getAsJsonObject(), false);
+					DBObject dbObject = mergeData(ObjectUtils.toDbObject(base.get(key)), element.getAsJsonObject(),
+							false);
 					// Add the database object in the base object
 					base.put(key, dbObject);
 					// If it's the base point
-					if (basePoint)
-					{
+					if (basePoint) {
 						// We just save the data
 						saveData();
 					}
@@ -255,8 +262,7 @@ public final class BadIP
 					return dbObject;
 				}
 				// Error case
-				catch (Exception exception)
-				{
+				catch (Exception exception) {
 					exception.printStackTrace();
 				}
 			}
@@ -267,22 +273,20 @@ public final class BadIP
 
 	/**
 	 * Update data
+	 * 
 	 * @param key
 	 * @param value
 	 */
-	public void updateData(String key, Object value)
-	{
+	public void updateData(String key, Object value) {
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService)
-		{
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 			/**
 			 * Run asynchronously
 			 */
 			@Override
-			public void run(MongoService mongoService)
-			{
+			public void run(MongoService mongoService) {
 				// Get database
 				DB db = mongoService.getDb();
 				// Get database collection
@@ -294,7 +298,7 @@ public final class BadIP
 
 				// Query IP
 				query.put("ip", getIp().toLowerCase());
-				
+
 				// Updater with all data to set
 				BasicDBObject updater = new BasicDBObject("$set", update);
 
@@ -303,13 +307,12 @@ public final class BadIP
 
 				// Sleep100 ms
 				TimeUtils.sleep(100);
-				
+
 				// Load data
 				loadData(true);
-				
+
 				// Callback not null
-				if (callback != null)
-				{
+				if (callback != null) {
 					// Done!
 					callback.done(BadIP.this, null);
 					// Remove the callback
@@ -322,26 +325,26 @@ public final class BadIP
 
 	/**
 	 * Load data
-	 * @param If we create data if it doesn't exist
+	 * 
+	 * @param If
+	 *            we create data if it doesn't exist
 	 */
-	protected void loadData(boolean create)
-	{
+	protected void loadData(boolean create) {
 		// New query data
 		BasicDBObject query = new BasicDBObject();
 		// Query IP
 		query.append("ip", getIp().toLowerCase());
-		
+
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Get databse collection
 		DBCollection dbCollection = mongoService.getDb().getCollection("players");
-		
+
 		// Find each data with this IP
 		DBCursor cursor = dbCollection.find(query);
-		
+
 		// If we find anything
-		if (cursor.hasNext())
-		{
+		if (cursor.hasNext()) {
 			// Set the database object
 			setDbObject(cursor.next());
 			// Log
@@ -352,19 +355,14 @@ public final class BadIP
 			setVpn(getBoolean("vpn"));
 			// Set punished
 			setPunished(new Punished(getJsonElement("punish").getAsJsonObject()));
-		}
-		else
-		{
+		} else {
 			// Log
 			BadBungee.log(getIp() + " doesn't exist in the player table.");
 			// If we can create
-			if (create)
-			{
+			if (create) {
 				// So we insert
 				insert();
-			}
-			else
-			{
+			} else {
 				// Not found.
 				setFound(false);
 			}
@@ -374,22 +372,20 @@ public final class BadIP
 	/**
 	 * Insert BadIP
 	 */
-	private void insert()
-	{
+	private void insert() {
 		// Log
 		BadBungee.log("§aCreating it...");
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService)
-		{
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 			/**
 			 * Run asynchronously
+			 * 
 			 * @param mongoService
 			 */
 			@Override
-			public void run(MongoService mongoService)
-			{
+			public void run(MongoService mongoService) {
 				// New punished data
 				punished = new Punished();
 				// Set VPN state
@@ -412,31 +408,28 @@ public final class BadIP
 
 	/**
 	 * Get a string
+	 * 
 	 * @param part
 	 * @return
 	 */
-	private String getString(String part)
-	{
+	private String getString(String part) {
 		// If the database object contains the field
-		if (getDbObject().containsField(part))
-		{
+		if (getDbObject().containsField(part)) {
 			// Returns the field content
 			return getDbObject().get(part).toString();
-		}
-		else
-		{
+		} else {
 			// Returns an empty string
 			return "";
 		}
 	}
-	
+
 	/**
 	 * Get a boolean
+	 * 
 	 * @param part
 	 * @return
 	 */
-	private boolean getBoolean(String part)
-	{
+	private boolean getBoolean(String part) {
 		// Parsing a boolean from getString();
 		return Boolean.parseBoolean(getString(part));
 	}
@@ -444,23 +437,20 @@ public final class BadIP
 	@SuppressWarnings("deprecation")
 	/**
 	 * Get a JsonElement
+	 * 
 	 * @param part
 	 * @return
 	 */
-	public JsonElement getJsonElement(String part)
-	{
+	public JsonElement getJsonElement(String part) {
 		// If the database object contains the field
-		if (getDbObject().containsField(part))
-		{
+		if (getDbObject().containsField(part)) {
 			// Serialize the object
 			String serialize = JSON.serialize(getDbObject().get(part));
 			// Deserialize to a JsonElement
 			JsonElement jsonElement = GsonUtils.toJsonElement(serialize);
 			// Returns the element
 			return jsonElement;
-		}
-		else
-		{
+		} else {
 			// Returns a new json object
 			return new JsonObject();
 		}
@@ -468,10 +458,10 @@ public final class BadIP
 
 	/**
 	 * Get saved object
+	 * 
 	 * @return BasicDBObject
 	 */
-	public BasicDBObject getSavedObject()
-	{
+	public BasicDBObject getSavedObject() {
 		// Create a new object
 		BasicDBObject object = new BasicDBObject();
 		// Set the IP

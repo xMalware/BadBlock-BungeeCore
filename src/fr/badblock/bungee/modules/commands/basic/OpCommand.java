@@ -11,26 +11,22 @@ import net.md_5.bungee.api.CommandSender;
  * @author xMalware
  *
  */
-public class OpCommand extends BadCommand
-{
+public class OpCommand extends BadCommand {
 
 	/**
 	 * Command constructor
 	 */
-	public OpCommand()
-	{
+	public OpCommand() {
 		super("op");
 	}
-	
+
 	/**
 	 * Method called when using the command
 	 */
 	@Override
-	public void run(CommandSender sender, String[] args)
-	{
+	public void run(CommandSender sender, String[] args) {
 		// If the number of arguments of the command is not equal to 1.
-		if (args.length != 1)
-		{
+		if (args.length != 1) {
 			// In this case the way of using the command is returned to the player
 			I19n.sendMessage(sender, "bungee.commands.op.usage", null);
 			// We stop there

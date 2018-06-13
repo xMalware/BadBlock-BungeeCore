@@ -11,14 +11,12 @@ import net.md_5.bungee.api.CommandSender;
  * @author xMalware
  *
  */
-public class PluginsCommand extends BadCommand
-{
-	
+public class PluginsCommand extends BadCommand {
+
 	/**
 	 * Command constructor
 	 */
-	public PluginsCommand()
-	{
+	public PluginsCommand() {
 		super("plugins", "", "pl", "bukkit:plugins", "bukkit:pl");
 	}
 
@@ -26,8 +24,7 @@ public class PluginsCommand extends BadCommand
 	 * Method called when using the command
 	 */
 	@Override
-	public void run(CommandSender sender, String[] args)
-	{
+	public void run(CommandSender sender, String[] args) {
 		// Sending the message
 		I19n.sendMessage(sender, "bungee.commands.plugins.message", null, sender.getName());
 	}

@@ -10,21 +10,18 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * 
  * Add friends, delete friends, view your friends list and much more.
  *
- * No permission is required to execute this command.
- * It is divided into subcommands:
- *  - /friend help/?/aide
- *  - /friend status
- *  - /friend ask/add/invite/request/accept/demander/ajouter/inviter/accepter
- *  - /friend remove/delete/cancel/supprimer/enlever/annuler
- *  - /friend list/show/lister/afficher/montrer
+ * No permission is required to execute this command. It is divided into
+ * subcommands: - /friend help/?/aide - /friend status - /friend
+ * ask/add/invite/request/accept/demander/ajouter/inviter/accepter - /friend
+ * remove/delete/cancel/supprimer/enlever/annuler - /friend
+ * list/show/lister/afficher/montrer
  * 
  * I18n key prefix: 'bungee.commands.friend.'
  * 
  * @author xMalware
  *
  */
-public class FriendCommand extends BadCommand
-{
+public class FriendCommand extends BadCommand {
 
 	// I18n key prefix
 	private String prefix = "bungee.commands.friends.";
@@ -32,8 +29,7 @@ public class FriendCommand extends BadCommand
 	/**
 	 * Command constructor
 	 */
-	public FriendCommand()
-	{
+	public FriendCommand() {
 		super("friend", null, "friends", "f", "ami", "amis");
 		// Allow access to the command for players only
 		this.setForPlayersOnly(true);
@@ -43,14 +39,12 @@ public class FriendCommand extends BadCommand
 	 * Method called when using the command
 	 */
 	@Override
-	public void run(CommandSender sender, String[] args)
-	{
+	public void run(CommandSender sender, String[] args) {
 		// We get the player from the sender
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 
 		// If no argument has been entered
-		if (args.length == 0)
-		{
+		if (args.length == 0) {
 			// We give him help.
 			help(sender);
 			// We stop there.
@@ -61,8 +55,7 @@ public class FriendCommand extends BadCommand
 		String subCommand = args[0];
 
 		// We're checking the subcommand
-		switch (subCommand)
-		{
+		switch (subCommand) {
 
 		// Request for help
 		case "help":
@@ -72,13 +65,13 @@ public class FriendCommand extends BadCommand
 			help(sender);
 			break;
 
-			// Status of requests
+		// Status of requests
 		case "status":
 			// Command execution
 			status(proxiedPlayer, args);
 			break;
 
-			// Add as a friend
+		// Add as a friend
 		case "ask":
 		case "add":
 		case "invite":
@@ -92,7 +85,7 @@ public class FriendCommand extends BadCommand
 			add(proxiedPlayer, args);
 			break;
 
-			// Remove a friend
+		// Remove a friend
 		case "remove":
 		case "delete":
 		case "cancel":
@@ -103,7 +96,7 @@ public class FriendCommand extends BadCommand
 			remove(proxiedPlayer, args);
 			break;
 
-			// List of friends
+		// List of friends
 		case "list":
 		case "show":
 		case "lister":
@@ -113,7 +106,7 @@ public class FriendCommand extends BadCommand
 			list(proxiedPlayer, args);
 			break;
 
-			// Other subcommand
+		// Other subcommand
 		default:
 			// Command execution
 			unknown(sender);
@@ -124,30 +117,28 @@ public class FriendCommand extends BadCommand
 	/*
 	 * Sending a message that the typed subcommand does not exist.
 	 */
-	private void unknown(CommandSender sender)
-	{
+	private void unknown(CommandSender sender) {
 		I19n.sendMessage(sender, prefix + "unknown_command", null);
 	}
 
 	/**
 	 * Sending help to the player
+	 * 
 	 * @param sender
 	 */
-	private void help(CommandSender sender)
-	{
+	private void help(CommandSender sender) {
 		I19n.sendMessage(sender, prefix + "help", null);
 	}
 
 	/**
 	 * Change the mod state
+	 * 
 	 * @param sender
 	 * @param args
 	 */
-	private void status(ProxiedPlayer sender, String[] args)
-	{
+	private void status(ProxiedPlayer sender, String[] args) {
 		// If less than two arguments were given
-		if (args.length < 2)
-		{
+		if (args.length < 2) {
 			// So we show him a status selector
 			FriendListManager.showStatusSelector(BadPlayer.get(sender));
 			// We stop there
@@ -159,34 +150,32 @@ public class FriendCommand extends BadCommand
 
 	/**
 	 * Add a player as a friend
+	 * 
 	 * @param sender
 	 * @param args
 	 */
-	private void add(ProxiedPlayer sender, String[] args)
-	{
+	private void add(ProxiedPlayer sender, String[] args) {
 		// If less than two arguments were given
-		if (args.length < 2)
-		{
+		if (args.length < 2) {
 			// We send him the way to use the command
 			I19n.sendMessage(sender, prefix + "add.usage", null);
 			// We stop there
 			return;
 		}
-		
+
 		// Sending the request
 		FriendListManager.request(sender.getName(), args[1]);
 	}
 
 	/**
 	 * Remove a friend
+	 * 
 	 * @param sender
 	 * @param args
 	 */
-	private void remove(ProxiedPlayer sender, String[] args)
-	{
+	private void remove(ProxiedPlayer sender, String[] args) {
 		// If less than two arguments were given
-		if (args.length < 2)
-		{
+		if (args.length < 2) {
 			// We send him the way to use the command
 			I19n.sendMessage(sender, prefix + "remove.usage", null);
 			// We stop there
@@ -198,14 +187,13 @@ public class FriendCommand extends BadCommand
 
 	/**
 	 * Displaying the player's friends list
+	 * 
 	 * @param sender
 	 * @param args
 	 */
-	private void list(ProxiedPlayer sender, String[] args)
-	{
+	private void list(ProxiedPlayer sender, String[] args) {
 		// If less than two arguments were given
-		if (args.length < 2)
-		{
+		if (args.length < 2) {
 			// We show him the first page of his friends list
 			FriendListManager.showFriendList(BadPlayer.get(sender));
 			// We stop there

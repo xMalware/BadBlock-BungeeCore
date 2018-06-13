@@ -10,20 +10,19 @@ import net.md_5.bungee.api.ProxyServer;
  * @author root
  *
  */
-public class BungeeBroadcastProcessing extends _BungeeProcessing
-{
+public class BungeeBroadcastProcessing extends _BungeeProcessing {
 
 	@SuppressWarnings("deprecation")
 	@Override
 	/**
 	 * Bungee message processing
-	 * @param Messages to broadcast
+	 * 
+	 * @param Messages
+	 *            to broadcast
 	 */
-	public void done(String message)
-	{
+	public void done(String message) {
 		// For each message
-		for (String string : message.split(System.lineSeparator()))
-		{
+		for (String string : message.split(System.lineSeparator())) {
 			// Broadcast it
 			ProxyServer.getInstance().broadcast(string);
 		}

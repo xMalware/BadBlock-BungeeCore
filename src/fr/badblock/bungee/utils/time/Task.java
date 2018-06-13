@@ -9,26 +9,24 @@ import java.util.UUID;
  * @author xMalware
  *
  */
-public class Task extends Thread
-{
+public class Task extends Thread {
 
 	/**
 	 * Constructor
+	 * 
 	 * @param name
 	 */
-	public Task(String name)
-	{
+	public Task(String name) {
 		// Set the name
 		setName("task-" + name);
 	}
-	
+
 	/**
 	 * Constructor with random name
 	 */
-	public Task()
-	{
+	public Task() {
 		// Use the first constructor
 		this(UUID.randomUUID().toString());
 	}
-	
+
 }

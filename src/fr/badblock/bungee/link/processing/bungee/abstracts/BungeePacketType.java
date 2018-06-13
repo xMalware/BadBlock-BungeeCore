@@ -12,8 +12,7 @@ import lombok.Getter;
  * @author xMalware
  *
  */
-public enum BungeePacketType
-{
+public enum BungeePacketType {
 
 	/**
 	 * Broadcast packet
@@ -23,21 +22,23 @@ public enum BungeePacketType
 	 * Logging packet
 	 */
 	LOG(new BungeeLogProcessing());
-	
+
 	/**
 	 * Custom packet processing
+	 * 
 	 * @return The custom packet processing
 	 */
 	private _BungeeProcessing process;
-	
+
 	/**
 	 * Constructor of a new Bungee packet tpye
-	 * @param custom packet processing
+	 * 
+	 * @param custom
+	 *            packet processing
 	 */
-	BungeePacketType(_BungeeProcessing process)
-	{
+	BungeePacketType(_BungeeProcessing process) {
 		// Set the custom packet processing
 		this.process = process;
 	}
-	
+
 }

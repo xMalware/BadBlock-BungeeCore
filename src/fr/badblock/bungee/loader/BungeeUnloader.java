@@ -13,22 +13,24 @@ import lombok.EqualsAndHashCode;
  * @author xMalware
  *
  */
-public class BungeeUnloader
-{
+public class BungeeUnloader {
 
 	/**
 	 * BadBungee object
-	 * @param Set the new BadBungee object
+	 * 
+	 * @param Set
+	 *            the new BadBungee object
 	 * @return Returns the current BadBungee object
 	 */
-	private BadBungee		badBungee;
+	private BadBungee badBungee;
 
 	/**
 	 * Constructor of the BungeeUnloader object
-	 * @param BadBungee object
+	 * 
+	 * @param BadBungee
+	 *            object
 	 */
-	public BungeeUnloader(BadBungee badBungee)
-	{
+	public BungeeUnloader(BadBungee badBungee) {
 		// Set BadBungee
 		setBadBungee(badBungee);
 		// Set unload state
@@ -42,28 +44,23 @@ public class BungeeUnloader
 	/**
 	 * Set the unload state
 	 */
-	private void setUnload()
-	{
+	private void setUnload() {
 		// Set unloaded
 		getBadBungee().setUnloaded(true);
 	}
 
 	/**
-	 * Unload MongoDB
-	 * (remove the service)
+	 * Unload MongoDB (remove the service)
 	 */
-	private void unloadMongo()
-	{
+	private void unloadMongo() {
 		// Remove the service
 		getBadBungee().getMongoService().remove();
 	}
 
 	/**
-	 * Unload RabbitMQ
-	 * (remove the service)
+	 * Unload RabbitMQ (remove the service)
 	 */
-	private void unloadRabbit()
-	{
+	private void unloadRabbit() {
 		// Remove the service
 		getBadBungee().getRabbitService().remove();
 	}

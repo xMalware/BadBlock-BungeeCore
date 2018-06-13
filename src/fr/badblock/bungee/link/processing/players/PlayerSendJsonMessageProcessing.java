@@ -13,17 +13,16 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public class PlayerSendJsonMessageProcessing extends _PlayerProcessing
-{
+public class PlayerSendJsonMessageProcessing extends _PlayerProcessing {
 
 	@Override
 	/**
 	 * Processing
 	 */
-	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket)
-	{
+	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket) {
 		// Send JSON
-        McJsonUtils.sendJsons(proxiedPlayer, McJsonUtils.parseMcJsons(ChatColorUtils.translateColors('&', playerPacket.getContent().split(System.lineSeparator()))));
+		McJsonUtils.sendJsons(proxiedPlayer, McJsonUtils.parseMcJsons(
+				ChatColorUtils.translateColors('&', playerPacket.getContent().split(System.lineSeparator()))));
 	}
 
 }

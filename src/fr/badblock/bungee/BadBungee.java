@@ -23,64 +23,78 @@ import net.md_5.bungee.api.plugin.Plugin;
  * @author xMalware
  *
  */
-public class BadBungee extends Plugin
-{
+public class BadBungee extends Plugin {
 
 	/**
 	 * BadBungee
-	 * @param Set the new BadBungee instance
+	 * 
+	 * @param Set
+	 *            the new BadBungee instance
 	 * @return Returns the current BadBungee instance
 	 */
-	@Getter@Setter private static BadBungee instance;
+	@Getter
+	@Setter
+	private static BadBungee instance;
 
 	/**
 	 * Rabbit service
-	 * @param Set the new Rabbit service
+	 * 
+	 * @param Set
+	 *            the new Rabbit service
 	 * @return Returns the current Rabbit service
 	 */
-	private RabbitService		rabbitService;
-	
+	private RabbitService rabbitService;
+
 	/**
 	 * Mongo service
-	 * @param Set the new Mongo service
+	 * 
+	 * @param Set
+	 *            the new Mongo service
 	 * @return Returns the current Mongo service
 	 */
-	private MongoService		mongoService;
-	
+	private MongoService mongoService;
+
 	/**
 	 * BadBungee configuration
-	 * @param Set the new BadBungee configuration
+	 * 
+	 * @param Set
+	 *            the new BadBungee configuration
 	 * @return Returns the current BadBungee configuration
 	 */
-	private BadBungeeConfig		config;
-	
+	private BadBungeeConfig config;
+
 	/**
 	 * Gson
-	 * @param Set the new Gson
+	 * 
+	 * @param Set
+	 *            the new Gson
 	 * @return Returns the current Gson
 	 */
-	private Gson				gson;
-	
+	private Gson gson;
+
 	/**
 	 * Pretty Gson
-	 * @param Set the new pretty Gson
-	 * @return Returns the current pretty Gson 
+	 * 
+	 * @param Set
+	 *            the new pretty Gson
+	 * @return Returns the current pretty Gson
 	 */
-	private Gson				prettyGson;
-	
+	private Gson prettyGson;
+
 	/**
 	 * Unloaded
-	 * @param Set the plugin to the unloaded state
+	 * 
+	 * @param Set
+	 *            the plugin to the unloaded state
 	 * @return Returns if the plugin is unloaded
 	 */
-	private boolean				unloaded;
+	private boolean unloaded;
 
 	@Override
 	/**
 	 * Plugin enable
 	 */
-	public void onEnable()
-	{
+	public void onEnable() {
 		// Call the loader
 		new BungeeLoader(this);
 	}
@@ -89,8 +103,7 @@ public class BadBungee extends Plugin
 	/**
 	 * Plugin disable
 	 */
-	public void onDisable()
-	{
+	public void onDisable() {
 		// Call the unloader
 		new BungeeUnloader(this);
 	}
@@ -98,10 +111,11 @@ public class BadBungee extends Plugin
 	@SuppressWarnings("deprecation")
 	/**
 	 * Proxy logging (with a prefix)
-	 * @param Message to log
+	 * 
+	 * @param Message
+	 *            to log
 	 */
-	public static void log(String message)
-	{
+	public static void log(String message) {
 		// Local logging
 		ProxyServer.getInstance().getConsole().sendMessage("§e[BadBungee] §f" + message);
 	}

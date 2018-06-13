@@ -7,20 +7,17 @@ import net.md_5.bungee.api.CommandSender;
 
 /**
  * 
- * Get the TPS.
- * Usage: /btps
+ * Get the TPS. Usage: /btps
  * 
  * @author xMalware
  *
  */
-public class BTPSCommand extends BadCommand
-{
+public class BTPSCommand extends BadCommand {
 
 	/**
 	 * Command constructor
 	 */
-	public BTPSCommand()
-	{
+	public BTPSCommand() {
 		super("btps", "", ")");
 		// New tps monitor
 		new TPS();
@@ -30,8 +27,7 @@ public class BTPSCommand extends BadCommand
 	 * Method called when using the command
 	 */
 	@Override
-	public void run(CommandSender sender, String[] args)
-	{
+	public void run(CommandSender sender, String[] args) {
 		// TPS!
 		I19n.sendMessage(sender, "bungee.commands.btps.message", null, TPS.getTps());
 	}

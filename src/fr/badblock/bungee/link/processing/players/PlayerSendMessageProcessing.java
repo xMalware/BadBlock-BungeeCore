@@ -12,18 +12,17 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public class PlayerSendMessageProcessing extends _PlayerProcessing
-{
+public class PlayerSendMessageProcessing extends _PlayerProcessing {
 
 	@SuppressWarnings("deprecation")
 	/**
 	 * Player processing
 	 */
 	@Override
-	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket)
-	{
+	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket) {
 		// Send messages
-	    proxiedPlayer.sendMessages(ChatColorUtils.translateColors('&', playerPacket.getContent().split(System.lineSeparator())));
+		proxiedPlayer.sendMessages(
+				ChatColorUtils.translateColors('&', playerPacket.getContent().split(System.lineSeparator())));
 	}
 
 }
