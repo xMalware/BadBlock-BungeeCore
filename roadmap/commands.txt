@@ -2,21 +2,15 @@ ToDo BadBlockBungee:
 
 
 - Commands:
-/enablechat
-/greports
 /onlinestaff
-/report
 /scale
 /spymsg
 /track
 /mute
 /sanction
-/tempban
 /unban
 /unmute
 /warn
-/cbreport
-/gwhitelist
 /done
 /gnick
 /rnick
@@ -32,3 +26,5 @@ T - /ghostconnect
 T - /fkick
 T - /kick
 T - /modo
+T - /report
+T - /tempban

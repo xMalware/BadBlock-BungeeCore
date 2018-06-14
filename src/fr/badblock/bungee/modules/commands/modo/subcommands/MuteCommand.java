@@ -16,7 +16,7 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.BanReasonType;
+import fr.badblock.bungee.modules.commands.modo.objects.MuteReasonType;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.DateUtils;
@@ -33,14 +33,14 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public class BanCommand extends AbstractModCommand {
+public class MuteCommand extends AbstractModCommand {
 
 	/**
 	 * Constructor
 	 */
-	public BanCommand() {
+	public MuteCommand() {
 		// Super!
-		super("ban", new String[] { "b" });
+		super("mute", new String[] { "m" });
 	}
 
 	/**
@@ -59,8 +59,8 @@ public class BanCommand extends AbstractModCommand {
 		// Get the player name
 		String playerName = args[1];
 
-		// If he can't ban
-		if (!canBeBanned(sender, playerName)) {
+		// If he can't be muted
+		if (!canBeMuted(sender, playerName)) {
 			// So we stop there
 			return;
 		}
@@ -92,9 +92,9 @@ public class BanCommand extends AbstractModCommand {
 			boolean hasReason = false;
 
 			// For each reason type
-			for (BanReasonType banReason : BanReasonType.values()) {
-				// If the sender doesn't have the permission to ban for this reason
-				if (!sender.hasPermission(getPermission() + "." + banReason.getName())) {
+			for (MuteReasonType muteReason : MuteReasonType.values()) {
+				// If the sender doesn't have the permission to mute for this reason
+				if (!sender.hasPermission(getPermission() + "." + muteReason.getName())) {
 					// So continue
 					continue;
 				}
@@ -107,11 +107,11 @@ public class BanCommand extends AbstractModCommand {
 					// Get the intro message
 					String intro = badPlayer.getTranslatedMessage(getPrefix("reason_intro"), null);
 					// Get the reason message
-					String reason = badPlayer.getTranslatedMessage(getPrefix("reason." + banReason.getName()), null);
+					String reason = badPlayer.getTranslatedMessage(getPrefix("reason." + muteReason.getName()), null);
 
 					// Get the McJson
 					McJson json = new McJsonFactory(intro).finaliseComponent().initNewComponent(reason)
-							.setHoverText(reason).setClickCommand("/m ban " + playerName + " " + banReason.getName())
+							.setHoverText(reason).setClickCommand("/m mute " + playerName + " " + muteReason.getName())
 							.finaliseComponent().build();
 
 					// Send the message
@@ -120,7 +120,7 @@ public class BanCommand extends AbstractModCommand {
 				// If the sender isn't a player
 				{
 					// Send the reason message
-					I19n.sendMessage(sender, getPrefix("reason." + banReason.getName()), null);
+					I19n.sendMessage(sender, getPrefix("reason." + muteReason.getName()), null);
 				}
 			}
 
@@ -135,24 +135,24 @@ public class BanCommand extends AbstractModCommand {
 		}
 
 		// If the sender is a player
-		if (isPlayer && badPlayer.getFlags().has("tryban")) {
+		if (isPlayer && badPlayer.getFlags().has("trymute")) {
 			return;
 		}
 
-		// Set the flag to avoid to duplicate bans
-		badPlayer.getFlags().set("tryban", 500);
+		// Set the flag to avoid to duplicate mutes
+		badPlayer.getFlags().set("trymute", 500);
 
 		// Is this a key
 		boolean isKey = true;
 
-		// Get the raw ban reason
-		String rawBanReason = args[2];
+		// Get the raw mute reason
+		String rawMuteReason = args[2];
 
-		// Get the ban reason
-		BanReasonType banReason = BanReasonType.getFromString(rawBanReason);
+		// Get the mute reason
+		MuteReasonType muteReason = MuteReasonType.getFromString(rawMuteReason);
 
 		// If the ban reason doesn't exist
-		if (banReason == null) {
+		if (muteReason == null) {
 			// If he doesn't have the permission
 			if (!sender.hasPermission(getPermission() + ".custom")) {
 				// Send a message
@@ -169,7 +169,7 @@ public class BanCommand extends AbstractModCommand {
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
 		// Get the reason
-		String reason = isKey ? getPrefix("reason." + banReason.getName()) : rawBanReason;
+		String reason = isKey ? getPrefix("reason." + muteReason.getName()) : rawMuteReason;
 		// Get the punisher ip
 		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
 
@@ -178,7 +178,7 @@ public class BanCommand extends AbstractModCommand {
 
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(),
-				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(),
+				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(),
 				TimeUtils.nextTime(Time.YEAR.convert(1L, Time.MILLIS_SECOND)), DateUtils.getHourDate(), reason, isKey,
 				new String[] {}, sender.getName(), punisherIp);
 
@@ -199,23 +199,23 @@ public class BanCommand extends AbstractModCommand {
 
 		// If the punish object isn't null
 		if (badOfflinePlayer.getPunished() != null) {
-			// So set the ban
-			badOfflinePlayer.getPunished().setBan(punishment);
+			// So set the mute
+			badOfflinePlayer.getPunished().setMute(punishment);
 		}
 		// If the punish object is null
 		else {
 			// Create a punish object
 			badOfflinePlayer.setPunished(new Punished());
-			// Set the ban
-			badOfflinePlayer.getPunished().setBan(punishment);
+			// Set the mute
+			badOfflinePlayer.getPunished().setMute(punishment);
 		}
 
 		// If the target player is online
 		if (badOfflinePlayer.isOnline()) {
 			// Get the target player
 			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
-			// Set ban
-			targetPlayer.getPunished().setBan(punishment);
+			// Set mute
+			targetPlayer.getPunished().setMute(punishment);
 			// Send online update
 			targetPlayer.sendOnlineTempSyncUpdate();
 			// Try to
@@ -228,9 +228,6 @@ public class BanCommand extends AbstractModCommand {
 				// Print the stack trace
 				exception.printStackTrace();
 			}
-
-			// Kick the player
-			targetPlayer.kick(targetPlayer.getBanMessage());
 		}
 		// If the target player is offline
 		else {
@@ -245,26 +242,26 @@ public class BanCommand extends AbstractModCommand {
 				exception.printStackTrace();
 			}
 		}
-		
+
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"), new int[] { 0, 2 }, 
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"), new int[] { 0, 2 }, 
 				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), reason);
 
 		// Send banned message
-		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
+		I19n.sendMessage(sender, getPrefix("muted"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
 				reason);
 	}
 
 	/**
-	 * If a player can be banned
+	 * If a player can be muted
 	 * 
 	 * @param sender
 	 * @param playerName
 	 * @return
 	 */
-	public boolean canBeBanned(CommandSender sender, String playerName) {
-		// If the banner is a player
-		boolean bannerPlayer = sender instanceof ProxiedPlayer;
+	public boolean canBeMuted(CommandSender sender, String playerName) {
+		// If the muter is a player
+		boolean muterPlayer = sender instanceof ProxiedPlayer;
 
 		// Get the target player
 		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
@@ -277,20 +274,20 @@ public class BanCommand extends AbstractModCommand {
 			return false;
 		}
 
-		// If the player is already banned
-		if (badOfflinePlayer.getPunished().isBan()) {
+		// If the player is already muted
+		if (badOfflinePlayer.getPunished().isMute()) {
 			// Send a message
-			I19n.sendMessage(sender, getPrefix("alreadybanned"), null, badOfflinePlayer.getName());
+			I19n.sendMessage(sender, getPrefix("alreadymuted"), null, badOfflinePlayer.getName());
 			// So we stop there
 			return false;
 		}
 
-		// If the banner is a player
-		if (bannerPlayer) {
-			// Get the banner
+		// If the muter is a player
+		if (muterPlayer) {
+			// Get the muter
 			BadPlayer badPlayer = BadPlayer.get((ProxiedPlayer) sender);
 
-			// If the banner is null
+			// If the muter is null
 			if (badPlayer == null) {
 				// Send an error message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 1);
@@ -298,10 +295,10 @@ public class BanCommand extends AbstractModCommand {
 				return false;
 			}
 
-			// Get the banner permissions
+			// Get the muter permissions
 			PermissionUser perm = badPlayer.getPermissions();
 
-			// If the banner doesn't have any permissions
+			// If the muter doesn't have any permissions
 			if (perm == null) {
 				// Send a message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 2);
@@ -309,7 +306,7 @@ public class BanCommand extends AbstractModCommand {
 				return false;
 			}
 
-			// Get the highest banner rank
+			// Get the highest muter rank
 			Permissible permissible = perm.getHighestRank("bungee", false);
 
 			// If the permissible is null
@@ -338,7 +335,7 @@ public class BanCommand extends AbstractModCommand {
 				return true;
 			}
 
-			// If the banner has a higher rank than the target player (or a bypass)
+			// If the muter has a higher rank than the target player (or a bypass)
 			if (permissible.getPower() > targetPermissible.getPower()
 					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
 				// So we stop there

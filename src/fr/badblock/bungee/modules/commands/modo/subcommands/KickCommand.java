@@ -117,6 +117,10 @@ public class KickCommand extends AbstractModCommand {
 
 		// Kick the player
 		badOnlinePlayer.kick(badOnlinePlayer.getKickMessage(kickReason));
+		
+		// We send the message and the sender to all concerned
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatkick"), new int[] { 0, 2 }, 
+				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), kickReason);
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("kicked"), null, badOnlinePlayer.getName(), kickReason);
