@@ -19,16 +19,12 @@ ToDo BadBlockBungee:
 /unban
 /unmute
 /warn
-/addserver
-/anim
 /cbreport
 /gwhitelist
-/removeserver
 /done
 /gnick
 /fkick
 /modo
-/thx
 /rnick
 /cheat
 /cl
@@ -37,3 +33,5 @@ T - /ban
 T - /btps
 T - /msg
 T - /r
+T - /addserver
+T - /removeserver
