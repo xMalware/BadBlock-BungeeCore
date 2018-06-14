@@ -356,7 +356,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 				? proxiedPlayer.getServer().getInfo().getName()
 				: null;
 	}
-
+	
 	/**
 	 * Get the ban message
 	 * 
@@ -380,6 +380,25 @@ public final class BadPlayer extends BadOfflinePlayer {
 		}
 
 		// Returns the ban message
+		return stringBuilder.toString();
+	}
+	
+	/**
+	 * Get the kick message
+	 * 
+	 * @return Returns the kick message
+	 */
+	public String getKickMessage(String reason) {
+		// We create an empty kick message
+		StringBuilder stringBuilder = new StringBuilder();
+		// For each line of the kick message
+		for (String string : getTranslatedMessages("punishments.kick", null, reason))
+		{
+			// We add it to the final kick message
+			stringBuilder.append(string + "\n");
+		}
+
+		// Returns the kick message
 		return stringBuilder.toString();
 	}
 
