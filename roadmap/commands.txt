@@ -8,7 +8,6 @@ ToDo BadBlockBungee:
 /track
 /sanction
 /unban
-/unmute
 /warn
 /done
 /gnick
@@ -28,3 +27,4 @@ T - /modo
 T - /report
 T - /tempban
 T - /mute
+T - /unmute

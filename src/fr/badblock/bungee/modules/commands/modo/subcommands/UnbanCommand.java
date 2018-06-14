@@ -29,26 +29,26 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public class UnmuteCommand extends AbstractModCommand {
+public class UnbanCommand extends AbstractModCommand {
 
 	/**
 	 * Constructor
 	 */
-	public UnmuteCommand() {
+	public UnbanCommand() {
 		// Super!
-		super("unmute", new String[] { "um" });
+		super("unban", new String[] { "ub" });
 	}
 
 	/**
-	 * If a player can be unmuted
+	 * If a player can be unbanned
 	 * 
 	 * @param sender
 	 * @param playerName
 	 * @return
 	 */
-	public boolean canBeUnmuted(CommandSender sender, String playerName) {
-		// If the unmuter is a player
-		boolean unmuterPlayer = sender instanceof ProxiedPlayer;
+	public boolean canBeUnbanned(CommandSender sender, String playerName) {
+		// If the unbanner is a player
+		boolean unbannerPlayer = sender instanceof ProxiedPlayer;
 
 		// Get the target player
 		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
@@ -62,19 +62,19 @@ public class UnmuteCommand extends AbstractModCommand {
 		}
 
 		// If the player is not muted
-		if (!badOfflinePlayer.getPunished().isMute()) {
+		if (!badOfflinePlayer.getPunished().isBan()) {
 			// Send a message
-			I19n.sendMessage(sender, getPrefix("notmuted"), null, badOfflinePlayer.getName());
+			I19n.sendMessage(sender, getPrefix("notbanned"), null, badOfflinePlayer.getName());
 			// So we stop there
 			return false;
 		}
 
-		// If the unmuter is a player
-		if (unmuterPlayer) {
-			// Get the unmuter
+		// If the unbanner is a player
+		if (unbannerPlayer) {
+			// Get the unbanner
 			BadPlayer badPlayer = BadPlayer.get((ProxiedPlayer) sender);
 
-			// If the unmuter is null
+			// If the unbanner is null
 			if (badPlayer == null) {
 				// Send an error message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 1);
@@ -82,10 +82,10 @@ public class UnmuteCommand extends AbstractModCommand {
 				return false;
 			}
 
-			// Get the unmuter permissions
+			// Get the unbanner permissions
 			PermissionUser perm = badPlayer.getPermissions();
 
-			// If the unmuter doesn't have any permissions
+			// If the unbanner doesn't have any permissions
 			if (perm == null) {
 				// Send a message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 2);
@@ -93,7 +93,7 @@ public class UnmuteCommand extends AbstractModCommand {
 				return false;
 			}
 
-			// Get the highest unmuter rank
+			// Get the highest unbanner rank
 			Permissible permissible = perm.getHighestRank("bungee", false);
 
 			// If the permissible is null
@@ -122,7 +122,7 @@ public class UnmuteCommand extends AbstractModCommand {
 				return true;
 			}
 
-			// If the unmuter has a higher rank than the target player (or a bypass)
+			// If the unbanner has a higher rank than the target player (or a bypass)
 			if (permissible.getPower() > targetPermissible.getPower()
 					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
 				// So we stop there
@@ -134,12 +134,12 @@ public class UnmuteCommand extends AbstractModCommand {
 			if (punishment == null)
 			{
 				// Send a message
-				I19n.sendMessage(sender, getPrefix("notmuted"), null, badOfflinePlayer.getName());
+				I19n.sendMessage(sender, getPrefix("notbanned"), null, badOfflinePlayer.getName());
 				// So we stop there
 				return false;
 			}
 
-			String punisher = badOfflinePlayer.getPunished().getMute().getPunisher();
+			String punisher = badOfflinePlayer.getPunished().getBan().getPunisher();
 
 			// Get the punisher player
 			BadOfflinePlayer punisherPlayer = BungeeManager.getInstance().getBadOfflinePlayer(punisher);
@@ -155,7 +155,7 @@ public class UnmuteCommand extends AbstractModCommand {
 				return false;
 			}
 
-			// Get the highest muter rank
+			// Get the highest banner rank
 			Permissible punisherPermissible = perm.getHighestRank("bungee", false);
 
 			// If the permissible is null
@@ -167,7 +167,7 @@ public class UnmuteCommand extends AbstractModCommand {
 				return false;
 			}
 
-			// If the muter has a higher rank than the player
+			// If the banner has a higher rank than the player
 			if (permissible.getPower() > punisherPermissible.getPower()
 					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
 				// So we stop there
@@ -200,8 +200,8 @@ public class UnmuteCommand extends AbstractModCommand {
 		// Get the player name
 		String playerName = args[1];
 
-		// If he can't be unmuted
-		if (!canBeUnmuted(sender, playerName)) {
+		// If he can't be unbanned
+		if (!canBeUnbanned(sender, playerName)) {
 			// So we stop there
 			return;
 		}
@@ -226,7 +226,7 @@ public class UnmuteCommand extends AbstractModCommand {
 
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(),
-				badOfflinePlayer.getLastIp(), PunishType.UNMUTE, TimeUtils.time(), -1, DateUtils.getHourDate(), "", false,
+				badOfflinePlayer.getLastIp(), PunishType.UNBAN, TimeUtils.time(), -1, DateUtils.getHourDate(), "", false,
 				new String[] {}, sender.getName(), punisherIp);
 
 		// Get the main class
@@ -247,22 +247,22 @@ public class UnmuteCommand extends AbstractModCommand {
 		// If the punish object isn't null
 		if (badOfflinePlayer.getPunished() != null) {
 			// So set the mute
-			badOfflinePlayer.getPunished().setMute(punishment);
+			badOfflinePlayer.getPunished().setBan(punishment);
 		}
 		// If the punish object is null
 		else {
 			// Create a punish object
 			badOfflinePlayer.setPunished(new Punished());
 			// Set the mute
-			badOfflinePlayer.getPunished().setMute(punishment);
+			badOfflinePlayer.getPunished().setBan(punishment);
 		}
 
 		// If the target player is online
 		if (badOfflinePlayer.isOnline()) {
 			// Get the target player
 			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
-			// Set mute
-			targetPlayer.getPunished().setMute(punishment);
+			// Set ban
+			targetPlayer.getPunished().setBan(punishment);
 			// Send online update
 			targetPlayer.sendOnlineTempSyncUpdate();
 			// Try to
@@ -291,12 +291,12 @@ public class UnmuteCommand extends AbstractModCommand {
 		}
 
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatunmute"),
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatunban"),
 				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName());
 
 		// Send banned message
-		I19n.sendMessage(sender, getPrefix("unmuted"), null, badOfflinePlayer.getName());
+		I19n.sendMessage(sender, getPrefix("unbanned"), null, badOfflinePlayer.getName());
 	}
 
 }
