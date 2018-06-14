@@ -16,13 +16,10 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.MuteReasonType;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.DateUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
-import fr.badblock.bungee.utils.mcjson.McJson;
-import fr.badblock.bungee.utils.mcjson.McJsonFactory;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -33,14 +30,14 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @author xMalware
  *
  */
-public class MuteCommand extends AbstractModCommand {
+public class TempMuteCommand extends AbstractModCommand {
 
 	/**
 	 * Constructor
 	 */
-	public MuteCommand() {
+	public TempMuteCommand() {
 		// Super!
-		super("mute", new String[] { "m" });
+		super("tempmute", new String[] { "tm" });
 	}
 
 	/**
@@ -48,8 +45,8 @@ public class MuteCommand extends AbstractModCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		// If arg length != 2 or 3
-		if (args.length != 2 && args.length != 3) {
+		// If arg length < 3
+		if (args.length < 3) {
 			// Send the message
 			I19n.sendMessage(sender, getPrefix("usage"), null);
 			// So we stop there
@@ -65,107 +62,34 @@ public class MuteCommand extends AbstractModCommand {
 			return;
 		}
 
-		// He's a player?
-		boolean isPlayer = sender instanceof ProxiedPlayer;
-		// Get the proxied player
-		ProxiedPlayer proxiedPlayer = isPlayer ? (ProxiedPlayer) sender : null;
-		// Get the bad player
-		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
-		// He's a player?
-		isPlayer = isPlayer && proxiedPlayer != null && badPlayer != null;
-
-		// two args
-		if (args.length == 2) {
-
-			// If the sender is a player
-			if (isPlayer) {
-				// Send the message
-				badPlayer.sendTranslatedOutgoingMessage(getPrefix("select_intro"), null, playerName);
-			} else
-				// If the sender isn't a player
-			{
-				// Send the message
-				I19n.sendMessage(sender, getPrefix("select_intro"), null, playerName);
-			}
-
-			// Has reason
-			boolean hasReason = false;
-
-			// For each reason type
-			for (MuteReasonType muteReason : MuteReasonType.values()) {
-				// If the sender doesn't have the permission to mute for this reason
-				if (!sender.hasPermission(getPermission() + "." + muteReason.getName())) {
-					// So continue
-					continue;
-				}
-
-				// One reason!
-				hasReason = true;
-
-				// If the sender is a player
-				if (isPlayer) {
-					// Get the intro message
-					String intro = badPlayer.getTranslatedMessage(getPrefix("reason_intro"), null);
-					// Get the reason message
-					String reason = badPlayer.getTranslatedMessage(getPrefix("reason." + muteReason.getName()), null);
-
-					// Get the McJson
-					McJson json = new McJsonFactory(intro).finaliseComponent().initNewComponent(reason)
-							.setHoverText(reason).setClickCommand("/m mute " + playerName + " " + muteReason.getName())
-							.finaliseComponent().build();
-
-					// Send the message
-					badPlayer.sendTranslatedOutgoingMCJson(json);
-				} else
-					// If the sender isn't a player
-				{
-					// Send the reason message
-					I19n.sendMessage(sender, getPrefix("reason." + muteReason.getName()), null);
-				}
-			}
-
-			// If we don't have reasons
-			if (!hasReason) {
-				// Send a message
-				I19n.sendMessage(sender, getPrefix("noreason"), null);
-			}
-
-			// So we stop there
-			return;
-		}
-
+		BadPlayer badPlayer = BadPlayer.get(playerName);
+		
 		// If the sender is a player
-		if (isPlayer && badPlayer.getFlags().has("trymute")) {
+		if (badPlayer != null && badPlayer.getFlags().has("trymute"))
+		{
 			return;
 		}
 
 		// Set the flag to avoid to duplicate mutes
 		badPlayer.getFlags().set("trymute", 500);
 
-		// Is this a key
-		boolean isKey = true;
-
-		// Get the raw mute reason
-		String rawMuteReason = args[2];
-
 		// Get the mute reason
-		MuteReasonType muteReason = MuteReasonType.getFromString(rawMuteReason);
+		String muteReason = args[2];
+		
+		String rawTime = args[3];
 
-		// If the ban reason doesn't exist
-		if (muteReason == null) {
-			// Send a message
-			I19n.sendMessage(sender, getPrefix("unknownreason"), null);
-			// So we stop there
+		long time = Time.MILLIS_SECOND.matchTime(rawTime);
+
+		if (time == 0L) {
+			I19n.sendMessage(sender, getPrefix("notgoodtime"), null);
 			return;
 		}
 
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
-		// Get the reason
-		String reason = isKey ? getPrefix("reason." + muteReason.getName()) : rawMuteReason;
 		// Get the punisher ip
-		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
+		String punisherIp = badPlayer != null ? "127.0.0.1" : badPlayer.getLastIp();
 
 		// Generate a unique id
 		UUID uuid = UUID.randomUUID();
@@ -173,7 +97,7 @@ public class MuteCommand extends AbstractModCommand {
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(),
 				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(),
-				TimeUtils.nextTime(Time.YEAR.convert(1L, Time.MILLIS_SECOND)), DateUtils.getHourDate(), reason, isKey,
+				time, DateUtils.getHourDate(), muteReason, false,
 				new String[] {}, sender.getName(), punisherIp);
 
 		// Get the main class
@@ -239,11 +163,10 @@ public class MuteCommand extends AbstractModCommand {
 
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"), new int[] { 0, 2 }, 
-				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), reason);
+				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), rawTime, muteReason);
 
 		// Send banned message
-		I19n.sendMessage(sender, getPrefix("muted"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
-				reason);
+		I19n.sendMessage(sender, getPrefix("muted"), null, badOfflinePlayer.getName(), rawTime, muteReason);
 	}
 
 	/**
