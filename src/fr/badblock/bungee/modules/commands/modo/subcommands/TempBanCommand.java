@@ -172,7 +172,7 @@ public class TempBanCommand extends AbstractModCommand {
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
 				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				rawTime, banReason);
+				badOfflinePlayer.getName(), rawTime, banReason);
 
 		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
 				rawTime, banReason);

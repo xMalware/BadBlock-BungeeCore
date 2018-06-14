@@ -262,7 +262,7 @@ public class TempMuteCommand extends AbstractModCommand {
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"),
 				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				rawTime, muteReason);
+				badOfflinePlayer.getName(), rawTime, muteReason);
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("muted"), null, badOfflinePlayer.getName(), rawTime, muteReason);
