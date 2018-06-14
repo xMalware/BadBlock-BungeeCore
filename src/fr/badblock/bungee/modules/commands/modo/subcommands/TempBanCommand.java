@@ -8,6 +8,7 @@ import com.mongodb.DBCollection;
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.utils.TimeUtils;
 import fr.badblock.api.common.utils.bungee.PunishType;
+import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.api.common.utils.bungee.Punishment;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
@@ -146,9 +147,11 @@ public class TempBanCommand extends AbstractModCommand {
 
 		collection.insert(punishment.toObject());
 
-		if (badOfflinePlayer.getPunished() != null) {
-			badOfflinePlayer.getPunished().setBan(punishment);
+		if (badOfflinePlayer.getPunished() == null) {
+			badOfflinePlayer.setPunished(new Punished());
 		}
+
+		badOfflinePlayer.getPunished().setBan(punishment);
 
 		if (badOfflinePlayer.isOnline()) {
 			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());

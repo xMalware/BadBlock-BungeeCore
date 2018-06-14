@@ -299,13 +299,15 @@ public class BadOfflinePlayer {
 	 */
 	public BadPlayer getOnlineBadPlayer() {
 		// If he's offline, returns null
-		if (!isOnline()) {
+		if (!isOnline())
+		{
 			// Returns null
 			return null;
 		}
 
 		// If he's online on this node
-		if (BadPlayer.has(getName().toLowerCase())) {
+		if (BadPlayer.has(getName().toLowerCase()))
+		{
 			// Returns the local player
 			return BadPlayer.get(getName());
 		}

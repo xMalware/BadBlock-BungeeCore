@@ -180,7 +180,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Returns the name
 		return proxiedPlayer != null && proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
 				? proxiedPlayer.getServer().getInfo().getName()
-				: null;
+						: null;
 	}
 
 	/**
@@ -278,6 +278,24 @@ public final class BadPlayer extends BadOfflinePlayer {
 
 		// Send the packet
 		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), getBanMessage(), PlayerPacketType.KICK));
+	}
+	
+	/**
+	 * Warn the player
+	 * 
+	 * @param kick
+	 *            message
+	 */
+	public void warn(String warnReason) {
+		// If the punish is null
+		if (getPunished() == null) {
+			// Returns null
+			return;
+		}
+
+		// Send outgoing message
+		this.sendTranslatedOutgoingMessage("punishments.warn", null,
+				getPunished().buildMuteTime(getLocale()), warnReason);
 	}
 
 	/**
@@ -495,7 +513,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 
 		// Send a translated MCJson message
 		BungeeManager.getInstance()
-				.sendPacket(new PlayerPacket(getName(), mcjson.toString(), PlayerPacketType.SEND_JSON_MESSAGE));
+		.sendPacket(new PlayerPacket(getName(), mcjson.toString(), PlayerPacketType.SEND_JSON_MESSAGE));
 	}
 
 	/**
