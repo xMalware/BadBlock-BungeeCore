@@ -7,7 +7,6 @@ ToDo BadBlockBungee:
 /spymsg
 /track
 /sanction
-/unban
 /warn
 /done
 /gnick
@@ -28,3 +27,4 @@ T - /report
 T - /tempban
 T - /mute
 T - /unmute
+T - /unban
