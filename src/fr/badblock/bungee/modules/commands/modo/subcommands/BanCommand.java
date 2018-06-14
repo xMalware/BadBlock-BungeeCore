@@ -275,12 +275,15 @@ public class BanCommand extends AbstractModCommand {
 
 		// Generate a unique id
 		UUID uuid = UUID.randomUUID();
+		
+		// Unique id
+		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
 		// Create the punishment object
-		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(),
+		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
 				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(),
 				TimeUtils.nextTime(Time.YEAR.convert(1L, Time.MILLIS_SECOND)), DateUtils.getHourDate(), reason, isKey,
-				new String[] {}, sender.getName(), punisherIp);
+				new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		// Get the main class
 		BadBungee badBungee = BadBungee.getInstance();

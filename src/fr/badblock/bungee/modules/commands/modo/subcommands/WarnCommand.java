@@ -185,11 +185,14 @@ public class WarnCommand extends AbstractModCommand {
 
 		// Generate a unique id
 		UUID uuid = UUID.randomUUID();
+		
+		// Unique id
+		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
 		// Create the punishment object
-		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(), badOfflinePlayer.getLastIp(),
+		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(), badOfflinePlayer.getLastIp(),
 				PunishType.WARN, TimeUtils.time(), -1, DateUtils.getHourDate(), warnReason, false, new String[] {},
-				sender.getName(), punisherIp);
+				sender.getName(), punisherUniqueId, punisherIp);
 
 		// Get the main class
 		BadBungee badBungee = BadBungee.getInstance();

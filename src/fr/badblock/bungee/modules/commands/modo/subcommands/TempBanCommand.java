@@ -132,10 +132,13 @@ public class TempBanCommand extends AbstractModCommand {
 		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
 
 		UUID uuid = UUID.randomUUID();
+		
+		// Unique id
+		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
-		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(),
+		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
 				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), TimeUtils.nextTime(time),
-				DateUtils.getHourDate(), banReason, isKey, new String[] {}, sender.getName(), punisherIp);
+				DateUtils.getHourDate(), banReason, isKey, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		BadBungee badBungee = BadBungee.getInstance();
 
