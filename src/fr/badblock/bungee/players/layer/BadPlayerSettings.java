@@ -22,13 +22,13 @@ import lombok.EqualsAndHashCode;
 public class BadPlayerSettings {
 
 	/**
-	 * Is partyable by who?
-	 */
-	public Partyable partyable;
-	/**
 	 * Is FriendListable by who ?
 	 */
 	public FriendListable friendListable;
+	/**
+	 * Is partyable by who?
+	 */
+	public Partyable partyable;
 	/**
 	 * PM Privacy
 	 */

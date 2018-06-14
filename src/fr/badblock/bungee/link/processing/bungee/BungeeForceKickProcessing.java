@@ -30,15 +30,14 @@ public class BungeeForceKickProcessing extends _BungeeProcessing {
 		// Get the BadPlayer object
 		BadPlayer badPlayer = BadPlayer.get(message);
 		// If the bad player is null
-		if (badPlayer == null)
-		{
+		if (badPlayer == null) {
 			// Returns null
 			return;
 		}
 		ProxiedPlayer proxiedPlayer = BungeeCord.getInstance().getPlayer(badPlayer.getName());
-		if (proxiedPlayer != null)
-		{
-			proxiedPlayer.disconnect(I19n.getMessage(proxiedPlayer, ForceKickCommand.prefix + "youhavebeenkicked", null));
+		if (proxiedPlayer != null) {
+			proxiedPlayer
+					.disconnect(I19n.getMessage(proxiedPlayer, ForceKickCommand.prefix + "youhavebeenkicked", null));
 		}
 		// Remove the bad player
 		badPlayer.remove();

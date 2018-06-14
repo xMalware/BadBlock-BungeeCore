@@ -20,10 +20,10 @@ import net.md_5.bungee.api.CommandSender;
  */
 public class MCommand extends BadCommand {
 
+	private List<AbstractModCommand> moderationCommands;
+
 	// I18n key prefix
 	private String prefix = "bungee.commands.mod.";
-
-	private List<AbstractModCommand> moderationCommands;
 
 	/**
 	 * Command constructor
@@ -36,6 +36,16 @@ public class MCommand extends BadCommand {
 		moderationCommands.add(new BanCommand());
 		moderationCommands.add(new TempBanCommand());
 		moderationCommands.add(new KickCommand());
+	}
+
+	/**
+	 * Send help to the player
+	 * 
+	 * @param sender
+	 */
+	private void help(CommandSender sender) {
+		// Send help
+		I19n.sendMessage(sender, prefix + "help", null);
 	}
 
 	/**
@@ -84,16 +94,6 @@ public class MCommand extends BadCommand {
 			}
 			break;
 		}
-	}
-
-	/**
-	 * Send help to the player
-	 * 
-	 * @param sender
-	 */
-	private void help(CommandSender sender) {
-		// Send help
-		I19n.sendMessage(sender, prefix + "help", null);
 	}
 
 	/**

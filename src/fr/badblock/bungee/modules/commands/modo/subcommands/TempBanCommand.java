@@ -28,6 +28,67 @@ public class TempBanCommand extends AbstractModCommand {
 		super("tempban", new String[] { "tban", "tb" });
 	}
 
+	public boolean canBeBanned(CommandSender sender, String playerName) {
+		boolean bannerPlayer = sender instanceof ProxiedPlayer;
+
+		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
+
+		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound()) {
+			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
+			return false;
+		}
+
+		if (badOfflinePlayer.getPunished().isBan()) {
+			I19n.sendMessage(sender, getPrefix("alreadybanned"), null, badOfflinePlayer.getName());
+			return false;
+		}
+
+		if (bannerPlayer) {
+			BadPlayer badPlayer = BadPlayer.get((ProxiedPlayer) sender);
+
+			if (badPlayer == null) {
+				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 1);
+				return false;
+			}
+
+			PermissionUser perm = badPlayer.getPermissions();
+
+			if (perm == null) {
+				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 2);
+				return false;
+			}
+
+			Permissible permissible = perm.getHighestRank("bungee", false);
+
+			if (permissible == null) {
+				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 3);
+				return false;
+			}
+
+			PermissionUser targetPerm = badOfflinePlayer.getPermissions();
+
+			if (targetPerm == null) {
+				return true;
+			}
+
+			Permissible targetPermissible = targetPerm.getHighestRank("bungee", false);
+
+			if (targetPermissible == null) {
+				return true;
+			}
+
+			if (permissible.getPower() > targetPermissible.getPower()
+					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
+				return true;
+			}
+
+			I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, badOfflinePlayer.getName());
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	@Override
 	public void run(CommandSender sender, String[] args) {
 		if (args.length != 4) {
@@ -107,74 +168,14 @@ public class TempBanCommand extends AbstractModCommand {
 				exception.printStackTrace();
 			}
 		}
-		
+
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"), new int[] { 0, 2 }, 
-				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), rawTime, banReason);
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
+				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
+				rawTime, banReason);
 
 		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
 				rawTime, banReason);
-	}
-
-	public boolean canBeBanned(CommandSender sender, String playerName) {
-		boolean bannerPlayer = sender instanceof ProxiedPlayer;
-
-		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
-
-		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound()) {
-			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
-			return false;
-		}
-
-		if (badOfflinePlayer.getPunished().isBan()) {
-			I19n.sendMessage(sender, getPrefix("alreadybanned"), null, badOfflinePlayer.getName());
-			return false;
-		}
-
-		if (bannerPlayer) {
-			BadPlayer badPlayer = BadPlayer.get((ProxiedPlayer) sender);
-
-			if (badPlayer == null) {
-				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 1);
-				return false;
-			}
-
-			PermissionUser perm = badPlayer.getPermissions();
-
-			if (perm == null) {
-				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 2);
-				return false;
-			}
-
-			Permissible permissible = perm.getHighestRank("bungee", false);
-
-			if (permissible == null) {
-				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 3);
-				return false;
-			}
-
-			PermissionUser targetPerm = badOfflinePlayer.getPermissions();
-
-			if (targetPerm == null) {
-				return true;
-			}
-
-			Permissible targetPermissible = targetPerm.getHighestRank("bungee", false);
-
-			if (targetPermissible == null) {
-				return true;
-			}
-
-			if (permissible.getPower() > targetPermissible.getPower()
-					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
-				return true;
-			}
-
-			I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, badOfflinePlayer.getName());
-			return false;
-		} else {
-			return true;
-		}
 	}
 
 }

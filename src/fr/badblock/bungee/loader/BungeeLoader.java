@@ -87,21 +87,11 @@ public class BungeeLoader {
 	}
 
 	/**
-	 * Set the instance of BadBungee
+	 * Load BungeeLinker
 	 */
-	private void setInstance() {
-		// Singleton :)
-		BadBungee.setInstance(getBadBungee());
-	}
-
-	/**
-	 * Set Gson objects
-	 */
-	private void setGson() {
-		// Basic Gson
-		getBadBungee().setGson(new Gson());
-		// Pretty-printing Gson
-		getBadBungee().setPrettyGson(new GsonBuilder().setPrettyPrinting().create());
+	private void loadBungeeLinker() {
+		// Instanciate the task
+		new BungeeTask();
 	}
 
 	/**
@@ -133,34 +123,6 @@ public class BungeeLoader {
 	}
 
 	/**
-	 * Load RabbitMQ
-	 */
-	private void loadRabbit() {
-		// Set the service
-		getBadBungee().setRabbitService(RabbitConnector.getInstance()
-				.registerService(new RabbitService("default", getConfig().getRabbitSettings())));
-		// Load claiments
-		RabbitClaimant.load();
-	}
-
-	/**
-	 * Load MongoDB
-	 */
-	private void loadMongo() {
-		// Set the service
-		getBadBungee().setMongoService(MongoConnector.getInstance()
-				.registerService(new MongoService("default", getConfig().getMongoSettings())));
-	}
-
-	/**
-	 * Load BungeeLinker
-	 */
-	private void loadBungeeLinker() {
-		// Instanciate the task
-		new BungeeTask();
-	}
-
-	/**
 	 * Load listeners
 	 */
 	private void loadListeners() {
@@ -170,7 +132,7 @@ public class BungeeLoader {
 			PackageUtils.instanciateListeners(getBadBungee(),
 					// Rabbit listeners
 					"fr.badblock.bungee.rabbit.listeners",
-					
+
 					// Bungee processing
 					"fr.badblock.bungee.link.processing.bungee",
 
@@ -190,6 +152,15 @@ public class BungeeLoader {
 			// Print the error in logs
 			exception.printStackTrace();
 		}
+	}
+
+	/**
+	 * Load MongoDB
+	 */
+	private void loadMongo() {
+		// Set the service
+		getBadBungee().setMongoService(MongoConnector.getInstance()
+				.registerService(new MongoService("default", getConfig().getMongoSettings())));
 	}
 
 	/**
@@ -221,6 +192,35 @@ public class BungeeLoader {
 		}
 		// Create a permission manager, with the 'bungee' place
 		PermissionsManager.createPermissionManager(groups, "bungee");
+	}
+
+	/**
+	 * Load RabbitMQ
+	 */
+	private void loadRabbit() {
+		// Set the service
+		getBadBungee().setRabbitService(RabbitConnector.getInstance()
+				.registerService(new RabbitService("default", getConfig().getRabbitSettings())));
+		// Load claiments
+		RabbitClaimant.load();
+	}
+
+	/**
+	 * Set Gson objects
+	 */
+	private void setGson() {
+		// Basic Gson
+		getBadBungee().setGson(new Gson());
+		// Pretty-printing Gson
+		getBadBungee().setPrettyGson(new GsonBuilder().setPrettyPrinting().create());
+	}
+
+	/**
+	 * Set the instance of BadBungee
+	 */
+	private void setInstance() {
+		// Singleton :)
+		BadBungee.setInstance(getBadBungee());
 	}
 
 }

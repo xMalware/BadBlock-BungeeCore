@@ -10,9 +10,9 @@ package fr.badblock.bungee.modules.commands.basic.friends;
 public enum FriendListRemoveStatus {
 
 	/**
-	 * When the player tries to act on himself
+	 * Not requested/friend with player
 	 */
-	PLAYER_SCHIZOPHRENIA,
+	NOT_REQUESTED_OR_FRIEND_WITH_PLAYER,
 
 	/**
 	 * Removed from the list
@@ -25,14 +25,14 @@ public enum FriendListRemoveStatus {
 	PLAYER_REQUEST_DECLINED,
 
 	/**
+	 * When the player tries to act on himself
+	 */
+	PLAYER_SCHIZOPHRENIA,
+
+	/**
 	 * Request to player cancelled
 	 */
 	REQUEST_TO_PLAYER_CANCELLED,
-
-	/**
-	 * Not requested/friend with player
-	 */
-	NOT_REQUESTED_OR_FRIEND_WITH_PLAYER,
 
 	/**
 	 * Unknown error

@@ -14,6 +14,25 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 public class PackageUtils {
 
+	private static boolean inheritFrom(Class<?> clazz, Class<?> from) {
+		while (clazz != Object.class) {
+			if (clazz == from)
+				return true;
+
+			clazz = clazz.getSuperclass();
+		}
+
+		return false;
+	}
+
+	private static Object instanciate(Class<?> clazz) throws Exception {
+		try {
+			return clazz.getConstructor().newInstance();
+		} catch (NoSuchMethodException e) {
+			return null;
+		}
+	}
+
 	public static void instanciateListeners(Plugin plugin, String... paths) throws IOException {
 		URL url = plugin.getClass().getProtectionDomain().getCodeSource().getLocation();
 
@@ -45,25 +64,6 @@ public class PackageUtils {
 				}
 			}
 
-		}
-	}
-
-	private static boolean inheritFrom(Class<?> clazz, Class<?> from) {
-		while (clazz != Object.class) {
-			if (clazz == from)
-				return true;
-
-			clazz = clazz.getSuperclass();
-		}
-
-		return false;
-	}
-
-	private static Object instanciate(Class<?> clazz) throws Exception {
-		try {
-			return clazz.getConstructor().newInstance();
-		} catch (NoSuchMethodException e) {
-			return null;
 		}
 	}
 

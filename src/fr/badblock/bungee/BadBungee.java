@@ -36,23 +36,17 @@ public class BadBungee extends Plugin {
 	@Setter
 	private static BadBungee instance;
 
+	@SuppressWarnings("deprecation")
 	/**
-	 * Rabbit service
+	 * Proxy logging (with a prefix)
 	 * 
-	 * @param Set
-	 *            the new Rabbit service
-	 * @return Returns the current Rabbit service
+	 * @param Message
+	 *            to log
 	 */
-	private RabbitService rabbitService;
-
-	/**
-	 * Mongo service
-	 * 
-	 * @param Set
-	 *            the new Mongo service
-	 * @return Returns the current Mongo service
-	 */
-	private MongoService mongoService;
+	public static void log(String message) {
+		// Local logging
+		ProxyServer.getInstance().getConsole().sendMessage("§e[BadBungee] §f" + message);
+	}
 
 	/**
 	 * BadBungee configuration
@@ -73,6 +67,15 @@ public class BadBungee extends Plugin {
 	private Gson gson;
 
 	/**
+	 * Mongo service
+	 * 
+	 * @param Set
+	 *            the new Mongo service
+	 * @return Returns the current Mongo service
+	 */
+	private MongoService mongoService;
+
+	/**
 	 * Pretty Gson
 	 * 
 	 * @param Set
@@ -80,6 +83,15 @@ public class BadBungee extends Plugin {
 	 * @return Returns the current pretty Gson
 	 */
 	private Gson prettyGson;
+
+	/**
+	 * Rabbit service
+	 * 
+	 * @param Set
+	 *            the new Rabbit service
+	 * @return Returns the current Rabbit service
+	 */
+	private RabbitService rabbitService;
 
 	/**
 	 * Unloaded
@@ -92,15 +104,6 @@ public class BadBungee extends Plugin {
 
 	@Override
 	/**
-	 * Plugin enable
-	 */
-	public void onEnable() {
-		// Call the loader
-		new BungeeLoader(this);
-	}
-
-	@Override
-	/**
 	 * Plugin disable
 	 */
 	public void onDisable() {
@@ -108,16 +111,13 @@ public class BadBungee extends Plugin {
 		new BungeeUnloader(this);
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
 	/**
-	 * Proxy logging (with a prefix)
-	 * 
-	 * @param Message
-	 *            to log
+	 * Plugin enable
 	 */
-	public static void log(String message) {
-		// Local logging
-		ProxyServer.getInstance().getConsole().sendMessage("§e[BadBungee] §f" + message);
+	public void onEnable() {
+		// Call the loader
+		new BungeeLoader(this);
 	}
 
 }

@@ -19,13 +19,13 @@ import lombok.EqualsAndHashCode;
 public class FriendListableChangeEvent extends CancellableEvent {
 
 	/**
-	 * The BadPlayer object
+	 * The new status
 	 * 
 	 * @param Set
-	 *            the BadPlayer object
-	 * @return Returns the BadPlayer object
+	 *            the new status
+	 * @return Returns the new status
 	 */
-	private final BadPlayer player;
+	private FriendListable newStatus;
 
 	/**
 	 * The old status
@@ -37,12 +37,12 @@ public class FriendListableChangeEvent extends CancellableEvent {
 	private final FriendListable oldStatus;
 
 	/**
-	 * The new status
+	 * The BadPlayer object
 	 * 
 	 * @param Set
-	 *            the new status
-	 * @return Returns the new status
+	 *            the BadPlayer object
+	 * @return Returns the BadPlayer object
 	 */
-	private FriendListable newStatus;
+	private final BadPlayer player;
 
 }

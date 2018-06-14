@@ -22,6 +22,15 @@ import net.md_5.bungee.BungeeCord;
 public class TPS implements Runnable {
 
 	/**
+	 * Queue
+	 * 
+	 * @param Set
+	 *            the new queue
+	 * @return Returns the current queue
+	 */
+	private static Queue<Double> queue = Queues.newLinkedBlockingDeque();
+
+	/**
 	 * TPS
 	 * 
 	 * @param Set
@@ -33,22 +42,56 @@ public class TPS implements Runnable {
 	private static double tps = 0.0D;
 
 	/**
-	 * Queue
+	 * Get lost milliseconds (lag factor)
 	 * 
-	 * @param Set
-	 *            the new queue
-	 * @return Returns the current queue
+	 * @return
 	 */
-	private static Queue<Double> queue = Queues.newLinkedBlockingDeque();
+	public static double getLostMilliseconds() {
+		// Returns the lost ms (with TPS)
+		return (20D - TPS.tps) * 50D;
+	}
 
 	/**
-	 * Time
+	 * Get lost milliseconds
+	 * 
+	 * @param tps
+	 * @return
+	 */
+	public static double getLostMilliseconds(double tps) {
+		// Returns the lost ms (with given TPS)
+		return (20D - tps) * 50D;
+	}
+
+	/**
+	 * Round a number
+	 * 
+	 * @param value
+	 * @param places
+	 * @return
+	 */
+	public static double round(double value, int places) {
+		// Problem with place number
+		if (places < 0) {
+			// Throw an exception
+			throw new IllegalArgumentException();
+		}
+
+		// Create a BigDecimal
+		BigDecimal bd = new BigDecimal(value);
+		// Scale & round half_up
+		bd = bd.setScale(places, RoundingMode.HALF_UP);
+		// Get double value
+		return bd.doubleValue();
+	}
+
+	/**
+	 * NB
 	 * 
 	 * @param Set
-	 *            the new time
-	 * @return Returns the current time
+	 *            the new nb
+	 * @return Returns the current nb
 	 */
-	private long time;
+	private int nb;
 
 	/**
 	 * Sec
@@ -60,13 +103,13 @@ public class TPS implements Runnable {
 	private long sec;
 
 	/**
-	 * NB
+	 * Time
 	 * 
 	 * @param Set
-	 *            the new nb
-	 * @return Returns the current nb
+	 *            the new time
+	 * @return Returns the current time
 	 */
-	private int nb;
+	private long time;
 
 	/*
 	 * TPS Constructor
@@ -125,49 +168,6 @@ public class TPS implements Runnable {
 		}
 		// Set the sec
 		sec = System.currentTimeMillis();
-	}
-
-	/**
-	 * Round a number
-	 * 
-	 * @param value
-	 * @param places
-	 * @return
-	 */
-	public static double round(double value, int places) {
-		// Problem with place number
-		if (places < 0) {
-			// Throw an exception
-			throw new IllegalArgumentException();
-		}
-
-		// Create a BigDecimal
-		BigDecimal bd = new BigDecimal(value);
-		// Scale & round half_up
-		bd = bd.setScale(places, RoundingMode.HALF_UP);
-		// Get double value
-		return bd.doubleValue();
-	}
-
-	/**
-	 * Get lost milliseconds (lag factor)
-	 * 
-	 * @return
-	 */
-	public static double getLostMilliseconds() {
-		// Returns the lost ms (with TPS)
-		return (20D - TPS.tps) * 50D;
-	}
-
-	/**
-	 * Get lost milliseconds
-	 * 
-	 * @param tps
-	 * @return
-	 */
-	public static double getLostMilliseconds(double tps) {
-		// Returns the lost ms (with given TPS)
-		return (20D - tps) * 50D;
 	}
 
 }

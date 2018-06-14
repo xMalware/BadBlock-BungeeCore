@@ -39,15 +39,14 @@ public class RemoveServerCommand extends BadCommand {
 		}
 
 		String name = args[0];
-		
-		if (!BungeeCord.getInstance().getServers().containsKey(name))
-		{
+
+		if (!BungeeCord.getInstance().getServers().containsKey(name)) {
 			I19n.sendMessage(sender, "bungee.commands.removeserver.doesntexist", null);
 			return;
 		}
-		
+
 		BungeeUtils.removeServer(BadBungee.getInstance().getRabbitService(), name);
-		
+
 		I19n.sendMessage(sender, "bungee.commands.addserver.removed", null, name);
 	}
 

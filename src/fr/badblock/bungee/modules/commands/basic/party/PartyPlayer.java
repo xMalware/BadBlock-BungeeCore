@@ -20,6 +20,15 @@ import lombok.EqualsAndHashCode;
 public class PartyPlayer {
 
 	/**
+	 * Follow
+	 * 
+	 * @param Set
+	 *            the follow bool
+	 * @return Returns the follow bool
+	 */
+	private boolean follow = true;
+
+	/**
 	 * Username
 	 * 
 	 * @param Set
@@ -47,15 +56,6 @@ public class PartyPlayer {
 	private PartyPlayerState state;
 
 	/**
-	 * Follow
-	 * 
-	 * @param Set
-	 *            the follow bool
-	 * @return Returns the follow bool
-	 */
-	private boolean follow = true;
-
-	/**
 	 * Constructor
 	 * 
 	 * @param Username
@@ -64,7 +64,7 @@ public class PartyPlayer {
 	 */
 	public PartyPlayer(String name, PartyPlayerRole role, PartyPlayerState state) {
 		// use constructor with lombok (with follow as default)
-		this(name, role, state, true);
+		this(true, name, role, state);
 	}
 
 	/**

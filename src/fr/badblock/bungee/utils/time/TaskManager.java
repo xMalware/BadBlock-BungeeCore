@@ -14,6 +14,19 @@ public class TaskManager {
 	/**
 	 * Schedule a delayed task
 	 * 
+	 * @param Runnable
+	 * @param Delay
+	 *            (ms)
+	 * @return a Task object
+	 */
+	public static Task scheduleDelayedTask(Runnable runnable, long delay) {
+		// Schedule with random name
+		return scheduleDelayedTask(UUID.randomUUID().toString(), runnable, delay);
+	}
+
+	/**
+	 * Schedule a delayed task
+	 * 
 	 * @param The
 	 *            task name
 	 * @param Runnable
@@ -58,16 +71,18 @@ public class TaskManager {
 	}
 
 	/**
-	 * Schedule a delayed task
+	 * Schedule a new repeating task
 	 * 
 	 * @param Runnable
 	 * @param Delay
 	 *            (ms)
+	 * @param Repeat
+	 *            (ms)
 	 * @return a Task object
 	 */
-	public static Task scheduleDelayedTask(Runnable runnable, long delay) {
-		// Schedule with random name
-		return scheduleDelayedTask(UUID.randomUUID().toString(), runnable, delay);
+	public static Task scheduleRepeatingTask(Runnable runnable, long delay, long repeat) {
+		// We use the other method, with random task name
+		return scheduleRepeatingTask(UUID.randomUUID().toString(), runnable, delay, repeat);
 	}
 
 	/**
@@ -143,21 +158,6 @@ public class TaskManager {
 
 		// Returns the task
 		return task;
-	}
-
-	/**
-	 * Schedule a new repeating task
-	 * 
-	 * @param Runnable
-	 * @param Delay
-	 *            (ms)
-	 * @param Repeat
-	 *            (ms)
-	 * @return a Task object
-	 */
-	public static Task scheduleRepeatingTask(Runnable runnable, long delay, long repeat) {
-		// We use the other method, with random task name
-		return scheduleRepeatingTask(UUID.randomUUID().toString(), runnable, delay, repeat);
 	}
 
 }

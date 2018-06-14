@@ -14,21 +14,6 @@ import lombok.Getter;
 @Getter
 public enum McJsonAttribute {
 
-	/**
-	 * Text attribute
-	 */
-	TEXT("text", "text", 0),
-
-	/**
-	 * Website attribute
-	 */
-	WEBSITE("site", "open_url", 1),
-
-	/**
-	 * Suggest attribute
-	 */
-	SUGGEST("insert", "suggest_command", 1),
-
 	/*
 	 * Execute attribute
 	 */
@@ -37,7 +22,22 @@ public enum McJsonAttribute {
 	/**
 	 * Hover attribute
 	 */
-	HOVER("hover", "show_text", 2);
+	HOVER("hover", "show_text", 2),
+
+	/**
+	 * Suggest attribute
+	 */
+	SUGGEST("insert", "suggest_command", 1),
+
+	/**
+	 * Text attribute
+	 */
+	TEXT("text", "text", 0),
+
+	/**
+	 * Website attribute
+	 */
+	WEBSITE("site", "open_url", 1);
 
 	// Tags
 	private String decodetag, mcjsontag;

@@ -76,15 +76,6 @@ public abstract class BadCommand extends Command {
 	}
 
 	/**
-	 * Abstract method that allows BadBlock commands to differentiate themselves
-	 * from others by being implemented in the classes of commands
-	 * 
-	 * @param sender
-	 * @param args
-	 */
-	public abstract void run(CommandSender sender, String[] args);
-
-	/**
 	 * Registration of the command
 	 */
 	private void load() {
@@ -95,5 +86,14 @@ public abstract class BadCommand extends Command {
 		// We say that the command has been registered
 		BadBungee.log("§aLoaded command: " + getClass().getSimpleName());
 	}
+
+	/**
+	 * Abstract method that allows BadBlock commands to differentiate themselves
+	 * from others by being implemented in the classes of commands
+	 * 
+	 * @param sender
+	 * @param args
+	 */
+	public abstract void run(CommandSender sender, String[] args);
 
 }

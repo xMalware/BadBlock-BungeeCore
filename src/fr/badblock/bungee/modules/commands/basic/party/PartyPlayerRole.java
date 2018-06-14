@@ -10,6 +10,11 @@ package fr.badblock.bungee.modules.commands.basic.party;
 public enum PartyPlayerRole {
 
 	/**
+	 * Admin role
+	 */
+	ADMIN,
+
+	/**
 	 * Default role
 	 */
 	DEFAULT,
@@ -17,11 +22,6 @@ public enum PartyPlayerRole {
 	/**
 	 * Modo role
 	 */
-	MODO,
-
-	/**
-	 * Admin role
-	 */
-	ADMIN
+	MODO
 
 }

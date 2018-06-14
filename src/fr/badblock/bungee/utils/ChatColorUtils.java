@@ -13,6 +13,7 @@ public class ChatColorUtils {
 
 	/**
 	 * Translate colors
+	 * 
 	 * @param character
 	 * @param message
 	 * @return
@@ -24,6 +25,7 @@ public class ChatColorUtils {
 
 	/**
 	 * Translate colors of messages
+	 * 
 	 * @param character
 	 * @param messages
 	 * @return

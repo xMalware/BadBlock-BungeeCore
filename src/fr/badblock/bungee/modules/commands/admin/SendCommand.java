@@ -125,7 +125,7 @@ public class SendCommand extends BadCommand {
 		}
 
 		// We send the player's move with a packet over the network
-		BungeeManager.getInstance().sendPacket(new PlayerPacket(playerName, PlayerPacketType.SEND_SERVER, serverName));
+		BungeeManager.getInstance().sendPacket(new PlayerPacket(playerName, serverName, PlayerPacketType.SEND_SERVER));
 		// The requester is told that the action was indeed made
 		I19n.sendMessage(sender, "bungee.commands.send.sent", null, playerName, serverName);
 	}

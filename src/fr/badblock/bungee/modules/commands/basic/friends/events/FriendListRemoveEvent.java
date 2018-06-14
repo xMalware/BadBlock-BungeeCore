@@ -21,13 +21,13 @@ import lombok.EqualsAndHashCode;
 public class FriendListRemoveEvent extends CancellableEvent {
 
 	/**
-	 * The want player
+	 * Get the friendlist remove status
 	 * 
 	 * @param Set
-	 *            the want player
-	 * @return Get the want player
+	 *            the friendlist remove status
+	 * @return Get the friendlist remove status
 	 */
-	private final BadPlayer wantPlayer;
+	private FriendListRemoveStatus status;
 	/**
 	 * The wanted player
 	 * 
@@ -37,12 +37,12 @@ public class FriendListRemoveEvent extends CancellableEvent {
 	 */
 	private final BadOfflinePlayer wantedPlayer;
 	/**
-	 * Get the friendlist remove status
+	 * The want player
 	 * 
 	 * @param Set
-	 *            the friendlist remove status
-	 * @return Get the friendlist remove status
+	 *            the want player
+	 * @return Get the want player
 	 */
-	private FriendListRemoveStatus status;
+	private final BadPlayer wantPlayer;
 
 }

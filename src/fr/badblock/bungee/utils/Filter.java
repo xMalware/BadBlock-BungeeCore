@@ -16,13 +16,17 @@ import java.util.Set;
 public interface Filter<T> {
 
 	/**
-	 * Define if a object is filtered or not
+	 * Filter an array
 	 *
-	 * @param object
-	 *            the object on which the judgment will be carried :)
-	 * @return true if object is keeped, false if he is removed
+	 * @param filter
+	 *            the filter
+	 * @param array
+	 *            the array to be filtered
+	 * @return the filtered array
 	 */
-	boolean keep(T object);
+	static <E> E[] filterArrayStatic(Filter<E> filter, E[] array) {
+		return filter.filterArray(array);
+	}
 
 	/**
 	 * Filter a collection
@@ -66,14 +70,13 @@ public interface Filter<T> {
 	/**
 	 * Filter an array
 	 *
-	 * @param filter
-	 *            the filter
 	 * @param array
 	 *            the array to be filtered
 	 * @return the filtered array
 	 */
-	static <E> E[] filterArrayStatic(Filter<E> filter, E[] array) {
-		return filter.filterArray(array);
+	@SuppressWarnings("unchecked")
+	default T[] filterArray(T[] array) {
+		return (T[]) filterList(Arrays.asList(array)).toArray();
 	}
 
 	/**
@@ -109,18 +112,6 @@ public interface Filter<T> {
 	}
 
 	/**
-	 * Filter an array
-	 *
-	 * @param array
-	 *            the array to be filtered
-	 * @return the filtered array
-	 */
-	@SuppressWarnings("unchecked")
-	default T[] filterArray(T[] array) {
-		return (T[]) filterList(Arrays.asList(array)).toArray();
-	}
-
-	/**
 	 * Filter a set
 	 *
 	 * @param set
@@ -135,4 +126,13 @@ public interface Filter<T> {
 		});
 		return filtered;
 	}
+
+	/**
+	 * Define if a object is filtered or not
+	 *
+	 * @param object
+	 *            the object on which the judgment will be carried :)
+	 * @return true if object is keeped, false if he is removed
+	 */
+	boolean keep(T object);
 }

@@ -12,6 +12,14 @@ import java.util.UUID;
 public class Task extends Thread {
 
 	/**
+	 * Constructor with random name
+	 */
+	public Task() {
+		// Use the first constructor
+		this(UUID.randomUUID().toString());
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param name
@@ -19,14 +27,6 @@ public class Task extends Thread {
 	public Task(String name) {
 		// Set the name
 		setName("task-" + name);
-	}
-
-	/**
-	 * Constructor with random name
-	 */
-	public Task() {
-		// Use the first constructor
-		this(UUID.randomUUID().toString());
 	}
 
 }

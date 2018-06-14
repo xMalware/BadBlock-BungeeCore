@@ -1,11 +1,11 @@
 package fr.badblock.bungee.utils.mcjson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Factory to create a new minecraft JSON message
@@ -18,6 +18,15 @@ import java.util.List;
 public class McJsonFactory {
 
 	/**
+	 * Click element
+	 * 
+	 * @param Set
+	 *            the new click element
+	 * @return Returns the current click element
+	 */
+	private McJsonElement clickElement;
+
+	/**
 	 * Component list
 	 * 
 	 * @param Set
@@ -25,6 +34,15 @@ public class McJsonFactory {
 	 * @return Returns the current component list
 	 */
 	private List<McJsonComponent> componentList = new ArrayList<>();
+
+	/**
+	 * Hover element
+	 * 
+	 * @param Set
+	 *            the new hover element
+	 * @return Returns the current hover element
+	 */
+	private McJsonElement hoverElement;
 
 	/**
 	 * In component
@@ -45,24 +63,6 @@ public class McJsonFactory {
 	private McJsonElement textElement;
 
 	/**
-	 * Click element
-	 * 
-	 * @param Set
-	 *            the new click element
-	 * @return Returns the current click element
-	 */
-	private McJsonElement clickElement;
-
-	/**
-	 * Hover element
-	 * 
-	 * @param Set
-	 *            the new hover element
-	 * @return Returns the current hover element
-	 */
-	private McJsonElement hoverElement;
-
-	/**
 	 * Create a new factory with the content of the first component
 	 *
 	 * @param firstString
@@ -74,24 +74,38 @@ public class McJsonFactory {
 	}
 
 	/**
-	 * if not in component creation, create a new component with his content
+	 * Build the McJson object
+	 *
+	 * @return the McJson object
+	 */
+	public McJson build() {
+		// If we are in a component
+		if (isInComponent()) {
+			// Finish the component
+			finaliseComponent();
+		}
+
+		// Returns a new McJson object
+		return new McJson(componentList.toArray(new McJsonComponent[0]));
+	}
+
+	/**
+	 * if in component creation, finalise the current component create a new
+	 * component with his content
 	 *
 	 * @param componentString
-	 *            the content of the component
+	 *            the content of the new component
 	 * @return the factory
 	 */
-	public McJsonFactory initNewComponent(String componentString) {
-		// If we are not in a component
-		if (!isInComponent()) {
-			// Set the text element
-			setTextElement(new McJsonElement(McJsonAttribute.TEXT, componentString));
-			// Set the click element
-			setClickElement(null);
-			// Set the hover element
-			setHoverElement(null);
-			// We are in an component
-			setInComponent(true);
+	public McJsonFactory finaliseAndInitNewComponent(String componentString) {
+		// If we are in a component
+		if (isInComponent()) {
+			// So finish the component
+			finaliseComponent();
 		}
+
+		// Init a new component
+		initNewComponent(componentString);
 
 		// Returns the current factory
 		return this;
@@ -139,40 +153,23 @@ public class McJsonFactory {
 	}
 
 	/**
-	 * if in component creation, finalise the current component create a new
-	 * component with his content
+	 * if not in component creation, create a new component with his content
 	 *
 	 * @param componentString
-	 *            the content of the new component
+	 *            the content of the component
 	 * @return the factory
 	 */
-	public McJsonFactory finaliseAndInitNewComponent(String componentString) {
-		// If we are in a component
-		if (isInComponent()) {
-			// So finish the component
-			finaliseComponent();
-		}
-
-		// Init a new component
-		initNewComponent(componentString);
-
-		// Returns the current factory
-		return this;
-	}
-
-	/**
-	 * if in component creation, set the hover text of the current component the
-	 * hover text is displayed when the mouse passes on the component
-	 *
-	 * @param hoverText
-	 *            the hover text to set
-	 * @return the factory
-	 */
-	public McJsonFactory setHoverText(String hoverText) {
-		// If we are in a component
-		if (isInComponent()) {
+	public McJsonFactory initNewComponent(String componentString) {
+		// If we are not in a component
+		if (!isInComponent()) {
+			// Set the text element
+			setTextElement(new McJsonElement(McJsonAttribute.TEXT, componentString));
+			// Set the click element
+			setClickElement(null);
 			// Set the hover element
-			setHoverElement(new McJsonElement(McJsonAttribute.HOVER, hoverText));
+			setHoverElement(null);
+			// We are in an component
+			setInComponent(true);
 		}
 
 		// Returns the current factory
@@ -192,25 +189,6 @@ public class McJsonFactory {
 		if (isInComponent()) {
 			// Set the click element
 			setClickElement(new McJsonElement(McJsonAttribute.EXECUTE, clickCommand));
-		}
-
-		// Returns the current factory
-		return this;
-	}
-
-	/**
-	 * if in component creation, set the click website of the current component the
-	 * click website is opened to the player when he click on the component
-	 *
-	 * @param clickWebsite
-	 *            the click website to set
-	 * @return the factory
-	 */
-	public McJsonFactory setClickWebsite(String clickWebsite) {
-		// If we are in a component
-		if (isInComponent()) {
-			// Set the click element
-			setClickElement(new McJsonElement(McJsonAttribute.WEBSITE, clickWebsite));
 		}
 
 		// Returns the current factory
@@ -238,19 +216,41 @@ public class McJsonFactory {
 	}
 
 	/**
-	 * Build the McJson object
+	 * if in component creation, set the click website of the current component the
+	 * click website is opened to the player when he click on the component
 	 *
-	 * @return the McJson object
+	 * @param clickWebsite
+	 *            the click website to set
+	 * @return the factory
 	 */
-	public McJson build() {
+	public McJsonFactory setClickWebsite(String clickWebsite) {
 		// If we are in a component
 		if (isInComponent()) {
-			// Finish the component
-			finaliseComponent();
+			// Set the click element
+			setClickElement(new McJsonElement(McJsonAttribute.WEBSITE, clickWebsite));
 		}
 
-		// Returns a new McJson object
-		return new McJson(componentList.toArray(new McJsonComponent[0]));
+		// Returns the current factory
+		return this;
+	}
+
+	/**
+	 * if in component creation, set the hover text of the current component the
+	 * hover text is displayed when the mouse passes on the component
+	 *
+	 * @param hoverText
+	 *            the hover text to set
+	 * @return the factory
+	 */
+	public McJsonFactory setHoverText(String hoverText) {
+		// If we are in a component
+		if (isInComponent()) {
+			// Set the hover element
+			setHoverElement(new McJsonElement(McJsonAttribute.HOVER, hoverText));
+		}
+
+		// Returns the current factory
+		return this;
 	}
 
 }

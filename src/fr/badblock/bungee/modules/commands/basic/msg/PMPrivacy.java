@@ -15,14 +15,14 @@ public enum PMPrivacy {
 	WITH_EVERYONE,
 
 	/**
-	 * Accept PM only from his friends
-	 */
-	WITH_ONLY_HIS_FRIENDS,
-
-	/**
 	 * Don't accept PM
 	 */
-	WITH_NOBODY;
+	WITH_NOBODY,
+
+	/**
+	 * Accept PM only from his friends
+	 */
+	WITH_ONLY_HIS_FRIENDS;
 
 	/**
 	 * Get a possibility from a string

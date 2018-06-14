@@ -27,6 +27,10 @@ public class ReportCommand extends BadCommand {
 		super("report", "", "rp");
 	}
 
+	public String getPrefix(String string) {
+		return "bungee.commands.report." + string;
+	}
+
 	/**
 	 * Run
 	 */
@@ -46,8 +50,7 @@ public class ReportCommand extends BadCommand {
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
-		if (badOfflinePlayer == null || !badOfflinePlayer.isFound() || !badOfflinePlayer.isLoaded())
-		{
+		if (badOfflinePlayer == null || !badOfflinePlayer.isFound() || !badOfflinePlayer.isLoaded()) {
 			// Send the message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			// So we stop there
@@ -71,7 +74,7 @@ public class ReportCommand extends BadCommand {
 				// Send the message
 				badPlayer.sendTranslatedOutgoingMessage(getPrefix("select_intro"), null, playerName);
 			} else
-				// If the sender isn't a player
+			// If the sender isn't a player
 			{
 				// Send the message
 				I19n.sendMessage(sender, getPrefix("select_intro"), null, playerName);
@@ -106,7 +109,7 @@ public class ReportCommand extends BadCommand {
 					// Send the message
 					badPlayer.sendTranslatedOutgoingMCJson(json);
 				} else
-					// If the sender isn't a player
+				// If the sender isn't a player
 				{
 					// Send the reason message
 					I19n.sendMessage(sender, getPrefix("reason." + reportType.getName()), null);
@@ -149,16 +152,12 @@ public class ReportCommand extends BadCommand {
 		String reason = getPrefix("reason." + reportType.getName());
 
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.report.receivereports", getPrefix("reportmessage"), new int[] { 0, 2 }, 
-				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), reason);
-		
+		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.report.receivereports",
+				getPrefix("reportmessage"), new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(),
+				badPlayer.getRawChatSuffix(), reason);
+
 		// Send message
 		I19n.sendMessage(sender, getPrefix("reported"), null, badOfflinePlayer.getName(), reason);
-	}
-
-	public String getPrefix(String string)
-	{
-		return "bungee.commands.report." + string;
 	}
 
 }

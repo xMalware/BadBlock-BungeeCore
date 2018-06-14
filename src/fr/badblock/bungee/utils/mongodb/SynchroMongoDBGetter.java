@@ -14,15 +14,6 @@ import lombok.Data;
 public class SynchroMongoDBGetter {
 
 	/**
-	 * Database object
-	 * 
-	 * @param Set
-	 *            the new database obect
-	 * @return Returns the current database object
-	 */
-	private DBObject dbObject = null;
-
-	/**
 	 * Collection name
 	 * 
 	 * @param Set
@@ -32,13 +23,13 @@ public class SynchroMongoDBGetter {
 	private String collectionName;
 
 	/**
-	 * Query
+	 * Database object
 	 * 
 	 * @param Set
-	 *            the new query
-	 * @return Returns the current query
+	 *            the new database obect
+	 * @return Returns the current database object
 	 */
-	private BasicDBObject query;
+	private DBObject dbObject = null;
 
 	/**
 	 * Done
@@ -48,6 +39,15 @@ public class SynchroMongoDBGetter {
 	 * @return Returns if it's get
 	 */
 	private boolean done;
+
+	/**
+	 * Query
+	 * 
+	 * @param Set
+	 *            the new query
+	 * @return Returns the current query
+	 */
+	private BasicDBObject query;
 
 	/**
 	 * Thread
@@ -72,6 +72,16 @@ public class SynchroMongoDBGetter {
 		this.query = query;
 		// Set the thread
 		this.thread = Thread.currentThread();
+	}
+
+	/**
+	 * Clear the current getted value. So when the
+	 * SynchroMongoDBGetter#getDbObject() method is called, the object will be
+	 * retrieved from the database.
+	 */
+	public void clearCache() {
+		// DbObject => null
+		dbObject = null;
 	}
 
 	/**
@@ -105,16 +115,6 @@ public class SynchroMongoDBGetter {
 
 		// Returns the database object
 		return dbObject;
-	}
-
-	/**
-	 * Clear the current getted value. So when the
-	 * SynchroMongoDBGetter#getDbObject() method is called, the object will be
-	 * retrieved from the database.
-	 */
-	public void clearCache() {
-		// DbObject => null
-		dbObject = null;
 	}
 
 	void setDbObject(DBObject dbObject) {

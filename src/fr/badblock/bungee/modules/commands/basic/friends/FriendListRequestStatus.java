@@ -10,6 +10,21 @@ package fr.badblock.bungee.modules.commands.basic.friends;
 public enum FriendListRequestStatus {
 
 	/**
+	 * Already requested
+	 */
+	PLAYER_ALREADY_REQUESTED,
+
+	/**
+	 * Don't accept request
+	 */
+	PLAYER_DO_NOT_ACCEPT_REQUEST,
+
+	/**
+	 * Receive request
+	 */
+	PLAYER_RECEIVE_REQUEST,
+
+	/**
 	 * Can't act on himself
 	 */
 	PLAYER_SCHIZOPHRENIA,
@@ -23,21 +38,6 @@ public enum FriendListRequestStatus {
 	 * They're now friends
 	 */
 	PLAYERS_NOW_FRIENDS,
-
-	/**
-	 * Already requested
-	 */
-	PLAYER_ALREADY_REQUESTED,
-
-	/**
-	 * Receive request
-	 */
-	PLAYER_RECEIVE_REQUEST,
-
-	/**
-	 * Don't accept request
-	 */
-	PLAYER_DO_NOT_ACCEPT_REQUEST,
 
 	/**
 	 * Unknown error

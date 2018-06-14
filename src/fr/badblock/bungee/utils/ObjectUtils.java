@@ -13,6 +13,14 @@ import fr.badblock.api.common.utils.GsonUtils;
 
 public class ObjectUtils {
 
+	public static JsonObject getJsonObject(Object object) {
+		return GsonUtils.getPrettyGson().fromJson(GsonUtils.getGson().toJson(object), JsonObject.class);
+	}
+
+	public static JsonObject getJsonObject(String part) {
+		return GsonUtils.getPrettyGson().fromJson(part, JsonObject.class);
+	}
+
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public static <T> T getOr(BSONObject dbObject, String keyName, T d) {
 		if (dbObject == null || !dbObject.containsKey(keyName))
@@ -33,14 +41,6 @@ public class ObjectUtils {
 			dbObject.put(field.getName(), field.get(object));
 		}
 		return dbObject;
-	}
-
-	public static JsonObject getJsonObject(String part) {
-		return GsonUtils.getPrettyGson().fromJson(part, JsonObject.class);
-	}
-
-	public static JsonObject getJsonObject(Object object) {
-		return GsonUtils.getPrettyGson().fromJson(GsonUtils.getGson().toJson(object), JsonObject.class);
 	}
 
 }

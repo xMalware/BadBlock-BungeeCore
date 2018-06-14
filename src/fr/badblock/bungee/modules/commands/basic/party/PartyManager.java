@@ -42,6 +42,133 @@ public class PartyManager {
 	private static PartyMessages messages = new PartyMessages();
 
 	/**
+	 * Send the invitation message
+	 * 
+	 * @param currentPlayer
+	 * @param otherPlayer
+	 */
+	private static void _inviteMessage(BadPlayer currentPlayer, BadPlayer otherPlayer) {
+		// Send 'you invited'
+		messages.sendInviteYouInvited(currentPlayer, otherPlayer.getName());
+		// Send 'you have been invited'
+		messages.sendInviteYouHaveBeenInvited(otherPlayer, currentPlayer.getName());
+	}
+
+	/**
+	 * Accept
+	 * 
+	 * @param sender
+	 * @param args
+	 */
+	public static void accept(ProxiedPlayer sender, String[] args) {
+		// Ooh :-(
+		if (args.length != 2) {
+			// Send accept usage
+			PartyManager.getMessages().sendAcceptUsage(sender);
+			// So we stop there
+			return;
+		}
+
+		// Get owner party arg
+		String ownerParty = args[1];
+		// Get BungeeManager
+		BungeeManager bungeeManager = BungeeManager.getInstance();
+		// Get other player
+		BadPlayer otherPlayer = bungeeManager.getBadPlayer(ownerParty);
+		// Get current player
+		BadPlayer currPlayer = BadPlayer.get(sender);
+
+		// If he accepts himself
+		if (ownerParty.equalsIgnoreCase(sender.getName())) {
+			// Send the message
+			PartyManager.getMessages().sendCantActOnYourself(sender);
+			return;
+		}
+
+		// If they're not on the same server
+		if (otherPlayer == null || !currPlayer.getCurrentServer().equals(otherPlayer.getCurrentServer())) {
+			// Send the message
+			PartyManager.getMessages().sendAcceptMustBeOnSameServer(sender);
+			// So we stop there
+			return;
+		}
+
+		// Get the party
+		PartyManager.getParty(otherPlayer.getName(), new Callback<Party>() {
+
+			/**
+			 * When we receive the data
+			 */
+			@Override
+			public void done(Party party, Throwable error) {
+				// If the party is null
+				if (party == null) {
+					// Send expire message
+					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
+					// So we stop there
+					return;
+				}
+
+				// Get the party player
+				PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
+
+				// If the party player is null
+				if (partyPlayer == null) {
+					// Send message
+					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
+					// So we stop there
+					return;
+				}
+
+				// If the state isn't in 'waiting'
+				if (!partyPlayer.getState().equals(PartyPlayerState.WAITING)) {
+					// Send message
+					PartyManager.getMessages().sendAcceptAlreadyInParty(sender, otherPlayer.getName());
+					// So we stop there
+					return;
+				}
+
+				// Accept party player
+				party.accept(sender.getName());
+				// Send accepted message
+				PartyManager.getMessages().sendAcceptAccepted(sender, otherPlayer.getName());
+			}
+
+		});
+	}
+
+	/**
+	 * Remove party data
+	 * 
+	 * @param party
+	 */
+	public static void delete(Party party) {
+		// Mongo service
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		// Use async mongo
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
+			/**
+			 * Asynchronously
+			 */
+			@Override
+			public void run(MongoService mongoService) {
+				// Get the database
+				DB db = mongoService.getDb();
+				// Get the collection
+				DBCollection collection = db.getCollection("parties");
+				// New query
+				BasicDBObject query = new BasicDBObject();
+
+				// Set the id
+				query.put("uuid", party.getUuid());
+
+				// Update in the collection
+				collection.remove(query);
+			}
+		});
+	}
+
+	/**
 	 * Follow
 	 * 
 	 * @param sender
@@ -116,6 +243,95 @@ public class PartyManager {
 				}
 			}
 
+		});
+	}
+
+	/**
+	 * Get the party
+	 * 
+	 * @param player
+	 * @param callback
+	 */
+	public static void getParty(String player, Callback<Party> callback) {
+		// Get mongo service
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		// Use async mongo
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
+			/**
+			 * Use asynchronously
+			 */
+			@Override
+			public void run(MongoService mongoService) {
+				// Get the database
+				DB db = mongoService.getDb();
+				// Get the collection
+				DBCollection collection = db.getCollection("parties");
+				// Create empty query
+				DBObject query = new BasicDBObject("players." + player.toLowerCase(),
+						new BasicDBObject("$exists", true));
+				// Cursor
+				DBCursor cursor = collection.find(query);
+
+				// If the cursor isn't null
+				if (cursor != null && cursor.hasNext()) {
+					// Get the DBObject
+					DBObject dbObject = cursor.next();
+					// Done callback
+					callback.done(new Party(dbObject), null);
+				} else {
+					// Empty callback
+					callback.done(null, null);
+				}
+			}
+		});
+	}
+
+	/**
+	 * In group
+	 * 
+	 * @param player
+	 * @param callback
+	 */
+	public static void inGroup(String player, Callback<Boolean> callback) {
+		// Set to lower case username
+		player = player.toLowerCase();
+		// Get party
+		getParty(player, new Callback<Party>() {
+
+			/**
+			 * When we receive the party data
+			 */
+			@Override
+			public void done(Party result, Throwable error) {
+				// Callback
+				callback.done(result != null, null);
+			}
+
+		});
+	}
+
+	/**
+	 * Insert the party
+	 * 
+	 * @param party
+	 */
+	public static void insert(Party party) {
+		// Get mongo service
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		// Use async mongo
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
+			/**
+			 * Asynchronously
+			 */
+			@Override
+			public void run(MongoService mongoService) {
+				// Get database
+				DB db = mongoService.getDb();
+				// Get collection
+				DBCollection collection = db.getCollection("parties");
+				// Insert the collection
+				collection.insert(party.toObject());
+			}
 		});
 	}
 
@@ -224,102 +440,6 @@ public class PartyManager {
 	}
 
 	/**
-	 * Send the invitation message
-	 * 
-	 * @param currentPlayer
-	 * @param otherPlayer
-	 */
-	private static void _inviteMessage(BadPlayer currentPlayer, BadPlayer otherPlayer) {
-		// Send 'you invited'
-		messages.sendInviteYouInvited(currentPlayer, otherPlayer.getName());
-		// Send 'you have been invited'
-		messages.sendInviteYouHaveBeenInvited(otherPlayer, currentPlayer.getName());
-	}
-
-	/**
-	 * Accept
-	 * 
-	 * @param sender
-	 * @param args
-	 */
-	public static void accept(ProxiedPlayer sender, String[] args) {
-		// Ooh :-(
-		if (args.length != 2) {
-			// Send accept usage
-			PartyManager.getMessages().sendAcceptUsage(sender);
-			// So we stop there
-			return;
-		}
-
-		// Get owner party arg
-		String ownerParty = args[1];
-		// Get BungeeManager
-		BungeeManager bungeeManager = BungeeManager.getInstance();
-		// Get other player
-		BadPlayer otherPlayer = bungeeManager.getBadPlayer(ownerParty);
-		// Get current player
-		BadPlayer currPlayer = BadPlayer.get(sender);
-
-		// If he accepts himself
-		if (ownerParty.equalsIgnoreCase(sender.getName())) {
-			// Send the message
-			PartyManager.getMessages().sendCantActOnYourself(sender);
-			return;
-		}
-
-		// If they're not on the same server
-		if (otherPlayer == null || !currPlayer.getCurrentServer().equals(otherPlayer.getCurrentServer())) {
-			// Send the message
-			PartyManager.getMessages().sendAcceptMustBeOnSameServer(sender);
-			// So we stop there
-			return;
-		}
-
-		// Get the party
-		PartyManager.getParty(otherPlayer.getName(), new Callback<Party>() {
-
-			/**
-			 * When we receive the data
-			 */
-			@Override
-			public void done(Party party, Throwable error) {
-				// If the party is null
-				if (party == null) {
-					// Send expire message
-					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
-					// So we stop there
-					return;
-				}
-
-				// Get the party player
-				PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
-
-				// If the party player is null
-				if (partyPlayer == null) {
-					// Send message
-					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
-					// So we stop there
-					return;
-				}
-
-				// If the state isn't in 'waiting'
-				if (!partyPlayer.getState().equals(PartyPlayerState.WAITING)) {
-					// Send message
-					PartyManager.getMessages().sendAcceptAlreadyInParty(sender, otherPlayer.getName());
-					// So we stop there
-					return;
-				}
-
-				// Accept party player
-				party.accept(sender.getName());
-				// Send accepted message
-				PartyManager.getMessages().sendAcceptAccepted(sender, otherPlayer.getName());
-			}
-
-		});
-	}
-
-	/**
 	 * Leave
 	 * 
 	 * @param sender
@@ -377,6 +497,219 @@ public class PartyManager {
 					// Send cancelled message
 					PartyManager.getMessages().sendRemoveCancelled(sender, partyPlayer.getName());
 				}
+
+			}
+
+		});
+	}
+
+	/**
+	 * Send party list
+	 * 
+	 * @param sender
+	 */
+	public static void list(ProxiedPlayer sender) {
+		// Get party
+		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+
+			/**
+			 * When we receive the data
+			 */
+			@Override
+			public void done(Party party, Throwable error) {
+
+				// If the party is null
+				if (party == null) {
+					// Send message
+					PartyManager.getMessages().sendYouAreNotInParty(sender);
+					// So we stop there
+					return;
+				}
+
+				// Get the BadPlayer object
+				BadPlayer badPlayer = BadPlayer.get(sender.getName());
+
+				// If the BadPlayer object is null
+				if (badPlayer == null) {
+					// Send message
+					PartyManager.getMessages().sendErrorOccurred(sender, 1);
+					// So we stop there
+					return;
+				}
+
+				// Get the party player
+				PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
+
+				// If the current party player is null
+				if (partyPlayer == null) {
+					// Send message
+					PartyManager.getMessages().sendErrorOccurred(sender, 2);
+					// So we stop there
+					return;
+				}
+
+				// If the state isn't accepted
+				if (!partyPlayer.getState().equals(PartyPlayerState.ACCEPTED)) {
+					// Send message
+					PartyManager.getMessages().sendYouAreNotInParty(sender);
+					// So we stop there
+					return;
+				}
+
+				// Send intro list
+				PartyManager.getMessages().sendIntroList(sender, party.getPlayers().size());
+
+				// For each player
+				for (Entry<String, PartyPlayer> players : party.getPlayers().entrySet()) {
+					// Create canRemove var
+					boolean canRemove = false;
+
+					// If the player role is admin
+					if (partyPlayer.getRole().equals(PartyPlayerRole.ADMIN)) {
+						// So he can remove
+						canRemove = true;
+					}
+
+					// If the player role is modo & the other player isn't modo/admin
+					if (partyPlayer.getRole().equals(PartyPlayerRole.MODO)
+							&& players.getValue().getRole().equals(PartyPlayerRole.DEFAULT)) {
+						// So he can remove
+						canRemove = true;
+					}
+
+					// If the player role is admin
+					if (players.getValue().getRole().equals(PartyPlayerRole.ADMIN)) {
+						// Send admin party list
+						PartyManager.getMessages().sendPartyListAdmin(badPlayer, canRemove,
+								players.getValue().getName(), players.getValue().isFollow());
+					}
+					// If the player role is modo
+					else if (players.getValue().getRole().equals(PartyPlayerRole.MODO)) {
+						// Send modo party list
+						PartyManager.getMessages().sendPartyListModo(badPlayer, canRemove, players.getValue().getName(),
+								players.getValue().isFollow());
+					}
+					// If the player state is waiting
+					else if (players.getValue().getState().equals(PartyPlayerState.WAITING)) {
+						// Send waiting party list
+						PartyManager.getMessages().sendPartyListWaiting(badPlayer, canRemove,
+								players.getValue().getName());
+					}
+					// If the player state is accepted
+					else if (players.getValue().getState().equals(PartyPlayerState.ACCEPTED)) {
+						// Send accepted party list
+						PartyManager.getMessages().sendPartyListAccepted(badPlayer, canRemove,
+								players.getValue().getName(), players.getValue().isFollow());
+					}
+				}
+			}
+
+		});
+	}
+
+	/**
+	 * Set modo
+	 * 
+	 * @param sender
+	 * @param args
+	 */
+	public static void modo(ProxiedPlayer sender, String[] args) {
+		// Ooh :(
+		if (args.length != 2) {
+			// Send message
+			PartyManager.getMessages().sendModoUsage(sender);
+			// So we stop there
+			return;
+		}
+
+		// Raw type
+		String rawType = args[1];
+
+		// Get the party
+		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+
+			/**
+			 * When we receive the data
+			 */
+			@Override
+			public void done(Party party, Throwable error) {
+
+				// If the party is null
+				if (party == null) {
+					// Send message
+					PartyManager.getMessages().sendYouAreNotInParty(sender);
+					// So we stop there
+					return;
+				}
+
+				// Get current party player
+				PartyPlayer currentPartyPlayer = party.getPartyPlayer(sender.getName());
+
+				// If the current party player is null
+				if (currentPartyPlayer == null) {
+					// Send message
+					PartyManager.getMessages().sendYouAreNotInParty(sender);
+					// So we stop there
+					return;
+				}
+
+				// Get party player
+				PartyPlayer partyPlayer = party.getPartyPlayer(rawType);
+
+				// If the party player is null
+				if (partyPlayer == null) {
+					// Send message
+					PartyManager.getMessages().sendModoPlayerNotInGroup(sender, rawType);
+					// So we stop there
+					return;
+				}
+
+				// Player not accepted yet in group
+				if (!partyPlayer.getState().equals(PartyPlayerState.ACCEPTED)) {
+					// Send message
+					PartyManager.getMessages().sendModoNotAccepted(sender, rawType);
+					// So we stop there
+					return;
+				}
+
+				// If the current party player isn't admin
+				if (!currentPartyPlayer.getRole().equals(PartyPlayerRole.ADMIN)) {
+					// Send message
+					PartyManager.getMessages().sendNotEnoughPermissions(sender);
+					// So we stop there
+					return;
+				}
+
+				// If he's acting on himself
+				if (partyPlayer.getName().equalsIgnoreCase(sender.getName())) {
+					// Send message
+					PartyManager.getMessages().sendCantActOnYourself(sender);
+					// So we stop there
+					return;
+				}
+
+				// If the current party player isn't admin
+				if (partyPlayer.getRole().equals(PartyPlayerRole.ADMIN)) {
+					// Send message
+					PartyManager.getMessages().sendNotEnoughPermissions(sender);
+					// So we stop there
+					return;
+				}
+
+				// If the current party player is moderator
+				if (partyPlayer.getRole().equals(PartyPlayerRole.MODO)) {
+					// Set default
+					party.setRole(partyPlayer, PartyPlayerRole.DEFAULT);
+					// Send message
+					PartyManager.getMessages().sendModoSetDefault(sender, partyPlayer.getName());
+					// So we stop there
+					return;
+				}
+
+				// Set moderator
+				party.setRole(partyPlayer, PartyPlayerRole.MODO);
+				// Send message
+				PartyManager.getMessages().sendModoSetModo(sender, partyPlayer.getName());
 
 			}
 
@@ -490,107 +823,52 @@ public class PartyManager {
 	}
 
 	/**
-	 * Send party list
+	 * Toggle
 	 * 
 	 * @param sender
+	 * @param args
 	 */
-	public static void list(ProxiedPlayer sender) {
-		// Get party
-		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+	public static void toggle(ProxiedPlayer sender, String[] args) {
+		// Get BadPlayer object
+		BadPlayer badPlayer = BungeeManager.getInstance().getBadPlayer(sender);
+		// Get settings
+		BadPlayerSettings settings = badPlayer.getSettings();
 
-			/**
-			 * When we receive the data
-			 */
-			@Override
-			public void done(Party party, Throwable error) {
+		// Ooh :(
+		if (args.length != 2) {
+			// Send message
+			PartyManager.getMessages().sendToggleUsage(badPlayer);
+			// So we stop there
+			return;
+		}
 
-				// If the party is null
-				if (party == null) {
-					// Send message
-					PartyManager.getMessages().sendYouAreNotInParty(sender);
-					// So we stop there
-					return;
-				}
+		// Raw type
+		String rawType = args[1];
+		// Partyable
+		Partyable partyable = Partyable.getByString(rawType);
 
-				// Get the BadPlayer object
-				BadPlayer badPlayer = BadPlayer.get(sender.getName());
+		// If partyable is null
+		if (partyable == null) {
+			// Send message
+			PartyManager.getMessages().sendToggleUnknownType(sender, rawType);
+			// So we stop there
+			return;
+		}
 
-				// If the BadPlayer object is null
-				if (badPlayer == null) {
-					// Send message
-					PartyManager.getMessages().sendErrorOccurred(sender, 1);
-					// So we stop there
-					return;
-				}
+		// If the partyable is the same
+		if (settings.getPartyable().equals(partyable)) {
+			// Already toggle message
+			PartyManager.getMessages().sendToggleAlready(sender, rawType);
+			// So we stop there
+			return;
+		}
 
-				// Get the party player
-				PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
-
-				// If the current party player is null
-				if (partyPlayer == null) {
-					// Send message
-					PartyManager.getMessages().sendErrorOccurred(sender, 2);
-					// So we stop there
-					return;
-				}
-
-				// If the state isn't accepted
-				if (!partyPlayer.getState().equals(PartyPlayerState.ACCEPTED)) {
-					// Send message
-					PartyManager.getMessages().sendYouAreNotInParty(sender);
-					// So we stop there
-					return;
-				}
-
-				// Send intro list
-				PartyManager.getMessages().sendIntroList(sender, party.getPlayers().size());
-
-				// For each player
-				for (Entry<String, PartyPlayer> players : party.getPlayers().entrySet()) {
-					// Create canRemove var
-					boolean canRemove = false;
-
-					// If the player role is admin
-					if (partyPlayer.getRole().equals(PartyPlayerRole.ADMIN)) {
-						// So he can remove
-						canRemove = true;
-					}
-
-					// If the player role is modo & the other player isn't modo/admin
-					if (partyPlayer.getRole().equals(PartyPlayerRole.MODO)
-							&& players.getValue().getRole().equals(PartyPlayerRole.DEFAULT)) {
-						// So he can remove
-						canRemove = true;
-					}
-
-					// If the player role is admin
-					if (players.getValue().getRole().equals(PartyPlayerRole.ADMIN)) {
-						// Send admin party list
-						PartyManager.getMessages().sendPartyListAdmin(badPlayer, canRemove,
-								players.getValue().getName(), players.getValue().isFollow());
-					}
-					// If the player role is modo
-					else if (players.getValue().getRole().equals(PartyPlayerRole.MODO)) {
-						// Send modo party list
-						PartyManager.getMessages().sendPartyListModo(badPlayer, canRemove, players.getValue().getName(),
-								players.getValue().isFollow());
-					}
-					// If the player state is waiting
-					else if (players.getValue().getState().equals(PartyPlayerState.WAITING)) {
-						// Send waiting party list
-						PartyManager.getMessages().sendPartyListWaiting(badPlayer, canRemove,
-								players.getValue().getName());
-					}
-					// If the player state is accepted
-					else if (players.getValue().getState().equals(PartyPlayerState.ACCEPTED)) {
-						// Send accepted party list
-						PartyManager.getMessages().sendPartyListAccepted(badPlayer, canRemove,
-								players.getValue().getName(), players.getValue().isFollow());
-					}
-				}
-			}
-
-		});
+		// Set partyable
+		badPlayer.getSettings().setPartyable(partyable);
+		// Update settings
+		badPlayer.updateSettings();
+		// Send message
+		PartyManager.getMessages().sendToggleWith(sender, rawType);
 	}
 
 	/**
@@ -727,259 +1005,6 @@ public class PartyManager {
 	}
 
 	/**
-	 * Set modo
-	 * 
-	 * @param sender
-	 * @param args
-	 */
-	public static void modo(ProxiedPlayer sender, String[] args) {
-		// Ooh :(
-		if (args.length != 2) {
-			// Send message
-			PartyManager.getMessages().sendModoUsage(sender);
-			// So we stop there
-			return;
-		}
-
-		// Raw type
-		String rawType = args[1];
-
-		// Get the party
-		PartyManager.getParty(sender.getName(), new Callback<Party>() {
-
-			/**
-			 * When we receive the data
-			 */
-			@Override
-			public void done(Party party, Throwable error) {
-
-				// If the party is null
-				if (party == null) {
-					// Send message
-					PartyManager.getMessages().sendYouAreNotInParty(sender);
-					// So we stop there
-					return;
-				}
-
-				// Get current party player
-				PartyPlayer currentPartyPlayer = party.getPartyPlayer(sender.getName());
-
-				// If the current party player is null
-				if (currentPartyPlayer == null) {
-					// Send message
-					PartyManager.getMessages().sendYouAreNotInParty(sender);
-					// So we stop there
-					return;
-				}
-
-				// Get party player
-				PartyPlayer partyPlayer = party.getPartyPlayer(rawType);
-
-				// If the party player is null
-				if (partyPlayer == null) {
-					// Send message
-					PartyManager.getMessages().sendModoPlayerNotInGroup(sender, rawType);
-					// So we stop there
-					return;
-				}
-
-				// Player not accepted yet in group
-				if (!partyPlayer.getState().equals(PartyPlayerState.ACCEPTED)) {
-					// Send message
-					PartyManager.getMessages().sendModoNotAccepted(sender, rawType);
-					// So we stop there
-					return;
-				}
-
-				// If the current party player isn't admin
-				if (!currentPartyPlayer.getRole().equals(PartyPlayerRole.ADMIN)) {
-					// Send message
-					PartyManager.getMessages().sendNotEnoughPermissions(sender);
-					// So we stop there
-					return;
-				}
-
-				// If he's acting on himself
-				if (partyPlayer.getName().equalsIgnoreCase(sender.getName())) {
-					// Send message
-					PartyManager.getMessages().sendCantActOnYourself(sender);
-					// So we stop there
-					return;
-				}
-
-				// If the current party player isn't admin
-				if (partyPlayer.getRole().equals(PartyPlayerRole.ADMIN)) {
-					// Send message
-					PartyManager.getMessages().sendNotEnoughPermissions(sender);
-					// So we stop there
-					return;
-				}
-
-				// If the current party player is moderator
-				if (partyPlayer.getRole().equals(PartyPlayerRole.MODO)) {
-					// Set default
-					party.setRole(partyPlayer, PartyPlayerRole.DEFAULT);
-					// Send message
-					PartyManager.getMessages().sendModoSetDefault(sender, partyPlayer.getName());
-					// So we stop there
-					return;
-				}
-
-				// Set moderator
-				party.setRole(partyPlayer, PartyPlayerRole.MODO);
-				// Send message
-				PartyManager.getMessages().sendModoSetModo(sender, partyPlayer.getName());
-
-			}
-
-		});
-	}
-
-	/**
-	 * Toggle
-	 * 
-	 * @param sender
-	 * @param args
-	 */
-	public static void toggle(ProxiedPlayer sender, String[] args) {
-		// Get BadPlayer object
-		BadPlayer badPlayer = BungeeManager.getInstance().getBadPlayer(sender);
-		// Get settings
-		BadPlayerSettings settings = badPlayer.getSettings();
-
-		// Ooh :(
-		if (args.length != 2) {
-			// Send message
-			PartyManager.getMessages().sendToggleUsage(badPlayer);
-			// So we stop there
-			return;
-		}
-
-		// Raw type
-		String rawType = args[1];
-		// Partyable
-		Partyable partyable = Partyable.getByString(rawType);
-
-		// If partyable is null
-		if (partyable == null) {
-			// Send message
-			PartyManager.getMessages().sendToggleUnknownType(sender, rawType);
-			// So we stop there
-			return;
-		}
-
-		// If the partyable is the same
-		if (settings.getPartyable().equals(partyable)) {
-			// Already toggle message
-			PartyManager.getMessages().sendToggleAlready(sender, rawType);
-			// So we stop there
-			return;
-		}
-
-		// Set partyable
-		badPlayer.getSettings().setPartyable(partyable);
-		// Update settings
-		badPlayer.updateSettings();
-		// Send message
-		PartyManager.getMessages().sendToggleWith(sender, rawType);
-	}
-
-	/**
-	 * Get the party
-	 * 
-	 * @param player
-	 * @param callback
-	 */
-	public static void getParty(String player, Callback<Party> callback) {
-		// Get mongo service
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
-			/**
-			 * Use asynchronously
-			 */
-			@Override
-			public void run(MongoService mongoService) {
-				// Get the database
-				DB db = mongoService.getDb();
-				// Get the collection
-				DBCollection collection = db.getCollection("parties");
-				// Create empty query
-				DBObject query = new BasicDBObject("players." + player.toLowerCase(),
-						new BasicDBObject("$exists", true));
-				// Cursor
-				DBCursor cursor = collection.find(query);
-
-				// If the cursor isn't null
-				if (cursor != null && cursor.hasNext()) {
-					// Get the DBObject
-					DBObject dbObject = cursor.next();
-					// Done callback
-					callback.done(new Party(dbObject), null);
-				} else {
-					// Empty callback
-					callback.done(null, null);
-				}
-			}
-		});
-	}
-
-	/**
-	 * In group
-	 * 
-	 * @param player
-	 * @param callback
-	 */
-	public static void inGroup(String player, Callback<Boolean> callback) {
-		// Set to lower case username
-		player = player.toLowerCase();
-		// Get party
-		getParty(player, new Callback<Party>() {
-
-			/**
-			 * When we receive the party data
-			 */
-			@Override
-			public void done(Party result, Throwable error) {
-				// Callback
-				callback.done(result != null, null);
-			}
-
-		});
-	}
-
-	/**
-	 * Remove party data
-	 * 
-	 * @param party
-	 */
-	public static void delete(Party party) {
-		// Mongo service
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
-			/**
-			 * Asynchronously
-			 */
-			@Override
-			public void run(MongoService mongoService) {
-				// Get the database
-				DB db = mongoService.getDb();
-				// Get the collection
-				DBCollection collection = db.getCollection("parties");
-				// New query
-				BasicDBObject query = new BasicDBObject();
-
-				// Set the id
-				query.put("uuid", party.getUuid());
-
-				// Update in the collection
-				collection.remove(query);
-			}
-		});
-	}
-
-	/**
 	 * Update party data
 	 * 
 	 * @param party
@@ -1009,31 +1034,6 @@ public class PartyManager {
 
 				// Update in the collection
 				collection.update(query, updater);
-			}
-		});
-	}
-
-	/**
-	 * Insert the party
-	 * 
-	 * @param party
-	 */
-	public static void insert(Party party) {
-		// Get mongo service
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
-			/**
-			 * Asynchronously
-			 */
-			@Override
-			public void run(MongoService mongoService) {
-				// Get database
-				DB db = mongoService.getDb();
-				// Get collection
-				DBCollection collection = db.getCollection("parties");
-				// Insert the collection
-				collection.insert(party.toObject());
 			}
 		});
 	}

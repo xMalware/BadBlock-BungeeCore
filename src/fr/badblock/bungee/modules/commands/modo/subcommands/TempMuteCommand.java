@@ -41,135 +41,6 @@ public class TempMuteCommand extends AbstractModCommand {
 	}
 
 	/**
-	 * Run
-	 */
-	@Override
-	public void run(CommandSender sender, String[] args) {
-		// If arg length < 3
-		if (args.length < 3) {
-			// Send the message
-			I19n.sendMessage(sender, getPrefix("usage"), null);
-			// So we stop there
-			return;
-		}
-
-		// Get the player name
-		String playerName = args[1];
-
-		// If he can't be muted
-		if (!canBeMuted(sender, playerName)) {
-			// So we stop there
-			return;
-		}
-
-		BadPlayer badPlayer = BadPlayer.get(playerName);
-		
-		// If the sender is a player
-		if (badPlayer != null && badPlayer.getFlags().has("trymute"))
-		{
-			return;
-		}
-
-		// Set the flag to avoid to duplicate mutes
-		badPlayer.getFlags().set("trymute", 500);
-
-		// Get the mute reason
-		String muteReason = args[2];
-		
-		String rawTime = args[3];
-
-		long time = Time.MILLIS_SECOND.matchTime(rawTime);
-
-		if (time == 0L) {
-			I19n.sendMessage(sender, getPrefix("notgoodtime"), null);
-			return;
-		}
-
-		// Get the offline target player
-		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
-
-		// Get the punisher ip
-		String punisherIp = badPlayer != null ? "127.0.0.1" : badPlayer.getLastIp();
-
-		// Generate a unique id
-		UUID uuid = UUID.randomUUID();
-
-		// Create the punishment object
-		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(),
-				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(),
-				time, DateUtils.getHourDate(), muteReason, false,
-				new String[] {}, sender.getName(), punisherIp);
-
-		// Get the main class
-		BadBungee badBungee = BadBungee.getInstance();
-
-		// Get the service
-		MongoService mongoService = badBungee.getMongoService();
-
-		// Get the database
-		DB db = mongoService.getDb();
-
-		// Get the collection
-		DBCollection collection = db.getCollection("punishments");
-
-		// Insert in the collection
-		collection.insert(punishment.toObject());
-
-		// If the punish object isn't null
-		if (badOfflinePlayer.getPunished() != null) {
-			// So set the mute
-			badOfflinePlayer.getPunished().setMute(punishment);
-		}
-		// If the punish object is null
-		else {
-			// Create a punish object
-			badOfflinePlayer.setPunished(new Punished());
-			// Set the mute
-			badOfflinePlayer.getPunished().setMute(punishment);
-		}
-
-		// If the target player is online
-		if (badOfflinePlayer.isOnline()) {
-			// Get the target player
-			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
-			// Set mute
-			targetPlayer.getPunished().setMute(punishment);
-			// Send online update
-			targetPlayer.sendOnlineTempSyncUpdate();
-			// Try to
-			try {
-				// Save the data
-				targetPlayer.saveData();
-			}
-			// Error case
-			catch (Exception exception) {
-				// Print the stack trace
-				exception.printStackTrace();
-			}
-		}
-		// If the target player is offline
-		else {
-			// Try to
-			try {
-				// Save the data
-				badOfflinePlayer.saveData();
-			}
-			// Error case
-			catch (Exception exception) {
-				// Print the stacktrace
-				exception.printStackTrace();
-			}
-		}
-
-		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"), new int[] { 0, 2 }, 
-				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), rawTime, muteReason);
-
-		// Send banned message
-		I19n.sendMessage(sender, getPrefix("muted"), null, badOfflinePlayer.getName(), rawTime, muteReason);
-	}
-
-	/**
 	 * If a player can be muted
 	 * 
 	 * @param sender
@@ -267,6 +138,134 @@ public class TempMuteCommand extends AbstractModCommand {
 			// Returns true
 			return true;
 		}
+	}
+
+	/**
+	 * Run
+	 */
+	@Override
+	public void run(CommandSender sender, String[] args) {
+		// If arg length < 3
+		if (args.length < 3) {
+			// Send the message
+			I19n.sendMessage(sender, getPrefix("usage"), null);
+			// So we stop there
+			return;
+		}
+
+		// Get the player name
+		String playerName = args[1];
+
+		// If he can't be muted
+		if (!canBeMuted(sender, playerName)) {
+			// So we stop there
+			return;
+		}
+
+		BadPlayer badPlayer = BadPlayer.get(playerName);
+
+		// If the sender is a player
+		if (badPlayer != null && badPlayer.getFlags().has("trymute")) {
+			return;
+		}
+
+		// Set the flag to avoid to duplicate mutes
+		badPlayer.getFlags().set("trymute", 500);
+
+		// Get the mute reason
+		String muteReason = args[2];
+
+		String rawTime = args[3];
+
+		long time = Time.MILLIS_SECOND.matchTime(rawTime);
+
+		if (time == 0L) {
+			I19n.sendMessage(sender, getPrefix("notgoodtime"), null);
+			return;
+		}
+
+		// Get the offline target player
+		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
+
+		// Get the punisher ip
+		String punisherIp = badPlayer != null ? "127.0.0.1" : badPlayer.getLastIp();
+
+		// Generate a unique id
+		UUID uuid = UUID.randomUUID();
+
+		// Create the punishment object
+		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getName(),
+				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(), time, DateUtils.getHourDate(),
+				muteReason, false, new String[] {}, sender.getName(), punisherIp);
+
+		// Get the main class
+		BadBungee badBungee = BadBungee.getInstance();
+
+		// Get the service
+		MongoService mongoService = badBungee.getMongoService();
+
+		// Get the database
+		DB db = mongoService.getDb();
+
+		// Get the collection
+		DBCollection collection = db.getCollection("punishments");
+
+		// Insert in the collection
+		collection.insert(punishment.toObject());
+
+		// If the punish object isn't null
+		if (badOfflinePlayer.getPunished() != null) {
+			// So set the mute
+			badOfflinePlayer.getPunished().setMute(punishment);
+		}
+		// If the punish object is null
+		else {
+			// Create a punish object
+			badOfflinePlayer.setPunished(new Punished());
+			// Set the mute
+			badOfflinePlayer.getPunished().setMute(punishment);
+		}
+
+		// If the target player is online
+		if (badOfflinePlayer.isOnline()) {
+			// Get the target player
+			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
+			// Set mute
+			targetPlayer.getPunished().setMute(punishment);
+			// Send online update
+			targetPlayer.sendOnlineTempSyncUpdate();
+			// Try to
+			try {
+				// Save the data
+				targetPlayer.saveData();
+			}
+			// Error case
+			catch (Exception exception) {
+				// Print the stack trace
+				exception.printStackTrace();
+			}
+		}
+		// If the target player is offline
+		else {
+			// Try to
+			try {
+				// Save the data
+				badOfflinePlayer.saveData();
+			}
+			// Error case
+			catch (Exception exception) {
+				// Print the stacktrace
+				exception.printStackTrace();
+			}
+		}
+
+		// We send the message and the sender to all concerned
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"),
+				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
+				rawTime, muteReason);
+
+		// Send banned message
+		I19n.sendMessage(sender, getPrefix("muted"), null, badOfflinePlayer.getName(), rawTime, muteReason);
 	}
 
 }

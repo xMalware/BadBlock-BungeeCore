@@ -28,9 +28,13 @@ public class AntiVPN extends Thread {
 	public static AntiVPN instance = new AntiVPN();
 
 	/**
-	 * VPN queue
+	 * Get the AntiVPN instance
+	 * 
+	 * @return
 	 */
-	private Queue<String> vpn = new LinkedBlockingQueue<>();
+	public static AntiVPN getInstance() {
+		return instance;
+	}
 
 	/**
 	 * API key
@@ -38,11 +42,51 @@ public class AntiVPN extends Thread {
 	private String apiKey = BadBungee.getInstance().getConfig().getIpHubApiKey();
 
 	/**
+	 * VPN queue
+	 */
+	private Queue<String> vpn = new LinkedBlockingQueue<>();
+
+	/**
 	 * Constructor Starts the module as soon as it is instantiated
 	 */
 	public AntiVPN() {
 		// Start
 		start();
+	}
+
+	/**
+	 * Add the IP to the check queue
+	 * 
+	 * @param ip
+	 */
+	public void addToCheck(String ip) {
+		// Add the IP to the check queue
+		vpn.add(ip);
+	}
+
+	/**
+	 * If the address is local
+	 * 
+	 * @param addr
+	 * @return
+	 */
+	public boolean isThisLocal(InetAddress addr) {
+		// Check if the address is a valid special local or loop back
+		if (addr.isAnyLocalAddress() || addr.isLoopbackAddress()) {
+			// Yes
+			return true;
+		}
+
+		// Check if the address is defined on any interface
+		try {
+			// Defined on any interface?
+			return NetworkInterface.getByInetAddress(addr) != null;
+		}
+		// Error case
+		catch (SocketException e) {
+			// No
+			return false;
+		}
 	}
 
 	@Override
@@ -117,50 +161,6 @@ public class AntiVPN extends Thread {
 
 		// TODO Check ISP
 		return true;
-	}
-
-	/**
-	 * Add the IP to the check queue
-	 * 
-	 * @param ip
-	 */
-	public void addToCheck(String ip) {
-		// Add the IP to the check queue
-		vpn.add(ip);
-	}
-
-	/**
-	 * If the address is local
-	 * 
-	 * @param addr
-	 * @return
-	 */
-	public boolean isThisLocal(InetAddress addr) {
-		// Check if the address is a valid special local or loop back
-		if (addr.isAnyLocalAddress() || addr.isLoopbackAddress()) {
-			// Yes
-			return true;
-		}
-
-		// Check if the address is defined on any interface
-		try {
-			// Defined on any interface?
-			return NetworkInterface.getByInetAddress(addr) != null;
-		}
-		// Error case
-		catch (SocketException e) {
-			// No
-			return false;
-		}
-	}
-
-	/**
-	 * Get the AntiVPN instance
-	 * 
-	 * @return
-	 */
-	public static AntiVPN getInstance() {
-		return instance;
 	}
 
 }

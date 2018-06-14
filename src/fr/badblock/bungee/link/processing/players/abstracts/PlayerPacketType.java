@@ -13,26 +13,6 @@ import lombok.Getter;
 public enum PlayerPacketType {
 
 	/**
-	 * Send message packet type
-	 */
-	SEND_MESSAGE(),
-
-	/**
-	 * Send json message packet type
-	 */
-	SEND_JSON_MESSAGE(),
-
-	/**
-	 * Send server packet type
-	 */
-	SEND_SERVER(),
-
-	/**
-	 * Reload data packet type
-	 */
-	RELOAD_DATA(),
-
-	/**
 	 * Send BadPlayer update packet type
 	 */
 	BADPLAYER_UPDATE(),
@@ -40,7 +20,27 @@ public enum PlayerPacketType {
 	/**
 	 * Player kick packet type
 	 */
-	KICK();
+	KICK(),
+
+	/**
+	 * Reload data packet type
+	 */
+	RELOAD_DATA(),
+
+	/**
+	 * Send json message packet type
+	 */
+	SEND_JSON_MESSAGE(),
+
+	/**
+	 * Send message packet type
+	 */
+	SEND_MESSAGE(),
+
+	/**
+	 * Send server packet type
+	 */
+	SEND_SERVER();
 
 	/**
 	 * Player processing
@@ -53,12 +53,12 @@ public enum PlayerPacketType {
 
 	/**
 	 * Set the process
+	 * 
 	 * @param process
 	 */
-	public void setProcess(_PlayerProcessing process)
-	{
+	public void setProcess(_PlayerProcessing process) {
 		// Set the process
 		this.process = process;
 	}
-	
+
 }

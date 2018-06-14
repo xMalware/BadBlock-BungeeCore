@@ -33,6 +33,15 @@ public class Party {
 	}.getType();
 
 	/**
+	 * Players in the party
+	 * 
+	 * @param Set
+	 *            the party
+	 * @return Returns the party
+	 */
+	public Map<String, PartyPlayer> players;
+
+	/**
 	 * Unique ID
 	 * 
 	 * @param Set
@@ -42,13 +51,17 @@ public class Party {
 	public String uuid;
 
 	/**
-	 * Players in the party
+	 * Constructor
 	 * 
-	 * @param Set
-	 *            the party
-	 * @return Returns the party
+	 * @param Database
+	 *            object
 	 */
-	public Map<String, PartyPlayer> players;
+	public Party(DBObject dbObject) {
+		// Set the unique id
+		uuid = dbObject.get("uuid").toString();
+		// Set the player map
+		players = GsonUtils.getGson().fromJson(dbObject.get("players").toString(), collectionType);
+	}
 
 	/**
 	 * Constructor
@@ -81,44 +94,25 @@ public class Party {
 	}
 
 	/**
-	 * Constructor
+	 * Accept a player
 	 * 
-	 * @param Database
-	 *            object
+	 * @param Username
 	 */
-	public Party(DBObject dbObject) {
-		// Set the unique id
-		uuid = dbObject.get("uuid").toString();
-		// Set the player map
-		players = GsonUtils.getGson().fromJson(dbObject.get("players").toString(), collectionType);
+	public void accept(String name) {
+		// Add the player
+		add(name, getPartyPlayer(name).getRole());
 	}
 
 	/**
-	 * Get the party player
+	 * Add a player
 	 * 
-	 * @param The
-	 *            username
-	 * @return Returns the PartyPlayer object
+	 * @param Username
+	 * @param Player
+	 *            party role
 	 */
-	public PartyPlayer getPartyPlayer(String name) {
-		// Get the PartyPlayer object
-		return getPlayers().get(name.toLowerCase());
-	}
-
-	/**
-	 * To Party Player
-	 * 
-	 * @param Name
-	 *            of the player
-	 * @param Role
-	 *            of the player
-	 * @param Party
-	 *            state of the player
-	 * @return Returns the PartyPlayer object
-	 */
-	private PartyPlayer toPartyPlayer(String name, PartyPlayerRole role, PartyPlayerState state) {
-		// Create a new PartyPlayer object
-		return new PartyPlayer(name, role, state);
+	public void add(String name, PartyPlayerRole role) {
+		// Add the player
+		add(name, role, PartyPlayerState.ACCEPTED);
 	}
 
 	/**
@@ -148,15 +142,15 @@ public class Party {
 	}
 
 	/**
-	 * Add a player
+	 * Get the party player
 	 * 
-	 * @param Username
-	 * @param Player
-	 *            party role
+	 * @param The
+	 *            username
+	 * @return Returns the PartyPlayer object
 	 */
-	public void add(String name, PartyPlayerRole role) {
-		// Add the player
-		add(name, role, PartyPlayerState.ACCEPTED);
+	public PartyPlayer getPartyPlayer(String name) {
+		// Get the PartyPlayer object
+		return getPlayers().get(name.toLowerCase());
 	}
 
 	/**
@@ -172,37 +166,17 @@ public class Party {
 	}
 
 	/**
-	 * Accept a player
-	 * 
-	 * @param Username
+	 * Remove the party
 	 */
-	public void accept(String name) {
-		// Add the player
-		add(name, getPartyPlayer(name).getRole());
-	}
+	public void remove() {
+		// If the unique id is null
+		if (uuid == null) {
+			// So we stop there
+			return;
+		}
 
-	/**
-	 * Set user role
-	 * 
-	 * @param name
-	 * @param partyPlayerRole
-	 */
-	public void setRole(PartyPlayer partyPlayer, PartyPlayerRole partyPlayerRole) {
-		// Null player
-		assert partyPlayer == null;
-		// Unknown player
-		assert !players.containsKey(partyPlayer.getName().toLowerCase());
-		// Unknown role
-		assert partyPlayerRole == null;
-
-		// Set player role
-		partyPlayer.setRole(partyPlayerRole);
-
-		// Put in map
-		players.put(partyPlayer.getName().toLowerCase(), partyPlayer);
-
-		// Save the party
-		save();
+		// Remove the party
+		PartyManager.delete(this);
 	}
 
 	/**
@@ -234,17 +208,27 @@ public class Party {
 	}
 
 	/**
-	 * Remove the party
+	 * Set user role
+	 * 
+	 * @param name
+	 * @param partyPlayerRole
 	 */
-	public void remove() {
-		// If the unique id is null
-		if (uuid == null) {
-			// So we stop there
-			return;
-		}
+	public void setRole(PartyPlayer partyPlayer, PartyPlayerRole partyPlayerRole) {
+		// Null player
+		assert partyPlayer == null;
+		// Unknown player
+		assert !players.containsKey(partyPlayer.getName().toLowerCase());
+		// Unknown role
+		assert partyPlayerRole == null;
 
-		// Remove the party
-		PartyManager.delete(this);
+		// Set player role
+		partyPlayer.setRole(partyPlayerRole);
+
+		// Put in map
+		players.put(partyPlayer.getName().toLowerCase(), partyPlayer);
+
+		// Save the party
+		save();
 	}
 
 	/**
@@ -275,6 +259,22 @@ public class Party {
 
 		// Returns the object
 		return object;
+	}
+
+	/**
+	 * To Party Player
+	 * 
+	 * @param Name
+	 *            of the player
+	 * @param Role
+	 *            of the player
+	 * @param Party
+	 *            state of the player
+	 * @return Returns the PartyPlayer object
+	 */
+	private PartyPlayer toPartyPlayer(String name, PartyPlayerRole role, PartyPlayerState state) {
+		// Create a new PartyPlayer object
+		return new PartyPlayer(name, role, state);
 	}
 
 }

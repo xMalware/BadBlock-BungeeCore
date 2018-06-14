@@ -23,6 +23,15 @@ import lombok.EqualsAndHashCode;
 public class BungeeObject {
 
 	/**
+	 * IP of the BungeeCord node
+	 * 
+	 * @param New
+	 *            IP of the BungeeCord node
+	 * @return Current IP of the BungeeCord name
+	 */
+	private String ip;
+
+	/**
 	 * Name of the BungeeCord node
 	 * 
 	 * @param New
@@ -32,13 +41,13 @@ public class BungeeObject {
 	private String name;
 
 	/**
-	 * IP of the BungeeCord node
+	 * Expiry timestamp of the BungeeCord node
 	 * 
 	 * @param New
-	 *            IP of the BungeeCord node
-	 * @return Current IP of the BungeeCord name
+	 *            expiry timestamp of the BungeeCord node
+	 * @return Current expiry timestamp of the BungeeCord node
 	 */
-	private String ip;
+	private long timestamp;
 
 	/**
 	 * Player list of the BungeeCord node
@@ -50,13 +59,14 @@ public class BungeeObject {
 	private Map<String, BadPlayer> usernames;
 
 	/**
-	 * Expiry timestamp of the BungeeCord node
+	 * If the BungeeCord node stills valid
 	 * 
-	 * @param New
-	 *            expiry timestamp of the BungeeCord node
-	 * @return Current expiry timestamp of the BungeeCord node
+	 * @return if the BungeeCord node stills valid or not
 	 */
-	private long timestamp;
+	public boolean isValid() {
+		// Check with the timestamp
+		return TimeUtils.isValid(getTimestamp());
+	}
 
 	/**
 	 * Refresh the node data with the new player list
@@ -69,16 +79,6 @@ public class BungeeObject {
 		setUsernames(usernames);
 		// Set timestamp to the object
 		setTimestamp(BungeeTask.getTimestamp());
-	}
-
-	/**
-	 * If the BungeeCord node stills valid
-	 * 
-	 * @return if the BungeeCord node stills valid or not
-	 */
-	public boolean isValid() {
-		// Check with the timestamp
-		return TimeUtils.isValid(getTimestamp());
 	}
 
 }

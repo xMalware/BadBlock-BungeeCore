@@ -12,6 +12,14 @@ import fr.badblock.bungee.utils.time.TaskManager;
 public abstract class RabbitClaimant implements Runnable {
 
 	/**
+	 * Load Rabbit claiments
+	 */
+	public static void load() {
+		// Load token query
+		new BungeeTokenQuery();
+	}
+
+	/**
 	 * Constructor with only a delay
 	 * 
 	 * @param Claimant
@@ -37,14 +45,6 @@ public abstract class RabbitClaimant implements Runnable {
 	public RabbitClaimant(String name, long delay, long repeat) {
 		// Run the task
 		TaskManager.scheduleRepeatingTask("rabbitClaimant-" + name, this, delay, repeat);
-	}
-
-	/**
-	 * Load Rabbit claiments
-	 */
-	public static void load() {
-		// Load token query
-		new BungeeTokenQuery();
 	}
 
 }

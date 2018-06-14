@@ -19,17 +19,6 @@ import lombok.Setter;
 public class BadBungeeConfig {
 
 	/**
-	 * Unique bungee name.
-	 * 
-	 * @param The
-	 *            new bungee name
-	 * @return The unique bungee name
-	 */
-	@Getter
-	@Setter
-	private String bungeeName;
-
-	/**
 	 * Alert prefix.
 	 * 
 	 * @param The
@@ -43,6 +32,17 @@ public class BadBungeeConfig {
 	private String alertPrefix;
 
 	/**
+	 * Unique bungee name.
+	 * 
+	 * @param The
+	 *            new bungee name
+	 * @return The unique bungee name
+	 */
+	@Getter
+	@Setter
+	private String bungeeName;
+
+	/**
 	 * API key from IPHub to check VPNs
 	 * 
 	 * @param New
@@ -54,17 +54,6 @@ public class BadBungeeConfig {
 	private String ipHubApiKey;
 
 	/**
-	 * Rabbit settings to connect the network
-	 * 
-	 * @param New
-	 *            Rabbit settings
-	 * @return Current rabbit settings
-	 */
-	@Getter
-	@Setter
-	private RabbitSettings rabbitSettings;
-
-	/**
 	 * Mongo settings to connect the network
 	 * 
 	 * @param New
@@ -74,5 +63,16 @@ public class BadBungeeConfig {
 	@Getter
 	@Setter
 	private MongoSettings mongoSettings;
+
+	/**
+	 * Rabbit settings to connect the network
+	 * 
+	 * @param New
+	 *            Rabbit settings
+	 * @return Current rabbit settings
+	 */
+	@Getter
+	@Setter
+	private RabbitSettings rabbitSettings;
 
 }

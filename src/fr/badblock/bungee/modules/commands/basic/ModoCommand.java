@@ -32,8 +32,7 @@ public class ModoCommand extends BadCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		if (args.length < 1)
-		{
+		if (args.length < 1) {
 			I19n.sendMessage(sender, prefix + "usage", null, sender.getName());
 			return;
 		}
@@ -42,14 +41,12 @@ public class ModoCommand extends BadCommand {
 
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		if (badPlayer == null)
-		{
+		if (badPlayer == null) {
 			I19n.sendMessage(sender, prefix + "erroroccurred", null, 1);
 			return;
 		}
 
-		if (badPlayer.getFlags().has("modomessage"))
-		{
+		if (badPlayer.getFlags().has("modomessage")) {
 			I19n.sendMessage(sender, prefix + "pleasewait", null);
 			return;
 		}
@@ -57,8 +54,9 @@ public class ModoCommand extends BadCommand {
 		String message = StringUtils.join(args, " ");
 
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.modo.receivereports", prefix + "modomessage", new int[] { 0, 2 }, 
-				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), message);
+		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.modo.receivereports",
+				prefix + "modomessage", new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(),
+				badPlayer.getRawChatSuffix(), message);
 
 		// Send message
 		I19n.sendMessage(sender, prefix + "asked", null, sender.getName());

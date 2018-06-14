@@ -22,15 +22,6 @@ import lombok.EqualsAndHashCode;
 public final class FriendListPlayer {
 
 	/**
-	 * Unique ID of the player
-	 * 
-	 * @param Set
-	 *            the unique ID
-	 * @return Returns the unique ID
-	 */
-	private UUID uuid;
-
-	/**
 	 * Friendlist player state
 	 * 
 	 * @param Set
@@ -38,6 +29,15 @@ public final class FriendListPlayer {
 	 * @return Returns the friendlist player state
 	 */
 	private FriendListPlayerState state;
+
+	/**
+	 * Unique ID of the player
+	 * 
+	 * @param Set
+	 *            the unique ID
+	 * @return Returns the unique ID
+	 */
+	private UUID uuid;
 
 	/**
 	 * Convert to object

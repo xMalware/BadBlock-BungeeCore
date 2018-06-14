@@ -21,36 +21,6 @@ public class TimeUtils {
 	}
 
 	/**
-	 * Sleep
-	 * 
-	 * @param Time
-	 *            (ms)
-	 */
-	public static void sleep(long time) {
-		// So we try
-		try {
-			// To sleep
-			Thread.sleep(time);
-		}
-		// If something gone wrong
-		catch (InterruptedException exception) {
-			// We print the stack trace
-			exception.printStackTrace();
-		}
-	}
-
-	/**
-	 * Sleep in seconds
-	 * 
-	 * @param Time
-	 *            (seconds)
-	 */
-	public static void sleepInSeconds(long time) {
-		// Sleep with * 1000
-		sleep(time * 1_000);
-	}
-
-	/**
 	 * If something is valid
 	 * 
 	 * @param time
@@ -81,6 +51,36 @@ public class TimeUtils {
 	public static long nextTimeWithSeconds(long seconds) {
 		// Use with a multiplicator
 		return nextTime(seconds * 1000);
+	}
+
+	/**
+	 * Sleep
+	 * 
+	 * @param Time
+	 *            (ms)
+	 */
+	public static void sleep(long time) {
+		// So we try
+		try {
+			// To sleep
+			Thread.sleep(time);
+		}
+		// If something gone wrong
+		catch (InterruptedException exception) {
+			// We print the stack trace
+			exception.printStackTrace();
+		}
+	}
+
+	/**
+	 * Sleep in seconds
+	 * 
+	 * @param Time
+	 *            (seconds)
+	 */
+	public static void sleepInSeconds(long time) {
+		// Sleep with * 1000
+		sleep(time * 1_000);
 	}
 
 	/**

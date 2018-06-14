@@ -27,29 +27,18 @@ import lombok.EqualsAndHashCode;
 @Data
 public final class FriendList {
 
-	// Some keys
-	public static final String OWNER = "_owner";
-	public static final String PLAYERS = "players";
-
 	// Collection type
 	private static final Type collectionType = new TypeToken<Map<UUID, FriendListPlayer>>() {
 	}.getType();
+	// Some keys
+	public static final String OWNER = "_owner";
+
+	public static final String PLAYERS = "players";
 
 	// The leader of his friend list
 	private UUID owner;
 	// Friend map
 	private Map<UUID, FriendListPlayer> players;
-
-	/**
-	 * Constructor of the class
-	 * 
-	 * @param owner
-	 *            > UUID of the owner
-	 */
-	FriendList(UUID owner) {
-		this.owner = owner;
-		players = new HashMap<>();
-	}
 
 	/**
 	 * Constructor of the class
@@ -65,16 +54,25 @@ public final class FriendList {
 	}
 
 	/**
-	 * Convert into an object of friendship
+	 * Constructor of the class
+	 * 
+	 * @param owner
+	 *            > UUID of the owner
+	 */
+	FriendList(UUID owner) {
+		this.owner = owner;
+		players = new HashMap<>();
+	}
+
+	/**
+	 * Accept a friend
 	 * 
 	 * @param uuid
-	 *            > player uuid
-	 * @param state
-	 *            > state of the friendship
-	 * @return
+	 *            > Player UUID
 	 */
-	private FriendListPlayer toFriendListPlayer(UUID uuid, FriendListPlayerState state) {
-		return new FriendListPlayer(uuid, state);
+	void accept(UUID uuid) {
+		// Add a friend request with ACCEPTED state
+		add(uuid, FriendListPlayerState.ACCEPTED);
 	}
 
 	/**
@@ -103,6 +101,46 @@ public final class FriendList {
 	}
 
 	/**
+	 * If a player already requested to be friend
+	 * 
+	 * @param uuid
+	 *            > Player UUID
+	 * @return true or false?
+	 */
+	boolean alreadyRequestedBy(UUID uuid) {
+		// If the UUID is in the friendlist, return if the friendship state is WAITING
+		if (players.containsKey(uuid))
+			return players.get(uuid).getState() == FriendListPlayerState.WAITING;
+		// The UUID isn't in the friendlist, so we return false
+		else
+			return false;
+	}
+
+	/**
+	 * If the player is in the friendlist
+	 * 
+	 * @param uuid
+	 *            > Player UUID
+	 * @return true or false?
+	 */
+	boolean isFriend(UUID uuid) {
+		// If the UUID is in the friendlist and if the request has been accepted
+		return players.containsKey(uuid) && players.get(uuid).getState() == FriendListPlayerState.ACCEPTED;
+	}
+
+	/**
+	 * If a player is in the friendlist
+	 * 
+	 * @param uuid
+	 *            > Player UUID
+	 * @return true or false?
+	 */
+	boolean isInList(UUID uuid) {
+		// If the UUID is in the friendlist ? true or false
+		return players.containsKey(uuid);
+	}
+
+	/**
 	 * Remove a friend from the list
 	 * 
 	 * @param uuid
@@ -113,17 +151,6 @@ public final class FriendList {
 		players.remove(uuid);
 		// Save changes to the database
 		save();
-	}
-
-	/**
-	 * Accept a friend
-	 * 
-	 * @param uuid
-	 *            > Player UUID
-	 */
-	void accept(UUID uuid) {
-		// Add a friend request with ACCEPTED state
-		add(uuid, FriendListPlayerState.ACCEPTED);
 	}
 
 	/**
@@ -149,58 +176,6 @@ public final class FriendList {
 	}
 
 	/**
-	 * If the player is in the friendlist
-	 * 
-	 * @param uuid
-	 *            > Player UUID
-	 * @return true or false?
-	 */
-	boolean isFriend(UUID uuid) {
-		// If the UUID is in the friendlist and if the request has been accepted
-		return players.containsKey(uuid) && players.get(uuid).getState() == FriendListPlayerState.ACCEPTED;
-	}
-
-	/**
-	 * If the player wants to be friend with another one
-	 * 
-	 * @param uuid
-	 *            > Player UUID
-	 * @return true or false?
-	 */
-	boolean wantToBeFriendWith(UUID uuid) {
-		// If the UUID is in the friendlist and if the request is in REQUESTED state
-		return players.containsKey(uuid) && players.get(uuid).getState() == FriendListPlayerState.REQUESTED;
-	}
-
-	/**
-	 * If a player already requested to be friend
-	 * 
-	 * @param uuid
-	 *            > Player UUID
-	 * @return true or false?
-	 */
-	boolean alreadyRequestedBy(UUID uuid) {
-		// If the UUID is in the friendlist, return if the friendship state is WAITING
-		if (players.containsKey(uuid))
-			return players.get(uuid).getState() == FriendListPlayerState.WAITING;
-		// The UUID isn't in the friendlist, so we return false
-		else
-			return false;
-	}
-
-	/**
-	 * If a player is in the friendlist
-	 * 
-	 * @param uuid
-	 *            > Player UUID
-	 * @return true or false?
-	 */
-	boolean isInList(UUID uuid) {
-		// If the UUID is in the friendlist ? true or false
-		return players.containsKey(uuid);
-	}
-
-	/**
 	 * Save changes to database
 	 */
 	private void save() {
@@ -209,6 +184,19 @@ public final class FriendList {
 			// Update changes to database
 			FriendListManager.update(this);
 		}
+	}
+
+	/**
+	 * Convert into an object of friendship
+	 * 
+	 * @param uuid
+	 *            > player uuid
+	 * @param state
+	 *            > state of the friendship
+	 * @return
+	 */
+	private FriendListPlayer toFriendListPlayer(UUID uuid, FriendListPlayerState state) {
+		return new FriendListPlayer(state, uuid);
 	}
 
 	/**
@@ -235,6 +223,18 @@ public final class FriendList {
 		object.put(PLAYERS, map);
 		// Return the database object
 		return object;
+	}
+
+	/**
+	 * If the player wants to be friend with another one
+	 * 
+	 * @param uuid
+	 *            > Player UUID
+	 * @return true or false?
+	 */
+	boolean wantToBeFriendWith(UUID uuid) {
+		// If the UUID is in the friendlist and if the request is in REQUESTED state
+		return players.containsKey(uuid) && players.get(uuid).getState() == FriendListPlayerState.REQUESTED;
 	}
 
 }

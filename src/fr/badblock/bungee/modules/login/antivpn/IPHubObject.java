@@ -15,13 +15,22 @@ import lombok.Data;
 public class IPHubObject {
 
 	/**
-	 * IP
+	 * ASN
 	 * 
 	 * @param Set
-	 *            the new IP
-	 * @return Returns the current IP
+	 *            the new ASN
+	 * @return Returns the ASN
 	 */
-	private String ip;
+	private int asn;
+
+	/**
+	 * Block
+	 * 
+	 * @param Set
+	 *            the new block id
+	 * @return Returns the new block id
+	 */
+	private int block;
 
 	/**
 	 * Country code
@@ -42,13 +51,13 @@ public class IPHubObject {
 	private String countryName;
 
 	/**
-	 * ASN
+	 * IP
 	 * 
 	 * @param Set
-	 *            the new ASN
-	 * @return Returns the ASN
+	 *            the new IP
+	 * @return Returns the current IP
 	 */
-	private int asn;
+	private String ip;
 
 	/**
 	 * ISP
@@ -58,14 +67,5 @@ public class IPHubObject {
 	 * @return Returns the ISP
 	 */
 	private String isp;
-
-	/**
-	 * Block
-	 * 
-	 * @param Set
-	 *            the new block id
-	 * @return Returns the new block id
-	 */
-	private int block;
 
 }

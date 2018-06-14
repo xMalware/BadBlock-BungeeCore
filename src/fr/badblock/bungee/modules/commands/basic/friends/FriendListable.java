@@ -9,10 +9,10 @@ package fr.badblock.bungee.modules.commands.basic.friends;
  */
 public enum FriendListable {
 
-	// Yes, a player can add the other player
-	YES,
 	// No, a player can't add the other player
-	NO;
+	NO,
+	// Yes, a player can add the other player
+	YES;
 
 	/**
 	 * Get a possibility from a string

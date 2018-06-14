@@ -16,8 +16,8 @@ import net.md_5.bungee.api.CommandSender;
  */
 public class ForceKickCommand extends BadCommand {
 
-	public static String	prefix = "bungee.commands.forcekick.";
-	
+	public static String prefix = "bungee.commands.forcekick.";
+
 	/**
 	 * Command constructor
 	 */
@@ -41,17 +41,16 @@ public class ForceKickCommand extends BadCommand {
 		}
 
 		String name = args[0];
-		
+
 		BungeeManager bungeeManager = BungeeManager.getInstance();
-		
-		if (!bungeeManager.hasUsername(name))
-		{
+
+		if (!bungeeManager.hasUsername(name)) {
 			I19n.sendMessage(sender, prefix + "offline", null);
 			return;
 		}
-		
+
 		bungeeManager.sendPacket(new BungeePacket(BungeePacketType.FORCE_KICK, name));
-		
+
 		I19n.sendMessage(sender, prefix + "kicked", null, name);
 	}
 

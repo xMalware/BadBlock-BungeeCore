@@ -2,31 +2,27 @@ package fr.badblock.bungee.modules.commands.modo.objects;
 
 public enum BanReasonType {
 
+	ADVERTISING,
+
+	ANTI_GAMING,
+
+	BAN_EVASION,
+
 	CHEATING,
 
 	COMPROMISED_ACCOUNT,
 
-	ADVERTISING,
-
-	INAPPROPRIATE_NAME_OR_SKIN,
-
-	INAPPROPRIATE_BEHAVIOUR,
-
-	VERBAL_ABUSE,
-
-	BAN_EVASION,
+	EXPLOIT,
 
 	FRAUD,
 
 	HACK_THREATS,
 
-	ANTI_GAMING,
+	INAPPROPRIATE_BEHAVIOUR,
 
-	EXPLOIT;
+	INAPPROPRIATE_NAME_OR_SKIN,
 
-	public String getName() {
-		return name().toLowerCase();
-	}
+	VERBAL_ABUSE;
 
 	public static BanReasonType getFromString(String string) {
 		for (BanReasonType banReason : values()) {
@@ -35,6 +31,10 @@ public enum BanReasonType {
 			}
 		}
 		return null;
+	}
+
+	public String getName() {
+		return name().toLowerCase();
 	}
 
 }

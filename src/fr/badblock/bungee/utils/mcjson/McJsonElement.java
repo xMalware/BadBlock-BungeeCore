@@ -32,16 +32,6 @@ public class McJsonElement {
 	@Setter
 	private String value;
 
-	/*
-	 * Element constructor
-	 */
-	public McJsonElement(McJsonAttribute attribute, String value) {
-		// set the attribute
-		this.attribute = attribute;
-		// set the value
-		this.value = value;
-	}
-
 	/**
 	 * Another element constructor
 	 * 
@@ -50,6 +40,16 @@ public class McJsonElement {
 	public McJsonElement(McJsonAttribute attribute) {
 		// use the first constructor
 		this(attribute, "");
+	}
+
+	/*
+	 * Element constructor
+	 */
+	public McJsonElement(McJsonAttribute attribute, String value) {
+		// set the attribute
+		this.attribute = attribute;
+		// set the value
+		this.value = value;
 	}
 
 	/**

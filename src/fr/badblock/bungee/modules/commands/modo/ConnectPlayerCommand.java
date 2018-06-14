@@ -31,6 +31,16 @@ public class ConnectPlayerCommand extends BadCommand {
 	}
 
 	/**
+	 * Send help to the player
+	 * 
+	 * @param sender
+	 */
+	private void help(CommandSender sender) {
+		// Send help
+		I19n.sendMessage(sender, prefix + "help", null);
+	}
+
+	/**
 	 * Method called when using the command
 	 */
 	@Override
@@ -46,52 +56,38 @@ public class ConnectPlayerCommand extends BadCommand {
 		String playerName = args[0];
 
 		BungeeManager bungeeManager = BungeeManager.getInstance();
-		
-		if (!bungeeManager.hasUsername(playerName))
-		{
-			I19n.sendMessage(sender, prefix + "offline", null);
-			return;
-		}
-		
-		BadPlayer badPlayer = bungeeManager.getBadPlayer(playerName);
-		
-		if (badPlayer == null)
-		{
-			I19n.sendMessage(sender, prefix + "offline", null);
-			return;
-		}
-		
-		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
-		
-		String currentServer = badPlayer.getCurrentServer();
-		
-		if (currentServer == null)
-		{
-			I19n.sendMessage(sender, prefix + "unknownserver", null);
-			return;
-		}
-		
-		ServerInfo serverInfo = BungeeCord.getInstance().getServerInfo(currentServer);
-		
-		if (serverInfo == null)
-		{
-			I19n.sendMessage(sender, prefix + "unknownserver", null);
-			return;
-		}
-		
-		proxiedPlayer.connect(serverInfo);
-		
-		I19n.sendMessage(sender, prefix + "teleported", null, badPlayer.getName(), serverInfo.getName());
-	}
 
-	/**
-	 * Send help to the player
-	 * 
-	 * @param sender
-	 */
-	private void help(CommandSender sender) {
-		// Send help
-		I19n.sendMessage(sender, prefix + "help", null);
+		if (!bungeeManager.hasUsername(playerName)) {
+			I19n.sendMessage(sender, prefix + "offline", null);
+			return;
+		}
+
+		BadPlayer badPlayer = bungeeManager.getBadPlayer(playerName);
+
+		if (badPlayer == null) {
+			I19n.sendMessage(sender, prefix + "offline", null);
+			return;
+		}
+
+		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+
+		String currentServer = badPlayer.getCurrentServer();
+
+		if (currentServer == null) {
+			I19n.sendMessage(sender, prefix + "unknownserver", null);
+			return;
+		}
+
+		ServerInfo serverInfo = BungeeCord.getInstance().getServerInfo(currentServer);
+
+		if (serverInfo == null) {
+			I19n.sendMessage(sender, prefix + "unknownserver", null);
+			return;
+		}
+
+		proxiedPlayer.connect(serverInfo);
+
+		I19n.sendMessage(sender, prefix + "teleported", null, badPlayer.getName(), serverInfo.getName());
 	}
 
 }

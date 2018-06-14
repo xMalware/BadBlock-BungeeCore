@@ -27,13 +27,11 @@ public class BungeeAddServerProcessing extends _BungeeProcessing {
 	 * @param Messages
 	 *
 	 */
-	public void done(String message)
-	{
+	public void done(String message) {
 		// Get the server object
 		ServerObject serverObject = GsonUtils.getGson().fromJson(message, ServerObject.class);
 		// If the server object is null
-		if (serverObject == null)
-		{
+		if (serverObject == null) {
 			// So we stop there
 			return;
 		}

@@ -25,14 +25,6 @@ import net.md_5.bungee.BungeeCord;
 public class BungeeTask extends Thread {
 
 	/**
-	 * If the task is still running
-	 * 
-	 * @param New
-	 *            state of the task
-	 * @return If the task is still running or not
-	 */
-	public static boolean run = true;
-	/**
 	 * Local bungee object of the node
 	 * 
 	 * @param New
@@ -40,28 +32,23 @@ public class BungeeTask extends Thread {
 	 * @return The current local bungee object of the node
 	 */
 	public static BungeeObject bungeeObject = new BungeeObject(BadBungee.getInstance().getConfig().getBungeeName(),
-			getIP(), new HashMap<>(), getTimestamp());
+			getIP(), getTimestamp(), new HashMap<>());
+	/**
+	 * If the task is still running
+	 * 
+	 * @param New
+	 *            state of the task
+	 * @return If the task is still running or not
+	 */
+	public static boolean run = true;
 
 	/**
-	 * Constructor of a new Bungee task Automatic task start when instantiating
+	 * Get the current BungeeCord node IP
+	 * 
+	 * @return
 	 */
-	public BungeeTask() {
-		// Start the thread
-		this.start();
-	}
-
-	@Override
-	/**
-	 * Data sending loop method
-	 */
-	public void run() {
-		// While the task is allowed to run
-		while (run) {
-			// Send a keep alive packet
-			keepAlive();
-			// Sleep 1 second
-			TimeUtils.sleepInSeconds(1);
-		}
+	public static String getIP() {
+		return BungeeCord.getInstance().config.getListeners().iterator().next().getHost().getAddress().getHostAddress();
 	}
 
 	/**
@@ -72,15 +59,6 @@ public class BungeeTask extends Thread {
 	public static long getTimestamp() {
 		// Get with TimeUtils
 		return TimeUtils.nextTimeWithSeconds(30);
-	}
-
-	/**
-	 * Get the current BungeeCord node IP
-	 * 
-	 * @return
-	 */
-	public static String getIP() {
-		return BungeeCord.getInstance().config.getListeners().iterator().next().getHost().getAddress().getHostAddress();
 	}
 
 	/**
@@ -102,6 +80,28 @@ public class BungeeTask extends Thread {
 		// Send KeepAlive packet
 		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, jsonFormatString),
 				BadBungeeQueues.BUNGEE_DATA, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
+	}
+
+	/**
+	 * Constructor of a new Bungee task Automatic task start when instantiating
+	 */
+	public BungeeTask() {
+		// Start the thread
+		this.start();
+	}
+
+	@Override
+	/**
+	 * Data sending loop method
+	 */
+	public void run() {
+		// While the task is allowed to run
+		while (run) {
+			// Send a keep alive packet
+			keepAlive();
+			// Sleep 1 second
+			TimeUtils.sleepInSeconds(1);
+		}
 	}
 
 }

@@ -16,37 +16,20 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public class I19n {
 
 	/**
-	 * Get messages
+	 * Get a message
 	 * 
-	 * @param Locale
-	 * @param Message
-	 *            key
+	 * @param with
+	 *            the Command sender
+	 * @param The
+	 *            message key
 	 * @param Indexes
 	 *            to translate
-	 * @param Args
-	 * @return Returns the messages
+	 * @param Arguments
+	 * @return Returns the message
 	 */
-	public static String[] getMessages(Locale locale, String key, int[] indexesToTranslate, Object... args) {
-		// Create a new arg array
-		Object[] resultArgs = new Object[args.length];
-		// create an array copy
-		System.arraycopy(args, 0, resultArgs, 0, args.length);
-		// If we have indexes to translate
-		if (indexesToTranslate != null && indexesToTranslate.length != 0) {
-			// For each indexes to translate
-			for (int indexToTranslate : indexesToTranslate) {
-				// Check if they're out of list
-				if (indexToTranslate > resultArgs.length - 1) {
-					// So we don't care
-					continue;
-				}
-				// Set the result arg
-				resultArgs[indexToTranslate] = ChatColor.translateAlternateColorCodes('&',
-						I18n.getInstance().get(locale, resultArgs[indexToTranslate].toString())[0]);
-			}
-		}
-		// Get the message
-		return I18n.getInstance().get(locale, key, resultArgs);
+	public static String getMessage(CommandSender commandSender, String key, int[] indexesToTranslate, Object... args) {
+		// Get all messages and only the first in the array
+		return getMessages(commandSender, key, indexesToTranslate, args)[0];
 	}
 
 	/**
@@ -85,20 +68,37 @@ public class I19n {
 	}
 
 	/**
-	 * Get a message
+	 * Get messages
 	 * 
-	 * @param with
-	 *            the Command sender
-	 * @param The
-	 *            message key
+	 * @param Locale
+	 * @param Message
+	 *            key
 	 * @param Indexes
 	 *            to translate
-	 * @param Arguments
-	 * @return Returns the message
+	 * @param Args
+	 * @return Returns the messages
 	 */
-	public static String getMessage(CommandSender commandSender, String key, int[] indexesToTranslate, Object... args) {
-		// Get all messages and only the first in the array
-		return getMessages(commandSender, key, indexesToTranslate, args)[0];
+	public static String[] getMessages(Locale locale, String key, int[] indexesToTranslate, Object... args) {
+		// Create a new arg array
+		Object[] resultArgs = new Object[args.length];
+		// create an array copy
+		System.arraycopy(args, 0, resultArgs, 0, args.length);
+		// If we have indexes to translate
+		if (indexesToTranslate != null && indexesToTranslate.length != 0) {
+			// For each indexes to translate
+			for (int indexToTranslate : indexesToTranslate) {
+				// Check if they're out of list
+				if (indexToTranslate > resultArgs.length - 1) {
+					// So we don't care
+					continue;
+				}
+				// Set the result arg
+				resultArgs[indexToTranslate] = ChatColor.translateAlternateColorCodes('&',
+						I18n.getInstance().get(locale, resultArgs[indexToTranslate].toString())[0]);
+			}
+		}
+		// Get the message
+		return I18n.getInstance().get(locale, key, resultArgs);
 	}
 
 	/**

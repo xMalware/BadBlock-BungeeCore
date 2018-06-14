@@ -17,15 +17,6 @@ import lombok.Data;
 public class PlayerDataUpdateSender {
 
 	/**
-	 * Player name
-	 * 
-	 * @param Set
-	 *            the new player name
-	 * @return Returns the current player name
-	 */
-	private String playerName;
-
-	/**
 	 * Player data
 	 * 
 	 * @param Set
@@ -33,5 +24,14 @@ public class PlayerDataUpdateSender {
 	 * @return Returns the current player data
 	 */
 	private JsonObject data;
+
+	/**
+	 * Player name
+	 * 
+	 * @param Set
+	 *            the new player name
+	 * @return Returns the current player name
+	 */
+	private String playerName;
 
 }

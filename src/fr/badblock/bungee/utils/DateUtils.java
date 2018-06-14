@@ -12,29 +12,22 @@ import java.util.Date;
  */
 public class DateUtils {
 
-	private static SimpleDateFormat hourDate = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-
 	private static SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
 
+	private static SimpleDateFormat hourDate = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+
 	/**
-	 * Get the human date with the hour
-	 * @param dateObject
+	 * Get the human date
+	 * 
 	 * @return
 	 */
-	public static String getHourDate(Date dateObject) {
-		return hourDate.format(dateObject);
-	}
-	
-	/**
-	 * Get the human date with the hour
-	 * @return
-	 */
-	public static String getHourDate() {
-		return getHourDate(new Date());
+	public static String getDate() {
+		return getDate(new Date());
 	}
 
 	/**
 	 * Get the human date
+	 * 
 	 * @return
 	 */
 	public static String getDate(Date dateObject) {
@@ -42,11 +35,22 @@ public class DateUtils {
 	}
 
 	/**
-	 * Get the human date
+	 * Get the human date with the hour
+	 * 
 	 * @return
 	 */
-	public static String getDate() {
-		return getDate(new Date());
+	public static String getHourDate() {
+		return getHourDate(new Date());
+	}
+
+	/**
+	 * Get the human date with the hour
+	 * 
+	 * @param dateObject
+	 * @return
+	 */
+	public static String getHourDate(Date dateObject) {
+		return hourDate.format(dateObject);
 	}
 
 }

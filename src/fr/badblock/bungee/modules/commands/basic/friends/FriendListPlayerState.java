@@ -9,6 +9,11 @@ package fr.badblock.bungee.modules.commands.basic.friends;
 public enum FriendListPlayerState {
 
 	/**
+	 * The players are friends
+	 */
+	ACCEPTED,
+
+	/**
 	 * The player request another player
 	 */
 	REQUESTED,
@@ -16,11 +21,6 @@ public enum FriendListPlayerState {
 	/**
 	 * An other player requested this player
 	 */
-	WAITING,
-
-	/**
-	 * The players are friends
-	 */
-	ACCEPTED
+	WAITING
 
 }

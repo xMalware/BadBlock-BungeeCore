@@ -54,6 +54,63 @@ public final class BadPlayer extends BadOfflinePlayer {
 	private static Map<String, BadPlayer> maps = new HashMap<>();
 
 	/**
+	 * Get a BadPlayer object
+	 * 
+	 * @param The
+	 *            ProxiedPlayer object
+	 * @return Returns a BadPlayer object
+	 */
+	public static BadPlayer get(ProxiedPlayer bPlayer) {
+		// Get from another method
+		return get(bPlayer.getName());
+	}
+
+	/**
+	 * Get a BadPlayer object
+	 * 
+	 * @param Username
+	 * @return Returns a BadPlayer object
+	 */
+	public static BadPlayer get(String name) {
+		// Get from the map
+		return maps.getOrDefault(name, null);
+	}
+
+	/**
+	 * Get all BadPlayer objects
+	 * 
+	 * @return Returns all BadPlayer objects
+	 */
+	public static Collection<BadPlayer> getPlayers() {
+		// Get the map values
+		return maps.values();
+	}
+
+	/**
+	 * If the username is in the map
+	 * 
+	 * @param Username
+	 * @return Returns if the username is in the map or not
+	 */
+	public static boolean has(String name) {
+		// Contains in the map?
+		return maps.containsKey(name);
+	}
+
+	/**
+	 * Put the BadPlayer object
+	 * 
+	 * @param badPlayer
+	 */
+	public static void put(BadPlayer badPlayer) {
+		// Put in map
+		maps.put(badPlayer.getName(), badPlayer);
+
+		// Keep alive update
+		BungeeTask.keepAlive();
+	}
+
+	/**
 	 * Temp flags
 	 */
 	private FlagObject flags = new FlagObject();
@@ -87,277 +144,6 @@ public final class BadPlayer extends BadOfflinePlayer {
 	}
 
 	/**
-	 * Send data to bukkit
-	 */
-	public void sendDataToBukkit() {
-		// Get the current server name
-		String serverName = getCurrentServer();
-		// Get the player data update sender
-		PlayerDataUpdateSender playerDataUpdateSender = new PlayerDataUpdateSender(getName().toLowerCase(),
-				ObjectUtils.getJsonObject(getDbObject().toString()));
-		// Serialize data
-		String rawPlayerDataUpdateSender = GsonUtils.getGson().toJson(playerDataUpdateSender);
-		// Create a Rabbit packet message
-		RabbitPacketMessage rabbitPacketMessage = new RabbitPacketMessage(300_000L, rawPlayerDataUpdateSender);
-		// Get the queue
-		String builtQueue = BadBungeeQueues.BUNGEE_DATA_SENDERS + serverName;
-		// Create a Rabbit packet
-		RabbitPacket rabbitPacket = new RabbitPacket(rabbitPacketMessage, builtQueue, true, RabbitPacketEncoder.UTF8,
-				RabbitPacketType.MESSAGE_BROKER);
-		// Send the RabbitMQ packet
-		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
-	}
-
-	/**
-	 * Get the last server
-	 * 
-	 * @return a String
-	 */
-	public String getLastServer() {
-		// If the database object is null
-		if (getDbObject() == null) {
-			// Unknown last server
-			return null;
-		}
-		// Returns the last server
-		return getDbObject().get("lastServer").toString();
-	}
-
-	/**
-	 * If the player is logged (if he has passed the login server)
-	 * 
-	 * @return
-	 */
-	public boolean isLogged() {
-		// Returns if the last server doesn't start with login
-		return getLastServer() != null && !getLastServer().startsWith("login");
-	}
-
-	/**
-	 * Reload data
-	 */
-	public void reload() {
-		// Load data without create
-		loadData(false);
-	}
-
-	/**
-	 * Send an outgoing message
-	 * 
-	 * @param Messages
-	 *            to send
-	 */
-	public void sendOutgoingMessage(String... messages) {
-		// If the player is logged on this local node
-		if (!isOnThisNode()) {
-			// Send a local message
-			sendLocalMessage(messages);
-			// So we stop there
-			return;
-		}
-
-		// Send a packet
-		BungeeManager.getInstance().sendPacket(
-				new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE, StringUtils.toOneString(messages)));
-	}
-
-	@SuppressWarnings("deprecation")
-	/**
-	 * Send a local message
-	 * 
-	 * @param Messages
-	 *            to send
-	 */
-	private void sendLocalMessage(String... messages) {
-		// If the player isn't logged on this local node
-		if (!isOnThisNode()) {
-			// So we stop there
-			return;
-		}
-
-		// Send messages
-		toProxiedPlayer().sendMessages(ChatColorUtils.translateColors('&', messages));
-	}
-
-	/**
-	 * Send a translated outgoing message
-	 * 
-	 * @param Message
-	 *            key
-	 * @param Indexes
-	 *            to translate
-	 * @param Arguments
-	 */
-	public void sendTranslatedOutgoingMessage(String key, int[] indexesToTranslate, Object... args) {
-		// If the player is logged on this local node
-		if (isOnThisNode()) {
-			// Send a local translated message
-			sendTranslatedLocalMessage(key, indexesToTranslate, args);
-			// So we stop there
-			return;
-		}
-
-		// Send a packet
-		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_MESSAGE,
-				StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args))));
-	}
-
-	/**
-	 * Send a translated outgoing Json message
-	 * 
-	 * @param Message
-	 *            key
-	 * @param Indexes
-	 *            to translate
-	 * @param Arguments
-	 */
-	public void sendTranslatedOutgoingJsonMessage(String key, int[] indexesToTranslate, Object... args) {
-		// If the player is logged on this local node
-		if (isOnThisNode()) {
-			// Send a local translated Json message
-			sendTranslatedLocalJsonMessage(key, indexesToTranslate, args);
-			// So we stop there
-			return;
-		}
-
-		// Send a packet
-		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE,
-				StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args))));
-	}
-
-	/**
-	 * Send a local Json message
-	 * 
-	 * @param jsons
-	 */
-	private void sendLocalJsonMessage(String... jsons) {
-		// If the player isn't logged on this local node
-		if (!isOnThisNode()) {
-			// So we stop there
-			return;
-		}
-
-		// Send json message
-		McJsonUtils.sendJsons(toProxiedPlayer(), McJsonUtils.parseMcJsons(ChatColorUtils.translateColors('&', jsons)));
-	}
-
-	@SuppressWarnings("deprecation")
-	/**
-	 * Send a translated local message
-	 * 
-	 * @param Message
-	 *            key
-	 * @param Indexes
-	 *            to translate
-	 * @param Arguments
-	 */
-	private void sendTranslatedLocalMessage(String key, int[] indexesToTranslate, Object... args) {
-		// If the player isn't logged on this local node
-		if (!isOnThisNode()) {
-			// So we stop there
-			return;
-		}
-
-		// Send the translated local message
-		toProxiedPlayer().sendMessages(
-				ChatColorUtils.translateColors('&', I19n.getMessages(getLocale(), key, indexesToTranslate, args)));
-	}
-
-	/**
-	 * Send a translated local Json message
-	 * 
-	 * @param Message
-	 *            key
-	 * @param Indexes
-	 *            to translate
-	 * @param Arguments
-	 */
-	private void sendTranslatedLocalJsonMessage(String key, int[] indexesToTranslate, Object... args) {
-		// If the player isn't logged on this local node
-		if (!isOnThisNode()) {
-			// So we stop there
-			return;
-		}
-
-		// Send the translated local Json message
-		McJsonUtils.sendJsons(toProxiedPlayer(), McJsonUtils.parseMcJsons(
-				ChatColorUtils.translateColors('&', I19n.getMessages(getLocale(), key, indexesToTranslate, args))));
-	}
-
-	/**
-	 * Send an outgoing Json message
-	 * 
-	 * @param jsons
-	 */
-	public void sendOutgoingJsonMessage(String... jsons) {
-		// If the player is logged on this local node
-		if (isOnThisNode()) {
-			// Send a local json message
-			sendLocalJsonMessage(jsons);
-			// So we stop there
-			return;
-		}
-
-		// Send a json message
-		BungeeManager.getInstance().sendPacket(
-				new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, StringUtils.toOneString(jsons)));
-	}
-
-	/**
-	 * Send a translated outgoing MCJson message
-	 * 
-	 * @param MCJson
-	 *            object
-	 */
-	public void sendTranslatedOutgoingMCJson(McJson mcjson) {
-		// If the player is logged on this locale node
-		if (isOnThisNode()) {
-			// Send a local MCJson message
-			sendLocalJsonMessage(mcjson.toString());
-			// So we stop there
-			return;
-		}
-
-		// Send a translated MCJson message
-		BungeeManager.getInstance()
-				.sendPacket(new PlayerPacket(getName(), PlayerPacketType.SEND_JSON_MESSAGE, mcjson.toString()));
-	}
-
-	@SuppressWarnings("deprecation")
-	/**
-	 * Kick the player
-	 * 
-	 * @param kick
-	 *            message
-	 */
-	public void kick(String message) {
-		// If the player is on this node
-		if (isOnThisNode()) {
-			// Disconnect the player
-			toProxiedPlayer().disconnect(getBanMessage());
-			// So we stop there
-			return;
-		}
-
-		// Send the packet
-		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), PlayerPacketType.KICK, getBanMessage()));
-	}
-
-	/**
-	 * Get the current server name
-	 * 
-	 * @return Returns the current server name
-	 */
-	public String getCurrentServer() {
-		// Get the proxied player
-		ProxiedPlayer proxiedPlayer = toProxiedPlayer();
-		// Returns the name
-		return proxiedPlayer != null && proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
-				? proxiedPlayer.getServer().getInfo().getName()
-				: null;
-	}
-	
-	/**
 	 * Get the ban message
 	 * 
 	 * @return Returns the ban message
@@ -382,7 +168,21 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Returns the ban message
 		return stringBuilder.toString();
 	}
-	
+
+	/**
+	 * Get the current server name
+	 * 
+	 * @return Returns the current server name
+	 */
+	public String getCurrentServer() {
+		// Get the proxied player
+		ProxiedPlayer proxiedPlayer = toProxiedPlayer();
+		// Returns the name
+		return proxiedPlayer != null && proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
+				? proxiedPlayer.getServer().getInfo().getName()
+				: null;
+	}
+
 	/**
 	 * Get the kick message
 	 * 
@@ -392,14 +192,28 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// We create an empty kick message
 		StringBuilder stringBuilder = new StringBuilder();
 		// For each line of the kick message
-		for (String string : getTranslatedMessages("punishments.kick", null, reason))
-		{
+		for (String string : getTranslatedMessages("punishments.kick", null, reason)) {
 			// We add it to the final kick message
 			stringBuilder.append(string + "\n");
 		}
 
 		// Returns the kick message
 		return stringBuilder.toString();
+	}
+
+	/**
+	 * Get the last server
+	 * 
+	 * @return a String
+	 */
+	public String getLastServer() {
+		// If the database object is null
+		if (getDbObject() == null) {
+			// Unknown last server
+			return null;
+		}
+		// Returns the last server
+		return getDbObject().get("lastServer").toString();
 	}
 
 	/**
@@ -428,12 +242,42 @@ public final class BadPlayer extends BadOfflinePlayer {
 	}
 
 	/**
-	 * Send an online/temp sync update
+	 * If the player is logged (if he has passed the login server)
+	 * 
+	 * @return
 	 */
-	public void sendOnlineTempSyncUpdate() {
+	public boolean isLogged() {
+		// Returns if the last server doesn't start with login
+		return getLastServer() != null && !getLastServer().startsWith("login");
+	}
+
+	/**
+	 * If the player is on this node
+	 * 
+	 * @return
+	 */
+	public boolean isOnThisNode() {
+		return toProxiedPlayer() != null;
+	}
+
+	@SuppressWarnings("deprecation")
+	/**
+	 * Kick the player
+	 * 
+	 * @param kick
+	 *            message
+	 */
+	public void kick(String message) {
+		// If the player is on this node
+		if (isOnThisNode()) {
+			// Disconnect the player
+			toProxiedPlayer().disconnect(getBanMessage());
+			// So we stop there
+			return;
+		}
+
 		// Send the packet
-		BungeeManager.getInstance().sendPacket(
-				new PlayerPacket(getName(), PlayerPacketType.BADPLAYER_UPDATE, GsonUtils.getGson().toJson(this)));
+		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), getBanMessage(), PlayerPacketType.KICK));
 	}
 
 	/**
@@ -447,6 +291,14 @@ public final class BadPlayer extends BadOfflinePlayer {
 	}
 
 	/**
+	 * Reload data
+	 */
+	public void reload() {
+		// Load data without create
+		loadData(false);
+	}
+
+	/**
 	 * Remove the player from the map
 	 */
 	public void remove() {
@@ -457,12 +309,216 @@ public final class BadPlayer extends BadOfflinePlayer {
 	}
 
 	/**
-	 * If the player is on this node
-	 * 
-	 * @return
+	 * Send data to bukkit
 	 */
-	public boolean isOnThisNode() {
-		return toProxiedPlayer() != null;
+	public void sendDataToBukkit() {
+		// Get the current server name
+		String serverName = getCurrentServer();
+		// Get the player data update sender
+		PlayerDataUpdateSender playerDataUpdateSender = new PlayerDataUpdateSender(ObjectUtils.getJsonObject(getDbObject().toString()),
+				getName().toLowerCase());
+		// Serialize data
+		String rawPlayerDataUpdateSender = GsonUtils.getGson().toJson(playerDataUpdateSender);
+		// Create a Rabbit packet message
+		RabbitPacketMessage rabbitPacketMessage = new RabbitPacketMessage(300_000L, rawPlayerDataUpdateSender);
+		// Get the queue
+		String builtQueue = BadBungeeQueues.BUNGEE_DATA_SENDERS + serverName;
+		// Create a Rabbit packet
+		RabbitPacket rabbitPacket = new RabbitPacket(rabbitPacketMessage, builtQueue, true, RabbitPacketEncoder.UTF8,
+				RabbitPacketType.MESSAGE_BROKER);
+		// Send the RabbitMQ packet
+		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
+	}
+
+	/**
+	 * Send a local Json message
+	 * 
+	 * @param jsons
+	 */
+	private void sendLocalJsonMessage(String... jsons) {
+		// If the player isn't logged on this local node
+		if (!isOnThisNode()) {
+			// So we stop there
+			return;
+		}
+
+		// Send json message
+		McJsonUtils.sendJsons(toProxiedPlayer(), McJsonUtils.parseMcJsons(ChatColorUtils.translateColors('&', jsons)));
+	}
+
+	@SuppressWarnings("deprecation")
+	/**
+	 * Send a local message
+	 * 
+	 * @param Messages
+	 *            to send
+	 */
+	private void sendLocalMessage(String... messages) {
+		// If the player isn't logged on this local node
+		if (!isOnThisNode()) {
+			// So we stop there
+			return;
+		}
+
+		// Send messages
+		toProxiedPlayer().sendMessages(ChatColorUtils.translateColors('&', messages));
+	}
+
+	/**
+	 * Send an online/temp sync update
+	 */
+	public void sendOnlineTempSyncUpdate() {
+		// Send the packet
+		BungeeManager.getInstance().sendPacket(
+				new PlayerPacket(getName(), GsonUtils.getGson().toJson(this), PlayerPacketType.BADPLAYER_UPDATE));
+	}
+
+	/**
+	 * Send an outgoing Json message
+	 * 
+	 * @param jsons
+	 */
+	public void sendOutgoingJsonMessage(String... jsons) {
+		// If the player is logged on this local node
+		if (isOnThisNode()) {
+			// Send a local json message
+			sendLocalJsonMessage(jsons);
+			// So we stop there
+			return;
+		}
+
+		// Send a json message
+		BungeeManager.getInstance().sendPacket(
+				new PlayerPacket(getName(), StringUtils.toOneString(jsons), PlayerPacketType.SEND_JSON_MESSAGE));
+	}
+
+	/**
+	 * Send an outgoing message
+	 * 
+	 * @param Messages
+	 *            to send
+	 */
+	public void sendOutgoingMessage(String... messages) {
+		// If the player is logged on this local node
+		if (!isOnThisNode()) {
+			// Send a local message
+			sendLocalMessage(messages);
+			// So we stop there
+			return;
+		}
+
+		// Send a packet
+		BungeeManager.getInstance().sendPacket(
+				new PlayerPacket(getName(), StringUtils.toOneString(messages), PlayerPacketType.SEND_MESSAGE));
+	}
+
+	/**
+	 * Send a translated local Json message
+	 * 
+	 * @param Message
+	 *            key
+	 * @param Indexes
+	 *            to translate
+	 * @param Arguments
+	 */
+	private void sendTranslatedLocalJsonMessage(String key, int[] indexesToTranslate, Object... args) {
+		// If the player isn't logged on this local node
+		if (!isOnThisNode()) {
+			// So we stop there
+			return;
+		}
+
+		// Send the translated local Json message
+		McJsonUtils.sendJsons(toProxiedPlayer(), McJsonUtils.parseMcJsons(
+				ChatColorUtils.translateColors('&', I19n.getMessages(getLocale(), key, indexesToTranslate, args))));
+	}
+
+	@SuppressWarnings("deprecation")
+	/**
+	 * Send a translated local message
+	 * 
+	 * @param Message
+	 *            key
+	 * @param Indexes
+	 *            to translate
+	 * @param Arguments
+	 */
+	private void sendTranslatedLocalMessage(String key, int[] indexesToTranslate, Object... args) {
+		// If the player isn't logged on this local node
+		if (!isOnThisNode()) {
+			// So we stop there
+			return;
+		}
+
+		// Send the translated local message
+		toProxiedPlayer().sendMessages(
+				ChatColorUtils.translateColors('&', I19n.getMessages(getLocale(), key, indexesToTranslate, args)));
+	}
+
+	/**
+	 * Send a translated outgoing Json message
+	 * 
+	 * @param Message
+	 *            key
+	 * @param Indexes
+	 *            to translate
+	 * @param Arguments
+	 */
+	public void sendTranslatedOutgoingJsonMessage(String key, int[] indexesToTranslate, Object... args) {
+		// If the player is logged on this local node
+		if (isOnThisNode()) {
+			// Send a local translated Json message
+			sendTranslatedLocalJsonMessage(key, indexesToTranslate, args);
+			// So we stop there
+			return;
+		}
+
+		// Send a packet
+		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args)),
+				PlayerPacketType.SEND_JSON_MESSAGE));
+	}
+
+	/**
+	 * Send a translated outgoing MCJson message
+	 * 
+	 * @param MCJson
+	 *            object
+	 */
+	public void sendTranslatedOutgoingMCJson(McJson mcjson) {
+		// If the player is logged on this locale node
+		if (isOnThisNode()) {
+			// Send a local MCJson message
+			sendLocalJsonMessage(mcjson.toString());
+			// So we stop there
+			return;
+		}
+
+		// Send a translated MCJson message
+		BungeeManager.getInstance()
+				.sendPacket(new PlayerPacket(getName(), mcjson.toString(), PlayerPacketType.SEND_JSON_MESSAGE));
+	}
+
+	/**
+	 * Send a translated outgoing message
+	 * 
+	 * @param Message
+	 *            key
+	 * @param Indexes
+	 *            to translate
+	 * @param Arguments
+	 */
+	public void sendTranslatedOutgoingMessage(String key, int[] indexesToTranslate, Object... args) {
+		// If the player is logged on this local node
+		if (isOnThisNode()) {
+			// Send a local translated message
+			sendTranslatedLocalMessage(key, indexesToTranslate, args);
+			// So we stop there
+			return;
+		}
+
+		// Send a packet
+		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args)),
+				PlayerPacketType.SEND_MESSAGE));
 	}
 
 	/**
@@ -473,63 +529,6 @@ public final class BadPlayer extends BadOfflinePlayer {
 	private ProxiedPlayer toProxiedPlayer() {
 		// Get the proxied player object
 		return ProxyServer.getInstance().getPlayer(getName());
-	}
-
-	/**
-	 * Get a BadPlayer object
-	 * 
-	 * @param The
-	 *            ProxiedPlayer object
-	 * @return Returns a BadPlayer object
-	 */
-	public static BadPlayer get(ProxiedPlayer bPlayer) {
-		// Get from another method
-		return get(bPlayer.getName());
-	}
-
-	/**
-	 * Get a BadPlayer object
-	 * 
-	 * @param Username
-	 * @return Returns a BadPlayer object
-	 */
-	public static BadPlayer get(String name) {
-		// Get from the map
-		return maps.getOrDefault(name, null);
-	}
-
-	/**
-	 * If the username is in the map
-	 * 
-	 * @param Username
-	 * @return Returns if the username is in the map or not
-	 */
-	public static boolean has(String name) {
-		// Contains in the map?
-		return maps.containsKey(name);
-	}
-
-	/**
-	 * Get all BadPlayer objects
-	 * 
-	 * @return Returns all BadPlayer objects
-	 */
-	public static Collection<BadPlayer> getPlayers() {
-		// Get the map values
-		return maps.values();
-	}
-
-	/**
-	 * Put the BadPlayer object
-	 * 
-	 * @param badPlayer
-	 */
-	public static void put(BadPlayer badPlayer) {
-		// Put in map
-		maps.put(badPlayer.getName(), badPlayer);
-
-		// Keep alive update
-		BungeeTask.keepAlive();
 	}
 
 }

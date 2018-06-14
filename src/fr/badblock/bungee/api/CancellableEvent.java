@@ -22,6 +22,18 @@ public abstract class CancellableEvent extends Event implements Cancellable {
 	@Setter
 	private String cancelReason = "";
 
+	/**
+	 * Cancel the event with reason
+	 * 
+	 * @param reason
+	 */
+	public void cancel(String reason) {
+		// Set cancelled
+		setCancelled(true);
+		// Set cancel reason
+		setCancelReason(reason);
+	}
+
 	@Override
 	/**
 	 * Returns if the event is cancelled
@@ -38,18 +50,6 @@ public abstract class CancellableEvent extends Event implements Cancellable {
 	public void setCancelled(boolean cancelled) {
 		// Set the cancelled field
 		this.cancelled = cancelled;
-	}
-
-	/**
-	 * Cancel the event with reason
-	 * 
-	 * @param reason
-	 */
-	public void cancel(String reason) {
-		// Set cancelled
-		setCancelled(true);
-		// Set cancel reason
-		setCancelReason(reason);
 	}
 
 }

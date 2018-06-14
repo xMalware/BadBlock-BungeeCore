@@ -50,23 +50,33 @@ public class RCommand extends BadCommand {
 	}
 
 	/**
-	 * Method called when using the command
+	 * Get a message with args
+	 * 
+	 * @param args
+	 * @return
 	 */
-	@Override
-	public void run(CommandSender sender, String[] args) {
-		// We get the player from the sender
-		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
-
-		// If no argument has been entered
-		if (args.length < 1) {
-			// We give him help.
-			help(sender);
-			// We stop there.
-			return;
+	private String getMessage(String[] args) {
+		// Create a StringBuilder
+		StringBuilder stringBuilder = new StringBuilder();
+		// Index
+		int i = 0;
+		// For each arg
+		for (String arg : args) {
+			// Increment index
+			i++;
+			// Spacer
+			String spacer = " ";
+			// If the args are the same
+			if (args.length == i) {
+				// Empty spacer
+				spacer = "";
+			}
+			// Append to the stringBuilder
+			stringBuilder.append(arg + spacer);
 		}
 
-		// Send a message
-		msg(proxiedPlayer, args);
+		// Returns the result
+		return stringBuilder.toString();
 	}
 
 	/**
@@ -322,33 +332,23 @@ public class RCommand extends BadCommand {
 	}
 
 	/**
-	 * Get a message with args
-	 * 
-	 * @param args
-	 * @return
+	 * Method called when using the command
 	 */
-	private String getMessage(String[] args) {
-		// Create a StringBuilder
-		StringBuilder stringBuilder = new StringBuilder();
-		// Index
-		int i = 0;
-		// For each arg
-		for (String arg : args) {
-			// Increment index
-			i++;
-			// Spacer
-			String spacer = " ";
-			// If the args are the same
-			if (args.length == i) {
-				// Empty spacer
-				spacer = "";
-			}
-			// Append to the stringBuilder
-			stringBuilder.append(arg + spacer);
+	@Override
+	public void run(CommandSender sender, String[] args) {
+		// We get the player from the sender
+		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+
+		// If no argument has been entered
+		if (args.length < 1) {
+			// We give him help.
+			help(sender);
+			// We stop there.
+			return;
 		}
 
-		// Returns the result
-		return stringBuilder.toString();
+		// Send a message
+		msg(proxiedPlayer, args);
 	}
 
 }

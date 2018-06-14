@@ -75,34 +75,24 @@ public final class FriendListManager {
 	}
 
 	/**
-	 * Update the friend list
+	 * Get the friend list
 	 * 
-	 * @param friendlist
+	 * @param BadOfflinePlayer
+	 *            object
+	 * @return friend list
 	 */
-	static void update(FriendList friendlist) {
-		// Get the mongo service
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
-			/**
-			 * When executing asynchronously
-			 */
-			@Override
-			public void run(MongoService mongoService) {
-				// Get the database
-				DB db = mongoService.getDb();
-				// Get the collection
-				DBCollection collection = db.getCollection(COLLECTION);
-				// Create a new query
-				BasicDBObject query = new BasicDBObject();
-				// Add the owner in the query
-				query.put(FriendList.OWNER, friendlist.getOwner().toString());
-				// Create set updater
-				BasicDBObject updater = new BasicDBObject("$set", friendlist.toObject());
-				// Update the friendlist of the owner
-				collection.update(query, updater);
-			}
-		});
+	public static Map<BadOfflinePlayer, FriendListPlayer> getFriends(BadPlayer badPlayer) {
+		// Get the friend list
+		Map<UUID, FriendListPlayer> players = getFriendList(badPlayer.getUniqueId()).getPlayers();
+		// Create a new friend list
+		Map<BadOfflinePlayer, FriendListPlayer> friends = new HashMap<>();
+		// Get BungeeManager object
+		BungeeManager bungeeManager = BungeeManager.getInstance();
+		// Put all friends
+		players.entrySet()
+				.forEach(player -> friends.put(bungeeManager.getBadOfflinePlayer(player.getKey()), player.getValue()));
+		// Returns friend list
+		return friends;
 	}
 
 	/**
@@ -132,78 +122,147 @@ public final class FriendListManager {
 	}
 
 	/**
-	 * Show the status selector
+	 * Remove a friend
 	 * 
-	 * @param BadPlayer
-	 *            object
+	 * @param want
+	 *            username
+	 * @param wanted
+	 *            username
 	 */
-	public static void showStatusSelector(BadPlayer player) {
-		// Send the query selector message
-		message.sendQuerySelector(player);
-	}
+	public static void remove(String want, String wanted) {
+		// Get the want BadPlayer
+		BadPlayer wantBadPlayer = BungeeManager.getInstance().getBadPlayer(want);
+		// Get the wanted BadPlayer
+		BadOfflinePlayer wantedBadPlayer = BungeeManager.getInstance().getBadOfflinePlayer(wanted);
 
-	/**
-	 * Set queryable
-	 * 
-	 * @param BadPlayer
-	 * @param Raw
-	 *            status
-	 */
-	public static void setQueryable(BadPlayer player, String status) {
-		// Get the friendlistable status
-		FriendListable friendListable = FriendListable.getByString(status);
-		// If the friendlistable status is null
-		if (friendListable == null) {
-			// Unknown status
-			message.sendUnknownStatus(player);
+		// If the wanted BadPlayer is null
+		if (wantedBadPlayer == null) {
+			// Send the message
+			message.sendUnknownPlayer(wantBadPlayer, wanted);
 			// So we stop there
 			return;
 		}
 
-		// Create a new event
-		FriendListableChangeEvent event = new FriendListableChangeEvent(player,
-				player.getSettings().getFriendListable(), friendListable);
+		// Get the wanted friend list
+		FriendList wantedFriendList = getFriendList(wantedBadPlayer.getUniqueId());
+		// Get the want friend list
+		FriendList wantFriendList = getFriendList(wantBadPlayer.getUniqueId());
+		// New status
+		FriendListRemoveStatus status;
+
+		// If the want player remove the wanted player
+		if (want.equalsIgnoreCase(wanted)) {
+			// Set the status
+			status = FriendListRemoveStatus.PLAYER_SCHIZOPHRENIA;
+		}
+		// Else if
+		else {
+			// If the wanted player is in the friend list etc.
+			if (wantedFriendList.isInList(wantBadPlayer.getUniqueId())
+					|| wantFriendList.isInList(wantedBadPlayer.getUniqueId())) {
+				// If they're friends
+				if (wantedFriendList.isFriend(wantBadPlayer.getUniqueId())
+						|| wantFriendList.isFriend(wantedBadPlayer.getUniqueId())) {
+					// Set the status => removed from the list
+					status = FriendListRemoveStatus.PLAYER_REMOVED_FROM_LIST;
+				} else {
+					// If he want to be friend
+					if (wantedFriendList.wantToBeFriendWith(wantBadPlayer.getUniqueId())) {
+						// Set the status => request declined
+						status = FriendListRemoveStatus.PLAYER_REQUEST_DECLINED;
+					} else {
+						// If they're already requested
+						if (wantedFriendList.alreadyRequestedBy(wantBadPlayer.getUniqueId())) {
+							// Set the status => cancelled
+							status = FriendListRemoveStatus.REQUEST_TO_PLAYER_CANCELLED;
+						} else {
+							// Set the status => error
+							status = FriendListRemoveStatus.UNKNOWN_ERROR;
+						}
+					}
+				}
+			}
+			// If they're not in list
+			else {
+				// Set the status => not request/or friend with player
+				status = FriendListRemoveStatus.NOT_REQUESTED_OR_FRIEND_WITH_PLAYER;
+			}
+		}
+
+		// Create an event
+		FriendListRemoveEvent event = new FriendListRemoveEvent(status, wantedBadPlayer, wantBadPlayer);
 		// Call the event
 		event = ProxyServer.getInstance().getPluginManager().callEvent(event);
 
 		// If the event is cancelled
 		if (event.isCancelled()) {
 			// Operation cancelled
-			message.sendOperationCancelled(player, event.getCancelReason());
-			// So we stop there
-			return;
-		}
-
-		// If the old status is the same as the new status.
-		if (event.getOldStatus() != null && event.getOldStatus().equals(event.getNewStatus())) {
-			// If the new status is equal to YES
-			if (event.getNewStatus().equals(FriendListable.YES)) {
-				// Already accepted
-				message.sendAlreadyAccepted(player);
-				// So we stop there
-				return;
-			}
-			// Already declined
-			message.sendAlreadyRefused(player);
-			// So we stop there
-			return;
-		}
-
-		// Set the new status in the settings
-		player.getSettings().setFriendListable(event.getNewStatus());
-
-		// Update the settings
-		player.updateSettings();
-
-		// If the new status is equal to YES
-		if (event.getNewStatus().equals(FriendListable.YES)) {
-			// Now accepted
-			message.sendNowAccepted(player);
+			message.sendOperationCancelled(wantBadPlayer, event.getCancelReason());
 			// We stop there
 			return;
 		}
-		// Already declined
-		message.sendNowRefused(player);
+
+		// Check status
+		switch (event.getStatus()) {
+		// Error case
+		case UNKNOWN_ERROR:
+			// Send the error message
+			message.sendError(wantBadPlayer);
+			break;
+
+		// Same remove user
+		case PLAYER_SCHIZOPHRENIA:
+			// Send the message
+			message.sendCantActOnYourself(wantBadPlayer);
+			break;
+
+		// Request declined
+		case PLAYER_REQUEST_DECLINED:
+			// Remove the friend
+			wantedFriendList.remove(wantBadPlayer.getUniqueId());
+			// Send the message
+			message.sendDeclinedYourRequest(wantedBadPlayer, wantBadPlayer);
+			// Remove the friend
+			wantFriendList.remove(wantedBadPlayer.getUniqueId());
+			// Send the message
+			message.sendRejectRequestOf(wantBadPlayer, wantedBadPlayer);
+			break;
+
+		// Removed from list
+		case PLAYER_REMOVED_FROM_LIST:
+			// Remove the friend
+			wantedFriendList.remove(wantBadPlayer.getUniqueId());
+			// Send the message
+			message.sendRemovedYouFromFriends(wantedBadPlayer, wantBadPlayer);
+			// Remove the friend
+			wantFriendList.remove(wantedBadPlayer.getUniqueId());
+			// Send the message
+			message.sendNowNoLongerFriends(wantBadPlayer, wantedBadPlayer);
+			break;
+
+		// Cancelled
+		case REQUEST_TO_PLAYER_CANCELLED:
+			// Remove the friend
+			wantFriendList.remove(wantedBadPlayer.getUniqueId());
+			// Send the message
+			message.sendCancelRequestTo(wantBadPlayer, wantedBadPlayer);
+			// Remove the friend
+			wantedFriendList.remove(wantBadPlayer.getUniqueId());
+			// Send the message
+			message.sendCancelledRequest(wantedBadPlayer, wantBadPlayer);
+			break;
+
+		case NOT_REQUESTED_OR_FRIEND_WITH_PLAYER:
+			// No relationship between them
+			message.sendNoRelationship(wantBadPlayer, wantedBadPlayer);
+			break;
+
+		// What else?
+		default:
+			// Send the error message
+			message.sendError(wantBadPlayer);
+			break;
+		}
 	}
 
 	/**
@@ -284,7 +343,7 @@ public final class FriendListManager {
 		}
 
 		// Create a new event
-		FriendListRequestEvent event = new FriendListRequestEvent(wantBadPlayer, wantedBadPlayer, status);
+		FriendListRequestEvent event = new FriendListRequestEvent(status, wantedBadPlayer, wantBadPlayer);
 		// Call the event
 		event = ProxyServer.getInstance().getPluginManager().callEvent(event);
 
@@ -360,147 +419,67 @@ public final class FriendListManager {
 	}
 
 	/**
-	 * Remove a friend
+	 * Set queryable
 	 * 
-	 * @param want
-	 *            username
-	 * @param wanted
-	 *            username
+	 * @param BadPlayer
+	 * @param Raw
+	 *            status
 	 */
-	public static void remove(String want, String wanted) {
-		// Get the want BadPlayer
-		BadPlayer wantBadPlayer = BungeeManager.getInstance().getBadPlayer(want);
-		// Get the wanted BadPlayer
-		BadOfflinePlayer wantedBadPlayer = BungeeManager.getInstance().getBadOfflinePlayer(wanted);
-
-		// If the wanted BadPlayer is null
-		if (wantedBadPlayer == null) {
-			// Send the message
-			message.sendUnknownPlayer(wantBadPlayer, wanted);
+	public static void setQueryable(BadPlayer player, String status) {
+		// Get the friendlistable status
+		FriendListable friendListable = FriendListable.getByString(status);
+		// If the friendlistable status is null
+		if (friendListable == null) {
+			// Unknown status
+			message.sendUnknownStatus(player);
 			// So we stop there
 			return;
 		}
 
-		// Get the wanted friend list
-		FriendList wantedFriendList = getFriendList(wantedBadPlayer.getUniqueId());
-		// Get the want friend list
-		FriendList wantFriendList = getFriendList(wantBadPlayer.getUniqueId());
-		// New status
-		FriendListRemoveStatus status;
-
-		// If the want player remove the wanted player
-		if (want.equalsIgnoreCase(wanted)) {
-			// Set the status
-			status = FriendListRemoveStatus.PLAYER_SCHIZOPHRENIA;
-		}
-		// Else if
-		else {
-			// If the wanted player is in the friend list etc.
-			if (wantedFriendList.isInList(wantBadPlayer.getUniqueId())
-					|| wantFriendList.isInList(wantedBadPlayer.getUniqueId())) {
-				// If they're friends
-				if (wantedFriendList.isFriend(wantBadPlayer.getUniqueId())
-						|| wantFriendList.isFriend(wantedBadPlayer.getUniqueId())) {
-					// Set the status => removed from the list
-					status = FriendListRemoveStatus.PLAYER_REMOVED_FROM_LIST;
-				} else {
-					// If he want to be friend
-					if (wantedFriendList.wantToBeFriendWith(wantBadPlayer.getUniqueId())) {
-						// Set the status => request declined
-						status = FriendListRemoveStatus.PLAYER_REQUEST_DECLINED;
-					} else {
-						// If they're already requested
-						if (wantedFriendList.alreadyRequestedBy(wantBadPlayer.getUniqueId())) {
-							// Set the status => cancelled
-							status = FriendListRemoveStatus.REQUEST_TO_PLAYER_CANCELLED;
-						} else {
-							// Set the status => error
-							status = FriendListRemoveStatus.UNKNOWN_ERROR;
-						}
-					}
-				}
-			}
-			// If they're not in list
-			else {
-				// Set the status => not request/or friend with player
-				status = FriendListRemoveStatus.NOT_REQUESTED_OR_FRIEND_WITH_PLAYER;
-			}
-		}
-
-		// Create an event
-		FriendListRemoveEvent event = new FriendListRemoveEvent(wantBadPlayer, wantedBadPlayer, status);
+		// Create a new event
+		FriendListableChangeEvent event = new FriendListableChangeEvent(friendListable,
+				player.getSettings().getFriendListable(), player);
 		// Call the event
 		event = ProxyServer.getInstance().getPluginManager().callEvent(event);
 
 		// If the event is cancelled
 		if (event.isCancelled()) {
 			// Operation cancelled
-			message.sendOperationCancelled(wantBadPlayer, event.getCancelReason());
-			// We stop there
+			message.sendOperationCancelled(player, event.getCancelReason());
+			// So we stop there
 			return;
 		}
 
-		// Check status
-		switch (event.getStatus()) {
-		// Error case
-		case UNKNOWN_ERROR:
-			// Send the error message
-			message.sendError(wantBadPlayer);
-			break;
-
-		// Same remove user
-		case PLAYER_SCHIZOPHRENIA:
-			// Send the message
-			message.sendCantActOnYourself(wantBadPlayer);
-			break;
-
-		// Request declined
-		case PLAYER_REQUEST_DECLINED:
-			// Remove the friend
-			wantedFriendList.remove(wantBadPlayer.getUniqueId());
-			// Send the message
-			message.sendDeclinedYourRequest(wantedBadPlayer, wantBadPlayer);
-			// Remove the friend
-			wantFriendList.remove(wantedBadPlayer.getUniqueId());
-			// Send the message
-			message.sendRejectRequestOf(wantBadPlayer, wantedBadPlayer);
-			break;
-
-		// Removed from list
-		case PLAYER_REMOVED_FROM_LIST:
-			// Remove the friend
-			wantedFriendList.remove(wantBadPlayer.getUniqueId());
-			// Send the message
-			message.sendRemovedYouFromFriends(wantedBadPlayer, wantBadPlayer);
-			// Remove the friend
-			wantFriendList.remove(wantedBadPlayer.getUniqueId());
-			// Send the message
-			message.sendNowNoLongerFriends(wantBadPlayer, wantedBadPlayer);
-			break;
-
-		// Cancelled
-		case REQUEST_TO_PLAYER_CANCELLED:
-			// Remove the friend
-			wantFriendList.remove(wantedBadPlayer.getUniqueId());
-			// Send the message
-			message.sendCancelRequestTo(wantBadPlayer, wantedBadPlayer);
-			// Remove the friend
-			wantedFriendList.remove(wantBadPlayer.getUniqueId());
-			// Send the message
-			message.sendCancelledRequest(wantedBadPlayer, wantBadPlayer);
-			break;
-
-		case NOT_REQUESTED_OR_FRIEND_WITH_PLAYER:
-			// No relationship between them
-			message.sendNoRelationship(wantBadPlayer, wantedBadPlayer);
-			break;
-
-		// What else?
-		default:
-			// Send the error message
-			message.sendError(wantBadPlayer);
-			break;
+		// If the old status is the same as the new status.
+		if (event.getOldStatus() != null && event.getOldStatus().equals(event.getNewStatus())) {
+			// If the new status is equal to YES
+			if (event.getNewStatus().equals(FriendListable.YES)) {
+				// Already accepted
+				message.sendAlreadyAccepted(player);
+				// So we stop there
+				return;
+			}
+			// Already declined
+			message.sendAlreadyRefused(player);
+			// So we stop there
+			return;
 		}
+
+		// Set the new status in the settings
+		player.getSettings().setFriendListable(event.getNewStatus());
+
+		// Update the settings
+		player.updateSettings();
+
+		// If the new status is equal to YES
+		if (event.getNewStatus().equals(FriendListable.YES)) {
+			// Now accepted
+			message.sendNowAccepted(player);
+			// We stop there
+			return;
+		}
+		// Already declined
+		message.sendNowRefused(player);
 	}
 
 	/**
@@ -510,27 +489,6 @@ public final class FriendListManager {
 	 */
 	public static void showFriendList(BadPlayer badPlayer) {
 		showFriendList(badPlayer, "1");
-	}
-
-	/**
-	 * Get the friend list
-	 * 
-	 * @param BadOfflinePlayer
-	 *            object
-	 * @return friend list
-	 */
-	public static Map<BadOfflinePlayer, FriendListPlayer> getFriends(BadPlayer badPlayer) {
-		// Get the friend list
-		Map<UUID, FriendListPlayer> players = getFriendList(badPlayer.getUniqueId()).getPlayers();
-		// Create a new friend list
-		Map<BadOfflinePlayer, FriendListPlayer> friends = new HashMap<>();
-		// Get BungeeManager object
-		BungeeManager bungeeManager = BungeeManager.getInstance();
-		// Put all friends
-		players.entrySet()
-				.forEach(player -> friends.put(bungeeManager.getBadOfflinePlayer(player.getKey()), player.getValue()));
-		// Returns friend list
-		return friends;
 	}
 
 	/**
@@ -639,6 +597,48 @@ public final class FriendListManager {
 			// Send footer
 			message.sendFooterList(badPlayer);
 		}
+	}
+
+	/**
+	 * Show the status selector
+	 * 
+	 * @param BadPlayer
+	 *            object
+	 */
+	public static void showStatusSelector(BadPlayer player) {
+		// Send the query selector message
+		message.sendQuerySelector(player);
+	}
+
+	/**
+	 * Update the friend list
+	 * 
+	 * @param friendlist
+	 */
+	static void update(FriendList friendlist) {
+		// Get the mongo service
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
+		// Use async mongo
+		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
+			/**
+			 * When executing asynchronously
+			 */
+			@Override
+			public void run(MongoService mongoService) {
+				// Get the database
+				DB db = mongoService.getDb();
+				// Get the collection
+				DBCollection collection = db.getCollection(COLLECTION);
+				// Create a new query
+				BasicDBObject query = new BasicDBObject();
+				// Add the owner in the query
+				query.put(FriendList.OWNER, friendlist.getOwner().toString());
+				// Create set updater
+				BasicDBObject updater = new BasicDBObject("$set", friendlist.toObject());
+				// Update the friendlist of the owner
+				collection.update(query, updater);
+			}
+		});
 	}
 
 }

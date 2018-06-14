@@ -33,6 +33,18 @@ public class BungeeLocalManager {
 	private static BungeeLocalManager instance = new BungeeLocalManager();
 
 	/**
+	 * Get a local player with a ProxiedPlayer object
+	 * 
+	 * @param current
+	 *            ProxiedPlayer object
+	 * @return BadPlayer object, with data
+	 */
+	public BadPlayer getPlayer(ProxiedPlayer player) {
+		// Get BadPlayer from a map
+		return BadPlayer.get(player);
+	}
+
+	/**
 	 * Get a local player with his player name
 	 * 
 	 * @param current
@@ -62,18 +74,6 @@ public class BungeeLocalManager {
 		}
 		// We return the data
 		return optional.get();
-	}
-
-	/**
-	 * Get a local player with a ProxiedPlayer object
-	 * 
-	 * @param current
-	 *            ProxiedPlayer object
-	 * @return BadPlayer object, with data
-	 */
-	public BadPlayer getPlayer(ProxiedPlayer player) {
-		// Get BadPlayer from a map
-		return BadPlayer.get(player);
 	}
 
 	/**

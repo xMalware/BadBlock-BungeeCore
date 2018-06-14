@@ -1,10 +1,10 @@
 package fr.badblock.bungee.utils.mcjson;
 
+import java.util.Arrays;
+
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.chat.ComponentSerializer;
-
-import java.util.Arrays;
 
 /**
  * Util Class for working with the minecraft jsons

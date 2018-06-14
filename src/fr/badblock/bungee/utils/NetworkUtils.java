@@ -19,6 +19,7 @@ public class NetworkUtils {
 
 	/**
 	 * Fetch the source code
+	 * 
 	 * @param link
 	 * @return
 	 */
@@ -41,8 +42,7 @@ public class NetworkUtils {
 			return body;
 		}
 		// Error case
-		catch (Exception error)
-		{
+		catch (Exception error) {
 			// Print stack trace
 			error.printStackTrace();
 			// Returns 0 (I don't remember why)
@@ -52,12 +52,12 @@ public class NetworkUtils {
 
 	/**
 	 * Fetch source code with API
+	 * 
 	 * @param link
 	 * @param apiKey
 	 * @return
 	 */
-	public static String fetchSourceCodeWithAPI(String link, String apiKey)
-	{
+	public static String fetchSourceCodeWithAPI(String link, String apiKey) {
 		// Try to
 		try {
 			// Set the user agent
@@ -78,8 +78,7 @@ public class NetworkUtils {
 			return body;
 		}
 		// Error case
-		catch (Exception error)
-		{
+		catch (Exception error) {
 			// Print the error
 			error.printStackTrace();
 			// Returns 0 (I don't remember why)

@@ -10,13 +10,13 @@ package fr.badblock.bungee.modules.commands.basic.party;
 public enum PartyPlayerState {
 
 	/**
-	 * Waiting state
-	 */
-	WAITING,
-
-	/**
 	 * Accepted state
 	 */
-	ACCEPTED
+	ACCEPTED,
+
+	/**
+	 * Waiting state
+	 */
+	WAITING
 
 }

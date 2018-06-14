@@ -39,94 +39,6 @@ public class KickCommand extends AbstractModCommand {
 	}
 
 	/**
-	 * Run
-	 */
-	@Override
-	public void run(CommandSender sender, String[] args) {
-		// If arg length != 1
-		if (args.length != 1) {
-			// Send the message
-			I19n.sendMessage(sender, getPrefix("usage"), null);
-			// So we stop there
-			return;
-		}
-
-		// Get the player name
-		String playerName = args[1];
-
-		BungeeManager bungeeManager = BungeeManager.getInstance();
-
-		if (!bungeeManager.hasUsername(playerName))
-		{
-			I19n.sendMessage(sender, getPrefix("offline"), null);
-			return;
-		}
-
-		// Get the online target player
-		BadPlayer badOnlinePlayer = bungeeManager.getBadPlayer(playerName);
-
-		if (badOnlinePlayer == null)
-		{
-			I19n.sendMessage(sender, getPrefix("offline"), null);
-			return;
-		}
-
-		// If he can't be kicked
-		if (!canBeKicked(sender, playerName)) {
-			// So we stop there
-			return;
-		}
-
-		// He's a player?
-		boolean isPlayer = sender instanceof ProxiedPlayer;
-		// Get the proxied player
-		ProxiedPlayer proxiedPlayer = isPlayer ? (ProxiedPlayer) sender : null;
-		// Get the bad player
-		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
-		// He's a player?
-		isPlayer = isPlayer && proxiedPlayer != null && badPlayer != null;
-
-		// Get the kick reason
-		String kickReason = args[2];
-
-		// Get the punisher ip
-		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
-
-		// Generate a unique id
-		UUID uuid = UUID.randomUUID();
-
-		// Create the punishment object
-		Punishment punishment = new Punishment(uuid.toString(), badOnlinePlayer.getName(),
-				badOnlinePlayer.getLastIp(), PunishType.KICK, TimeUtils.time(), -1, DateUtils.getHourDate(), kickReason, false,
-				new String[] {}, sender.getName(), punisherIp);
-
-		// Get the main class
-		BadBungee badBungee = BadBungee.getInstance();
-
-		// Get the service
-		MongoService mongoService = badBungee.getMongoService();
-
-		// Get the database
-		DB db = mongoService.getDb();
-
-		// Get the collection
-		DBCollection collection = db.getCollection("punishments");
-
-		// Insert in the collection
-		collection.insert(punishment.toObject());
-
-		// Kick the player
-		badOnlinePlayer.kick(badOnlinePlayer.getKickMessage(kickReason));
-		
-		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatkick"), new int[] { 0, 2 }, 
-				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), kickReason);
-
-		// Send banned message
-		I19n.sendMessage(sender, getPrefix("kicked"), null, badOnlinePlayer.getName(), kickReason);
-	}
-
-	/**
 	 * If a player can be kicked
 	 * 
 	 * @param sender
@@ -216,6 +128,93 @@ public class KickCommand extends AbstractModCommand {
 			// Returns true
 			return true;
 		}
+	}
+
+	/**
+	 * Run
+	 */
+	@Override
+	public void run(CommandSender sender, String[] args) {
+		// If arg length != 1
+		if (args.length != 1) {
+			// Send the message
+			I19n.sendMessage(sender, getPrefix("usage"), null);
+			// So we stop there
+			return;
+		}
+
+		// Get the player name
+		String playerName = args[1];
+
+		BungeeManager bungeeManager = BungeeManager.getInstance();
+
+		if (!bungeeManager.hasUsername(playerName)) {
+			I19n.sendMessage(sender, getPrefix("offline"), null);
+			return;
+		}
+
+		// Get the online target player
+		BadPlayer badOnlinePlayer = bungeeManager.getBadPlayer(playerName);
+
+		if (badOnlinePlayer == null) {
+			I19n.sendMessage(sender, getPrefix("offline"), null);
+			return;
+		}
+
+		// If he can't be kicked
+		if (!canBeKicked(sender, playerName)) {
+			// So we stop there
+			return;
+		}
+
+		// He's a player?
+		boolean isPlayer = sender instanceof ProxiedPlayer;
+		// Get the proxied player
+		ProxiedPlayer proxiedPlayer = isPlayer ? (ProxiedPlayer) sender : null;
+		// Get the bad player
+		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
+		// He's a player?
+		isPlayer = isPlayer && proxiedPlayer != null && badPlayer != null;
+
+		// Get the kick reason
+		String kickReason = args[2];
+
+		// Get the punisher ip
+		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
+
+		// Generate a unique id
+		UUID uuid = UUID.randomUUID();
+
+		// Create the punishment object
+		Punishment punishment = new Punishment(uuid.toString(), badOnlinePlayer.getName(), badOnlinePlayer.getLastIp(),
+				PunishType.KICK, TimeUtils.time(), -1, DateUtils.getHourDate(), kickReason, false, new String[] {},
+				sender.getName(), punisherIp);
+
+		// Get the main class
+		BadBungee badBungee = BadBungee.getInstance();
+
+		// Get the service
+		MongoService mongoService = badBungee.getMongoService();
+
+		// Get the database
+		DB db = mongoService.getDb();
+
+		// Get the collection
+		DBCollection collection = db.getCollection("punishments");
+
+		// Insert in the collection
+		collection.insert(punishment.toObject());
+
+		// Kick the player
+		badOnlinePlayer.kick(badOnlinePlayer.getKickMessage(kickReason));
+
+		// We send the message and the sender to all concerned
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatkick"),
+				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
+				kickReason);
+
+		// Send banned message
+		I19n.sendMessage(sender, getPrefix("kicked"), null, badOnlinePlayer.getName(), kickReason);
 	}
 
 }

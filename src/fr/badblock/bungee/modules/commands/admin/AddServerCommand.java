@@ -42,28 +42,24 @@ public class AddServerCommand extends BadCommand {
 		String name = args[0];
 		String ip = args[1];
 		int port = -1;
-		
-		try
-		{
+
+		try {
 			port = Integer.parseInt(args[2]);
-		}
-		catch (Exception error)
-		{
+		} catch (Exception error) {
 			// Error
 			I19n.sendMessage(sender, "bungee.commands.addserver.portmustbeanint", null);
 			return;
 		}
-		
-		if (BungeeCord.getInstance().getServers().containsKey(name))
-		{
+
+		if (BungeeCord.getInstance().getServers().containsKey(name)) {
 			I19n.sendMessage(sender, "bungee.commands.addserver.alreadyadded", null);
 			return;
 		}
-		
+
 		ServerObject serverObject = new ServerObject(name, ip, port);
-		
+
 		BungeeUtils.addServer(BadBungee.getInstance().getRabbitService(), serverObject);
-		
+
 		I19n.sendMessage(sender, "bungee.commands.addserver.added", null, name);
 	}
 

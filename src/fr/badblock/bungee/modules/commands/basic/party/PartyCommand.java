@@ -28,6 +28,16 @@ public class PartyCommand extends BadCommand {
 	}
 
 	/**
+	 * Sending help
+	 * 
+	 * @param sender
+	 */
+	public void help(ProxiedPlayer sender) {
+		// We give him the list of subcommands
+		PartyManager.getMessages().sendHelp(sender);
+	}
+
+	/**
 	 * Method called when using the command
 	 */
 	@Override
@@ -135,16 +145,6 @@ public class PartyCommand extends BadCommand {
 	public void unknown(ProxiedPlayer sender) {
 		// We tell him this command doesn't exist.
 		PartyManager.getMessages().sendUnknownMessage(sender);
-	}
-
-	/**
-	 * Sending help
-	 * 
-	 * @param sender
-	 */
-	public void help(ProxiedPlayer sender) {
-		// We give him the list of subcommands
-		PartyManager.getMessages().sendHelp(sender);
 	}
 
 }

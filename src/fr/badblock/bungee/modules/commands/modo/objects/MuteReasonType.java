@@ -2,27 +2,23 @@ package fr.badblock.bungee.modules.commands.modo.objects;
 
 public enum MuteReasonType {
 
-	SPAM(),
+	DISRESPECTFUL,
 
 	INAPPROPRIATE,
 
-	RUDE,
-
-	SWEARING,
-
-	DISRESPECTFUL,
-
-	VERBAL_ABUSE,
-
 	NEGATIVE_BEHAVIOUR,
+
+	OTHER,
+
+	RUDE,
 
 	SOCIAL_MEDIA_ADVERTISING,
 
-	OTHER;
+	SPAM(),
 
-	public String getName() {
-		return name().toLowerCase();
-	}
+	SWEARING,
+
+	VERBAL_ABUSE;
 
 	public static MuteReasonType getFromString(String string) {
 		for (MuteReasonType muteReason : values()) {
@@ -31,6 +27,10 @@ public enum MuteReasonType {
 			}
 		}
 		return null;
+	}
+
+	public String getName() {
+		return name().toLowerCase();
 	}
 
 }

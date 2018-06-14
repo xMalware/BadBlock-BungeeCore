@@ -29,6 +29,16 @@ public class ConnectServerCommand extends BadCommand {
 	}
 
 	/**
+	 * Send help to the player
+	 * 
+	 * @param sender
+	 */
+	private void help(CommandSender sender) {
+		// Send help
+		I19n.sendMessage(sender, prefix + "help", null);
+	}
+
+	/**
 	 * Method called when using the command
 	 */
 	@Override
@@ -44,28 +54,17 @@ public class ConnectServerCommand extends BadCommand {
 		String serverName = args[0];
 
 		ServerInfo serverInfo = BungeeCord.getInstance().getServerInfo(serverName);
-		
-		if (serverInfo == null)
-		{
+
+		if (serverInfo == null) {
 			I19n.sendMessage(sender, prefix + "unknownserver", null);
 			return;
 		}
-		
-		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
-		
-		proxiedPlayer.connect(serverInfo);
-		
-		I19n.sendMessage(sender, prefix + "teleported", null, serverInfo.getName());
-	}
 
-	/**
-	 * Send help to the player
-	 * 
-	 * @param sender
-	 */
-	private void help(CommandSender sender) {
-		// Send help
-		I19n.sendMessage(sender, prefix + "help", null);
+		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+
+		proxiedPlayer.connect(serverInfo);
+
+		I19n.sendMessage(sender, prefix + "teleported", null, serverInfo.getName());
 	}
 
 }

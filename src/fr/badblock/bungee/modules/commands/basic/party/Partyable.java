@@ -15,14 +15,14 @@ public enum Partyable {
 	WITH_EVERYONE,
 
 	/**
-	 * With only his friends
-	 */
-	WITH_ONLY_HIS_FRIENDS,
-
-	/**
 	 * With nobody
 	 */
-	WITH_NOBODY;
+	WITH_NOBODY,
+
+	/**
+	 * With only his friends
+	 */
+	WITH_ONLY_HIS_FRIENDS;
 
 	/**
 	 * Get the Partyable by string

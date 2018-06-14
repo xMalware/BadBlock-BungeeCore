@@ -44,6 +44,106 @@ public class MuteCommand extends AbstractModCommand {
 	}
 
 	/**
+	 * If a player can be muted
+	 * 
+	 * @param sender
+	 * @param playerName
+	 * @return
+	 */
+	public boolean canBeMuted(CommandSender sender, String playerName) {
+		// If the muter is a player
+		boolean muterPlayer = sender instanceof ProxiedPlayer;
+
+		// Get the target player
+		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
+
+		// If he doesn't exist
+		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound()) {
+			// Send a message
+			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
+			// So we stop there
+			return false;
+		}
+
+		// If the player is already muted
+		if (badOfflinePlayer.getPunished().isMute()) {
+			// Send a message
+			I19n.sendMessage(sender, getPrefix("alreadymuted"), null, badOfflinePlayer.getName());
+			// So we stop there
+			return false;
+		}
+
+		// If the muter is a player
+		if (muterPlayer) {
+			// Get the muter
+			BadPlayer badPlayer = BadPlayer.get((ProxiedPlayer) sender);
+
+			// If the muter is null
+			if (badPlayer == null) {
+				// Send an error message
+				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 1);
+				// So we stop there
+				return false;
+			}
+
+			// Get the muter permissions
+			PermissionUser perm = badPlayer.getPermissions();
+
+			// If the muter doesn't have any permissions
+			if (perm == null) {
+				// Send a message
+				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 2);
+				// So we stop there
+				return false;
+			}
+
+			// Get the highest muter rank
+			Permissible permissible = perm.getHighestRank("bungee", false);
+
+			// If the permissible is null
+			if (permissible == null) {
+				// Send a message
+				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 3);
+				// So we stop there
+				return false;
+			}
+
+			// Get the target permissions
+			PermissionUser targetPerm = badOfflinePlayer.getPermissions();
+
+			// If the target player doesn't have any permissions
+			if (targetPerm == null) {
+				// So we stop there
+				return true;
+			}
+
+			// Get the highest target rank
+			Permissible targetPermissible = targetPerm.getHighestRank("bungee", false);
+
+			// If the permissible is null
+			if (targetPermissible == null) {
+				// So we stop there
+				return true;
+			}
+
+			// If the muter has a higher rank than the target player (or a bypass)
+			if (permissible.getPower() > targetPermissible.getPower()
+					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
+				// So we stop there
+				return true;
+			}
+
+			// Not enough permission message
+			I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, badOfflinePlayer.getName());
+			// Returns false
+			return false;
+		} else {
+			// Returns true
+			return true;
+		}
+	}
+
+	/**
 	 * Run
 	 */
 	@Override
@@ -82,7 +182,7 @@ public class MuteCommand extends AbstractModCommand {
 				// Send the message
 				badPlayer.sendTranslatedOutgoingMessage(getPrefix("select_intro"), null, playerName);
 			} else
-				// If the sender isn't a player
+			// If the sender isn't a player
 			{
 				// Send the message
 				I19n.sendMessage(sender, getPrefix("select_intro"), null, playerName);
@@ -117,7 +217,7 @@ public class MuteCommand extends AbstractModCommand {
 					// Send the message
 					badPlayer.sendTranslatedOutgoingMCJson(json);
 				} else
-					// If the sender isn't a player
+				// If the sender isn't a player
 				{
 					// Send the reason message
 					I19n.sendMessage(sender, getPrefix("reason." + muteReason.getName()), null);
@@ -238,112 +338,13 @@ public class MuteCommand extends AbstractModCommand {
 		}
 
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"), new int[] { 0, 2 }, 
-				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), reason);
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"),
+				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
+				reason);
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("muted"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
 				reason);
-	}
-
-	/**
-	 * If a player can be muted
-	 * 
-	 * @param sender
-	 * @param playerName
-	 * @return
-	 */
-	public boolean canBeMuted(CommandSender sender, String playerName) {
-		// If the muter is a player
-		boolean muterPlayer = sender instanceof ProxiedPlayer;
-
-		// Get the target player
-		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
-
-		// If he doesn't exist
-		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound()) {
-			// Send a message
-			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
-			// So we stop there
-			return false;
-		}
-
-		// If the player is already muted
-		if (badOfflinePlayer.getPunished().isMute()) {
-			// Send a message
-			I19n.sendMessage(sender, getPrefix("alreadymuted"), null, badOfflinePlayer.getName());
-			// So we stop there
-			return false;
-		}
-
-		// If the muter is a player
-		if (muterPlayer) {
-			// Get the muter
-			BadPlayer badPlayer = BadPlayer.get((ProxiedPlayer) sender);
-
-			// If the muter is null
-			if (badPlayer == null) {
-				// Send an error message
-				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 1);
-				// So we stop there
-				return false;
-			}
-
-			// Get the muter permissions
-			PermissionUser perm = badPlayer.getPermissions();
-
-			// If the muter doesn't have any permissions
-			if (perm == null) {
-				// Send a message
-				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 2);
-				// So we stop there
-				return false;
-			}
-
-			// Get the highest muter rank
-			Permissible permissible = perm.getHighestRank("bungee", false);
-
-			// If the permissible is null
-			if (permissible == null) {
-				// Send a message
-				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 3);
-				// So we stop there
-				return false;
-			}
-
-			// Get the target permissions
-			PermissionUser targetPerm = badOfflinePlayer.getPermissions();
-
-			// If the target player doesn't have any permissions
-			if (targetPerm == null) {
-				// So we stop there
-				return true;
-			}
-
-			// Get the highest target rank
-			Permissible targetPermissible = targetPerm.getHighestRank("bungee", false);
-
-			// If the permissible is null
-			if (targetPermissible == null) {
-				// So we stop there
-				return true;
-			}
-
-			// If the muter has a higher rank than the target player (or a bypass)
-			if (permissible.getPower() > targetPermissible.getPower()
-					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
-				// So we stop there
-				return true;
-			}
-
-			// Not enough permission message
-			I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, badOfflinePlayer.getName());
-			// Returns false
-			return false;
-		} else {
-			// Returns true
-			return true;
-		}
 	}
 
 }

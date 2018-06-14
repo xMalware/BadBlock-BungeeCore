@@ -13,22 +13,14 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public abstract class _PlayerProcessing {
 
 	/**
-	 * Work with player packets
+	 * Message processing
 	 * 
-	 * @param player
-	 *            packet object
+	 * @param The
+	 *            ProxiedPlayer object
+	 * @param The
+	 *            PlayerPacket object
 	 */
-	public void work(PlayerPacket playerPacket) {
-		// Get the proxied player from the player packet
-		ProxiedPlayer proxiedPlayer = getProxiedPlayerByPacket(playerPacket);
-		// If the player isn't online on this node
-		if (proxiedPlayer == null) {
-			// So we stop there
-			return;
-		}
-		// Work
-		done(proxiedPlayer, playerPacket);
-	}
+	public abstract void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket);
 
 	/**
 	 * Get the proxied player by getting the packet
@@ -47,13 +39,21 @@ public abstract class _PlayerProcessing {
 	}
 
 	/**
-	 * Message processing
+	 * Work with player packets
 	 * 
-	 * @param The
-	 *            ProxiedPlayer object
-	 * @param The
-	 *            PlayerPacket object
+	 * @param player
+	 *            packet object
 	 */
-	public abstract void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket);
+	public void work(PlayerPacket playerPacket) {
+		// Get the proxied player from the player packet
+		ProxiedPlayer proxiedPlayer = getProxiedPlayerByPacket(playerPacket);
+		// If the player isn't online on this node
+		if (proxiedPlayer == null) {
+			// So we stop there
+			return;
+		}
+		// Work
+		done(proxiedPlayer, playerPacket);
+	}
 
 }

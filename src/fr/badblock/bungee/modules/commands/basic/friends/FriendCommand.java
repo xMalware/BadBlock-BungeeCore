@@ -36,6 +36,70 @@ public class FriendCommand extends BadCommand {
 	}
 
 	/**
+	 * Add a player as a friend
+	 * 
+	 * @param sender
+	 * @param args
+	 */
+	private void add(ProxiedPlayer sender, String[] args) {
+		// If less than two arguments were given
+		if (args.length < 2) {
+			// We send him the way to use the command
+			I19n.sendMessage(sender, prefix + "add.usage", null);
+			// We stop there
+			return;
+		}
+
+		// Sending the request
+		FriendListManager.request(sender.getName(), args[1]);
+	}
+
+	/**
+	 * Sending help to the player
+	 * 
+	 * @param sender
+	 */
+	private void help(CommandSender sender) {
+		I19n.sendMessage(sender, prefix + "help", null);
+	}
+
+	/**
+	 * Displaying the player's friends list
+	 * 
+	 * @param sender
+	 * @param args
+	 */
+	private void list(ProxiedPlayer sender, String[] args) {
+		// If less than two arguments were given
+		if (args.length < 2) {
+			// We show him the first page of his friends list
+			FriendListManager.showFriendList(BadPlayer.get(sender));
+			// We stop there
+			return;
+		}
+		// We show the friend list
+		FriendListManager.showFriendList(BadPlayer.get(sender), args[1]);
+	}
+
+	/**
+	 * Remove a friend
+	 * 
+	 * @param sender
+	 * @param args
+	 */
+	private void remove(ProxiedPlayer sender, String[] args) {
+		// If less than two arguments were given
+		if (args.length < 2) {
+			// We send him the way to use the command
+			I19n.sendMessage(sender, prefix + "remove.usage", null);
+			// We stop there
+			return;
+		}
+		// Removing the friend
+		FriendListManager.remove(sender.getName(), args[1]);
+	}
+
+	/**
 	 * Method called when using the command
 	 */
 	@Override
@@ -114,22 +178,6 @@ public class FriendCommand extends BadCommand {
 		}
 	}
 
-	/*
-	 * Sending a message that the typed subcommand does not exist.
-	 */
-	private void unknown(CommandSender sender) {
-		I19n.sendMessage(sender, prefix + "unknown_command", null);
-	}
-
-	/**
-	 * Sending help to the player
-	 * 
-	 * @param sender
-	 */
-	private void help(CommandSender sender) {
-		I19n.sendMessage(sender, prefix + "help", null);
-	}
-
 	/**
 	 * Change the mod state
 	 * 
@@ -148,59 +196,11 @@ public class FriendCommand extends BadCommand {
 		FriendListManager.setQueryable(BadPlayer.get(sender), args[1]);
 	}
 
-	/**
-	 * Add a player as a friend
-	 * 
-	 * @param sender
-	 * @param args
+	/*
+	 * Sending a message that the typed subcommand does not exist.
 	 */
-	private void add(ProxiedPlayer sender, String[] args) {
-		// If less than two arguments were given
-		if (args.length < 2) {
-			// We send him the way to use the command
-			I19n.sendMessage(sender, prefix + "add.usage", null);
-			// We stop there
-			return;
-		}
-
-		// Sending the request
-		FriendListManager.request(sender.getName(), args[1]);
-	}
-
-	/**
-	 * Remove a friend
-	 * 
-	 * @param sender
-	 * @param args
-	 */
-	private void remove(ProxiedPlayer sender, String[] args) {
-		// If less than two arguments were given
-		if (args.length < 2) {
-			// We send him the way to use the command
-			I19n.sendMessage(sender, prefix + "remove.usage", null);
-			// We stop there
-			return;
-		}
-		// Removing the friend
-		FriendListManager.remove(sender.getName(), args[1]);
-	}
-
-	/**
-	 * Displaying the player's friends list
-	 * 
-	 * @param sender
-	 * @param args
-	 */
-	private void list(ProxiedPlayer sender, String[] args) {
-		// If less than two arguments were given
-		if (args.length < 2) {
-			// We show him the first page of his friends list
-			FriendListManager.showFriendList(BadPlayer.get(sender));
-			// We stop there
-			return;
-		}
-		// We show the friend list
-		FriendListManager.showFriendList(BadPlayer.get(sender), args[1]);
+	private void unknown(CommandSender sender) {
+		I19n.sendMessage(sender, prefix + "unknown_command", null);
 	}
 
 }
