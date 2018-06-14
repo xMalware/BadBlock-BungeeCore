@@ -6,7 +6,6 @@ ToDo BadBlockBungee:
 /scale
 /spymsg
 /track
-/mute
 /sanction
 /unban
 /unmute
@@ -28,3 +27,4 @@ T - /kick
 T - /modo
 T - /report
 T - /tempban
+T - /mute
