@@ -2,9 +2,7 @@ ToDo BadBlockBungee:
 
 
 - Commands:
-/connect
 /enablechat
-/ghostconnect
 /greports
 /onlinestaff
 /rconnect
@@ -23,7 +21,6 @@ ToDo BadBlockBungee:
 /gwhitelist
 /done
 /gnick
-/fkick
 /modo
 /rnick
 /cheat
@@ -35,3 +32,6 @@ T - /msg
 T - /r
 T - /addserver
 T - /removeserver
+T - /connect
+T - /ghostconnect
+T - /fkick
