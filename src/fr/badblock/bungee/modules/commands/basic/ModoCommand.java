@@ -57,7 +57,7 @@ public class ModoCommand extends BadCommand {
 		String message = StringUtils.join(args, " ");
 
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.modo", prefix + "modomessage", new int[] { 0, 2 }, 
+		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.modo.receivereports", prefix + "modomessage", new int[] { 0, 2 }, 
 				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(), message);
 
 		// Send message
