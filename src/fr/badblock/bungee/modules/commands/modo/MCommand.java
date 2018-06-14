@@ -30,7 +30,7 @@ public class MCommand extends BadCommand {
 	 */
 	public MCommand() {
 		// Super!
-		super("m", null, "md", "moderation", "mod");
+		super("m", null, "md");
 
 		moderationCommands = new ArrayList<>();
 		moderationCommands.add(new BanCommand());

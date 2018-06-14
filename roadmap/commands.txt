@@ -5,12 +5,10 @@ ToDo BadBlockBungee:
 /enablechat
 /greports
 /onlinestaff
-/rconnect
 /report
 /scale
 /spymsg
 /track
-/kick
 /mute
 /sanction
 /tempban
@@ -21,10 +19,7 @@ ToDo BadBlockBungee:
 /gwhitelist
 /done
 /gnick
-/modo
 /rnick
-/cheat
-/cl
 
 T - /ban
 T - /btps
@@ -35,3 +30,5 @@ T - /removeserver
 T - /connect
 T - /ghostconnect
 T - /fkick
+T - /kick
+T - /modo
