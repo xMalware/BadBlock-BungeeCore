@@ -7,7 +7,10 @@ import java.util.List;
 import fr.badblock.bungee.modules.commands.BadCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.BanCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.KickCommand;
+import fr.badblock.bungee.modules.commands.modo.subcommands.MuteCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.TempBanCommand;
+import fr.badblock.bungee.modules.commands.modo.subcommands.TempMuteCommand;
+import fr.badblock.bungee.modules.commands.modo.subcommands.UnmuteCommand;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 
@@ -36,6 +39,9 @@ public class MCommand extends BadCommand {
 		moderationCommands.add(new BanCommand());
 		moderationCommands.add(new TempBanCommand());
 		moderationCommands.add(new KickCommand());
+		moderationCommands.add(new TempMuteCommand());
+		moderationCommands.add(new MuteCommand());
+		moderationCommands.add(new UnmuteCommand());
 	}
 
 	/**
