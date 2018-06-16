@@ -9,6 +9,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.BungeeManager;
+import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
+import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
 import fr.badblock.bungee.players.BadIP;
 import fr.badblock.bungee.utils.NetworkUtils;
 import fr.badblock.bungee.utils.time.TimeUtils;
@@ -125,11 +128,11 @@ public class AntiVPN extends Thread {
 	 * @return
 	 * @throws UnknownHostException
 	 */
-	private boolean work(String ip) throws UnknownHostException {
+	private void work(String ip) throws UnknownHostException {
 		// If the IP is local
 		if (isThisLocal(InetAddress.getByName(ip))) {
 			// Accepted
-			return true;
+			return;
 		}
 
 		// Get the BadIP object
@@ -138,7 +141,7 @@ public class AntiVPN extends Thread {
 		// If it's a VPN
 		if (badIp.isVpn()) {
 			// Declined
-			return false;
+			return;
 		}
 
 		// Get the url
@@ -149,18 +152,27 @@ public class AntiVPN extends Thread {
 		// Get the IPHub object
 		IPHubObject object = GsonUtils.getGson().fromJson(sourceCode, IPHubObject.class);
 
+		badIp.setApiData(object);
+		
 		// If it's a VPN
 		if (object != null && object.getBlock() == 1) {
 			// Set as a VPN
 			badIp.setVpn(true);
-			// Update the VPN
-			badIp.updateVPN();
-			// Declined
-			return false;
+			// Kick VPN
+			badIp.kick("VPN");
+		}
+		
+		try
+		{
+			badIp.saveData();
+		}
+		catch (Exception exception)
+		{
+			exception.printStackTrace();
 		}
 
 		// TODO Check ISP
-		return true;
+		return;
 	}
 
 }
