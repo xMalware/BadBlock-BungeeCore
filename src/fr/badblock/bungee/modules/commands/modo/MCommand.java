@@ -8,8 +8,10 @@ import fr.badblock.bungee.modules.commands.BadCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.BanCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.KickCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.MuteCommand;
+import fr.badblock.bungee.modules.commands.modo.subcommands.SanctionCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.TempBanCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.TempMuteCommand;
+import fr.badblock.bungee.modules.commands.modo.subcommands.TrackCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.UnbanCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.UnmuteCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.WarnCommand;
@@ -46,6 +48,8 @@ public class MCommand extends BadCommand {
 		moderationCommands.add(new UnmuteCommand());
 		moderationCommands.add(new UnbanCommand());;
 		moderationCommands.add(new WarnCommand());
+		moderationCommands.add(new TrackCommand());
+		moderationCommands.add(new SanctionCommand());
 	}
 
 	/**
