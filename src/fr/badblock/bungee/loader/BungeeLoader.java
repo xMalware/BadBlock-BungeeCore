@@ -137,15 +137,23 @@ public class BungeeLoader {
 					"fr.badblock.bungee.link.processing.bungee",
 
 					// Commands
-					"fr.badblock.bungee.modules.commands.admin", "fr.badblock.bungee.modules.commands.badfriends",
-					"fr.badblock.bungee.modules.commands.basic", "fr.badblock.bungee.modules.commands.basic.friends",
-					"fr.badblock.bungee.modules.commands.basic.msg", "fr.badblock.bungee.modules.commands.basic.party",
-					"fr.badblock.bungee.modules.commands.modo", "fr.badblock.bungee.modules.commands.staff",
+					"fr.badblock.bungee.modules.commands.admin",
+					"fr.badblock.bungee.modules.commands.badfriends",
+					"fr.badblock.bungee.modules.commands.basic",
+					"fr.badblock.bungee.modules.commands.basic.friends",
+					"fr.badblock.bungee.modules.commands.basic.msg",
+					"fr.badblock.bungee.modules.commands.basic.party",
+					"fr.badblock.bungee.modules.commands.modo",
+					"fr.badblock.bungee.modules.commands.staff",
 
 					// Login
-					"fr.badblock.bungee.modules.login.antivpn", "fr.badblock.bungee.modules.login.checkers",
-					"fr.badblock.bungee.modules.login.datamanager", "fr.badblock.bungee.modules.permissions",
-					"fr.badblock.bungee.modules.punishments", "fr.badblock.bungee.modules.ping");
+					"fr.badblock.bungee.modules.login.antivpn",
+					"fr.badblock.bungee.modules.login.antibot",
+					"fr.badblock.bungee.modules.login.checkers",
+					"fr.badblock.bungee.modules.login.datamanager",
+					"fr.badblock.bungee.modules.permissions",
+					"fr.badblock.bungee.modules.punishments",
+					"fr.badblock.bungee.modules.ping");
 		}
 		// Error case
 		catch (IOException exception) {
