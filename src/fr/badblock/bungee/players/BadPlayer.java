@@ -271,13 +271,13 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// If the player is on this node
 		if (isOnThisNode()) {
 			// Disconnect the player
-			toProxiedPlayer().disconnect(getBanMessage());
+			toProxiedPlayer().disconnect(message);
 			// So we stop there
 			return;
 		}
 
 		// Send the packet
-		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), getBanMessage(), PlayerPacketType.KICK));
+		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), message, PlayerPacketType.KICK));
 	}
 	
 	/**
