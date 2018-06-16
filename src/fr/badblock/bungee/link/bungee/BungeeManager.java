@@ -263,6 +263,15 @@ public class BungeeManager {
 	}
 
 	/**
+	 * Get the logged players with an IP
+	 * 
+	 * @param IP
+	 */
+	public List<BadPlayer> getLoggedPlayers(String ip) {
+		return getLoggedPlayers(badPlayer -> badPlayer.getLastIp().equalsIgnoreCase(ip));
+	}
+
+	/**
 	 * Get the online player count with cache time (to avoid compute-spamming)
 	 * 
 	 * @return the online player count
