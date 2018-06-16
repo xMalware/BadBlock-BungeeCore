@@ -19,6 +19,7 @@ import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.api.common.utils.data.Callback;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.modules.login.antivpn.IPHubObject;
 import fr.badblock.bungee.utils.ObjectUtils;
 import fr.badblock.bungee.utils.time.TimeUtils;
 import lombok.AccessLevel;
@@ -118,6 +119,14 @@ public final class BadIP {
 	 * @return Returns punished
 	 */
 	private Punished punished;
+	
+	/**
+	 * API Data
+	 * 
+	 * @param Set API data
+	 * @return Returns API data
+	 */
+	private IPHubObject	apiData;
 
 	/**
 	 * VPN
@@ -206,6 +215,8 @@ public final class BadIP {
 		object.put("vpn", isVpn());
 		// Set the punished object
 		object.put("punish", punished.getDBObject());
+		// Set the API data object
+		object.put("apiData", apiData.getDBObject());
 		// Returns the object
 		return object;
 	}
@@ -296,6 +307,8 @@ public final class BadIP {
 			setVpn(getBoolean("vpn"));
 			// Set punished
 			setPunished(new Punished(getJsonElement("punish").getAsJsonObject()));
+			// Set API data
+			setApiData(new IPHubObject(getDbObject()));
 		} else {
 			// Log
 			BadBungee.log(getIp() + " doesn't exist in the player table.");
@@ -472,6 +485,23 @@ public final class BadIP {
 	public void updateVPN() {
 		// Update data
 		updateData("vpn", isVpn());
+	}
+
+	/**
+	 * Update API data object
+	 */
+	public void updateApiData() {
+		// Update data
+		updateData("apiData", getApiData());
+	}
+
+	/**
+	 * Kick online players with this IP
+	 * @param string
+	 */
+	public void kick(String reason)
+	{
+		
 	}
 
 }
