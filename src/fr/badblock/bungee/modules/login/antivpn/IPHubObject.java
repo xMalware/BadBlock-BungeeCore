@@ -1,6 +1,8 @@
 package fr.badblock.bungee.modules.login.antivpn;
 
 import com.google.gson.JsonObject;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -84,6 +86,30 @@ public class IPHubObject {
 		ip = jsonObject.get("ip").getAsString();
 		// Set ISP
 		isp = jsonObject.get("isp").getAsString();
+	}
+	
+	/**
+	 * To database object
+	 * @return
+	 */
+	public DBObject toDbObject()
+	{
+		// Create a database object
+		DBObject dbObject = new BasicDBObject();
+		// Put ASN
+		dbObject.put("asn", asn);
+		// Put block
+		dbObject.put("block", block);
+		// Put country code
+		dbObject.put("countryCode", countryCode);
+		// Put country name
+		dbObject.put("countryName", countryName);
+		// Put IP
+		dbObject.put("ip", ip);
+		// Put ISP
+		dbObject.put("isp", isp);
+		// Returns the database object
+		return dbObject;
 	}
 
 }
