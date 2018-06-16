@@ -5,7 +5,6 @@ ToDo BadBlockBungee:
 /onlinestaff
 /scale
 /spymsg
-/track
 /done
 /gnick
 /rnick
@@ -28,3 +27,4 @@ T - /unmute
 T - /unban
 T - /warn
 T - /sanction
+T - /track
