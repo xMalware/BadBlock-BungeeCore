@@ -17,15 +17,6 @@ import lombok.EqualsAndHashCode;
 public class PlayerPacket {
 
 	/**
-	 * Content
-	 * 
-	 * @param Set
-	 *            the content of the playerPacket
-	 * @return The content of the playerPacket
-	 */
-	private String content;
-
-	/**
 	 * Player name (username)
 	 * 
 	 * @param Set
@@ -34,6 +25,15 @@ public class PlayerPacket {
 	 */
 	private String playerName;
 
+	/**
+	 * Content
+	 * 
+	 * @param Set
+	 *            the content of the playerPacket
+	 * @return The content of the playerPacket
+	 */
+	private String content;
+	
 	/**
 	 * Player packet type
 	 * 
