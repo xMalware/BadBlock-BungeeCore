@@ -1,5 +1,7 @@
 package fr.badblock.bungee.modules.login.antivpn;
 
+import com.google.gson.JsonObject;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -67,5 +69,21 @@ public class IPHubObject {
 	 * @return Returns the ISP
 	 */
 	private String isp;
+	
+	public IPHubObject(JsonObject jsonObject)
+	{
+		// Set asn
+		asn = jsonObject.get("asn").getAsInt();
+		// Set block
+		block = jsonObject.get("asn").getAsInt();
+		// Set country code
+		countryCode = jsonObject.get("countryCode").getAsString();
+		// Set country name
+		countryName = jsonObject.get("countryName").getAsString();
+		// Set ip
+		ip = jsonObject.get("ip").getAsString();
+		// Set ISP
+		isp = jsonObject.get("isp").getAsString();
+	}
 
 }
