@@ -216,7 +216,7 @@ public final class BadIP {
 		// Set the punished object
 		object.put("punish", punished.getDBObject());
 		// Set the API data object
-		object.put("apiData", apiData.getDBObject());
+		object.put("apiData", apiData.toDbObject());
 		// Returns the object
 		return object;
 	}
@@ -308,7 +308,7 @@ public final class BadIP {
 			// Set punished
 			setPunished(new Punished(getJsonElement("punish").getAsJsonObject()));
 			// Set API data
-			setApiData(new IPHubObject(getDbObject()));
+			setApiData(new IPHubObject(getJsonElement("apiData").getAsJsonObject()));
 		} else {
 			// Log
 			BadBungee.log(getIp() + " doesn't exist in the player table.");
