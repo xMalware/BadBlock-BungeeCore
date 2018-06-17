@@ -114,9 +114,7 @@ public class TempBanCommand extends AbstractModCommand {
 		}
 
 		badPlayer.getFlags().set("tryban", 500);
-
-		boolean isKey = true;
-
+		
 		String banReason = args[2];
 		String rawTime = args[3];
 
@@ -138,7 +136,7 @@ public class TempBanCommand extends AbstractModCommand {
 
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
 				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), TimeUtils.nextTime(time),
-				DateUtils.getHourDate(), banReason, isKey, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
+				DateUtils.getHourDate(), banReason, false, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		BadBungee badBungee = BadBungee.getInstance();
 
@@ -178,10 +176,9 @@ public class TempBanCommand extends AbstractModCommand {
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
 				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				badOfflinePlayer.getName(), rawTime, banReason);
+				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);
 
-		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
-				rawTime, banReason);
+		I19n.sendMessage(sender, getPrefix("banned"), null, badOfflinePlayer.getName(), rawTime, banReason);
 	}
 
 }
