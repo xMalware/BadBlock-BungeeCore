@@ -215,10 +215,19 @@ public final class BadPlayer extends BadOfflinePlayer {
 			return null;
 		}
 
+		// If the punish mute is null
+		if (getPunished().getMute() == null)
+		{
+			// Returns null
+			return null;
+		}
+		
 		// We create an empty mute message
 		StringBuilder stringBuilder = new StringBuilder();
+		// Create array
+		int[] arr = getPunished().getMute().isReasonKey() ? new int[] { 1 } : null;
 		// For each line of the mute message
-		for (String string : getTranslatedMessages("punishments.mute", null, getPunished().buildMuteTime(getLocale()),
+		for (String string : getTranslatedMessages("punishments.mute", arr, getPunished().buildMuteTime(getLocale()),
 				ChatColor.stripColor(getPunished().getMute().getReason()))) {
 			// We add it to the final ban message
 			stringBuilder.append(string + System.lineSeparator());
