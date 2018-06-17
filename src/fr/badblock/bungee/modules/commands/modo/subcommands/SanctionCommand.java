@@ -1,7 +1,5 @@
 package fr.badblock.bungee.modules.commands.modo.subcommands;
 
-import java.util.Date;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -9,6 +7,7 @@ import com.mongodb.DBObject;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.utils.bungee.Punishment;
+import fr.badblock.api.common.utils.i18n.Locale;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
 import fr.badblock.bungee.BadBungee;
@@ -16,7 +15,6 @@ import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.badblock.bungee.utils.DateUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -167,15 +165,38 @@ public class SanctionCommand extends AbstractModCommand {
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Get database collection
-		DBCollection dbCollection = mongoService.getDb().getCollection("players");
+		DBCollection dbCollection = mongoService.getDb().getCollection("punishments");
 		// Create query
-		DBObject query = new BasicDBObject();
+		BasicDBObject query = new BasicDBObject();
 		// Add punished
-		query.put("punished", playerName.toLowerCase());
+		query.put("punishedUuid", badOfflinePlayer.getUniqueId().toString().toLowerCase());
+		System.out.println(query.toJson());
 		// Get data
 		DBCursor cursor = dbCollection.find(query);
+		// Data?
+		boolean data = false;
+		// Get sender locale
+		Locale senderLocale = !(sender instanceof ProxiedPlayer) ? Locale.FRENCH_FRANCE : null;
+		// If the sender locale is null
+		if (senderLocale == null)
+		{
+			// Get the proxied player
+			ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+			// Get the bad player
+			BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
+			if (badPlayer != null)
+			{
+				senderLocale = badPlayer.getLocale();
+			}
+			else
+			{
+				senderLocale = Locale.FRENCH_FRANCE;
+			}
+		}
 		// If there's data
 		while (cursor.hasNext()) {
+			// There is a data
+			data = true;
 			// Get the database object
 			DBObject dbObject = cursor.next();
 			// Create a punishment
@@ -183,7 +204,13 @@ public class SanctionCommand extends AbstractModCommand {
 			// Send punishment data
 			I19n.sendMessage(sender, getPrefix("history"), new int[] { 1 }, badOfflinePlayer.getName(),
 					punishment.getType().name(), punishment.getReason(),
-					DateUtils.getHourDate(new Date(punishment.getExpire())), punishment.getPunisher());
+					punishment.buildTime(senderLocale), punishment.getPunisher());
+		}
+		// If there's no data
+		if (!data)
+		{
+			// Send a message
+			I19n.sendMessage(sender, getPrefix("norecords"), null, badOfflinePlayer.getName());
 		}
 	}
 

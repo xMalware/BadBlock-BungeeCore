@@ -373,7 +373,7 @@ public class BadOfflinePlayer {
 		// Put the last IP
 		object.put("lastIp", getLastIp());
 		// Put the unique ID
-		object.put("uniqueId", UUID.randomUUID().toString());
+		object.put("uniqueId", getUniqueId());
 		// Put the settings
 		object.put("settings", settings.getDBObject());
 		// Put the punish object
