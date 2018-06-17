@@ -146,8 +146,8 @@ public class TempMuteCommand extends AbstractModCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		// If arg length < 3
-		if (args.length < 3) {
+		// If arg length < 4
+		if (args.length < 4) {
 			// Send the message
 			I19n.sendMessage(sender, getPrefix("usage"), null);
 			// So we stop there
