@@ -61,6 +61,15 @@ public class ConnectServerCommand extends BadCommand {
 		}
 
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+		
+		if (proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null)
+		{
+			if (proxiedPlayer.getServer().getInfo().equals(serverInfo))
+			{
+				I19n.sendMessage(sender, prefix + "alreadyconnected", null, serverName);
+				return;
+			}
+		}
 
 		proxiedPlayer.connect(serverInfo);
 
