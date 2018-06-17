@@ -412,14 +412,14 @@ public class BanCommand extends AbstractModCommand {
 		}
 
 		// Array to translate
-		int[] arr = isKey ? new int[] { 0, 2, 4 } : new int[] { 0, 2 };
+		int[] arr = isKey ? new int[] { 0, 2, 5 } : new int[] { 0, 2 };
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
 				arr, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), reason);
 
 		// Send banned message
-		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
+		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 2 } : null, badOfflinePlayer.getName(),
 				Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), reason);
 	}
 
