@@ -8,17 +8,17 @@ public enum MuteReasonType {
 
 	NEGATIVE_BEHAVIOUR,
 
-	OTHER,
-
 	RUDE,
 
 	SOCIAL_MEDIA_ADVERTISING,
 
-	SPAM(),
+	SPAM,
 
 	SWEARING,
 
-	VERBAL_ABUSE;
+	VERBAL_ABUSE,
+	
+	OTHER;
 
 	public static MuteReasonType getFromString(String string) {
 		for (MuteReasonType muteReason : values()) {
