@@ -10,6 +10,7 @@ import fr.badblock.api.common.utils.TimeUtils;
 import fr.badblock.api.common.utils.bungee.PunishType;
 import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.api.common.utils.bungee.Punishment;
+import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
 import fr.badblock.api.common.utils.time.Time;
@@ -92,7 +93,7 @@ public class TempBanCommand extends AbstractModCommand {
 
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		if (args.length != 4) {
+		if (args.length < 4) {
 			// /m ban <pseudo> <temps> <raison>
 			I19n.sendMessage(sender, getPrefix("usage"), null);
 			return;
@@ -115,8 +116,8 @@ public class TempBanCommand extends AbstractModCommand {
 
 		badPlayer.getFlags().set("tryban", 500);
 		
-		String banReason = args[2];
-		String rawTime = args[3];
+		String rawTime = args[2];
+		String banReason = StringUtils.join(args, " ", 3);
 
 		long time = Time.MILLIS_SECOND.matchTime(rawTime);
 

@@ -10,6 +10,7 @@ import fr.badblock.api.common.utils.TimeUtils;
 import fr.badblock.api.common.utils.bungee.PunishType;
 import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.api.common.utils.bungee.Punishment;
+import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
 import fr.badblock.api.common.utils.time.Time;
@@ -148,8 +149,7 @@ public class BanCommand extends AbstractModCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		// If arg length != 2 or 3
-		if (args.length != 2 && args.length != 3) {
+		if (args.length < 2) {
 			// Send the message
 			I19n.sendMessage(sender, getPrefix("usage"), null);
 			// So we stop there
@@ -175,7 +175,7 @@ public class BanCommand extends AbstractModCommand {
 		isPlayer = isPlayer && proxiedPlayer != null && badPlayer != null;
 
 		// two args
-		if (args.length == 2) {
+		if (args.length <= 2) {
 
 			// If the sender is a player
 			if (isPlayer) {
@@ -246,7 +246,7 @@ public class BanCommand extends AbstractModCommand {
 		boolean isKey = true;
 
 		// Get the raw ban reason
-		String rawBanReason = args[2];
+		String rawBanReason = StringUtils.join(args, " ", 2);
 
 		// Get the ban reason
 		BanReasonType banReason = BanReasonType.getFromString(rawBanReason);
@@ -352,6 +352,7 @@ public class BanCommand extends AbstractModCommand {
 		// Array to translate
 		int[] arr = isKey ? new int[] { 0, 2, 4 } : new int[] { 0, 2 };
 		// We send the message and the sender to all concerned
+		// TODO time with mod-table
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
 				arr, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName(), reason);
