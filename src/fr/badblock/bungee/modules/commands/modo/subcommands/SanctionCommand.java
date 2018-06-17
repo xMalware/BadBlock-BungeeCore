@@ -202,8 +202,8 @@ public class SanctionCommand extends AbstractModCommand {
 			// Create a punishment
 			Punishment punishment = new Punishment(dbObject);
 			// Send punishment data
-			I19n.sendMessage(sender, getPrefix("history"), new int[] { 1 }, badOfflinePlayer.getName(),
-					"punishments.types." + punishment.getType().name(), punishment.getReason(),
+			I19n.sendMessage(sender, getPrefix("history." + punishment.getType().name().toLowerCase()), new int[] { 1 }, badOfflinePlayer.getName(),
+					"punishments.types." + punishment.getType().name().toLowerCase(), punishment.getReason(),
 					punishment.buildTime(senderLocale), punishment.getPunisher());
 		}
 		// If there's no data
