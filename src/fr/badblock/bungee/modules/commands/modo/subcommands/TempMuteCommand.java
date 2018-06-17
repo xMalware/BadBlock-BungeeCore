@@ -206,7 +206,7 @@ public class TempMuteCommand extends AbstractModCommand {
 
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
-				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(), time, DateUtils.getHourDate(),
+				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(), TimeUtils.nextTime(time), DateUtils.getHourDate(),
 				muteReason, false, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		// Get the main class
