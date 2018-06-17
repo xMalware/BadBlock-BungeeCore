@@ -83,7 +83,7 @@ public class TrackCommand extends AbstractModCommand {
 				String rawParty = Boolean.toString(inParty);
 				String rawMute = Boolean.toString(isMute);
 				String countryName = badIp != null && badIp.getApiData() != null ? badIp.getApiData().getCountryName() : "unknown";
-				I19n.sendMessage(sender, getPrefix("message"), new int[] { 3, 4, 5, 6, 7, 8, 9 },
+				I19n.sendMessage(sender, getPrefix("message"), new int[] { 2, 3, 4, 5, 6, 7, 8, 9 },
 						playerName, currentServer, bungeeGroups, getPrefix("mute_" + rawMute),
 						getPrefix("friendlistable_" + friendlistable.name()), getPrefix("partyable_" + partyable.name()),
 						getPrefix("pmprivacy_" + pmPrivacy.name()), "locale." + locale, getPrefix("party_" + rawParty),
