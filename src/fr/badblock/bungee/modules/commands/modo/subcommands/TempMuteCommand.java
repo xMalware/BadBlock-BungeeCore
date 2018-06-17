@@ -163,7 +163,14 @@ public class TempMuteCommand extends AbstractModCommand {
 			return;
 		}
 
-		BadPlayer badPlayer = BadPlayer.get(playerName);
+		// He's a player?
+		boolean isPlayer = sender instanceof ProxiedPlayer;
+		// Get the proxied player
+		ProxiedPlayer proxiedPlayer = isPlayer ? (ProxiedPlayer) sender : null;
+		// Get the bad player
+		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
+		// He's a player?
+		isPlayer = isPlayer && proxiedPlayer != null && badPlayer != null;
 
 		// If the sender is a player
 		if (badPlayer != null && badPlayer.getFlags().has("trymute")) {
