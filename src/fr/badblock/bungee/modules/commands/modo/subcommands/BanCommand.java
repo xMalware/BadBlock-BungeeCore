@@ -344,7 +344,7 @@ public class BanCommand extends AbstractModCommand {
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
 				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(),
-				time, DateUtils.getHourDate(), reason, isKey,
+				 TimeUtils.nextTime(time), DateUtils.getHourDate(), reason, isKey,
 				new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		// Get the main class
