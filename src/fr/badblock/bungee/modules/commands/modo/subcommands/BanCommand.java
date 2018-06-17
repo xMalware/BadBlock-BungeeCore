@@ -3,8 +3,10 @@ package fr.badblock.bungee.modules.commands.modo.subcommands;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.utils.TimeUtils;
@@ -18,6 +20,7 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
+import fr.badblock.bungee.modules.commands.modo.objects.BanIndex;
 import fr.badblock.bungee.modules.commands.modo.objects.BanReason;
 import fr.badblock.bungee.modules.commands.modo.objects.BanReasons;
 import fr.badblock.bungee.players.BadOfflinePlayer;
@@ -184,7 +187,7 @@ public class BanCommand extends AbstractModCommand {
 				// Send the message
 				badPlayer.sendTranslatedOutgoingMessage(getPrefix("select_intro"), null, playerName);
 			} else
-			// If the sender isn't a player
+				// If the sender isn't a player
 			{
 				// Send the message
 				I19n.sendMessage(sender, getPrefix("select_intro"), null, playerName);
@@ -219,7 +222,7 @@ public class BanCommand extends AbstractModCommand {
 					// Send the message
 					badPlayer.sendTranslatedOutgoingMCJson(json);
 				} else
-				// If the sender isn't a player
+					// If the sender isn't a player
 				{
 					// Send the reason message
 					I19n.sendMessage(sender, getPrefix("reason." + entry.getKey()), null);
@@ -270,6 +273,12 @@ public class BanCommand extends AbstractModCommand {
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
+		if (badOfflinePlayer == null)
+		{
+			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
+			return;
+		}
+
 		// Get the reason
 		String reason = isKey ? getPrefix("reason." + banReason.getName()) : rawBanReason;
 		// Get the punisher ip
@@ -277,14 +286,59 @@ public class BanCommand extends AbstractModCommand {
 
 		// Generate a unique id
 		UUID uuid = UUID.randomUUID();
-		
+
 		// Unique id
 		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
+
+		long time = Time.YEAR.convert(1L, Time.MILLIS_SECOND);
+
+		if (banReason != null && isKey)
+		{
+
+			// Get mongo service
+			MongoService mongoService = BadBungee.getInstance().getMongoService();
+			// Get database collection
+			DBCollection dbCollection = mongoService.getDb().getCollection("punishments");
+			// Create query
+			BasicDBObject query = new BasicDBObject();
+			// Add punished
+			query.put("punishedUuid", badOfflinePlayer.getUniqueId().toString().toLowerCase());
+			// Add type
+			query.put("type", PunishType.BAN.name());
+			// Add reason
+			query.put("reason", reason);
+			// Get data
+			DBCursor cursor = dbCollection.find(query);
+
+			int ban = cursor.count();
+
+			if (banReason != null)
+			{
+				BanIndex index = null;
+				for (BanIndex banIndex : banReason.getPunishments().values())
+				{
+					if (index == null || (banIndex.getIndex() > index.getIndex() && banIndex.getIndex() >= ban))
+					{
+						index = banIndex;
+					}
+				}
+				
+				if (index != null)
+				{
+					time = index.getTime();
+				}
+				else
+				{
+					I19n.sendMessage(sender, getPrefix("unknownreason"), null, playerName);
+					return;
+				}
+			}
+		}
 
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
 				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(),
-				TimeUtils.nextTime(Time.YEAR.convert(1L, Time.MILLIS_SECOND)), DateUtils.getHourDate(), reason, isKey,
+				time, DateUtils.getHourDate(), reason, isKey,
 				new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		// Get the main class
@@ -354,10 +408,9 @@ public class BanCommand extends AbstractModCommand {
 		// Array to translate
 		int[] arr = isKey ? new int[] { 0, 2, 4 } : new int[] { 0, 2 };
 		// We send the message and the sender to all concerned
-		// TODO time with mod-table
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
 				arr, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				badOfflinePlayer.getName(), reason);
+				badOfflinePlayer.getName(), time, reason);
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
