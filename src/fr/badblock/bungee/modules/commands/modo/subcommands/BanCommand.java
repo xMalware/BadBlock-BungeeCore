@@ -325,7 +325,13 @@ public class BanCommand extends AbstractModCommand {
 				
 				if (index != null)
 				{
-					time = index.getTime();
+					String rawTime = index.getTime();
+					time = Time.MILLIS_SECOND.matchTime(rawTime);
+					if (time == 0L)
+					{
+						I19n.sendMessage(sender, getPrefix("unknowntime"), null, rawTime);
+						return;
+					}
 				}
 				else
 				{

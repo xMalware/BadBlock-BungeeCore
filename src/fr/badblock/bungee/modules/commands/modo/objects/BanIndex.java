@@ -32,7 +32,7 @@ public class BanIndex {
 	 *            the new time
 	 * @return Returns the current time
 	 */
-	private long time;
+	private String time;
 
 	/**
 	 * Constructor
@@ -44,7 +44,7 @@ public class BanIndex {
 		// Set index
 		index = dbObject.getInt("index");
 		// Set time
-		time = dbObject.getLong("time");
+		time = dbObject.getString("time");
 	}
 
 }
