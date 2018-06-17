@@ -35,7 +35,7 @@ public class SanctionCommand extends AbstractModCommand {
 	 */
 	public SanctionCommand() {
 		// Super!
-		super("sanction", new String[] { "casier", "case", "s", "c", "cases" });
+		super("sanction", new String[] { "casier", "case", "s", "c", "cases", "records", "record", "r" });
 	}
 
 	/**
@@ -135,8 +135,8 @@ public class SanctionCommand extends AbstractModCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		// If arg length != 3
-		if (args.length != 3) {
+		// If arg length != 2
+		if (args.length != 2) {
 			// Send the message
 			I19n.sendMessage(sender, getPrefix("usage"), null);
 			// So we stop there
@@ -152,7 +152,7 @@ public class SanctionCommand extends AbstractModCommand {
 		BadOfflinePlayer badOfflinePlayer = bungeeManager.getBadOfflinePlayer(playerName);
 
 		if (badOfflinePlayer == null) {
-			I19n.sendMessage(sender, getPrefix("offline"), null);
+			I19n.sendMessage(sender, getPrefix("unknownplayer"), null);
 			return;
 		}
 
@@ -176,14 +176,15 @@ public class SanctionCommand extends AbstractModCommand {
 		DBCursor cursor = dbCollection.find(query);
 		// If there's data
 		while (cursor.hasNext()) {
+			// Get the database object
 			DBObject dbObject = cursor.next();
+			// Create a punishment
 			Punishment punishment = new Punishment(dbObject);
+			// Send punishment data
 			I19n.sendMessage(sender, getPrefix("history"), new int[] { 1 }, badOfflinePlayer.getName(),
 					punishment.getType().name(), punishment.getReason(),
 					DateUtils.getHourDate(new Date(punishment.getExpire())), punishment.getPunisher());
 		}
-
-		// Send banned message
 	}
 
 }
