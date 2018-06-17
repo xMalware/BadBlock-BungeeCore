@@ -60,7 +60,7 @@ public class BanReasons {
 		// Get the mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Get database collection
-		DBCollection dbCollection = mongoService.getDb().getCollection("players");
+		DBCollection dbCollection = mongoService.getDb().getCollection("punishTable");
 		// Create database query
 		DBObject query = new BasicDBObject();
 		// Add ban type
