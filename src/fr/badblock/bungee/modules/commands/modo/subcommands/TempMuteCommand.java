@@ -10,6 +10,7 @@ import fr.badblock.api.common.utils.TimeUtils;
 import fr.badblock.api.common.utils.bungee.PunishType;
 import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.api.common.utils.bungee.Punishment;
+import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
 import fr.badblock.api.common.utils.time.Time;
@@ -173,14 +174,14 @@ public class TempMuteCommand extends AbstractModCommand {
 		badPlayer.getFlags().set("trymute", 500);
 
 		// Get the mute reason
-		String muteReason = args[2];
-
-		String rawTime = args[3];
+		String rawTime = args[2];
+		
+		String muteReason = StringUtils.join(args, " ", 3);
 
 		long time = Time.MILLIS_SECOND.matchTime(rawTime);
 
 		if (time == 0L) {
-			I19n.sendMessage(sender, getPrefix("notgoodtime"), null);
+			I19n.sendMessage(sender, getPrefix("notgoodtime"), null, rawTime);
 			return;
 		}
 
@@ -265,7 +266,7 @@ public class TempMuteCommand extends AbstractModCommand {
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"),
 				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				badOfflinePlayer.getName(), rawTime, muteReason);
+				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), muteReason);
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("muted"), null, badOfflinePlayer.getName(), rawTime, muteReason);
