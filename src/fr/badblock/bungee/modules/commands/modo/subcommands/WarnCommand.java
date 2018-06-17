@@ -36,7 +36,7 @@ public class WarnCommand extends AbstractModCommand {
 	 */
 	public WarnCommand() {
 		// Super!
-		super("warn", new String[] { "kw" });
+		super("warn", new String[] { "w" });
 	}
 
 	/**
@@ -149,16 +149,11 @@ public class WarnCommand extends AbstractModCommand {
 
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 
-		if (!bungeeManager.hasUsername(playerName)) {
-			I19n.sendMessage(sender, getPrefix("offline"), null);
-			return;
-		}
-
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = bungeeManager.getBadOfflinePlayer(playerName);
 
-		if (badOfflinePlayer == null) {
-			I19n.sendMessage(sender, getPrefix("offline"), null);
+		if (badOfflinePlayer == null || !badOfflinePlayer.isFound() || !badOfflinePlayer.isLoaded()) {
+			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			return;
 		}
 
