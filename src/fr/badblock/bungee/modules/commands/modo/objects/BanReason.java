@@ -3,13 +3,13 @@ package fr.badblock.bungee.modules.commands.modo.objects;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import com.google.gson.reflect.TypeToken;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-import fr.badblock.api.common.utils.GsonUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -60,14 +60,15 @@ public class BanReason {
 		// Create a map!
 		punishments = new HashMap<>();
 
-		// Get temp map
-		Map<String, DBObject> temp = GsonUtils.getGson().fromJson(dbObject.get("punishments").toString(),
-				collectionType);
+		// Get table
+		BasicDBList dbList = (BasicDBList) dbObject.get("punishments");
+		// Get database array
+		BasicDBObject[] dbArray = dbList.toArray(new BasicDBObject[] { });
 
 		// For each entry
-		for (Entry<String, DBObject> entry : temp.entrySet()) {
+		for (BasicDBObject basicDbObject : dbArray) {
 			// Insert into punishment map
-			punishments.put(entry.getKey(), new BanIndex(entry.getValue()));
+			punishments.put(basicDbObject.getString("name"), new BanIndex(basicDbObject));
 		}
 	}
 
