@@ -1,14 +1,17 @@
 package fr.badblock.bungee.modules.commands.modo.objects;
-
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
+import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.bungee.BadBungee;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +25,9 @@ import lombok.Setter;
  */
 @Getter
 public class BanReasons {
+
+
+	public static final Type dbType = new TypeToken<List<DBObject>>() {}.getType();
 
 	/**
 	 * Instance
@@ -71,10 +77,16 @@ public class BanReasons {
 		while (cursor.hasNext()) {
 			// Get the database object
 			DBObject dbObject = cursor.next();
-			// Create a ban reason
-			BanReason banReason = new BanReason(dbObject);
-			// Add ban reasons
-			banReasons.put(banReason.getName(), banReason);
+			// Get table
+			List<DBObject> table = GsonUtils.getGson().fromJson(dbObject.get("table").toString(), dbType);
+			// For each ban object
+			for (DBObject banObject : table)
+			{
+				// Create a ban reason
+				BanReason banReason = new BanReason(banObject);
+				// Add ban reasons
+				banReasons.put(banReason.getName(), banReason);
+			}
 		}
 		// Close the cursor
 		cursor.close();
