@@ -56,7 +56,7 @@ public class ConnectServerCommand extends BadCommand {
 		ServerInfo serverInfo = BungeeCord.getInstance().getServerInfo(serverName);
 
 		if (serverInfo == null) {
-			I19n.sendMessage(sender, prefix + "unknownserver", null);
+			I19n.sendMessage(sender, prefix + "unknownserver", null, serverName);
 			return;
 		}
 
