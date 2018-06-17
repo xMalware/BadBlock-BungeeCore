@@ -74,14 +74,14 @@ public class ConnectPlayerCommand extends BadCommand {
 		String currentServer = badPlayer.getCurrentServer();
 
 		if (currentServer == null) {
-			I19n.sendMessage(sender, prefix + "unknownserver", null);
+			I19n.sendMessage(sender, prefix + "unknownserver", null, currentServer);
 			return;
 		}
 
 		ServerInfo serverInfo = BungeeCord.getInstance().getServerInfo(currentServer);
 
 		if (serverInfo == null) {
-			I19n.sendMessage(sender, prefix + "unknownserver", null);
+			I19n.sendMessage(sender, prefix + "unknownserver", null, currentServer);
 			return;
 		}
 
