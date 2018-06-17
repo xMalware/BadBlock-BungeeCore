@@ -123,7 +123,7 @@ public class TempBanCommand extends AbstractModCommand {
 		long time = Time.MILLIS_SECOND.matchTime(rawTime);
 
 		if (time == 0L) {
-			I19n.sendMessage(sender, getPrefix("notgoodtime"), null);
+			I19n.sendMessage(sender, getPrefix("notgoodtime"), null, rawTime);
 			return;
 		}
 
