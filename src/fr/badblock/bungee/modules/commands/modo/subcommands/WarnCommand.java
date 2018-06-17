@@ -10,6 +10,7 @@ import fr.badblock.api.common.utils.TimeUtils;
 import fr.badblock.api.common.utils.bungee.PunishType;
 import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.api.common.utils.bungee.Punishment;
+import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
 import fr.badblock.bungee.BadBungee;
@@ -173,7 +174,7 @@ public class WarnCommand extends AbstractModCommand {
 		isPlayer = isPlayer && proxiedPlayer != null && badPlayer != null;
 
 		// Get the warn reason
-		String warnReason = args[2];
+		String warnReason = StringUtils.join(args, " ", 2);
 
 		// Get the punisher ip
 		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
