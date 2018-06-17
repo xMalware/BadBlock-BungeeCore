@@ -1,5 +1,6 @@
 package fr.badblock.bungee.modules.commands.modo.subcommands;
 
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import com.mongodb.DB;
@@ -17,7 +18,8 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.BanReasonType;
+import fr.badblock.bungee.modules.commands.modo.objects.BanReason;
+import fr.badblock.bungee.modules.commands.modo.objects.BanReasons;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.DateUtils;
@@ -192,9 +194,9 @@ public class BanCommand extends AbstractModCommand {
 			boolean hasReason = false;
 
 			// For each reason type
-			for (BanReasonType banReason : BanReasonType.values()) {
+			for (Entry<String, BanReason> entry : BanReasons.getInstance().getBanReasons().entrySet()) {
 				// If the sender doesn't have the permission to ban for this reason
-				if (!sender.hasPermission(getPermission() + "." + banReason.getName())) {
+				if (!sender.hasPermission(getPermission() + "." + entry.getKey())) {
 					// So continue
 					continue;
 				}
@@ -207,11 +209,11 @@ public class BanCommand extends AbstractModCommand {
 					// Get the intro message
 					String intro = badPlayer.getTranslatedMessage(getPrefix("reason_intro"), null);
 					// Get the reason message
-					String reason = badPlayer.getTranslatedMessage(getPrefix("reason." + banReason.getName()), null);
+					String reason = badPlayer.getTranslatedMessage(getPrefix("reason." + entry.getKey()), null);
 
 					// Get the McJson
 					McJson json = new McJsonFactory(intro).finaliseComponent().initNewComponent(reason)
-							.setHoverText(reason).setClickCommand("/m ban " + playerName + " " + banReason.getName())
+							.setHoverText(reason).setClickCommand("/m ban " + playerName + " " + entry.getKey())
 							.finaliseComponent().build();
 
 					// Send the message
@@ -220,7 +222,7 @@ public class BanCommand extends AbstractModCommand {
 				// If the sender isn't a player
 				{
 					// Send the reason message
-					I19n.sendMessage(sender, getPrefix("reason." + banReason.getName()), null);
+					I19n.sendMessage(sender, getPrefix("reason." + entry.getKey()), null);
 				}
 			}
 
@@ -249,7 +251,7 @@ public class BanCommand extends AbstractModCommand {
 		String rawBanReason = StringUtils.join(args, " ", 2);
 
 		// Get the ban reason
-		BanReasonType banReason = BanReasonType.getFromString(rawBanReason);
+		BanReason banReason = BanReasons.getInstance().getBanReasons().get(rawBanReason);
 
 		// If the ban reason doesn't exist
 		if (banReason == null) {

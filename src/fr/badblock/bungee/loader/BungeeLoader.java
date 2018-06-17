@@ -24,6 +24,7 @@ import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.config.ConfigLoader;
 import fr.badblock.bungee.link.bungee.BungeeTask;
+import fr.badblock.bungee.modules.commands.modo.objects.BanReasons;
 import fr.badblock.bungee.rabbit.claimants.RabbitClaimant;
 import fr.badblock.bungee.utils.PackageUtils;
 import lombok.Data;
@@ -82,10 +83,20 @@ public class BungeeLoader {
 		loadBungeeLinker();
 		// Load listeners
 		loadListeners();
+		// Load punishment table
+		loadPunishmentTable();
 		// Load permissions
 		loadPermissions();
 	}
 
+	/**
+	 * Load punishment table
+	 */
+	private void loadPunishmentTable()
+	{
+		new BanReasons();
+	}
+	
 	/**
 	 * Load BungeeLinker
 	 */

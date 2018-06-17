@@ -1,6 +1,6 @@
 package fr.badblock.bungee.modules.commands.modo.objects;
 
-public enum BanReasonType {
+public enum _BanReasonType {
 
 	ADVERTISING,
 
@@ -24,8 +24,8 @@ public enum BanReasonType {
 
 	VERBAL_ABUSE;
 
-	public static BanReasonType getFromString(String string) {
-		for (BanReasonType banReason : values()) {
+	public static _BanReasonType getFromString(String string) {
+		for (_BanReasonType banReason : values()) {
 			if (banReason.name().equalsIgnoreCase(string)) {
 				return banReason;
 			}

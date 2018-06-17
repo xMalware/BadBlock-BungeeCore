@@ -20,6 +20,7 @@ import lombok.Setter;
  * @author xMalware
  *
  */
+@Getter
 public class BanReasons {
 
 	/**
