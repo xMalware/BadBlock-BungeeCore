@@ -1,6 +1,6 @@
 package fr.badblock.bungee.modules.commands.modo.objects;
 
-import com.mongodb.DBObject;
+import com.mongodb.BasicDBObject;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,11 +40,11 @@ public class BanIndex {
 	 * @param Database
 	 *            object
 	 */
-	public BanIndex(DBObject dbObject) {
+	public BanIndex(BasicDBObject dbObject) {
 		// Set index
-		index = Integer.parseInt(dbObject.get("index").toString());
+		index = dbObject.getInt("index");
 		// Set time
-		time = Long.parseLong(dbObject.get("time").toString());
+		time = dbObject.getLong("time");
 	}
 
 }
