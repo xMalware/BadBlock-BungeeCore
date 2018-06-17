@@ -340,6 +340,7 @@ public class MuteCommand extends AbstractModCommand {
 			}
 		}
 
+		// Array to translate
 		int[] arr = isKey ? new int[] { 0, 2, 5 } : new int[] { 0, 2 };
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"),

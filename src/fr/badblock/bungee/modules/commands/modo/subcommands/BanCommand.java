@@ -349,9 +349,11 @@ public class BanCommand extends AbstractModCommand {
 			}
 		}
 
+		// Array to translate
+		int[] arr = isKey ? new int[] { 0, 2, 4 } : new int[] { 0, 2 };
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
-				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
+				arr, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName(), reason);
 
 		// Send banned message
