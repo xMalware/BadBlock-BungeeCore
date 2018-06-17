@@ -137,6 +137,8 @@ public final class BadPlayer extends BadOfflinePlayer {
 		updateLastIp();
 		// Set the version
 		setVersion(pendingConnection.getVersion());
+		// Set the last server
+		setLastServer(getCurrentServer());
 		// Update the vesion
 		updateVersion();
 		// Put in the map
@@ -180,7 +182,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Returns the name
 		return proxiedPlayer != null && proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
 				? proxiedPlayer.getServer().getInfo().getName()
-						: null;
+						: getLastServer();
 	}
 
 	/**

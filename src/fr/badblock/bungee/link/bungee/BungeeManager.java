@@ -91,7 +91,7 @@ public class BungeeManager {
 	 */
 	public void add(BungeeObject bungeeObject) {
 		// Add in the map
-		bungees.put(bungeeObject.getName(), bungeeObject);
+		bungees.put(bungeeObject.getIp() + "_" + bungeeObject.getName(), bungeeObject);
 	}
 
 	/**

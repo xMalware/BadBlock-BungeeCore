@@ -147,6 +147,14 @@ public class BadOfflinePlayer {
 	 * @return Returns the current username
 	 */
 	private String name;
+	
+	/**
+	 * Last server
+	 * 
+	 * @param Set the new "last server" :o
+	 * @return Returns the current last server
+	 */
+	private String lastServer;
 
 	/**
 	 * Permissions
