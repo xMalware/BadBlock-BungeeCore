@@ -340,10 +340,11 @@ public class MuteCommand extends AbstractModCommand {
 			}
 		}
 
+		int[] arr = isKey ? new int[] { 0, 2, 5 } : new int[] { 0, 2 };
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"),
-				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				badOfflinePlayer.getName(), reason);
+				arr, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
+				badOfflinePlayer.getName(), "TODO", reason);
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("muted"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
