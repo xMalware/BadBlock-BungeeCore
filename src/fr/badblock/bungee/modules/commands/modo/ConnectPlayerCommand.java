@@ -58,14 +58,14 @@ public class ConnectPlayerCommand extends BadCommand {
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 
 		if (!bungeeManager.hasUsername(playerName)) {
-			I19n.sendMessage(sender, prefix + "offline", null);
+			I19n.sendMessage(sender, prefix + "offline", null, playerName);
 			return;
 		}
 
 		BadPlayer badPlayer = bungeeManager.getBadPlayer(playerName);
 
 		if (badPlayer == null) {
-			I19n.sendMessage(sender, prefix + "offline", null);
+			I19n.sendMessage(sender, prefix + "offline", null, playerName);
 			return;
 		}
 
