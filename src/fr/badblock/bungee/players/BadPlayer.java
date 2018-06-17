@@ -204,21 +204,6 @@ public final class BadPlayer extends BadOfflinePlayer {
 	}
 
 	/**
-	 * Get the last server
-	 * 
-	 * @return a String
-	 */
-	public String getLastServer() {
-		// If the database object is null
-		if (getDbObject() == null) {
-			// Unknown last server
-			return null;
-		}
-		// Returns the last server
-		return getDbObject().get("lastServer").toString();
-	}
-
-	/**
 	 * Get the mute message
 	 * 
 	 * @return Returns the mute message
