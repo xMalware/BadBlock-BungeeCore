@@ -156,11 +156,20 @@ public final class BadPlayer extends BadOfflinePlayer {
 			// Returns null
 			return null;
 		}
+		
+		// If the punish ban is null
+		if (getPunished().getBan() == null)
+		{
+			// Returns null
+			return null;
+		}
 
 		// We create an empty ban message
 		StringBuilder stringBuilder = new StringBuilder();
+		// Create array
+		int[] arr = getPunished().getBan().isReasonKey() ? new int[] { 1 } : null;
 		// For each line of the ban message
-		for (String string : getTranslatedMessages("punishments.ban", new int[] { 1 }, Time.MILLIS_SECOND
+		for (String string : getTranslatedMessages("punishments.ban", arr, Time.MILLIS_SECOND
 				.toFrench(getPunished().getBan().getExpire() - System.currentTimeMillis(), Time.SECOND, Time.YEAR),
 				getPunished().getBan().getReason())) {
 			// We add it to the final ban message

@@ -179,7 +179,7 @@ public class TempBanCommand extends AbstractModCommand {
 				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);
 
-		I19n.sendMessage(sender, getPrefix("banned"), null, badOfflinePlayer.getName(), rawTime, banReason);
+		I19n.sendMessage(sender, getPrefix("banned"), null, badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);
 	}
 
 }
