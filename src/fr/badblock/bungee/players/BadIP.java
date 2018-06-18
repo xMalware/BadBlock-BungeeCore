@@ -267,7 +267,7 @@ public final class BadIP {
 				// Get the database
 				DB db = mongoService.getDb();
 				// Get the database collection
-				DBCollection collection = db.getCollection("players");
+				DBCollection collection = db.getCollection("ip");
 				// Insert the object in the collection
 				collection.insert(obj);
 				// Log
@@ -291,7 +291,7 @@ public final class BadIP {
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Get databse collection
-		DBCollection dbCollection = mongoService.getDb().getCollection("players");
+		DBCollection dbCollection = mongoService.getDb().getCollection("ip");
 
 		// Find each data with this IP
 		DBCursor cursor = dbCollection.find(query);
