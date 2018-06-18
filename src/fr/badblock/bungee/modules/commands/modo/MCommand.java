@@ -6,6 +6,7 @@ import java.util.List;
 
 import fr.badblock.bungee.modules.commands.BadCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.BanCommand;
+import fr.badblock.bungee.modules.commands.modo.subcommands.BanIpCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.KickCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.MuteCommand;
 import fr.badblock.bungee.modules.commands.modo.subcommands.SanctionCommand;
@@ -40,6 +41,7 @@ public class MCommand extends BadCommand {
 		super("m", null, "md");
 
 		moderationCommands = new ArrayList<>();
+		moderationCommands.add(new BanIpCommand());
 		moderationCommands.add(new BanCommand());
 		moderationCommands.add(new TempBanCommand());
 		moderationCommands.add(new KickCommand());
