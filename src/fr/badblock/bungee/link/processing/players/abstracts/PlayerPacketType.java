@@ -1,5 +1,6 @@
 package fr.badblock.bungee.link.processing.players.abstracts;
 
+import fr.badblock.bungee.link.processing.players.PlayerForceCommandProcessing;
 import fr.badblock.bungee.link.processing.players.PlayerKickProcessing;
 import fr.badblock.bungee.link.processing.players.PlayerReloadDataProcessing;
 import fr.badblock.bungee.link.processing.players.PlayerSendBadPlayerUpdateProcessing;
@@ -46,7 +47,12 @@ public enum PlayerPacketType {
 	/**
 	 * Send server packet type
 	 */
-	SEND_SERVER(new PlayerSendServerProcessing());
+	SEND_SERVER(new PlayerSendServerProcessing()),
+	
+	/**
+	 * Force command packet type
+	 */
+	FORCE_COMMAND(new PlayerForceCommandProcessing());
 
 	/**
 	 * Player processing
