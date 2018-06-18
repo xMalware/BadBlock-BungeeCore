@@ -35,10 +35,17 @@ public class BungeeUnloader {
 		setBadBungee(badBungee);
 		// Set unload state
 		setUnload();
+		// Unload filters
+		unloadFilters();
 		// Unload MongoDB
 		unloadMongo();
 		// Unload RabbitMQ
 		unloadRabbit();
+	}
+	
+	private void unloadFilters()
+	{
+		BungeeLoader.filters.forEach(filter -> filter.reset());
 	}
 
 	/**
