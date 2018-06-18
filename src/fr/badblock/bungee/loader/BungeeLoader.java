@@ -163,6 +163,9 @@ public class BungeeLoader {
 					// Rabbit listeners
 					"fr.badblock.bungee.rabbit.listeners",
 
+					// Chat modules
+					"fr.badblock.bungee.modules.chat",
+					
 					// Bungee processing
 					"fr.badblock.bungee.link.processing.bungee",
 

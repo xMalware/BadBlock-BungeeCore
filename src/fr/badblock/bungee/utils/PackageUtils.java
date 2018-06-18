@@ -9,6 +9,7 @@ import java.util.zip.ZipInputStream;
 import fr.badblock.api.common.sync.bungee._BungeeProcessing;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
 import fr.badblock.bungee.modules.abstracts.BadListener;
+import fr.badblock.bungee.modules.chat.ChatModule;
 import fr.badblock.bungee.modules.commands.BadCommand;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -56,7 +57,8 @@ public class PackageUtils {
 					Class<?> clazz = plugin.getClass().getClassLoader().loadClass(className);
 
 					if (inheritFrom(clazz, BadListener.class) || inheritFrom(clazz, RabbitListener.class)
-							|| inheritFrom(clazz, BadCommand.class) || inheritFrom(clazz, _BungeeProcessing.class)) {
+							|| inheritFrom(clazz, BadCommand.class) || inheritFrom(clazz, _BungeeProcessing.class)
+							|| inheritFrom(clazz, ChatModule.class)) {
 						instanciate(clazz);
 					}
 				} catch (Exception exception) {
