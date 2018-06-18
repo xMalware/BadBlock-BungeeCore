@@ -3,6 +3,8 @@ package fr.badblock.bungee.loader;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -27,6 +29,9 @@ import fr.badblock.bungee.link.bungee.BungeeTask;
 import fr.badblock.bungee.modules.commands.modo.objects.BanReasons;
 import fr.badblock.bungee.rabbit.claimants.RabbitClaimant;
 import fr.badblock.bungee.utils.PackageUtils;
+import fr.badblock.bungee.utils.logfilters.IHConnectedFilter;
+import fr.badblock.bungee.utils.logfilters.IHResetByPeerFilter;
+import fr.badblock.bungee.utils.logfilters.InjectableFilter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -41,6 +46,8 @@ import lombok.EqualsAndHashCode;
  */
 public class BungeeLoader {
 
+	public static List<InjectableFilter>	filters = new LinkedList<>();
+
 	/**
 	 * BadBungee instance
 	 * 
@@ -48,7 +55,7 @@ public class BungeeLoader {
 	 *            the new BadBungee instance
 	 * @return Returns the current BadBungee instance
 	 */
-	private BadBungee badBungee;
+	private BadBungee						badBungee;
 	/**
 	 * BadBungeeConfig instance
 	 * 
@@ -56,8 +63,8 @@ public class BungeeLoader {
 	 *            the new BadBungee config
 	 * @return Returns the current BadBungee config
 	 */
-	private BadBungeeConfig config;
-
+	private BadBungeeConfig					config;
+	
 	/**
 	 * Constructor
 	 * 
@@ -71,6 +78,8 @@ public class BungeeLoader {
 		setInstance();
 		// Set the Gson object
 		setGson();
+		// Load filters
+		loadFilters();
 		// Load configuration
 		loadConfig();
 		// Load i18n
@@ -87,6 +96,16 @@ public class BungeeLoader {
 		loadPunishmentTable();
 		// Load permissions
 		loadPermissions();
+	}
+	
+	private void loadFilters()
+	{
+		filters.clear();
+		filters.add(new IHConnectedFilter());
+		filters.add(new IHResetByPeerFilter());
+		for (InjectableFilter filter : filters) {
+			filter.inject();
+		}
 	}
 
 	/**
