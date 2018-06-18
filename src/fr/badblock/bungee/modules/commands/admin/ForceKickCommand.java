@@ -45,7 +45,7 @@ public class ForceKickCommand extends BadCommand {
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 
 		if (!bungeeManager.hasUsername(name)) {
-			I19n.sendMessage(sender, prefix + "offline", null);
+			I19n.sendMessage(sender, prefix + "offline", null, name);
 			return;
 		}
 
