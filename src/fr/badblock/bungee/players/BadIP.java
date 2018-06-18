@@ -314,6 +314,8 @@ public final class BadIP {
 				// Set API data
 				setApiData(new IPHubObject(getJsonElement("apiData").getAsJsonObject()));
 			}
+			// Set loaded
+			setLoaded(true);
 		} else {
 			// Log
 			BadBungee.log(getIp() + " doesn't exist in the player table.");

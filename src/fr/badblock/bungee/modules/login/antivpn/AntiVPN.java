@@ -147,6 +147,8 @@ public class AntiVPN extends Thread {
 		// Get the source code
 		String sourceCode = NetworkUtils.fetchSourceCodeWithAPI(url, apiKey);
 
+		System.out.println(sourceCode);
+		
 		// Get the IPHub object
 		IPHubObject object = GsonUtils.getGson().fromJson(sourceCode, IPHubObject.class);
 

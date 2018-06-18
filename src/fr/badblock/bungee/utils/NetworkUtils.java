@@ -81,6 +81,7 @@ public class NetworkUtils {
 		catch (Exception error) {
 			// Print the error
 			error.printStackTrace();
+			System.out.println("Error: " + error.getMessage());
 			// Returns 0 (I don't remember why)
 			return "0";
 		}
