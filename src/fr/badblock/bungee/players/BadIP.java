@@ -308,8 +308,12 @@ public final class BadIP {
 			setVpn(getBoolean("vpn"));
 			// Set punished
 			setPunished(new Punished(getJsonElement("punish").getAsJsonObject()));
-			// Set API data
-			setApiData(new IPHubObject(getJsonElement("apiData").getAsJsonObject()));
+			// If the API data isn't null
+			if (!getJsonElement("apiData").isJsonNull())
+			{
+				// Set API data
+				setApiData(new IPHubObject(getJsonElement("apiData").getAsJsonObject()));
+			}
 		} else {
 			// Log
 			BadBungee.log(getIp() + " doesn't exist in the player table.");

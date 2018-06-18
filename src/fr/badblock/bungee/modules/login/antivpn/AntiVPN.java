@@ -62,6 +62,7 @@ public class AntiVPN extends Thread {
 	public void addToCheck(String ip) {
 		// Add the IP to the check queue
 		vpn.add(ip);
+		System.out.println("VPN added to check");
 	}
 
 	/**
