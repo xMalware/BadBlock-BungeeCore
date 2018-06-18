@@ -47,7 +47,7 @@ public class RemoveServerCommand extends BadCommand {
 
 		BungeeUtils.removeServer(BadBungee.getInstance().getRabbitService(), name);
 
-		I19n.sendMessage(sender, "bungee.commands.addserver.removed", null, name);
+		I19n.sendMessage(sender, "bungee.commands.removeserver.removed", null, name);
 	}
 
 }

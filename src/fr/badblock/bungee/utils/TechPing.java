@@ -44,7 +44,10 @@ public class TechPing extends Thread
 			// Rabbit ping
 			RabbitService rabbitService = badBungee.getRabbitService();
 			pingStart = TimeUtils.time();
-			rabbitService.getConnection().isOpen();
+			try {
+				rabbitService.getChannel().basicQos(1);
+			} catch (Exception e) {
+			}
 			rabbitPing = TimeUtils.time() - pingStart;
 			TimeUtils.sleepInSeconds(2);
 		}
