@@ -11,8 +11,8 @@ import net.md_5.bungee.event.EventPriority;
 
 /**
  * 
- * The purpose of this class is to check if the player has too many
- * accounts connected 
+ * The purpose of this class is to check if the player has too many accounts
+ * connected
  * 
  * @author xMalware
  *
@@ -36,8 +36,7 @@ public class TooManyAccountsConnectedListener extends BadListener {
 		// Logged players
 		List<BadPlayer> loggedPlayers = bungeeManager.getLoggedPlayers(lastIp);
 		// Check how many players connected
-		if (loggedPlayers.size() > 3)
-		{
+		if (loggedPlayers.size() > 3) {
 			// Kick the players
 			loggedPlayers.forEach(loggedPlayer -> loggedPlayer.kick("tooManyAccountsConnected"));
 			// Kick the player

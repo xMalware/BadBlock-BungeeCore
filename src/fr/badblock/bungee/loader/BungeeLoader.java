@@ -46,7 +46,7 @@ import lombok.EqualsAndHashCode;
  */
 public class BungeeLoader {
 
-	public static List<InjectableFilter>	filters = new LinkedList<>();
+	public static List<InjectableFilter> filters = new LinkedList<>();
 
 	/**
 	 * BadBungee instance
@@ -55,7 +55,7 @@ public class BungeeLoader {
 	 *            the new BadBungee instance
 	 * @return Returns the current BadBungee instance
 	 */
-	private BadBungee						badBungee;
+	private BadBungee badBungee;
 	/**
 	 * BadBungeeConfig instance
 	 * 
@@ -63,8 +63,8 @@ public class BungeeLoader {
 	 *            the new BadBungee config
 	 * @return Returns the current BadBungee config
 	 */
-	private BadBungeeConfig					config;
-	
+	private BadBungeeConfig config;
+
 	/**
 	 * Constructor
 	 * 
@@ -97,9 +97,8 @@ public class BungeeLoader {
 		// Load permissions
 		loadPermissions();
 	}
-	
-	private void loadFilters()
-	{
+
+	private void loadFilters() {
 		filters.clear();
 		filters.add(new IHConnectedFilter());
 		filters.add(new IHResetByPeerFilter());
@@ -111,11 +110,10 @@ public class BungeeLoader {
 	/**
 	 * Load punishment table
 	 */
-	private void loadPunishmentTable()
-	{
+	private void loadPunishmentTable() {
 		new BanReasons();
 	}
-	
+
 	/**
 	 * Load BungeeLinker
 	 */
@@ -165,27 +163,20 @@ public class BungeeLoader {
 
 					// Chat modules
 					"fr.badblock.bungee.modules.chat",
-					
+
 					// Bungee processing
 					"fr.badblock.bungee.link.processing.bungee",
 
 					// Commands
-					"fr.badblock.bungee.modules.commands.admin",
-					"fr.badblock.bungee.modules.commands.badfriends",
-					"fr.badblock.bungee.modules.commands.basic",
-					"fr.badblock.bungee.modules.commands.basic.friends",
-					"fr.badblock.bungee.modules.commands.basic.msg",
-					"fr.badblock.bungee.modules.commands.basic.party",
-					"fr.badblock.bungee.modules.commands.modo",
-					"fr.badblock.bungee.modules.commands.staff",
+					"fr.badblock.bungee.modules.commands.admin", "fr.badblock.bungee.modules.commands.badfriends",
+					"fr.badblock.bungee.modules.commands.basic", "fr.badblock.bungee.modules.commands.basic.friends",
+					"fr.badblock.bungee.modules.commands.basic.msg", "fr.badblock.bungee.modules.commands.basic.party",
+					"fr.badblock.bungee.modules.commands.modo", "fr.badblock.bungee.modules.commands.staff",
 
 					// Login
-					"fr.badblock.bungee.modules.login.antivpn",
-					"fr.badblock.bungee.modules.login.antibot",
-					"fr.badblock.bungee.modules.login.checkers",
-					"fr.badblock.bungee.modules.login.datamanager",
-					"fr.badblock.bungee.modules.permissions",
-					"fr.badblock.bungee.modules.punishments",
+					"fr.badblock.bungee.modules.login.antivpn", "fr.badblock.bungee.modules.login.antibot",
+					"fr.badblock.bungee.modules.login.checkers", "fr.badblock.bungee.modules.login.datamanager",
+					"fr.badblock.bungee.modules.permissions", "fr.badblock.bungee.modules.punishments",
 					"fr.badblock.bungee.modules.ping");
 		}
 		// Error case

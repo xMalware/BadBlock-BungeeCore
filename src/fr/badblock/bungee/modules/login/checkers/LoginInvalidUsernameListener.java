@@ -25,11 +25,10 @@ public class LoginInvalidUsernameListener extends BadListener {
 		// We get his/her username
 		String username = badPlayer.getName();
 		// If the username isn't valid
-		if (!username.matches("^\\w{3,16}$"))
-		{
+		if (!username.matches("^\\w{3,16}$")) {
 			// We cancel the player connection with a specific message
 			event.cancel(badPlayer.getTranslatedMessage("bungee.login.invalidusername", null));
 		}
 	}
-	
+
 }

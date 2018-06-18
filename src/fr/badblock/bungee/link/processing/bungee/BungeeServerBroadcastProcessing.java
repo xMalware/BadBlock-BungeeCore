@@ -34,8 +34,7 @@ public class BungeeServerBroadcastProcessing extends _BungeeProcessing {
 		List<BadPlayer> loggedPlayers = bungeeManager.getLoggedPlayers(
 				badPlayer -> badPlayer.getCurrentServer().equalsIgnoreCase(serverBroadcast.getServerName()));
 		// For each player
-		for (BadPlayer badPlayer : loggedPlayers)
-		{
+		for (BadPlayer badPlayer : loggedPlayers) {
 			// Send outgoing message
 			badPlayer.sendOutgoingMessage(message);
 		}

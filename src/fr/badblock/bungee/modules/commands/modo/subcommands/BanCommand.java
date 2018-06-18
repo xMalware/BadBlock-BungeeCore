@@ -187,7 +187,7 @@ public class BanCommand extends AbstractModCommand {
 				// Send the message
 				badPlayer.sendTranslatedOutgoingMessage(getPrefix("select_intro"), null, playerName);
 			} else
-				// If the sender isn't a player
+			// If the sender isn't a player
 			{
 				// Send the message
 				I19n.sendMessage(sender, getPrefix("select_intro"), null, playerName);
@@ -222,7 +222,7 @@ public class BanCommand extends AbstractModCommand {
 					// Send the message
 					badPlayer.sendTranslatedOutgoingMCJson(json);
 				} else
-					// If the sender isn't a player
+				// If the sender isn't a player
 				{
 					// Send the reason message
 					I19n.sendMessage(sender, getPrefix("reason." + entry.getKey()), null);
@@ -273,8 +273,7 @@ public class BanCommand extends AbstractModCommand {
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
-		if (badOfflinePlayer == null)
-		{
+		if (badOfflinePlayer == null) {
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			return;
 		}
@@ -292,8 +291,7 @@ public class BanCommand extends AbstractModCommand {
 
 		long time = Time.YEAR.convert(1L, Time.MILLIS_SECOND);
 
-		if (banReason != null && isKey)
-		{
+		if (banReason != null && isKey) {
 
 			// Get mongo service
 			MongoService mongoService = BadBungee.getInstance().getMongoService();
@@ -312,29 +310,22 @@ public class BanCommand extends AbstractModCommand {
 
 			int ban = cursor.count();
 
-			if (banReason != null)
-			{
+			if (banReason != null) {
 				BanIndex index = null;
-				for (BanIndex banIndex : banReason.getPunishments().values())
-				{
-					if (index == null || (banIndex.getIndex() > index.getIndex() && banIndex.getIndex() >= ban))
-					{
+				for (BanIndex banIndex : banReason.getPunishments().values()) {
+					if (index == null || (banIndex.getIndex() > index.getIndex() && banIndex.getIndex() >= ban)) {
 						index = banIndex;
 					}
 				}
-				
-				if (index != null)
-				{
+
+				if (index != null) {
 					String rawTime = index.getTime();
 					time = Time.MILLIS_SECOND.matchTime(rawTime);
-					if (time == 0L)
-					{
+					if (time == 0L) {
 						I19n.sendMessage(sender, getPrefix("unknowntime"), null, rawTime);
 						return;
 					}
-				}
-				else
-				{
+				} else {
 					I19n.sendMessage(sender, getPrefix("unknownreason"), null, playerName);
 					return;
 				}
@@ -343,9 +334,9 @@ public class BanCommand extends AbstractModCommand {
 
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
-				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(),
-				 TimeUtils.nextTime(time), DateUtils.getHourDate(), reason, isKey,
-				new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
+				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), TimeUtils.nextTime(time),
+				DateUtils.getHourDate(), reason, isKey, new String[] {}, sender.getName(), punisherUniqueId,
+				punisherIp);
 
 		// Get the main class
 		BadBungee badBungee = BadBungee.getInstance();
@@ -414,8 +405,8 @@ public class BanCommand extends AbstractModCommand {
 		// Array to translate
 		int[] arr = isKey ? new int[] { 0, 2, 5 } : new int[] { 0, 2 };
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
-				arr, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"), arr,
+				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), reason);
 
 		// Send banned message

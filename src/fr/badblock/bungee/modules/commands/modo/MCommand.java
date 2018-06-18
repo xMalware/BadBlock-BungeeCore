@@ -48,7 +48,8 @@ public class MCommand extends BadCommand {
 		moderationCommands.add(new TempMuteCommand());
 		moderationCommands.add(new MuteCommand());
 		moderationCommands.add(new UnmuteCommand());
-		moderationCommands.add(new UnbanCommand());;
+		moderationCommands.add(new UnbanCommand());
+		;
 		moderationCommands.add(new WarnCommand());
 		moderationCommands.add(new TrackCommand());
 		moderationCommands.add(new SanctionCommand());

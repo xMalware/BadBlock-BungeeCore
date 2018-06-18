@@ -1,4 +1,5 @@
 package fr.badblock.bungee.modules.commands.modo.objects;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,10 +75,9 @@ public class BanReasons {
 			// Get table
 			BasicDBList dbList = (BasicDBList) dbObject.get("table");
 			// Get database array
-			BasicDBObject[] dbArray = dbList.toArray(new BasicDBObject[] { });
+			BasicDBObject[] dbArray = dbList.toArray(new BasicDBObject[] {});
 			// For each ban object
-			for (BasicDBObject banObject : dbArray)
-			{
+			for (BasicDBObject banObject : dbArray) {
 				// Create a ban reason
 				BanReason banReason = new BanReason(banObject);
 				// Add ban reasons

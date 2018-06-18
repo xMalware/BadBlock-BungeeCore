@@ -8,8 +8,8 @@ import net.md_5.bungee.api.CommandSender;
 @Data
 public abstract class AbstractModCommand {
 
-	private String		name;
-	private String[]	args;
+	private String name;
+	private String[] args;
 
 	public String getPermission() {
 		return "bungee.command.mod." + getName();

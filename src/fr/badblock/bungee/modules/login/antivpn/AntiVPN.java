@@ -150,7 +150,7 @@ public class AntiVPN extends Thread {
 		IPHubObject object = GsonUtils.getGson().fromJson(sourceCode, IPHubObject.class);
 
 		badIp.setApiData(object);
-		
+
 		// If it's a VPN
 		if (object != null && object.getBlock() == 1) {
 			// Set as a VPN
@@ -158,13 +158,10 @@ public class AntiVPN extends Thread {
 			// Kick VPN
 			badIp.kick("VPN");
 		}
-		
-		try
-		{
+
+		try {
 			badIp.saveData();
-		}
-		catch (Exception exception)
-		{
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
 

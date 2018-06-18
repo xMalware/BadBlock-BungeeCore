@@ -131,8 +131,7 @@ public class UnbanCommand extends AbstractModCommand {
 
 			Punishment punishment = badOfflinePlayer.getPunished().getMute();
 
-			if (punishment == null)
-			{
+			if (punishment == null) {
 				// Send a message
 				I19n.sendMessage(sender, getPrefix("notbanned"), null, badOfflinePlayer.getName());
 				// So we stop there
@@ -159,8 +158,7 @@ public class UnbanCommand extends AbstractModCommand {
 			Permissible punisherPermissible = perm.getHighestRank("bungee", false);
 
 			// If the permissible is null
-			if (punisherPermissible == null)
-			{
+			if (punisherPermissible == null) {
 				// Send a message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 3);
 				// So we stop there
@@ -223,14 +221,14 @@ public class UnbanCommand extends AbstractModCommand {
 
 		// Generate a unique id
 		UUID uuid = UUID.randomUUID();
-		
+
 		// Unique id
 		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
-				badOfflinePlayer.getLastIp(), PunishType.UNBAN, TimeUtils.time(), -1, DateUtils.getHourDate(), "", false,
-				new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
+				badOfflinePlayer.getLastIp(), PunishType.UNBAN, TimeUtils.time(), -1, DateUtils.getHourDate(), "",
+				false, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		// Get the main class
 		BadBungee badBungee = BadBungee.getInstance();

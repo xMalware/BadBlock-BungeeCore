@@ -17,7 +17,7 @@ public enum MuteReasonType {
 	SWEARING,
 
 	VERBAL_ABUSE,
-	
+
 	OTHER;
 
 	public static MuteReasonType getFromString(String string) {

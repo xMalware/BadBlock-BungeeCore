@@ -33,7 +33,7 @@ public class PlayerPacket {
 	 * @return The content of the playerPacket
 	 */
 	private String content;
-	
+
 	/**
 	 * Player packet type
 	 * 

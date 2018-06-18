@@ -269,7 +269,7 @@ public class MuteCommand extends AbstractModCommand {
 
 		// Generate a unique id
 		UUID uuid = UUID.randomUUID();
-		
+
 		// Unique id
 		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
@@ -343,8 +343,8 @@ public class MuteCommand extends AbstractModCommand {
 		// Array to translate
 		int[] arr = isKey ? new int[] { 0, 2, 5 } : new int[] { 0, 2 };
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"),
-				arr, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"), arr,
+				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName(), "TODO", reason);
 
 		// Send banned message

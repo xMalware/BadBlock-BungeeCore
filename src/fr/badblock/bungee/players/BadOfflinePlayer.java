@@ -147,11 +147,12 @@ public class BadOfflinePlayer {
 	 * @return Returns the current username
 	 */
 	private String name;
-	
+
 	/**
 	 * Last server
 	 * 
-	 * @param Set the new "last server" :o
+	 * @param Set
+	 *            the new "last server" :o
 	 * @return Returns the current last server
 	 */
 	private String lastServer;
@@ -307,15 +308,13 @@ public class BadOfflinePlayer {
 	 */
 	public BadPlayer getOnlineBadPlayer() {
 		// If he's offline, returns null
-		if (!isOnline())
-		{
+		if (!isOnline()) {
 			// Returns null
 			return null;
 		}
 
 		// If he's online on this node
-		if (BadPlayer.has(getName().toLowerCase()))
-		{
+		if (BadPlayer.has(getName().toLowerCase())) {
 			// Returns the local player
 			return BadPlayer.get(getName());
 		}

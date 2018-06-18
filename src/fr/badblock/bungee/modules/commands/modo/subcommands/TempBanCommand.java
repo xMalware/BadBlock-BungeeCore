@@ -115,7 +115,7 @@ public class TempBanCommand extends AbstractModCommand {
 		}
 
 		badPlayer.getFlags().set("tryban", 500);
-		
+
 		String rawTime = args[2];
 		String banReason = StringUtils.join(args, " ", 3);
 
@@ -131,13 +131,14 @@ public class TempBanCommand extends AbstractModCommand {
 		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
 
 		UUID uuid = UUID.randomUUID();
-		
+
 		// Unique id
 		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
 				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), TimeUtils.nextTime(time),
-				DateUtils.getHourDate(), banReason, false, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
+				DateUtils.getHourDate(), banReason, false, new String[] {}, sender.getName(), punisherUniqueId,
+				punisherIp);
 
 		BadBungee badBungee = BadBungee.getInstance();
 
@@ -179,7 +180,8 @@ public class TempBanCommand extends AbstractModCommand {
 				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);
 
-		I19n.sendMessage(sender, getPrefix("banned"), null, badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);
+		I19n.sendMessage(sender, getPrefix("banned"), null, badOfflinePlayer.getName(),
+				Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);
 	}
 
 }

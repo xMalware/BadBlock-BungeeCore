@@ -71,9 +71,8 @@ public class IPHubObject {
 	 * @return Returns the ISP
 	 */
 	private String isp;
-	
-	public IPHubObject(JsonObject jsonObject)
-	{
+
+	public IPHubObject(JsonObject jsonObject) {
 		// Set asn
 		asn = jsonObject.get("asn").getAsInt();
 		// Set block
@@ -87,13 +86,13 @@ public class IPHubObject {
 		// Set ISP
 		isp = jsonObject.get("isp").getAsString();
 	}
-	
+
 	/**
 	 * To database object
+	 * 
 	 * @return
 	 */
-	public DBObject toDbObject()
-	{
+	public DBObject toDbObject() {
 		// Create a database object
 		DBObject dbObject = new BasicDBObject();
 		// Put ASN

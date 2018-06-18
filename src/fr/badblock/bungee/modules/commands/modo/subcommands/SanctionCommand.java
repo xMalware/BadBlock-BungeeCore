@@ -159,7 +159,7 @@ public class SanctionCommand extends AbstractModCommand {
 			// So we stop there
 			return;
 		}
-		
+
 		I19n.sendMessage(sender, getPrefix("intro"), null, badOfflinePlayer.getName());
 
 		// Get mongo service
@@ -178,18 +178,14 @@ public class SanctionCommand extends AbstractModCommand {
 		// Get sender locale
 		Locale senderLocale = !(sender instanceof ProxiedPlayer) ? Locale.FRENCH_FRANCE : null;
 		// If the sender locale is null
-		if (senderLocale == null)
-		{
+		if (senderLocale == null) {
 			// Get the proxied player
 			ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 			// Get the bad player
 			BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
-			if (badPlayer != null)
-			{
+			if (badPlayer != null) {
 				senderLocale = badPlayer.getLocale();
-			}
-			else
-			{
+			} else {
 				senderLocale = Locale.FRENCH_FRANCE;
 			}
 		}
@@ -202,13 +198,12 @@ public class SanctionCommand extends AbstractModCommand {
 			// Create a punishment
 			Punishment punishment = new Punishment(dbObject);
 			// Send punishment data
-			I19n.sendMessage(sender, getPrefix("history." + punishment.getType().name().toLowerCase()), new int[] { 1 }, badOfflinePlayer.getName(),
-					"punishments.types." + punishment.getType().name().toLowerCase(), punishment.getReason(),
-					punishment.buildTime(senderLocale), punishment.getPunisher());
+			I19n.sendMessage(sender, getPrefix("history." + punishment.getType().name().toLowerCase()), new int[] { 1 },
+					badOfflinePlayer.getName(), "punishments.types." + punishment.getType().name().toLowerCase(),
+					punishment.getReason(), punishment.buildTime(senderLocale), punishment.getPunisher());
 		}
 		// If there's no data
-		if (!data)
-		{
+		if (!data) {
 			// Send a message
 			I19n.sendMessage(sender, getPrefix("norecords"), null, badOfflinePlayer.getName());
 		}

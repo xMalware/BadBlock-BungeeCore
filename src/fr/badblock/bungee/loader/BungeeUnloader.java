@@ -42,9 +42,8 @@ public class BungeeUnloader {
 		// Unload RabbitMQ
 		unloadRabbit();
 	}
-	
-	private void unloadFilters()
-	{
+
+	private void unloadFilters() {
 		BungeeLoader.filters.forEach(filter -> filter.reset());
 	}
 

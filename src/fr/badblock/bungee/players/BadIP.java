@@ -119,14 +119,15 @@ public final class BadIP {
 	 * @return Returns punished
 	 */
 	private Punished punished;
-	
+
 	/**
 	 * API Data
 	 * 
-	 * @param Set API data
+	 * @param Set
+	 *            API data
 	 * @return Returns API data
 	 */
-	private IPHubObject	apiData;
+	private IPHubObject apiData;
 
 	/**
 	 * VPN
@@ -497,11 +498,11 @@ public final class BadIP {
 
 	/**
 	 * Kick online players with this IP
+	 * 
 	 * @param string
 	 */
-	public void kick(String reason)
-	{
-		
+	public void kick(String reason) {
+
 	}
 
 }

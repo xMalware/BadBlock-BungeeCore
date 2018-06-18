@@ -35,8 +35,7 @@ public class BTPSCommand extends BadCommand {
 	public void run(CommandSender sender, String[] args) {
 		BadBungee badBungee = BadBungee.getInstance();
 		BadBungeeConfig badConfig = null;
-		if (badBungee != null)
-		{
+		if (badBungee != null) {
 			badConfig = badBungee.getConfig();
 		}
 		int ping = sender instanceof ProxiedPlayer ? ((ProxiedPlayer) sender).getPing() : 0;

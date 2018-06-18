@@ -181,14 +181,14 @@ public class WarnCommand extends AbstractModCommand {
 
 		// Generate a unique id
 		UUID uuid = UUID.randomUUID();
-		
+
 		// Unique id
 		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
 		// Create the punishment object
-		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(), badOfflinePlayer.getLastIp(),
-				PunishType.WARN, TimeUtils.time(), -1, DateUtils.getHourDate(), warnReason, false, new String[] {},
-				sender.getName(), punisherUniqueId, punisherIp);
+		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
+				badOfflinePlayer.getLastIp(), PunishType.WARN, TimeUtils.time(), -1, DateUtils.getHourDate(),
+				warnReason, false, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		// Get the main class
 		BadBungee badBungee = BadBungee.getInstance();
@@ -206,32 +206,28 @@ public class WarnCommand extends AbstractModCommand {
 		collection.insert(punishment.toObject());
 
 		// If the player is online
-		if (badOfflinePlayer.isOnline())
-		{
+		if (badOfflinePlayer.isOnline()) {
 			// Send warn message
 			badPlayer.getOnlineBadPlayer().warn(warnReason);
 		}
 		// If the player is offline
-		else
-		{
+		else {
 			// If the punished object is null
-			if (badOfflinePlayer.getPunished() == null)
-			{
+			if (badOfflinePlayer.getPunished() == null) {
 				// Create a punished object
 				badOfflinePlayer.setPunished(new Punished());
 			}
 
 			// Set warn
 			badOfflinePlayer.getPunished().setWarn(punishment);
-			
+
 			// Try to
 			try {
 				// Save data
 				badOfflinePlayer.saveData();
 			}
 			// Error case
-			catch (Exception exception)
-			{
+			catch (Exception exception) {
 				// Print stack trace
 				exception.printStackTrace();
 			}

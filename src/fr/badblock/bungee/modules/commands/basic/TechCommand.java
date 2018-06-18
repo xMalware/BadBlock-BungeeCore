@@ -15,8 +15,8 @@ import net.md_5.bungee.api.CommandSender;
  */
 public class TechCommand extends BadCommand {
 
-	private TechPing	techPing	= new TechPing();
-	
+	private TechPing techPing = new TechPing();
+
 	/**
 	 * Command constructor
 	 */
@@ -31,8 +31,7 @@ public class TechCommand extends BadCommand {
 	public void run(CommandSender sender, String[] args) {
 		BadBungee badBungee = BadBungee.getInstance();
 		BadBungeeConfig badConfig = null;
-		if (badBungee != null)
-		{
+		if (badBungee != null) {
 			badConfig = badBungee.getConfig();
 		}
 		// Bungee name

@@ -63,7 +63,7 @@ public class BanReason {
 		// Get table
 		BasicDBList dbList = (BasicDBList) dbObject.get("punishments");
 		// Get database array
-		BasicDBObject[] dbArray = dbList.toArray(new BasicDBObject[] { });
+		BasicDBObject[] dbArray = dbList.toArray(new BasicDBObject[] {});
 
 		// For each entry
 		for (BasicDBObject basicDbObject : dbArray) {

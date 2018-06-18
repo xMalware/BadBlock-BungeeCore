@@ -48,7 +48,7 @@ public enum PlayerPacketType {
 	 * Send server packet type
 	 */
 	SEND_SERVER(new PlayerSendServerProcessing()),
-	
+
 	/**
 	 * Force command packet type
 	 */

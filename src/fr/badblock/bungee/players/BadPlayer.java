@@ -156,10 +156,9 @@ public final class BadPlayer extends BadOfflinePlayer {
 			// Returns null
 			return null;
 		}
-		
+
 		// If the punish ban is null
-		if (getPunished().getBan() == null)
-		{
+		if (getPunished().getBan() == null) {
 			// Returns null
 			return null;
 		}
@@ -191,7 +190,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Returns the name
 		return proxiedPlayer != null && proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
 				? proxiedPlayer.getServer().getInfo().getName()
-						: getLastServer();
+				: getLastServer();
 	}
 
 	/**
@@ -225,12 +224,11 @@ public final class BadPlayer extends BadOfflinePlayer {
 		}
 
 		// If the punish mute is null
-		if (getPunished().getMute() == null)
-		{
+		if (getPunished().getMute() == null) {
 			// Returns null
 			return null;
 		}
-		
+
 		// We create an empty mute message
 		StringBuilder stringBuilder = new StringBuilder();
 		// Create array
@@ -284,7 +282,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Send the packet
 		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), message, PlayerPacketType.KICK));
 	}
-	
+
 	/**
 	 * Warn the player
 	 * 
@@ -299,8 +297,8 @@ public final class BadPlayer extends BadOfflinePlayer {
 		}
 
 		// Send outgoing message
-		this.sendTranslatedOutgoingMessage("punishments.warn", null,
-				getPunished().buildMuteTime(getLocale()), warnReason);
+		this.sendTranslatedOutgoingMessage("punishments.warn", null, getPunished().buildMuteTime(getLocale()),
+				warnReason);
 	}
 
 	/**
@@ -338,8 +336,8 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Get the current server name
 		String serverName = getCurrentServer();
 		// Get the player data update sender
-		PlayerDataUpdateSender playerDataUpdateSender = new PlayerDataUpdateSender(ObjectUtils.getJsonObject(getDbObject().toString()),
-				getName().toLowerCase());
+		PlayerDataUpdateSender playerDataUpdateSender = new PlayerDataUpdateSender(
+				ObjectUtils.getJsonObject(getDbObject().toString()), getName().toLowerCase());
 		// Serialize data
 		String rawPlayerDataUpdateSender = GsonUtils.getGson().toJson(playerDataUpdateSender);
 		// Create a Rabbit packet message
@@ -497,8 +495,10 @@ public final class BadPlayer extends BadOfflinePlayer {
 		}
 
 		// Send a packet
-		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args)),
-				PlayerPacketType.SEND_JSON_MESSAGE));
+		BungeeManager.getInstance()
+				.sendPacket(new PlayerPacket(getName(),
+						StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args)),
+						PlayerPacketType.SEND_JSON_MESSAGE));
 	}
 
 	/**
@@ -518,7 +518,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 
 		// Send a translated MCJson message
 		BungeeManager.getInstance()
-		.sendPacket(new PlayerPacket(getName(), mcjson.toString(), PlayerPacketType.SEND_JSON_MESSAGE));
+				.sendPacket(new PlayerPacket(getName(), mcjson.toString(), PlayerPacketType.SEND_JSON_MESSAGE));
 	}
 
 	/**
@@ -540,8 +540,10 @@ public final class BadPlayer extends BadOfflinePlayer {
 		}
 
 		// Send a packet
-		BungeeManager.getInstance().sendPacket(new PlayerPacket(getName(), StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args)),
-				PlayerPacketType.SEND_MESSAGE));
+		BungeeManager.getInstance()
+				.sendPacket(new PlayerPacket(getName(),
+						StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args)),
+						PlayerPacketType.SEND_MESSAGE));
 	}
 
 	/**

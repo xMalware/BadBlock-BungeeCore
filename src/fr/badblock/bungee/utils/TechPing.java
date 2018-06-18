@@ -13,22 +13,18 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class TechPing extends Thread
-{
+public class TechPing extends Thread {
 
-	private long mongoPing	= -1;
-	private long rabbitPing	= -1;
+	private long mongoPing = -1;
+	private long rabbitPing = -1;
 
-	public TechPing()
-	{
+	public TechPing() {
 		this.start();
 	}
 
 	@Override
-	public void run()
-	{
-		while (true)
-		{
+	public void run() {
+		while (true) {
 			BadBungee badBungee = BadBungee.getInstance();
 			// Mongo ping
 			long pingStart = TimeUtils.time();

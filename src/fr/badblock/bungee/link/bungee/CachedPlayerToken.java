@@ -25,6 +25,7 @@ public class CachedPlayerToken {
 		// Returns the new token
 		return new CachedPlayerToken(TimeUtils.nextTimeWithSeconds(1), token);
 	}
+
 	/**
 	 * Last calculated token timestamp
 	 * 

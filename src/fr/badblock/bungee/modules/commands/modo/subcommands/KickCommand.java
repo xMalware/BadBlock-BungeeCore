@@ -184,14 +184,14 @@ public class KickCommand extends AbstractModCommand {
 
 		// Generate a unique id
 		UUID uuid = UUID.randomUUID();
-		
+
 		// Unique id
 		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
 		// Create the punishment object
-		Punishment punishment = new Punishment(uuid.toString(), badOnlinePlayer.getUniqueId().toString(), badOnlinePlayer.getLastIp(),
-				PunishType.KICK, TimeUtils.time(), -1, DateUtils.getHourDate(), kickReason, false, new String[] {},
-				sender.getName(), punisherUniqueId, punisherIp);
+		Punishment punishment = new Punishment(uuid.toString(), badOnlinePlayer.getUniqueId().toString(),
+				badOnlinePlayer.getLastIp(), PunishType.KICK, TimeUtils.time(), -1, DateUtils.getHourDate(), kickReason,
+				false, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		// Get the main class
 		BadBungee badBungee = BadBungee.getInstance();

@@ -182,7 +182,7 @@ public class TempMuteCommand extends AbstractModCommand {
 
 		// Get the mute reason
 		String rawTime = args[2];
-		
+
 		String muteReason = StringUtils.join(args, " ", 3);
 
 		long time = Time.MILLIS_SECOND.matchTime(rawTime);
@@ -200,14 +200,15 @@ public class TempMuteCommand extends AbstractModCommand {
 
 		// Generate a unique id
 		UUID uuid = UUID.randomUUID();
-		
+
 		// Unique id
 		String punisherUniqueId = badPlayer != null ? badPlayer.getUniqueId().toString() : null;
 
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
-				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(), TimeUtils.nextTime(time), DateUtils.getHourDate(),
-				muteReason, false, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
+				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(), TimeUtils.nextTime(time),
+				DateUtils.getHourDate(), muteReason, false, new String[] {}, sender.getName(), punisherUniqueId,
+				punisherIp);
 
 		// Get the main class
 		BadBungee badBungee = BadBungee.getInstance();

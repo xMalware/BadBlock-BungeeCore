@@ -8,10 +8,8 @@ import net.md_5.bungee.api.event.ChatEvent;
 public class NullServerChatModule extends ChatModule {
 
 	@Override
-	public ChatEvent check(ChatEvent event)
-	{
-		if (event.getSender() == null)
-		{
+	public ChatEvent check(ChatEvent event) {
+		if (event.getSender() == null) {
 			event.setCancelled(true);
 			return event;
 		}
@@ -20,8 +18,7 @@ public class NullServerChatModule extends ChatModule {
 
 		if (connection instanceof ProxiedPlayer) {
 			ProxiedPlayer bPlayer = (ProxiedPlayer) connection;
-			if (bPlayer != null && bPlayer.getServer() == null)
-			{
+			if (bPlayer != null && bPlayer.getServer() == null) {
 				event.setCancelled(true);
 				bPlayer.disconnect(new TextComponent("Erreur. Impossible de trouver le serveur. (code 629)"));
 			}
@@ -29,7 +26,5 @@ public class NullServerChatModule extends ChatModule {
 
 		return event;
 	}
-
-
 
 }
