@@ -2,6 +2,7 @@
 package fr.badblock.bungee.utils;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -16,6 +17,10 @@ import net.md_5.bungee.api.plugin.Plugin;
 public class PackageUtils {
 
 	private static boolean inheritFrom(Class<?> clazz, Class<?> from) {
+		if (Modifier.isAbstract(clazz.getModifiers()))
+		{
+			return false;
+		}
 		while (clazz != Object.class) {
 			if (clazz == from)
 				return true;
