@@ -287,7 +287,6 @@ public final class BadIP {
 		BasicDBObject query = new BasicDBObject();
 		// Query IP
 		query.append("ip", getIp().toLowerCase());
-
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Get databse collection
@@ -301,7 +300,7 @@ public final class BadIP {
 			// Set the database object
 			setDbObject(cursor.next());
 			// Log
-			BadBungee.log("§c" + getIp() + " exists in the player table.");
+			BadBungee.log("§c" + getIp() + " exists in the IP table.");
 			// Set IP
 			setIp(getString("ip"));
 			// Set VPN boolean
@@ -316,9 +315,11 @@ public final class BadIP {
 			}
 			// Set loaded
 			setLoaded(true);
+			// Set found
+			setFound(true);
 		} else {
 			// Log
-			BadBungee.log(getIp() + " doesn't exist in the player table.");
+			BadBungee.log(getIp() + " doesn't exist in the IP table.");
 			// If we can create
 			if (create) {
 				// So we insert
