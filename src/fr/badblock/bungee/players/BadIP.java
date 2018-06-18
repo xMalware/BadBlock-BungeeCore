@@ -215,9 +215,9 @@ public final class BadIP {
 		// Set the VPN boolean
 		object.put("vpn", isVpn());
 		// Set the punished object
-		object.put("punish", punished.getDBObject());
+		object.put("punish", punished != null ? punished.getDBObject() : null);
 		// Set the API data object
-		object.put("apiData", apiData.toDbObject());
+		object.put("apiData", apiData != null ? apiData.toDbObject() : null);
 		// Returns the object
 		return object;
 	}
