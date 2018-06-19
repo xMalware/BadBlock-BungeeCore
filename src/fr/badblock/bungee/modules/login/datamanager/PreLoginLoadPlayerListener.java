@@ -26,7 +26,7 @@ public class PreLoginLoadPlayerListener extends BadListener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPreLogin(PreLoginEvent event) {
 		// If the connection attempt is cancelled first
 		if (event.isCancelled()) {

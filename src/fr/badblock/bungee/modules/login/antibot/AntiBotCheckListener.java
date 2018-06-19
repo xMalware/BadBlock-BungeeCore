@@ -27,7 +27,7 @@ public class AntiBotCheckListener extends BadListener
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPreLogin(PreLoginEvent event)
 	{
 		PendingConnection pendingConnection = event.getConnection();
