@@ -3,7 +3,6 @@ package fr.badblock.bungee.modules.commands.basic.party;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -70,7 +69,6 @@ public class PartyMessageListener extends BadListener {
 				}
 				String[] arr = new String[argList.size()];
 				arr = argList.toArray(arr);
-				System.out.println(GsonUtils.getGson().toJson(arr));
 				PartyManager.msg(proxiedPlayer, arr);
 			}
 			else
