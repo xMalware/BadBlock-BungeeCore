@@ -1,5 +1,7 @@
 package fr.badblock.bungee.modules.commands.basic.msg;
 
+import java.util.UUID;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -9,8 +11,10 @@ import com.mongodb.DBObject;
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
+import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.mcjson.McJsonFactory;
@@ -68,27 +72,36 @@ public class MessageReconnectListener extends BadListener {
 						String message = data.get("message").toString();
 						
 						// Sender
-						String sender = data.get("sender").toString();
+						String senderRawUuid = data.get("senderUuid").toString();
+						
+						UUID senderUuid = UUID.fromString(senderRawUuid);
+						
+						if (senderUuid == null)
+						{
+							continue;
+						}
+						
+						BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(senderUuid);
 						
 						// Get the intro message
 						String Dintro = badPlayer.getTranslatedMessage(MsgCommand.prefix + "receive.intro", null);
 						// Get the message
 						String Dmessage = badPlayer.getTranslatedMessage(MsgCommand.prefix + "receive.message", new int[] { 0, 2 },
-								badPlayer.getRawChatPrefix(), badPlayer.getName(), badPlayer.getRawChatSuffix(), message);
+								badOfflinePlayer.getRawChatPrefix(), badOfflinePlayer.getName(), badOfflinePlayer.getRawChatSuffix(), message);
 						// Get the message hover
 						String Dmessage_hover = badPlayer.getTranslatedMessage(MsgCommand.prefix + "receive.message_hover",
-								new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), badPlayer.getName(), badPlayer.getRawChatSuffix(),
+								new int[] { 0, 2 }, badOfflinePlayer.getRawChatPrefix(), badOfflinePlayer.getName(), badOfflinePlayer.getRawChatSuffix(),
 								message);
 
 						// Get the McJson
 						McJson json = new McJsonFactory(Dintro).finaliseComponent().initNewComponent(Dmessage).setHoverText(Dmessage_hover)
-								.setClickSuggest("/msg " + sender + " ").build();
+								.setClickSuggest("/msg " + badOfflinePlayer.getName() + " ").build();
 
 						// Send the message
 						badPlayer.sendTranslatedOutgoingMCJson(json);
 
 						// Set reply
-						badPlayer.setTmpLastMessagePlayer(sender);
+						badPlayer.setTmpLastMessagePlayer(badOfflinePlayer.getName());
 						
 						// New query
 						BasicDBObject newQuery = new BasicDBObject();

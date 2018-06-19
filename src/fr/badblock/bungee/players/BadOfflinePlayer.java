@@ -554,9 +554,12 @@ public class BadOfflinePlayer {
 			// Set punished
 			setPunished(new Punished(getJsonElement("punish").getAsJsonObject()));
 
+			System.out.println("Load permissions : A");
 			// If the permission manager exists
 			if (PermissionsManager.getManager() != null) {
 				// Set permissions
+				System.out.println("Load permissions : B");
+				System.out.println("Load permissions : C : " + getJsonElement("permissions").toString());
 				setPermissions(new PermissionUser(getJsonElement("permissions").getAsJsonObject()));
 			}
 

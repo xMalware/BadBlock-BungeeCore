@@ -23,7 +23,7 @@ public class ServerConnectedReloadDataListener extends BadListener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onServerConnected(ServerConnectedEvent event) {
 		// We create a new thread
 		ThreadRunnable.run(() -> {
