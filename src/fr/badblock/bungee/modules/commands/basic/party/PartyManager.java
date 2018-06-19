@@ -440,6 +440,65 @@ public class PartyManager {
 	}
 
 	/**
+	 * Msg
+	 * 
+	 * @param sender
+	 * @param args
+	 */
+	public static void msg(ProxiedPlayer sender, String[] args) {
+		// Oooh :(
+		if (args.length < 2) {
+			// Send invite usage
+			PartyManager.getMessages().sendMsgUsage(sender);
+			// We stop there
+			return;
+		}
+
+		// Get the current player
+		BadPlayer currPlayer = BadPlayer.get(sender);
+
+		// Get the party
+		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+
+			/**
+			 * When you receive the party data
+			 */
+			@Override
+			public void done(Party party, Throwable error) {
+				// If party is null
+				if (party == null) {
+					PartyManager.getMessages().sendYouAreNotInParty(sender);
+				}
+				// If party isn't null
+				else {
+					// Get the party player
+					PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
+
+					// If the party player isn't null
+					if (partyPlayer != null) {
+						// If the state is accepted
+						if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED)) {
+							// Send the message
+							PartyManager.getMessages().sendMsg(currPlayer, partyPlayer.getRole());
+						}
+						// Else
+						else {
+							// Send the message
+							PartyManager.getMessages().sendYouAreNotInParty(sender);
+						}
+					}
+					// Null party player
+					else {
+						// Send the message
+						PartyManager.getMessages().sendYouAreNotInParty(sender);
+					}
+				}
+			}
+
+		});
+	}
+
+	/**
 	 * Leave
 	 * 
 	 * @param sender

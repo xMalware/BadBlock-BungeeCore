@@ -958,4 +958,32 @@ public class PartyMessages {
 		I19n.sendMessage(proxiedPlayer, prefix + "youarenotinparty", null);
 	}
 
+	public void sendMsgUsage(ProxiedPlayer sender) {
+		// Send message
+		I19n.sendMessage(sender, prefix + "msg.usage", null);
+	}
+
+	public void sendMsg(BadPlayer badPlayer, PartyPlayerRole partyPlayerRole) {
+		// Get the message
+		String message = null;
+
+		if (partyPlayerRole.equals(PartyPlayerRole.ADMIN))
+		{
+			message = badPlayer.getTranslatedMessage(prefix + "msg.admin", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName());
+		}else if (partyPlayerRole.equals(PartyPlayerRole.MODO))
+		{
+			message = badPlayer.getTranslatedMessage(prefix + "msg.modo", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName());
+		}else
+		{
+			message = badPlayer.getTranslatedMessage(prefix + "msg.default", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName());
+		}
+
+		// Create McJson message
+		McJson json = new McJsonFactory(message).setHoverText(badPlayer.getTranslatedMessage(prefix + "msg.hover", new int[] { 0 },
+				badPlayer.getRawChatPrefix(), badPlayer.getName())).setClickSuggest("/party msg ").build();
+
+		// Send the translated message
+		badPlayer.sendTranslatedOutgoingMCJson(json);
+	}
+
 }
