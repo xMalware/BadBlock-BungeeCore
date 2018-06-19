@@ -21,13 +21,13 @@ import net.md_5.bungee.api.CommandSender;
  */
 public class OnlineStaffCommand extends BadCommand {
 
-	private static String	prefix = "bungee.commands.onlinestaff";
+	private static String	prefix = "bungee.commands.onlinestaff.";
 	
 	/**
 	 * Command constructor
 	 */
 	public OnlineStaffCommand() {
-		super("plugins", "bungee.command.onlinestaff", "os");
+		super("onlinestaff", "bungee.command.onlinestaff", "os");
 	}
 
 	/**
