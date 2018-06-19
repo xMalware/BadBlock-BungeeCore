@@ -109,7 +109,7 @@ public class GWhitelistCommand extends BadCommand {
 				{
 					if (cursor.hasNext())
 					{
-						I19n.sendMessage(sender, prefix + "add.alreadyexists", null);
+						I19n.sendMessage(sender, prefix + "add.alreadyexists", null, username);
 					}
 					else
 					{
@@ -127,7 +127,7 @@ public class GWhitelistCommand extends BadCommand {
 				catch (Exception error)
 				{
 					error.printStackTrace();
-					I19n.sendMessage(sender, prefix + "add.erroroccurred", null);
+					I19n.sendMessage(sender, prefix + "add.erroroccurred", null, username);
 				}
 
 				// Close the cursor
@@ -172,7 +172,7 @@ public class GWhitelistCommand extends BadCommand {
 				{
 					if (!cursor.hasNext())
 					{
-						I19n.sendMessage(sender, prefix + "remove.notinwhitelist", null);
+						I19n.sendMessage(sender, prefix + "remove.notinwhitelist", null, username);
 					}
 					else
 					{
@@ -190,7 +190,7 @@ public class GWhitelistCommand extends BadCommand {
 				catch (Exception error)
 				{
 					error.printStackTrace();
-					I19n.sendMessage(sender, prefix + "remove.erroroccurred", null);
+					I19n.sendMessage(sender, prefix + "remove.erroroccurred", null, username);
 				}
 
 				// Close the cursor
