@@ -81,7 +81,7 @@ public class GWhitelistCommand extends BadCommand {
 			return;
 		}
 
-		String username = args[0];
+		String username = args[1];
 
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
@@ -144,7 +144,7 @@ public class GWhitelistCommand extends BadCommand {
 			return;
 		}
 
-		String username = args[0];
+		String username = args[1];
 
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
@@ -228,7 +228,7 @@ public class GWhitelistCommand extends BadCommand {
 					{
 						c = false;
 						DBObject dbObject = cursor.next();
-						String username = dbObject.get("username").toString();
+						String username = dbObject.get("name").toString();
 						I19n.sendMessage(sender, prefix + "list.message", null, username);
 					}
 					
