@@ -29,6 +29,10 @@ public class ConnectionLogListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
+		if (event.isCancelled())
+		{
+			return;
+		}
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// We get his/her username

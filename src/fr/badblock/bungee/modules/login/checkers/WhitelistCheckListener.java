@@ -32,6 +32,10 @@ public class WhitelistCheckListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
+		if (event.isCancelled())
+		{
+			return;
+		}
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 

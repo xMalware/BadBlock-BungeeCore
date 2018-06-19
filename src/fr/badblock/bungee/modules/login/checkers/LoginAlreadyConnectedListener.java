@@ -25,6 +25,10 @@ public class LoginAlreadyConnectedListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
+		if (event.isCancelled())
+		{
+			return;
+		}
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// We get his/her username

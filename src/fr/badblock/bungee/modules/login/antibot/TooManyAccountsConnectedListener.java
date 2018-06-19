@@ -26,6 +26,10 @@ public class TooManyAccountsConnectedListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
+		if (event.isCancelled())
+		{
+			return;
+		}
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// We get his/her IP
@@ -38,9 +42,9 @@ public class TooManyAccountsConnectedListener extends BadListener {
 		// Check how many players connected
 		if (loggedPlayers.size() > 3) {
 			// Kick the players
-			loggedPlayers.forEach(loggedPlayer -> loggedPlayer.kick("tooManyAccountsConnected"));
+			loggedPlayers.forEach(loggedPlayer -> loggedPlayer.kick(loggedPlayer.getTranslatedMessage("bungee.antibot.toomanyaccountsconnected", null)));
 			// Kick the player
-			badPlayer.kick("tooManyAccountsConnected");
+			event.cancel(badPlayer.getTranslatedMessage("bungee.antibot.toomanyaccountsconnected", null));
 		}
 	}
 

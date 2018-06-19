@@ -25,6 +25,10 @@ public class LoginFullServerListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
+		if (event.isCancelled())
+		{
+			return;
+		}
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// We'll use our bungee manager to determinate if the network is full
