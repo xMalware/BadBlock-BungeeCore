@@ -14,7 +14,7 @@ public class DateUtils {
 
 	private static SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
 
-	private static SimpleDateFormat hourDate = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+	private static SimpleDateFormat hourDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
 	/**
 	 * Get the human date
