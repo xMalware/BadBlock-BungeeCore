@@ -321,8 +321,8 @@ public class BanCommand extends AbstractModCommand {
 
 			if (banReason != null) {
 				BanIndex index = null;
-				for (BanIndex banIndex : banReason.getPunishments().values()) {
-					if (index == null || (banIndex.getIndex() > index.getIndex() && banIndex.getIndex() >= ban)) {
+				for (BanIndex banIndex : banReason.getPunishments().get(rawBanReason)) {
+					if (index == null || (banIndex.getIndex() > index.getIndex() && ban >= banIndex.getIndex())) {
 						index = banIndex;
 					}
 				}

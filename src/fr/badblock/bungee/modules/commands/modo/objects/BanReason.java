@@ -1,7 +1,9 @@
 package fr.badblock.bungee.modules.commands.modo.objects;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -46,7 +48,7 @@ public class BanReason {
 	 *            the new punishments
 	 * @return Returns the current punishments
 	 */
-	private Map<String, BanIndex> punishments;
+	private Map<String, List<BanIndex>> punishments;
 
 	/**
 	 * Constructor
@@ -67,8 +69,16 @@ public class BanReason {
 
 		// For each entry
 		for (BasicDBObject basicDbObject : dbArray) {
+			String name = basicDbObject.getString("name");
+			// If the punishment table is nul
+			if (!punishments.containsKey(name))
+			{
+				punishments.put(name, new ArrayList<>());
+			}
+			List<BanIndex> pun = punishments.get(name);
 			// Insert into punishment map
-			punishments.put(basicDbObject.getString("name"), new BanIndex(basicDbObject));
+			pun.add(new BanIndex(basicDbObject));
+			punishments.put(name, pun);
 		}
 	}
 
