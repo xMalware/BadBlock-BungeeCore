@@ -239,6 +239,8 @@ public class MsgCommand extends BadCommand {
 		// Get the message
 		String Dmessage = badPlayer.getTranslatedMessage(prefix + "send.message", new int[] { 0, 2 },
 				badPlayer.getRawChatPrefix(), badPlayer.getName(), badPlayer.getRawChatSuffix(), message);
+		
+		System.out.println(badOfflinePlayer.getRawChatPrefix() + " / " + badOfflinePlayer.getRawChatSuffix());
 		// Get the message hover
 		String Dmessage_hover = badPlayer.getTranslatedMessage(prefix + "send.message_hover", new int[] { 0, 2 },
 				badOfflinePlayer.getRawChatPrefix(), badOfflinePlayer.getName(), badOfflinePlayer.getRawChatSuffix(),

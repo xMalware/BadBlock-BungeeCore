@@ -332,6 +332,7 @@ public class BadOfflinePlayer {
 		// Get permissible object
 		Permissible permissible = getPermissions().getHighestRank("bungee", true);
 		// If permissible object is null
+		System.out.println("A - " + permissible);
 		if (permissible == null) {
 			// Returns an empty string
 			return "";
@@ -464,6 +465,10 @@ public class BadOfflinePlayer {
 		punished = new Punished();
 		// Set new permission object
 		permissions = new PermissionUser(new HashMap<>(), new ArrayList<>());
+		// Set default
+		HashMap<String, Long> defaultBungeePermissions = new HashMap<>();
+		defaultBungeePermissions.put("default", -1L);
+		permissions.getGroups().put("bungee", defaultBungeePermissions);
 		// Set new settins
 		settings = new BadPlayerSettings(new JsonObject());
 		// Set a random unique ID
