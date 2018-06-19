@@ -60,7 +60,7 @@ public class PartyMessageListener extends BadListener {
 				String[] array = message.split(" ");
 				for (int i = 0; i < argList.size() - 1; i++)
 				{
-					String word = array[0];
+					String word = array[i];
 					if (i == 0)
 					{
 						word = message.substring(1, message.length() - 1);
