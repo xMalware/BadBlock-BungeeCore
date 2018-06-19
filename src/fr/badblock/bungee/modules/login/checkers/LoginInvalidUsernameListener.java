@@ -18,7 +18,7 @@ public class LoginInvalidUsernameListener extends BadListener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
