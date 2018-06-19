@@ -1,7 +1,6 @@
 package fr.badblock.bungee.modules.commands.basic.party;
 
 import fr.badblock.bungee.modules.abstracts.BadListener;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
@@ -53,13 +52,13 @@ public class PartyMessageListener extends BadListener {
 			if (message.length() > 1)
 			{
 				// Send the message
-				BungeeCord.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, "/party msg " + 
+				proxiedPlayer.chat("/party msg " + 
 						event.getMessage().substring(1, event.getMessage().length() - 1));
 			}
 			else
 			{
 				// Usage
-				BungeeCord.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, "/party msg");
+				proxiedPlayer.chat("/party msg");
 			}
 		}
 	}
