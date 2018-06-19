@@ -41,16 +41,26 @@ public class PartyMessageListener extends BadListener {
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 
 		String message = event.getMessage();
-		
+
 		if (message == null)
 		{
 			return;
 		}
-		
+
 		if (message.startsWith("%") && message.length() > 1)
 		{
-			BungeeCord.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, "/party msg " + 
-					event.getMessage().substring(1, event.getMessage().length() - 1));
+			event.setCancelled(true);
+			if (message.length() > 1)
+			{
+				// Send the message
+				BungeeCord.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, "/party msg " + 
+						event.getMessage().substring(1, event.getMessage().length() - 1));
+			}
+			else
+			{
+				// Usage
+				BungeeCord.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, "/party msg");
+			}
 		}
 	}
 
