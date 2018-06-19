@@ -18,6 +18,7 @@ import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
 import fr.badblock.api.common.utils.GsonUtils;
 import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.api.common.utils.data.Callback;
+import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.modules.login.antivpn.IPHubObject;
 import fr.badblock.bungee.utils.ObjectUtils;
@@ -237,6 +238,40 @@ public final class BadIP {
 			// Returns an empty string
 			return "";
 		}
+	}
+
+	/**
+	 * Get the ban ip message
+	 * 
+	 * @return Returns the ban ip message
+	 */
+	public String getBanIpMessage(BadPlayer badPlayer) {
+		// If the punish is null
+		if (getPunished() == null) {
+			// Returns null
+			return null;
+		}
+
+		// If the punish ban is null
+		if (getPunished().getBan() == null) {
+			// Returns null
+			return null;
+		}
+
+		// We create an empty ban message
+		StringBuilder stringBuilder = new StringBuilder();
+		// Create array
+		int[] arr = getPunished().getBan().isReasonKey() ? new int[] { 1 } : null;
+		// For each line of the ban message
+		for (String string : badPlayer.getTranslatedMessages("punishments.banip", arr, Time.MILLIS_SECOND
+				.toFrench(getPunished().getBan().getExpire() - System.currentTimeMillis(), Time.SECOND, Time.YEAR),
+				getPunished().getBan().getReason())) {
+			// We add it to the final ban message
+			stringBuilder.append(string + "\n");
+		}
+
+		// Returns the ban message
+		return stringBuilder.toString();
 	}
 
 	/**

@@ -260,7 +260,7 @@ public class MuteCommand extends AbstractModCommand {
 		}
 		else
 		{
-			if (!sender.hasPermission(getPermission() + "." + rawBanReason))
+			if (!sender.hasPermission(getPermission() + "." + rawMuteReason))
 			{
 				I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, playerName);
 				// So we stop there
