@@ -171,16 +171,17 @@ public class AdvertisingChatModule extends ChatModule {
 	public void hasBlockedFirstTopLevelDomain(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
 	{
 		String message = chatEvent.getMessage();
+		String filteredMessage = applyFilter(message);
 
 		for (String blockedFirstTopLevelDomain : blockedFirstTopLevelDomains) {
-			if (message.contains(blockedFirstTopLevelDomain)) {
-				if (message.equalsIgnoreCase(blockedFirstTopLevelDomain)) {
+			if (message.contains(blockedFirstTopLevelDomain) || message.contains(filteredMessage)) {
+				if (message.equalsIgnoreCase(blockedFirstTopLevelDomain) || filteredMessage.equalsIgnoreCase(blockedFirstTopLevelDomain)) {
 					chatEvent.setCancelled(true);
 					I19n.sendMessage(proxiedPlayer, "bungee.chat.advertising", null);
 					return;
 				}
 				
-				String[] splitter = message.split(blockedFirstTopLevelDomain);
+				String[] splitter = filteredMessage.split(blockedFirstTopLevelDomain);
 				String domain = splitter[0];
 				boolean cancelled = true;
 				
