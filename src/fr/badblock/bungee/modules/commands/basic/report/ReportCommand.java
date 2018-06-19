@@ -160,7 +160,7 @@ public class ReportCommand extends BadCommand {
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.command.report.receivereports",
 				getPrefix("reportmessage"), new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(),
-				badPlayer.getRawChatSuffix(), reason);
+				badPlayer.getRawChatSuffix(), badOfflinePlayer.getName(), reason);
 
 		// Send message
 		I19n.sendMessage(sender, getPrefix("reported"), null, badOfflinePlayer.getName(), reason);
