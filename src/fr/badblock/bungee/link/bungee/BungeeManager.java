@@ -368,7 +368,7 @@ public class BungeeManager {
 		String json = badBungee.getGson().toJson(playerPacket);
 		// Send the packet over RabbitMQ
 		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, json),
-				BadBungeeQueues.PLAYER_PROCESSING, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
+				BadBungeeQueues.PLAYER_PROCESSING, true, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
 	}
 
 	/**

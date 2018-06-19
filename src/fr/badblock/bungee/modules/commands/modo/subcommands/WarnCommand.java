@@ -210,7 +210,8 @@ public class WarnCommand extends AbstractModCommand {
 		// If the player is online
 		if (badOfflinePlayer.isOnline()) {
 			// Send warn message
-			badPlayer.getOnlineBadPlayer().warn(warnReason);
+			System.out.println("warn");
+			badOfflinePlayer.getOnlineBadPlayer().warn(warnReason);
 		}
 		// If the player is offline
 		else {
