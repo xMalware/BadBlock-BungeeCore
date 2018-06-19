@@ -11,6 +11,7 @@ import com.mongodb.DBObject;
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
 import fr.badblock.api.common.utils.data.Callback;
+import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.BadPlayer;
@@ -479,7 +480,7 @@ public class PartyManager {
 						// If the state is accepted
 						if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED)) {
 							// Send the message
-							PartyManager.getMessages().sendMsg(currPlayer, partyPlayer.getRole());
+							PartyManager.getMessages().sendMsg(currPlayer, partyPlayer.getRole(), StringUtils.join(args, " ", 1), party);
 						}
 						// Else
 						else {

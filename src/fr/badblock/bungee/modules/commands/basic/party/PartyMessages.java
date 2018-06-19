@@ -963,19 +963,19 @@ public class PartyMessages {
 		I19n.sendMessage(sender, prefix + "msg.usage", null);
 	}
 
-	public void sendMsg(BadPlayer badPlayer, PartyPlayerRole partyPlayerRole) {
+	public void sendMsg(BadPlayer badPlayer, PartyPlayerRole partyPlayerRole, String msg, Party party) {
 		// Get the message
 		String message = null;
 
 		if (partyPlayerRole.equals(PartyPlayerRole.ADMIN))
 		{
-			message = badPlayer.getTranslatedMessage(prefix + "msg.admin", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName());
+			message = badPlayer.getTranslatedMessage(prefix + "msg.admin", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName(), msg);
 		}else if (partyPlayerRole.equals(PartyPlayerRole.MODO))
 		{
-			message = badPlayer.getTranslatedMessage(prefix + "msg.modo", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName());
+			message = badPlayer.getTranslatedMessage(prefix + "msg.modo", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName(), msg);
 		}else
 		{
-			message = badPlayer.getTranslatedMessage(prefix + "msg.default", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName());
+			message = badPlayer.getTranslatedMessage(prefix + "msg.default", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName(), msg);
 		}
 
 		// Create McJson message
@@ -983,7 +983,8 @@ public class PartyMessages {
 				badPlayer.getRawChatPrefix(), badPlayer.getName())).setClickSuggest("/party msg ").build();
 
 		// Send the translated message
-		badPlayer.sendTranslatedOutgoingMCJson(json);
+		party.getPlayers().values().parallelStream().filter(partyPlayer -> BungeeManager.getInstance().hasUsername(partyPlayer.getName()))
+		.forEach(partyPlayer -> BungeeManager.getInstance().getBadPlayer(partyPlayer.getName()).sendTranslatedOutgoingMCJson(json));
 	}
 
 }
