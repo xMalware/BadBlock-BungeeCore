@@ -10,10 +10,8 @@ import fr.badblock.api.common.utils.TimeUtils;
 import fr.badblock.api.common.utils.bungee.PunishType;
 import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.api.common.utils.bungee.Punishment;
-import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
-import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
@@ -25,180 +23,281 @@ import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class TempBanIpCommand extends AbstractModCommand {
+/**
+ * 
+ * BadCommand
+ * 
+ * @author xMalware
+ *
+ */
+public class UnbanIPCommand extends AbstractModCommand {
 
-	public TempBanIpCommand() {
-		super("tempbanip", new String[] { "tbip", "tbanip", "tbi" });
+	/**
+	 * Constructor
+	 */
+	public UnbanIPCommand() {
+		// Super!
+		super("unbanip", new String[] { "ub", "ubi", "ubip" });
 	}
 
-	public boolean canBeBanned(CommandSender sender, String playerName) {
-		boolean bannerPlayer = sender instanceof ProxiedPlayer;
+	/**
+	 * If a player can be unbanned
+	 * 
+	 * @param sender
+	 * @param playerName
+	 * @return
+	 */
+	public boolean canBeUnbanned(CommandSender sender, String playerName) {
+		// If the unbanner is a player
+		boolean unbannerPlayer = sender instanceof ProxiedPlayer;
 
+		// Get the target player
 		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
 
+		// If he doesn't exist
 		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound()) {
+			// Send a message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
+			// So we stop there
 			return false;
 		}
 
 		BadIP badIp = BadIP.get(badOfflinePlayer.getLastIp());
 
-		System.out.println("2");
-
-		if (badIp == null) {
+		if (badIp == null || !badIp.isFound() || !badIp.isLoaded())
+		{
 			// Send a message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			// So we stop there
 			return false;
 		}
 
-		System.out.println("3");
+		Punished punished = badIp.getPunished();
 
-		// If the player is already banned
-		if (badIp.getPunished() != null && badIp.getPunished().isBan()) {
+		if (punished == null)
+		{
+			punished = new Punished();
+		}
+
+		// If the player is not banned
+		if (!punished.isBan()) {
 			// Send a message
-			I19n.sendMessage(sender, getPrefix("alreadybanned"), null, badOfflinePlayer.getName());
+			I19n.sendMessage(sender, getPrefix("notbanned"), null, badOfflinePlayer.getName());
 			// So we stop there
 			return false;
 		}
 
-		if (bannerPlayer) {
+		// If the unbanner is a player
+		if (unbannerPlayer) {
+			// Get the unbanner
 			BadPlayer badPlayer = BadPlayer.get((ProxiedPlayer) sender);
 
+			// If the unbanner is null
 			if (badPlayer == null) {
+				// Send an error message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 1);
+				// So we stop there
 				return false;
 			}
 
+			// Get the unbanner permissions
 			PermissionUser perm = badPlayer.getPermissions();
 
+			// If the unbanner doesn't have any permissions
 			if (perm == null) {
+				// Send a message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 2);
+				// So we stop there
 				return false;
 			}
 
+			// Get the highest unbanner rank
 			Permissible permissible = perm.getHighestRank("bungee", false);
 
+			// If the permissible is null
 			if (permissible == null) {
+				// Send a message
 				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 3);
+				// So we stop there
 				return false;
 			}
 
+			// Get the target permissions
 			PermissionUser targetPerm = badOfflinePlayer.getPermissions();
 
+			// If the target player doesn't have any permissions
 			if (targetPerm == null) {
+				// So we stop there
 				return true;
 			}
 
+			// Get the highest target rank
 			Permissible targetPermissible = targetPerm.getHighestRank("bungee", false);
 
+			// If the permissible is null
 			if (targetPermissible == null) {
+				// So we stop there
 				return true;
 			}
 
+			// If the unbanner has a higher rank than the target player (or a bypass)
 			if (permissible.getPower() > targetPermissible.getPower()
 					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
+				// So we stop there
 				return true;
 			}
 
+			Punishment punishment = punished.getMute();
+
+			if (punishment == null) {
+				// Send a message
+				I19n.sendMessage(sender, getPrefix("notbanned"), null, badOfflinePlayer.getName());
+				// So we stop there
+				return false;
+			}
+
+			String punisher = punished.getBan().getPunisher();
+
+			// Get the punisher player
+			BadOfflinePlayer punisherPlayer = BungeeManager.getInstance().getBadOfflinePlayer(punisher);
+
+			// Get the muter permissions
+			PermissionUser punisherPerm = punisherPlayer.getPermissions();
+
+			// If the muter doesn't have any permissions
+			if (punisherPerm == null) {
+				// Send a message
+				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 2);
+				// So we stop there
+				return false;
+			}
+
+			// Get the highest banner rank
+			Permissible punisherPermissible = perm.getHighestRank("bungee", false);
+
+			// If the permissible is null
+			if (punisherPermissible == null) {
+				// Send a message
+				I19n.sendMessage(sender, getPrefix("erroroccurred"), null, 3);
+				// So we stop there
+				return false;
+			}
+
+			// If the banner has a higher rank than the player
+			if (permissible.getPower() > punisherPermissible.getPower()
+					|| badPlayer.hasPermission(getPermission() + ".bypasspower")) {
+				// So we stop there
+				return true;
+			}
+
+			// Not enough permission message
 			I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, badOfflinePlayer.getName());
+			// Returns false
 			return false;
 		} else {
+			// Returns true
 			return true;
 		}
 	}
 
+	/**
+	 * Run
+	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		if (args.length < 4) {
-			// /m ban <pseudo> <temps> <raison>
+		// If arg length != 2
+		if (args.length != 2) {
+			// Send the message
 			I19n.sendMessage(sender, getPrefix("usage"), null);
+			// So we stop there
 			return;
 		}
 
+		// Get the player name
 		String playerName = args[1];
 
-		if (!canBeBanned(sender, playerName)) {
+		// If he can't be unbanned
+		if (!canBeUnbanned(sender, playerName)) {
+			// So we stop there
 			return;
 		}
 
+		// He's a player?
 		boolean isPlayer = sender instanceof ProxiedPlayer;
+		// Get the proxied player
 		ProxiedPlayer proxiedPlayer = isPlayer ? (ProxiedPlayer) sender : null;
+		// Get the bad player
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
+		// He's a player?
 		isPlayer = isPlayer && proxiedPlayer != null && badPlayer != null;
-
-		if (isPlayer && badPlayer.getFlags().has("tryban")) {
-			return;
-		}
-
-		badPlayer.getFlags().set("tryban", 500);
-
-		String rawTime = args[2];
-		String banReason = StringUtils.join(args, " ", 3);
-
-		long time = Time.MILLIS_SECOND.matchTime(rawTime);
-
-		if (time == 0L) {
-			I19n.sendMessage(sender, getPrefix("notgoodtime"), null, rawTime);
-			return;
-		}
 
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
-		if (badOfflinePlayer == null) {
+		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound())
+		{
+			// Send a message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
+			// So we stop there
 			return;
 		}
 
 		BadIP badIp = BadIP.get(badOfflinePlayer.getLastIp());
 
-		System.out.println("A : " + badOfflinePlayer.getLastIp());
-		if (badIp == null) {
+		if (badIp == null || !badIp.isLoaded() || !badIp.isFound())
+		{
+			// Send a message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
+			// So we stop there
 			return;
 		}
-		System.out.println("B : " + badOfflinePlayer.getLastIp());
 
+		// Get the punisher ip
 		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
 
+		// Generate a unique id
 		UUID uuid = UUID.randomUUID();
 
 		// Unique id
 		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
+		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
-				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), TimeUtils.nextTime(time),
-				DateUtils.getHourDate(), banReason, false, new String[] {}, sender.getName(), punisherUniqueId,
-				punisherIp);
+				badOfflinePlayer.getLastIp(), PunishType.UNBAN, TimeUtils.time(), -1, DateUtils.getHourDate(), "",
+				false, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
+		// Get the main class
 		BadBungee badBungee = BadBungee.getInstance();
 
+		// Get the service
 		MongoService mongoService = badBungee.getMongoService();
 
+		// Get the database
 		DB db = mongoService.getDb();
 
+		// Get the collection
 		DBCollection collection = db.getCollection("punishments");
 
+		// Insert in the collection
 		collection.insert(punishment.toObject());
 
 		// If the punish object isn't null
 		if (badIp.getPunished() != null) {
-			// So set the ban
+			// So set the mute
 			badIp.getPunished().setBan(punishment);
 		}
 		// If the punish object is null
 		else {
 			// Create a punish object
 			badIp.setPunished(new Punished());
-			// Set the ban
+			// Set the mute
 			badIp.getPunished().setBan(punishment);
 		}
-		
+
 		// Try to
 		try {
 			// Save the data
-			badIp.saveData();
+			badOfflinePlayer.saveData();
 		}
 		// Error case
 		catch (Exception exception) {
@@ -206,22 +305,13 @@ public class TempBanIpCommand extends AbstractModCommand {
 			exception.printStackTrace();
 		}
 
-		// If the target player is online
-		if (badOfflinePlayer.isOnline()) {
-			// Get the target player
-			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
-
-			// Kick the player
-			targetPlayer.kick(targetPlayer.getBanMessage());
-		}
-
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatunban"),
 				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);
+				badOfflinePlayer.getName());
 
-		I19n.sendMessage(sender, getPrefix("banned"), null, badOfflinePlayer.getName(),
-				Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);
+		// Send banned message
+		I19n.sendMessage(sender, getPrefix("unbanned"), null, badOfflinePlayer.getName());
 	}
 
 }

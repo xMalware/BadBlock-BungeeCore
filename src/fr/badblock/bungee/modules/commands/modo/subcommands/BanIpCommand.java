@@ -403,6 +403,17 @@ public class BanIpCommand extends AbstractModCommand {
 			badIp.getPunished().setBan(punishment);
 		}
 
+		// Try to
+		try {
+			// Save the data
+			badIp.saveData();
+		}
+		// Error case
+		catch (Exception exception) {
+			// Print the stacktrace
+			exception.printStackTrace();
+		}
+		
 		// If the target player is online
 		if (badOfflinePlayer.isOnline()) {
 			// Get the target player
@@ -410,19 +421,6 @@ public class BanIpCommand extends AbstractModCommand {
 
 			// Kick the player
 			targetPlayer.kick(targetPlayer.getBanMessage());
-		}
-		// If the target player is offline
-		else {
-			// Try to
-			try {
-				// Save the data
-				badIp.saveData();
-			}
-			// Error case
-			catch (Exception exception) {
-				// Print the stacktrace
-				exception.printStackTrace();
-			}
 		}
 
 		// Array to translate
