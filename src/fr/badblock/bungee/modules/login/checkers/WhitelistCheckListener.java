@@ -48,6 +48,11 @@ public class WhitelistCheckListener extends BadListener {
 		// Get results
 		DBCursor cursor = collection.find(query);
 
+		if (badPlayer.hasPermission("bungee.command.whitelist.bypass"))
+		{
+			return;
+		}
+		
 		try
 		{
 			if (!cursor.hasNext())
