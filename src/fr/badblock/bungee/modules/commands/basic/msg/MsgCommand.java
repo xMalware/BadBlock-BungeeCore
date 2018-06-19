@@ -38,7 +38,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public class MsgCommand extends BadCommand {
 
 	// I18n key prefix
-	private String prefix = "bungee.commands.msg.";
+	static String prefix = "bungee.commands.msg.";
 
 	/**
 	 * Command constructor
