@@ -147,6 +147,15 @@ public class BadOfflinePlayer {
 	 * @return Returns the current username
 	 */
 	private String name;
+	
+	/**
+	 * Nickname
+	 * 
+	 * @param Set
+	 *            the new nickname
+	 * @return Returns the current nickname
+	 */
+	private String nickname;
 
 	/**
 	 * Last server
@@ -370,6 +379,8 @@ public class BadOfflinePlayer {
 		object.put("name", getName().toLowerCase());
 		// Put the real name
 		object.put("realName", getName());
+		// Put the nickname
+		object.put("nickname", getNickname());
 		// Put the last IP
 		object.put("lastIp", getLastIp());
 		// Put the unique ID
@@ -475,6 +486,8 @@ public class BadOfflinePlayer {
 		uniqueId = UUID.randomUUID();
 		// Set the version
 		version = 0;
+		// Set the username
+		nickname = null;
 		// Get saved object
 		BasicDBObject obj = getSavedObject();
 		// Set database object
@@ -547,6 +560,8 @@ public class BadOfflinePlayer {
 			BadBungee.log("§c" + getName() + " exists in the player table.");
 			// Set last IP
 			setLastIp(getString("lastIp"));
+			// Set nickname
+			setNickname(getString("nickname"));
 			// Set unique ID
 			setUniqueId(UUID.fromString(getString("uniqueId")));
 			// Set settings
@@ -771,6 +786,14 @@ public class BadOfflinePlayer {
 	public void updateLastIp() {
 		// Update last IP
 		updateData("lastIp", getLastIp().toString());
+	}
+
+	/**
+	 * Update the nickname
+	 */
+	public void updateNickname() {
+		// Update the nickname
+		updateData("nickname", getNickname().toString());
 	}
 
 	/**
