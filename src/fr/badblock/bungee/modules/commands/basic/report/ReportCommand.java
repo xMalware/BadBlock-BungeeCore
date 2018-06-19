@@ -83,6 +83,8 @@ public class ReportCommand extends BadCommand {
 			// Has reason
 			boolean hasReason = false;
 
+			int reasons = 0;
+			
 			// For each type
 			for (ReportType reportType : ReportType.values()) {
 				// If the sender doesn't have the permission
@@ -94,10 +96,11 @@ public class ReportCommand extends BadCommand {
 				// One reason!
 				hasReason = true;
 
+				reasons++;
 				// If the sender is a player
 				if (isPlayer) {
 					// Get the intro message
-					String intro = badPlayer.getTranslatedMessage(getPrefix("reason_intro"), null);
+					String intro = badPlayer.getTranslatedMessage(getPrefix("reason_intro"), null, reasons);
 					// Get the reason message
 					String reason = badPlayer.getTranslatedMessage(getPrefix("reason." + reportType.getName()), null);
 
@@ -128,6 +131,9 @@ public class ReportCommand extends BadCommand {
 
 		// If the sender is a player
 		if (isPlayer && badPlayer.getFlags().has("report")) {
+			// Send a message
+			I19n.sendMessage(sender, getPrefix("pleasewait"), null);
+			// So we stop there
 			return;
 		}
 
