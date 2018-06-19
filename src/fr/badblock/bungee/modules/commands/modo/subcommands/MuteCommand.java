@@ -258,6 +258,15 @@ public class MuteCommand extends AbstractModCommand {
 			// So we stop there
 			return;
 		}
+		else
+		{
+			if (!sender.hasPermission(getPermission() + "." + rawBanReason))
+			{
+				I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, playerName);
+				// So we stop there
+				return;
+			}
+		}
 
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);

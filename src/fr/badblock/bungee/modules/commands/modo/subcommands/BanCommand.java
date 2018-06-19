@@ -238,6 +238,15 @@ public class BanCommand extends AbstractModCommand {
 			// So we stop there
 			return;
 		}
+		else
+		{
+			if (!sender.hasPermission(getPermission() + "." + rawBanReason))
+			{
+				I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, playerName);
+				// So we stop there
+				return;
+			}
+		}
 
 		// If the sender is a player
 		if (isPlayer && badPlayer.getFlags().has("tryban")) {
