@@ -46,7 +46,7 @@ public class OnlineStaffCommand extends BadCommand {
 		permissibles.forEach(permissible -> 
 		{
 			StringBuilder data = new StringBuilder();
-			data.append(I19n.getMessage(sender, prefix + "intro", null));
+			data.append(I19n.getMessage(sender, prefix + "intro", new int[] { 0 }, permissible.getRawPrefix("chat")));
 			List<BadPlayer> usernames = BungeeManager.getInstance().getLoggedPlayers(player -> player.getPermissions().getHighestRank("bungee", true) != null
 					&& player.getPermissions().getHighestRank("bungee", false).getName().equalsIgnoreCase(permissible.getName()));
 			boolean first = true;
