@@ -205,6 +205,8 @@ public class WarnCommand extends AbstractModCommand {
 		// Insert in the collection
 		collection.insert(punishment.toObject());
 
+		System.out.println("Online " + badOfflinePlayer.getName() + " : " + badOfflinePlayer.isOnline());
+		
 		// If the player is online
 		if (badOfflinePlayer.isOnline()) {
 			// Send warn message
