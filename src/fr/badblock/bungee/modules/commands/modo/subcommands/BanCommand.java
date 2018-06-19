@@ -317,11 +317,11 @@ public class BanCommand extends AbstractModCommand {
 			// Get data
 			DBCursor cursor = dbCollection.find(query);
 
-			int ban = cursor.count();
+			int ban = cursor.count() + 1;
 
 			if (banReason != null) {
 				BanIndex index = null;
-				for (BanIndex banIndex : banReason.getPunishments().get(rawBanReason)) {
+				for (BanIndex banIndex : banReason.getPunishments()) {
 					if (index == null || (banIndex.getIndex() > index.getIndex() && ban >= banIndex.getIndex())) {
 						index = banIndex;
 					}

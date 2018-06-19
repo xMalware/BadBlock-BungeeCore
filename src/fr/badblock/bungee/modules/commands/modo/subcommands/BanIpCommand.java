@@ -349,7 +349,7 @@ public class BanIpCommand extends AbstractModCommand {
 
 			if (banReason != null) {
 				BanIndex index = null;
-				for (BanIndex banIndex : banReason.getPunishments().get(rawBanReason)) {
+				for (BanIndex banIndex : banReason.getPunishments()) {
 					if (index == null || (banIndex.getIndex() > index.getIndex() && banIndex.getIndex() >= ban)) {
 						index = banIndex;
 					}
