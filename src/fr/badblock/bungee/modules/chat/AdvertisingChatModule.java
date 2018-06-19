@@ -171,7 +171,7 @@ public class AdvertisingChatModule extends ChatModule {
 	public void hasBlockedFirstTopLevelDomain(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
 	{
 		String message = chatEvent.getMessage();
-		String filteredMessage = applyFilter(message);
+		String filteredMessage = applyFilterN(message);
 
 		for (String blockedFirstTopLevelDomain : blockedFirstTopLevelDomains) {
 			if (message.contains(blockedFirstTopLevelDomain) || message.contains(filteredMessage)) {
@@ -202,6 +202,19 @@ public class AdvertisingChatModule extends ChatModule {
 
 	public String applyFilter(String string) {
 		string = string.toLowerCase().replaceAll("\\W", "").replace(" ", "").replace("_", "");
+		String o = "";
+		Character lastCharacter = null;
+		for (Character character : string.toCharArray()) {
+			if (lastCharacter == null || !lastCharacter.toString().equals(character.toString()))
+				o += character.toString();
+			lastCharacter = character;
+		}
+		string = o;
+		return o;
+	}
+
+	public String applyFilterN(String string) {
+		string = string.toLowerCase().replaceAll("[^.,a-zA-Z]", "").replace(" ", "").replace("_", "");
 		String o = "";
 		Character lastCharacter = null;
 		for (Character character : string.toCharArray()) {
