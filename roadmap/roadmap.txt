@@ -1,9 +1,54 @@
-X - Commands
-X - AutoMessage
-X - Send data common utils (API)
-X - Add misc commands
-X - Finish VPN
-X - Punish table
-X - Ban IP
-X - Comment all classes
-X - i18n keys
+- Command: bungee whitelist
+- Command: reports
+- Command: gnick
+	- send username to the bukkit sender
+	PreLoginListener on BungeeOthers
+	- set the same unique id
+	- the server will know the real IP by using the uuid
+- Command: rnick
+	- fakeUsername => mongodb query
+- Command: reports enable (/m)
+- Command: pic
+- Command: Reload all loaded data (mongodb)
+- Connection logs
+- Command: message report
+- Staff sessions
+- Finish VPN (isp etc)
+- Antibot system!
+- Packet punishment
+- Player token cache
+- Check unknown i18n keys
+- Send uniqueId to spigot
+- Skins
+- Guardianer
+- "Absorbance" system
+- Login system (can't send commands/messages if
+the player isn't logged on), see BungeeOthers,
+PluginMessageListener
+- Anti advert module
+- BadCommunitySpookerModule, don't see 
+ragix messages on the server (see BungeeOthers)
+- Anti badwords module
+- Fallback system
+- Mute punishment table
+- Test ban punishment table
+
+X - Command: online staff
+
+T - Command: partymsg
+T - Command: Temp ban IP
+T - Command: Ban IP
+T - Command: Unban IP
+T - Force commands
+T - Kick the sender if the "null" sender sends a chat message
+T - Add log filter
+T - Anti bad username (regex)
+T - Server broadcast system (in BungeeManager, BungeePacket)
+T - Warn message on log-in
+T - /modo i18n keys
+T - /plugins i18n keys
+T - Disconnected MPs:
+T - MP on log-in
+T	- MP message: this player is not online
+
+(class comments)
