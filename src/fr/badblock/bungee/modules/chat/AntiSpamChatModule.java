@@ -44,8 +44,8 @@ public class AntiSpamChatModule extends ChatModule {
 					"cs"
 			};
 	
-	private long 			timeBetweenEachMessage = 0L;
-	private long 			timeBetweenSameMessage = 0L;
+	private double 			timeBetweenEachMessage = 0L;
+	private double 			timeBetweenSameMessage = 0L;
 
 	public AntiSpamChatModule()
 	{
@@ -76,8 +76,8 @@ public class AntiSpamChatModule extends ChatModule {
 					{
 						DBObject data = cursor.next();
 
-						timeBetweenEachMessage = Long.parseLong(data.get("timeBetweenEachMessage").toString());
-						timeBetweenSameMessage = Long.parseLong(data.get("timeBetweenSameMessage").toString());
+						timeBetweenEachMessage = Double.parseDouble(data.get("timeBetweenEachMessage").toString());
+						timeBetweenSameMessage = Double.parseDouble(data.get("timeBetweenSameMessage").toString());
 
 					}
 				}
@@ -213,8 +213,8 @@ public class AntiSpamChatModule extends ChatModule {
 			}
 		}
 
-		badPlayer.getSpamMessages().put(filteredMessage, System.currentTimeMillis() + timeBetweenSameMessage);
-		badPlayer.setLastMessageTime(System.currentTimeMillis() + timeBetweenEachMessage);
+		badPlayer.getSpamMessages().put(filteredMessage, (long) (System.currentTimeMillis() + timeBetweenSameMessage));
+		badPlayer.setLastMessageTime((long) (System.currentTimeMillis() + timeBetweenEachMessage));
 		badPlayer.setLastMessage(filteredMessage);
 	}
 
