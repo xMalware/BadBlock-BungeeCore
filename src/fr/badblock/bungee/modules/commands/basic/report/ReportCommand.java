@@ -36,8 +36,7 @@ public class ReportCommand extends BadCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		// If arg length != 2 or 3
-		if (args.length != 2 && args.length != 3) {
+		if (args.length < 1) {
 			// Send the message
 			I19n.sendMessage(sender, getPrefix("usage"), null);
 			// So we stop there
@@ -45,7 +44,7 @@ public class ReportCommand extends BadCommand {
 		}
 
 		// Get the player name
-		String playerName = args[1];
+		String playerName = args[0];
 
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
@@ -67,7 +66,7 @@ public class ReportCommand extends BadCommand {
 		isPlayer = isPlayer && proxiedPlayer != null && badPlayer != null;
 
 		// two args
-		if (args.length == 2) {
+		if (args.length == 1) {
 
 			// If the sender is a player
 			if (isPlayer) {
@@ -141,7 +140,7 @@ public class ReportCommand extends BadCommand {
 		badPlayer.getFlags().set("report", 60_000);
 
 		// Get the raw ban type
-		String rawReportType = args[2];
+		String rawReportType = args[1];
 
 		// Get the ban reason
 		ReportType reportType = ReportType.getFromString(rawReportType);
