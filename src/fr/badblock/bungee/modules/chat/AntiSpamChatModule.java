@@ -176,7 +176,7 @@ public class AntiSpamChatModule extends ChatModule {
 							continue;
 						}
 					}
-					I19n.sendMessage(proxiedPlayer, "bungee.antispam.flood", null);
+					I19n.sendMessage(proxiedPlayer, "bungee.chat.antispam.flood", null);
 					chatEvent.setCancelled(true);
 					return ;
 				}
@@ -200,7 +200,7 @@ public class AntiSpamChatModule extends ChatModule {
 		String filteredMessage = applyFilter(chatEvent.getMessage());
 		if (badPlayer.getLastMessage() != null && badPlayer.getLastMessageTime() > System.currentTimeMillis()) {
 			chatEvent.setCancelled(true);
-			I19n.sendMessage(proxiedPlayer, "bungee.antispam.flood", null);
+			I19n.sendMessage(proxiedPlayer, "bungee.chat.antispam.waitbetweenmessages", null);
 			return;
 		}
 
@@ -208,7 +208,7 @@ public class AntiSpamChatModule extends ChatModule {
 			long time = badPlayer.getSpamMessages().get(filteredMessage);
 			if (time > System.currentTimeMillis()) {
 				chatEvent.setCancelled(true);
-				I19n.sendMessage(proxiedPlayer, "bungee.antispam.spam", null);
+				I19n.sendMessage(proxiedPlayer, "bungee.chat.antispam.spam", null);
 				return;
 			}
 		}
