@@ -61,7 +61,7 @@ public class AntiSpamChatModule extends ChatModule {
 				// Get the database
 				DB db = mongoService.getDb();
 				// Get the collection
-				DBCollection collection = db.getCollection("customData");
+				DBCollection collection = db.getCollection("chatFilters");
 				// Create query
 				DBObject query = new BasicDBObject();
 
