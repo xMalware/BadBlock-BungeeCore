@@ -67,7 +67,8 @@ public class PartyMessageListener extends BadListener {
 					}
 					argList.add(word);
 				}
-				String[] arr = argList.toArray(new String[] { });
+				String[] arr = new String[argList.size()];
+				arr = argList.toArray(arr);
 				PartyManager.msg(proxiedPlayer, arr);
 			}
 			else
