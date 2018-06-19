@@ -119,6 +119,10 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 * Last message player (tmp var)
 	 */
 	private String tmpLastMessagePlayer;
+	
+	private String				lastMessage;
+	private long				lastMessageTime;
+	private Map<String, Long>	spamMessages;
 
 	/**
 	 * Constructor
