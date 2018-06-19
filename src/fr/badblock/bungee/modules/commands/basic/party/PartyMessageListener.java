@@ -1,5 +1,8 @@
 package fr.badblock.bungee.modules.commands.basic.party;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -52,13 +55,25 @@ public class PartyMessageListener extends BadListener {
 			if (message.length() > 1)
 			{
 				// Send the message
-				proxiedPlayer.chat("/party msg " + 
-						event.getMessage().substring(1, event.getMessage().length() - 1));
+				List<String> argList = new ArrayList<>();
+				argList.add("msg");
+				String[] array = message.split(" ");
+				for (int i = 0; i < argList.size() - 1; i++)
+				{
+					String word = array[0];
+					if (i == 0)
+					{
+						word = message.substring(1, message.length() - 1);
+					}
+					argList.add(word);
+				}
+				String[] arr = argList.toArray(new String[] { });
+				PartyManager.msg(proxiedPlayer, arr);
 			}
 			else
 			{
 				// Usage
-				proxiedPlayer.chat("/party msg");
+				PartyManager.msg(proxiedPlayer, null);
 			}
 		}
 	}

@@ -448,7 +448,7 @@ public class PartyManager {
 	 */
 	public static void msg(ProxiedPlayer sender, String[] args) {
 		// Oooh :(
-		if (args.length < 2) {
+		if (args == null || args.length < 2) {
 			// Send invite usage
 			PartyManager.getMessages().sendMsgUsage(sender);
 			// We stop there
