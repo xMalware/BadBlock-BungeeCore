@@ -43,6 +43,11 @@ public class BungeeTask extends Thread {
 	public static boolean run = true;
 
 	/**
+	 * Task thread
+	 */
+	private static Thread syncThread	= Thread.currentThread();
+
+	/**
 	 * Get the current BungeeCord node IP
 	 * 
 	 * @return
@@ -65,21 +70,24 @@ public class BungeeTask extends Thread {
 	 * Keep alive the current BungeeCord node
 	 */
 	public static void keepAlive() {
-		// Get main class
-		BadBungee badBungee = BadBungee.getInstance();
-		// New map of players
-		final Map<String, BadPlayer> players = new HashMap<>();
-		// Put players in the map
-		BadPlayer.getPlayers().forEach(player -> players.put(player.getName(), player));
-		// Refresh with the new player list
-		bungeeObject.refresh(players);
-		// Get gson
-		Gson gson = badBungee.getGson();
-		// Deserialize the object
-		String jsonFormatString = gson.toJson(bungeeObject);
-		// Send KeepAlive packet
-		badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, jsonFormatString),
-				BadBungeeQueues.BUNGEE_DATA, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
+		synchronized (syncThread)
+		{
+			// Get main class
+			BadBungee badBungee = BadBungee.getInstance();
+			// New map of players
+			final Map<String, BadPlayer> players = new HashMap<>();
+			// Put players in the map
+			BadPlayer.getPlayers().forEach(player -> players.put(player.getName(), player));
+			// Refresh with the new player list
+			bungeeObject.refresh(players);
+			// Get gson
+			Gson gson = badBungee.getGson();
+			// Deserialize the object
+			String jsonFormatString = gson.toJson(bungeeObject);
+			// Send KeepAlive packet
+			badBungee.getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, jsonFormatString),
+					BadBungeeQueues.BUNGEE_DATA, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
+		}
 	}
 
 	/**
