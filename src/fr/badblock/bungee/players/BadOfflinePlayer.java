@@ -766,6 +766,14 @@ public class BadOfflinePlayer {
 	}
 
 	/**
+	 * Update punishments
+	 */
+	public void updatePunishments() {
+		// Update punishments
+		updateData("punishments", getPunished().getDBObject());
+	}
+
+	/**
 	 * Update the last server
 	 * 
 	 * @param The
