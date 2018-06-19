@@ -1,5 +1,6 @@
 package fr.badblock.bungee.modules.login.checkers;
 
+import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
@@ -37,7 +38,7 @@ public class LoginFullServerListener extends BadListener {
 		// slots of the network
 		if (bungeeManager.getOnlinePlayers() >= bungeeManager.getSlots()) {
 			// We cancel his connection to the server
-			event.cancel(badPlayer.getTranslatedMessage("bungee.login.full", null));
+			event.cancel(StringUtils.join(badPlayer.getTranslatedMessages("bungee.login.full", null), System.lineSeparator()));
 		}
 	}
 

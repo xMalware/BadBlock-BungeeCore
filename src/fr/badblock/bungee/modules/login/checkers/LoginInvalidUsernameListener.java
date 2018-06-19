@@ -1,5 +1,6 @@
 package fr.badblock.bungee.modules.login.checkers;
 
+import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
 import fr.badblock.bungee.players.BadPlayer;
@@ -27,7 +28,7 @@ public class LoginInvalidUsernameListener extends BadListener {
 		// If the username isn't valid
 		if (!username.matches("^\\w{3,16}$")) {
 			// We cancel the player connection with a specific message
-			event.cancel(badPlayer.getTranslatedMessage("bungee.login.invalidusername", null));
+			event.cancel(StringUtils.join(badPlayer.getTranslatedMessages("bungee.login.invalidusername", null), System.lineSeparator()));
 		}
 	}
 

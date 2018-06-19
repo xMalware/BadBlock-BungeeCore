@@ -7,6 +7,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
+import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
@@ -63,7 +64,7 @@ public class WhitelistCheckListener extends BadListener {
 
 			if (!cursor.hasNext())
 			{
-				event.cancel(badPlayer.getTranslatedMessage("bungee.whitelist.notinwhitelist", null));
+				event.cancel(StringUtils.join(badPlayer.getTranslatedMessages("bungee.login.notinwhitelist", null), System.lineSeparator()));
 			}
 
 		}

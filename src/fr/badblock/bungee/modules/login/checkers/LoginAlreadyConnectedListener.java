@@ -1,5 +1,6 @@
 package fr.badblock.bungee.modules.login.checkers;
 
+import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
@@ -34,7 +35,7 @@ public class LoginAlreadyConnectedListener extends BadListener {
 		// If the username is already registered in the sync data
 		if (bungeeManager.hasUsername(username)) {
 			// We cancel the player connection with a specific message
-			event.cancel(badPlayer.getTranslatedMessage("bungee.login.alreadyconnected", null));
+			event.cancel(StringUtils.join(badPlayer.getTranslatedMessages("bungee.login.alreadyconnected", null), System.lineSeparator()));
 		}
 	}
 
