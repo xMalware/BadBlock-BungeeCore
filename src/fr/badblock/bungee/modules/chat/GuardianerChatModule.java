@@ -22,35 +22,8 @@ import net.md_5.bungee.api.event.ChatEvent;
 
 public class GuardianerChatModule extends ChatModule {
 
-	private String[]		applicableCommands	= new String[]
-			{
-					"msg",
-					"whisper",
-					"mp",
-					"w",
-					"tellraw",
-					"tell",
-					"minecraft:tell",
-					"minecraft:tellraw",
-					"minecraft:whisper",
-					"minecraft:w",
-					"pm",
-					"adminchat",
-					"ac",
-					"chatfriend",
-					"cf",
-					"r",
-					"reply",
-					"party",
-					"groupe",
-					"pa",
-					"gr",
-					"modo",
-					"chatstaff",
-					"cs"
-			};
-
 	private List<String>	words = new ArrayList<>();
+	private List<String>	applicableCommands = new ArrayList<>();
 
 	public GuardianerChatModule()
 	{
@@ -87,6 +60,14 @@ public class GuardianerChatModule extends ChatModule {
 						{
 							String name = object.toString();
 							words.add(name);
+						});
+						
+						BasicDBList applicableCommandlist = (BasicDBList) data.get("applicableCommands");
+
+						applicableCommandlist.forEach(object ->
+						{
+							String name = object.toString();
+							applicableCommands.add(name);
 						});
 
 					}
