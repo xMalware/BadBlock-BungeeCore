@@ -3,6 +3,7 @@ package fr.badblock.bungee.modules.login.datamanager;
 import java.lang.reflect.Field;
 
 import fr.badblock.bungee.modules.abstracts.BadListener;
+import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -23,15 +24,32 @@ public class SetUniqueIdListener extends BadListener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onServerConnect(ServerConnectEvent event) {
-		// We get the player
+	public void onServerConnect(ServerConnectEvent event)
+	{
 		ProxiedPlayer proxiedPlayer = event.getPlayer();
-		// We get the BadPlayer object
-		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
+		setUniqueId(proxiedPlayer, BadPlayer.get(proxiedPlayer));
+	}
+	
+	/**
+	 * When someone connects to the server
+	 * 
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerJoin(PlayerJoinEvent event)
+	{
+		ProxiedPlayer proxiedPlayer = event.getBadPlayer().toProxiedPlayer();
+		BadPlayer badPlayer = event.getBadPlayer();
+		setUniqueId(proxiedPlayer, badPlayer);
+	}
+
+	public void setUniqueId(ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
+	{
 		try {
 			PendingConnection pendingConnection = proxiedPlayer.getPendingConnection();
 			Field uniqueId = pendingConnection.getClass().getDeclaredField("uniqueId");
 			uniqueId.setAccessible(true);
+			System.out.println(badPlayer.getUniqueId());
 			uniqueId.set(pendingConnection, badPlayer.getUniqueId());
 		}catch(Exception error) {
 			error.printStackTrace();

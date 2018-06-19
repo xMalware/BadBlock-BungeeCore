@@ -557,7 +557,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 * 
 	 * @return Returns a ProxiedPlayer object
 	 */
-	private ProxiedPlayer toProxiedPlayer() {
+	public ProxiedPlayer toProxiedPlayer() {
 		// Get the proxied player object
 		return ProxyServer.getInstance().getPlayer(getName());
 	}
