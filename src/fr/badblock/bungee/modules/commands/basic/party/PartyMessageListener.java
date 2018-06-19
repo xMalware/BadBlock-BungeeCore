@@ -47,7 +47,7 @@ public class PartyMessageListener extends BadListener {
 			return;
 		}
 
-		if (message.startsWith("%") && message.length() > 1)
+		if (message.startsWith("%"))
 		{
 			event.setCancelled(true);
 			if (message.length() > 1)
