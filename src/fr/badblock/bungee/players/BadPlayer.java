@@ -297,7 +297,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 		}
 
 		// Send outgoing message
-		this.sendTranslatedOutgoingMessage("punishments.warn", null, getPunished().buildMuteTime(getLocale()),
+		this.sendTranslatedOutgoingMessage("punishments.warn", null,
 				warnReason);
 	}
 
