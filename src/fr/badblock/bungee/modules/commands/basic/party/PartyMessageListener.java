@@ -1,8 +1,7 @@
-package fr.badblock.bungee.modules.punishments;
+package fr.badblock.bungee.modules.commands.basic.party;
 
-import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.bungee.modules.abstracts.BadListener;
-import fr.badblock.bungee.players.BadPlayer;
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
@@ -11,13 +10,10 @@ import net.md_5.bungee.event.EventPriority;
 
 /**
  * 
- * The purpose of this class is to prevent muted players from being able to send
- * the message
- * 
  * @author xMalware
  *
  */
-public class PunishmentMutedListener extends BadListener {
+public class PartyMessageListener extends BadListener {
 
 	/**
 	 * When a message in the chat is sent
@@ -43,22 +39,18 @@ public class PunishmentMutedListener extends BadListener {
 
 		// We get the player
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
-		// We get the BadPlayer object
-		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
-		// We get punishment information
-		Punished punished = badPlayer.getPunished();
 
-		// If there is no punishment data
-		if (punished == null) {
-			// We stop there
+		String message = event.getMessage();
+		
+		if (message == null)
+		{
 			return;
 		}
-
-		// If the player is still muted
-		if (punished.isMute()) {
-			// So we cancel the message
-			event.setCancelled(true);
-			badPlayer.sendOutgoingMessage(badPlayer.getMuteMessage());
+		
+		if (message.startsWith("%") && message.length() > 1)
+		{
+			BungeeCord.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, "/party msg " + 
+					event.getMessage().substring(1, event.getMessage().length() - 1));
 		}
 	}
 
