@@ -48,7 +48,7 @@ public class PunishmentWarnReconnectListener extends BadListener {
 		
 		badPlayer.warn(reason);
 		
-		punished.setWarn(null);
+		badPlayer.getPunished().setWarn(null);
 		badPlayer.updatePunishments();
 	}
 

@@ -778,7 +778,7 @@ public class BadOfflinePlayer {
 	 */
 	public void updatePunishments() {
 		// Update punishments
-		updateData("punishments", getPunished().getDBObject());
+		updateData("punish", getPunished().getDBObject());
 	}
 
 	/**
