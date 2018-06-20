@@ -1,26 +1,14 @@
 package fr.badblock.bungee.modules.commands.modo.subcommands;
 
-import java.util.UUID;
-
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-
-import fr.badblock.api.common.tech.mongodb.MongoService;
-import fr.badblock.api.common.utils.TimeUtils;
-import fr.badblock.api.common.utils.bungee.PunishType;
-import fr.badblock.api.common.utils.bungee.Punished;
-import fr.badblock.api.common.utils.bungee.Punishment;
 import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
 import fr.badblock.api.common.utils.time.Time;
-import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
+import fr.badblock.bungee.modules.commands.modo.punishments.PunishmentType;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.badblock.bungee.utils.DateUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -129,64 +117,7 @@ public class TempBanCommand extends AbstractModCommand {
 
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
-		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
-
-		UUID uuid = UUID.randomUUID();
-
-		// Unique id
-		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
-
-		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
-				badOfflinePlayer.getLastIp(), PunishType.BAN, TimeUtils.time(), TimeUtils.nextTime(time),
-				DateUtils.getHourDate(), banReason, false, new String[] {}, sender.getName(), punisherUniqueId,
-				punisherIp);
-
-		BadBungee badBungee = BadBungee.getInstance();
-
-		MongoService mongoService = badBungee.getMongoService();
-
-		DB db = mongoService.getDb();
-
-		DBCollection collection = db.getCollection("punishments");
-
-		collection.insert(punishment.toObject());
-
-		if (badOfflinePlayer.getPunished() == null) {
-			badOfflinePlayer.setPunished(new Punished());
-		}
-
-		badOfflinePlayer.getPunished().setBan(punishment);
-
-		if (badOfflinePlayer.isOnline()) {
-			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
-			targetPlayer.getPunished().setBan(punishment);
-			targetPlayer.sendOnlineTempSyncUpdate();
-			try {
-				targetPlayer.saveData();
-			} catch (Exception exception) {
-				exception.printStackTrace();
-			}
-
-			targetPlayer.kick(targetPlayer.getBanMessage());
-		} else {
-			try {
-				badOfflinePlayer.saveData();
-			} catch (Exception exception) {
-				exception.printStackTrace();
-			}
-		}
-
-		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
-				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);
-
-		ModoSession modoSession = badPlayer.getModoSession();
-
-		if (modoSession != null)
-		{
-			modoSession.incrementPunishment();
-		}
+		PunishmentType.BAN.process(sender, playerName, banReason, false, time);
 
 		I19n.sendMessage(sender, getPrefix("banned"), null, badOfflinePlayer.getName(),
 				Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);

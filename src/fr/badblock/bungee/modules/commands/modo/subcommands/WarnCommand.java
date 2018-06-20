@@ -1,25 +1,13 @@
 package fr.badblock.bungee.modules.commands.modo.subcommands;
 
-import java.util.UUID;
-
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-
-import fr.badblock.api.common.tech.mongodb.MongoService;
-import fr.badblock.api.common.utils.TimeUtils;
-import fr.badblock.api.common.utils.bungee.PunishType;
-import fr.badblock.api.common.utils.bungee.Punished;
-import fr.badblock.api.common.utils.bungee.Punishment;
 import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
-import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
+import fr.badblock.bungee.modules.commands.modo.punishments.PunishmentType;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.badblock.bungee.utils.DateUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -176,78 +164,8 @@ public class WarnCommand extends AbstractModCommand {
 
 		// Get the warn reason
 		String warnReason = StringUtils.join(args, " ", 2);
-
-		// Get the punisher ip
-		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
-
-		// Generate a unique id
-		UUID uuid = UUID.randomUUID();
-
-		// Unique id
-		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
-
-		// Create the punishment object
-		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
-				badOfflinePlayer.getLastIp(), PunishType.WARN, TimeUtils.time(), -1, DateUtils.getHourDate(),
-				warnReason, false, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
-
-		// Get the main class
-		BadBungee badBungee = BadBungee.getInstance();
-
-		// Get the service
-		MongoService mongoService = badBungee.getMongoService();
-
-		// Get the database
-		DB db = mongoService.getDb();
-
-		// Get the collection
-		DBCollection collection = db.getCollection("punishments");
-
-		// Insert in the collection
-		collection.insert(punishment.toObject());
-
-		System.out.println("Online " + badOfflinePlayer.getName() + " : " + badOfflinePlayer.isOnline());
-
-		// If the player is online
-		if (badOfflinePlayer.isOnline()) {
-			// Send warn message
-			System.out.println("warn");
-			badOfflinePlayer.getOnlineBadPlayer().warn(warnReason);
-		}
-		// If the player is offline
-		else {
-			// If the punished object is null
-			if (badOfflinePlayer.getPunished() == null) {
-				// Create a punished object
-				badOfflinePlayer.setPunished(new Punished());
-			}
-
-			// Set warn
-			badOfflinePlayer.getPunished().setWarn(punishment);
-
-			// Try to
-			try {
-				// Save data
-				badOfflinePlayer.saveData();
-			}
-			// Error case
-			catch (Exception exception) {
-				// Print stack trace
-				exception.printStackTrace();
-			}
-		}
-
-		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatwarn"),
-				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				badOfflinePlayer.getName(), warnReason);
-
-		ModoSession modoSession = badPlayer.getModoSession();
-
-		if (modoSession != null)
-		{
-			modoSession.incrementPunishment();
-		}
+		
+		PunishmentType.WARN.process(sender, playerName, warnReason, false, -1);
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("warned"), null, badOfflinePlayer.getName(), warnReason);

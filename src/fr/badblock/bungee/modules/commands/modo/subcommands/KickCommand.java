@@ -1,23 +1,12 @@
 package fr.badblock.bungee.modules.commands.modo.subcommands;
 
-import java.util.UUID;
-
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-
-import fr.badblock.api.common.tech.mongodb.MongoService;
-import fr.badblock.api.common.utils.TimeUtils;
-import fr.badblock.api.common.utils.bungee.PunishType;
-import fr.badblock.api.common.utils.bungee.Punishment;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
-import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
+import fr.badblock.bungee.modules.commands.modo.punishments.PunishmentType;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.badblock.bungee.utils.DateUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -180,49 +169,7 @@ public class KickCommand extends AbstractModCommand {
 		// Get the kick reason
 		String kickReason = args[2];
 
-		// Get the punisher ip
-		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
-
-		// Generate a unique id
-		UUID uuid = UUID.randomUUID();
-
-		// Unique id
-		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
-
-		// Create the punishment object
-		Punishment punishment = new Punishment(uuid.toString(), badOnlinePlayer.getUniqueId().toString(),
-				badOnlinePlayer.getLastIp(), PunishType.KICK, TimeUtils.time(), -1, DateUtils.getHourDate(), kickReason,
-				false, new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
-
-		// Get the main class
-		BadBungee badBungee = BadBungee.getInstance();
-
-		// Get the service
-		MongoService mongoService = badBungee.getMongoService();
-
-		// Get the database
-		DB db = mongoService.getDb();
-
-		// Get the collection
-		DBCollection collection = db.getCollection("punishments");
-
-		// Insert in the collection
-		collection.insert(punishment.toObject());
-
-		// Kick the player
-		badOnlinePlayer.kick(badOnlinePlayer.getKickMessage(kickReason));
-
-		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatkick"),
-				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				badOnlinePlayer.getName(), kickReason);
-
-		ModoSession modoSession = badPlayer.getModoSession();
-
-		if (modoSession != null)
-		{
-			modoSession.incrementPunishment();
-		}
+		PunishmentType.KICK.process(sender, playerName, kickReason, false, -1);
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("kicked"), null, badOnlinePlayer.getName(), kickReason);

@@ -1,31 +1,25 @@
 package fr.badblock.bungee.modules.commands.modo.subcommands;
 
 import java.util.Map.Entry;
-import java.util.UUID;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
-import fr.badblock.api.common.utils.TimeUtils;
 import fr.badblock.api.common.utils.bungee.PunishType;
-import fr.badblock.api.common.utils.bungee.Punished;
-import fr.badblock.api.common.utils.bungee.Punishment;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
 import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentIndex;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReason;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
+import fr.badblock.bungee.modules.commands.modo.punishments.PunishmentType;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.badblock.bungee.utils.DateUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
 import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.mcjson.McJsonFactory;
@@ -279,14 +273,6 @@ public class MuteCommand extends AbstractModCommand {
 
 		// Get the reason
 		String reason = isKey ? getPrefix("reason." + muteReason.getName()) : rawMuteReason;
-		// Get the punisher ip
-		String punisherIp = !isPlayer ? "127.0.0.1" : badPlayer.getLastIp();
-
-		// Generate a unique id
-		UUID uuid = UUID.randomUUID();
-
-		// Unique id
-		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
 		long time = Time.YEAR.convert(1L, Time.MILLIS_SECOND);
 
@@ -331,87 +317,7 @@ public class MuteCommand extends AbstractModCommand {
 			}
 		}
 
-		// Create the punishment object
-		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
-				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(),
-				System.currentTimeMillis() + time, DateUtils.getHourDate(), reason, isKey,
-				new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
-
-		// Get the main class
-		BadBungee badBungee = BadBungee.getInstance();
-
-		// Get the service
-		MongoService mongoService = badBungee.getMongoService();
-
-		// Get the database
-		DB db = mongoService.getDb();
-
-		// Get the collection
-		DBCollection collection = db.getCollection("punishments");
-
-		// Insert in the collection
-		collection.insert(punishment.toObject());
-
-		// If the punish object isn't null
-		if (badOfflinePlayer.getPunished() != null) {
-			// So set the mute
-			badOfflinePlayer.getPunished().setMute(punishment);
-		}
-		// If the punish object is null
-		else {
-			// Create a punish object
-			badOfflinePlayer.setPunished(new Punished());
-			// Set the mute
-			badOfflinePlayer.getPunished().setMute(punishment);
-		}
-
-		// If the target player is online
-		if (badOfflinePlayer.isOnline()) {
-			// Get the target player
-			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
-			// Set mute
-			targetPlayer.getPunished().setMute(punishment);
-			// Send online update
-			targetPlayer.sendOnlineTempSyncUpdate();
-			// Try to
-			try {
-				// Save the data
-				targetPlayer.saveData();
-			}
-			// Error case
-			catch (Exception exception) {
-				// Print the stack trace
-				exception.printStackTrace();
-			}
-		}
-		// If the target player is offline
-		else {
-			// Try to
-			try {
-				// Save the data
-				badOfflinePlayer.saveData();
-			}
-			// Error case
-			catch (Exception exception) {
-				// Print the stacktrace
-				exception.printStackTrace();
-			}
-		}
-
-		// Array to translate
-		int[] arr = isKey ? new int[] { 0, 2, 5 } : new int[] { 0, 2 };
-		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatmute"), arr,
-				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
-				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR),
-				reason);
-
-		ModoSession modoSession = badPlayer.getModoSession();
-
-		if (modoSession != null)
-		{
-			modoSession.incrementPunishment();
-		}
+		PunishmentType.MUTE.process(sender, playerName, reason, isKey, time);
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("muted"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),
