@@ -140,14 +140,12 @@ public final class BadPlayer extends BadOfflinePlayer {
 		BadBungee.log(ChatColor.GREEN + "Loaded data for " + pendingConnection.getName());
 		// Set the last IP
 		setLastIp(pendingConnection.getAddress().getAddress().getHostAddress());
-		// Update the last IP
-		updateLastIp();
 		// Set the version
 		setVersion(pendingConnection.getVersion());
 		// Set the last server
 		setLastServer(getCurrentServer());
-		// Update the vesion
-		updateVersion();
+		// Update multiple values
+		updateData(new String[] { "lastIp", "version", "lastServer"}, new Object[] { getLastIp(), getVersion(), getLastServer() });
 		// Put in the map
 		put();
 	}

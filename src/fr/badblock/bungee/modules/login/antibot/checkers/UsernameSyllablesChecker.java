@@ -12,6 +12,12 @@ public class UsernameSyllablesChecker extends AntiBotChecker
 	public Queue<Long> syllables = Queues.newLinkedBlockingDeque();
 
 	@Override
+	public int getId()
+	{
+		return 6;
+	}
+	
+	@Override
 	public boolean accept(String username, String address)
 	{
 		if (countSyllables(username) == 0)

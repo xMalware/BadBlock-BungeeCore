@@ -12,6 +12,12 @@ public class UsernameLengthChecker extends AntiBotChecker
 	public Map<Integer, Queue<Long>> characters = new HashMap<>();
 
 	@Override
+	public int getId()
+	{
+		return 5;
+	}
+	
+	@Override
 	public boolean accept(String username, String address)
 	{
 		int length = username.length();

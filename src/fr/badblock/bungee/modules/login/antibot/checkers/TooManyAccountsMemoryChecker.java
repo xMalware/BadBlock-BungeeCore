@@ -11,6 +11,12 @@ public class TooManyAccountsMemoryChecker extends AntiBotChecker
 	private Map<String, Set<String>>	accounts	= new HashMap<>();
 	
 	@Override
+	public int getId()
+	{
+		return 4;
+	}
+	
+	@Override
 	public boolean accept(String username, String address)
 	{
 		Set<String> list = null;

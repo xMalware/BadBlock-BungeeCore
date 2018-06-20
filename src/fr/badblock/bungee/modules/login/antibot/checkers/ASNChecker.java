@@ -17,7 +17,6 @@ public class ASNChecker extends AntiBotChecker
 	public Map<Integer, Queue<Long>> 	asn				= new HashMap<>();
 	public Map<Integer, Queue<Long>>	blockedAsn		= new HashMap<>();
 
-	public Queue<Long>					blocks			= Queues.newLinkedBlockingDeque();
 	public Queue<Long>					invalidASNIPs	= Queues.newLinkedBlockingDeque();
 
 	private	DatabaseReader	reader;
@@ -33,6 +32,12 @@ public class ASNChecker extends AntiBotChecker
 		}
 	}
 
+	@Override
+	public int getId()
+	{
+		return 1;
+	}
+	
 	@Override
 	public boolean accept(String username, String address)
 	{
@@ -64,14 +69,14 @@ public class ASNChecker extends AntiBotChecker
 			{
 				long time = System.currentTimeMillis() - queue.poll();
 				int count = queue.size();
+				
 				if (time / count < 500)
 				{
-					blocks.add(System.currentTimeMillis());
 					return false;
 				}
 			}
 
-			return false;
+			return true;
 		} catch (Exception e) {
 			if (invalidASNIPs.size() >= 5)
 			{

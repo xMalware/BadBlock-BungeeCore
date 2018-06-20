@@ -102,7 +102,7 @@ public class AntiBotCheckListener extends BadListener
 				blockedUsernames.put(username, System.currentTimeMillis() + 300_000L);
 				blockedAddresses.put(address, System.currentTimeMillis() + 300_000L);
 				event.setCancelled(true);
-				event.setCancelReason(I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.antibot.blocked", null));
+				event.setCancelReason(I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.antibot.blockeddetails", null, checker.getId()));
 				BadBungee.log("§c[AntiBot] Rejected " + username + " from " + address + ".");
 				break;
 			}

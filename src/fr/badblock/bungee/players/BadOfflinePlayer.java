@@ -783,14 +783,25 @@ public class BadOfflinePlayer {
 
 		});
 	}
-
+	
 	/**
 	 * Update data
 	 * 
 	 * @param key
 	 * @param value
 	 */
-	public void updateData(String key, Object value) {
+	public void updateData(String key, Object value)
+	{
+		updateData(new String[] { key }, new Object[] { value });
+	}
+	
+	/**
+	 * Update data
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	public void updateData(String[] keys, Object[] values) {
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
@@ -807,8 +818,15 @@ public class BadOfflinePlayer {
 				// New query
 				BasicDBObject query = new BasicDBObject();
 				// Update query
-				BasicDBObject update = new BasicDBObject(key, value);
+				BasicDBObject update = new BasicDBObject();
 
+				for (int i = 0; i < keys.length; i++)
+				{
+					String key = keys[i];
+					Object value = values[i];
+					update.put(key, value);
+				}
+				
 				// Query name
 				query.put("name", getName().toLowerCase());
 				// Set the updater as a setter

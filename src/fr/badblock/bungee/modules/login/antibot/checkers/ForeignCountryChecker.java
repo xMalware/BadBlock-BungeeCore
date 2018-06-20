@@ -34,6 +34,12 @@ public class ForeignCountryChecker extends AntiBotChecker
 	}
 	
 	@Override
+	public int getId()
+	{
+		return 2;
+	}
+	
+	@Override
 	public boolean accept(String username, String address)
 	{
 		try {

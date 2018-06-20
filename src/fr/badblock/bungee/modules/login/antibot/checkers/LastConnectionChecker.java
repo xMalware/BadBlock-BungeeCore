@@ -12,6 +12,12 @@ public class LastConnectionChecker extends AntiBotChecker
 	public Map<String, Queue<Long>> connections = new HashMap<>();
 
 	@Override
+	public int getId()
+	{
+		return 3;
+	}
+	
+	@Override
 	public boolean accept(String username, String address)
 	{
 		if (!connections.containsKey(address))
