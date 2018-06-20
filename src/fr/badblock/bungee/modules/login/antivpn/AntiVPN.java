@@ -100,10 +100,8 @@ public class AntiVPN extends Thread {
 			while (!vpn.isEmpty()) {
 				// Try to
 				try {
-					// Get the IP
-					String ip = vpn.poll();
 					// Check the IP
-					work(ip);
+					// TODO
 				}
 				// Error case
 				catch (Exception error) {
@@ -125,11 +123,11 @@ public class AntiVPN extends Thread {
 	 * @return
 	 * @throws UnknownHostException
 	 */
-	public void work(String ip) throws UnknownHostException {
+	public boolean isAVPN(String ip) throws UnknownHostException {
 		// If the IP is local
 		if (isThisLocal(InetAddress.getByName(ip))) {
 			// Accepted
-			return;
+			return false;
 		}
 
 		// Get the BadIP object
@@ -137,21 +135,21 @@ public class AntiVPN extends Thread {
 
 		// If it's a VPN
 		if (badIp.isVpn()) {
-			// Declined
-			return;
+			// Kick VPN
+			return true;
 		}
 
 		// Get the url
 		String url = "http://v2.api.iphub.info/ip/" + ip;
 		// Get the source code
 		String sourceCode = NetworkUtils.fetchSourceCodeWithAPI(url, apiKey);
-		
+
 		if (sourceCode == null)
 		{
 			BadBungee.log("§c[VPN] Unable to check IP.");
-			return;
+			return false;
 		}
-		
+
 		// Get the IPHub object
 		IPHubObject object = GsonUtils.getGson().fromJson(sourceCode, IPHubObject.class);
 
@@ -161,8 +159,7 @@ public class AntiVPN extends Thread {
 		if (object != null && object.getBlock() == 1) {
 			// Set as a VPN
 			badIp.setVpn(true);
-			// Kick VPN
-			badIp.kick("VPN");
+			return true;
 		}
 
 		try {
@@ -172,7 +169,7 @@ public class AntiVPN extends Thread {
 		}
 
 		// TODO Check ISP
-		return;
+		return false;
 	}
 
 }
