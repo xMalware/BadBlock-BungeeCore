@@ -91,6 +91,7 @@ public class BungeeManager {
 	 */
 	public void add(BungeeObject bungeeObject) {
 		// Add in the map
+		System.out.println(bungeeObject.getIp() + "_" + bungeeObject.getName() + " : " + bungeeObject.getUsernames().size());
 		bungees.put(bungeeObject.getIp() + "_" + bungeeObject.getName(), bungeeObject);
 	}
 
@@ -313,11 +314,8 @@ public class BungeeManager {
 	public boolean hasUsername(String name) {
 		// Get the lower player username
 		final String toLowerName = name.toLowerCase();
-		// Get the count of players with this username on the network
-		long count = bungees.values().parallelStream().filter(bungee -> bungee.getUsernames().keySet().parallelStream()
-				.filter(n -> n.toLowerCase().equals(toLowerName)).count() > 0).count();
-		// Returns if the count is more than 0
-		return count > 0;
+		
+		return !getLoggedPlayers(n -> n.getName().toLowerCase().equals(toLowerName)).isEmpty();
 	}
 
 	/**
