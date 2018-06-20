@@ -27,6 +27,7 @@ public class ProxyPingListener extends BadListener {
 	public void onProxyPing(ProxyPingEvent event) {
 		// We get the bungee manager
 		BungeeManager bungeeManager = BungeeManager.getInstance();
+		
 		// Generate a ping
 		ServerPing serverPing = bungeeManager.generatePing();
 		// If the server ping is null
