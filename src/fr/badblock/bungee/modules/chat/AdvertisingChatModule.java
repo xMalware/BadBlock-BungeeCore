@@ -174,7 +174,7 @@ public class AdvertisingChatModule extends ChatModule {
 		String filteredMessage = applyFilterN(message);
 
 		for (String blockedFirstTopLevelDomain : blockedFirstTopLevelDomains) {
-			if (message.contains(blockedFirstTopLevelDomain) || message.contains(filteredMessage)) {
+			if (message.contains(blockedFirstTopLevelDomain) || filteredMessage.contains(blockedFirstTopLevelDomain)) {
 				if (message.equalsIgnoreCase(blockedFirstTopLevelDomain) || filteredMessage.equalsIgnoreCase(blockedFirstTopLevelDomain)) {
 					chatEvent.setCancelled(true);
 					I19n.sendMessage(proxiedPlayer, "bungee.chat.advertising", null);
