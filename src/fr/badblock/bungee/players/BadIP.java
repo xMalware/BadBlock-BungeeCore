@@ -464,7 +464,7 @@ public final class BadIP {
 				query.put("ip", getIp().toLowerCase());
 
 				// Update data
-				collection.update(query, getDbObject());
+				collection.update(query, getSavedObject());
 			}
 
 		});
