@@ -32,16 +32,12 @@ public class TempBanIpCommand extends AbstractModCommand {
 
 		BadIP badIp = BadIP.get(badOfflinePlayer.getLastIp());
 
-		System.out.println("2");
-
 		if (badIp == null) {
 			// Send a message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			// So we stop there
 			return false;
 		}
-
-		System.out.println("3");
 
 		// If the player is already banned
 		if (badIp.getPunished() != null && badIp.getPunished().isBan()) {

@@ -543,7 +543,6 @@ public final class FriendListManager {
 			List<Entry<BadOfflinePlayer, FriendListPlayer>> list = new ArrayList<>(friends.entrySet());
 			// For each
 			for (int l = (i - 1) * 10; l < i * 10; l++) {
-				System.out.println("A : " + (friends.size() - 1) + " / " + l);
 				// Exception case
 				if (friends.size() - 1 < l)
 					break;
@@ -556,40 +555,33 @@ public final class FriendListManager {
 				}
 				// Get the friend data
 				FriendListPlayer friendListPlayer = friend.getValue();
-				System.out.println("B");
 				// If the friend list player is null
 				if (friendListPlayer == null) {
 					// So we stop there
 					continue;
 				}
-				System.out.println("C");
 				// Get the frienship state
 				FriendListPlayerState state = friendListPlayer.getState();
 				// If the friendship state is accepted
 				if (FriendListPlayerState.ACCEPTED.equals(state)) {
-					System.out.println("D");
 					// If the player is offline
 					if (!bungeeManager.hasUsername(friend.getKey().getName())) {
-						System.out.println("E");
 						// Send offline list
 						message.sendOfflineList(badPlayer, friend.getKey());
 					}
 					// If the player is online
 					else {
-						System.out.println("F");
 						// Send online list
 						message.sendOnlineList(badPlayer, bungeeManager.getBadPlayer(friend.getKey().getName()));
 					}
 				}
 				// If the friendship state is 'requested'
 				else if (FriendListPlayerState.REQUESTED.equals(state)) {
-					System.out.println("G");
 					// Send requested list
 					message.sendRequestedList(badPlayer, friend.getKey());
 				}
 				// If the friendship state is 'waiting'
 				else if (FriendListPlayerState.WAITING.equals(state)) {
-					System.out.println("H");
 					// Send waiting list
 					message.sendWaitingList(badPlayer, friend.getKey());
 				}

@@ -34,7 +34,6 @@ public class ModoSessionStartListener extends BadListener {
 			return;
 		}
 
-		System.out.println("ModoSessionStart CALL!");
 		long time = System.currentTimeMillis();
 		
 		ModoSession modoSession = new ModoSession(badPlayer.getName(), badPlayer.getUniqueId().toString(), time, time, time, 0L, 0L, 0L);

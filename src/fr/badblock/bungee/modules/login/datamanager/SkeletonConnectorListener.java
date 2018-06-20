@@ -44,8 +44,6 @@ public class SkeletonConnectorListener extends BadListener {
 		ServerInfo target = event.getTarget();
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		System.out.println(target.getName());
-		
 		if (target != null && target.getName().equalsIgnoreCase( skeleton.getName() ))
 		{
 			ServerInfo serverInfo = this.roundrobinLogin();

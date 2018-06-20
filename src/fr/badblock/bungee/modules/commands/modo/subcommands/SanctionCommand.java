@@ -170,7 +170,6 @@ public class SanctionCommand extends AbstractModCommand {
 		BasicDBObject query = new BasicDBObject();
 		// Add punished
 		query.put("punishedUuid", badOfflinePlayer.getUniqueId().toString().toLowerCase());
-		System.out.println(query.toJson());
 		// Get data
 		DBCursor cursor = dbCollection.find(query);
 		// Data?

@@ -29,7 +29,6 @@ public class CheckVPNListener extends BadListener {
 			// Get the connection
 			Connection connection = event.getPreLoginEvent().getConnection();
 
-			System.out.println("AntiVPN CALL!");
 			// Get the IP
 			String ip = connection.getAddress().getAddress().getHostAddress();
 			// Get the AntiVPN instance

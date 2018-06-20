@@ -361,7 +361,6 @@ public class BadOfflinePlayer {
 		// Get permissible object
 		Permissible permissible = getPermissions().getHighestRank("bungee", true);
 		// If permissible object is null
-		System.out.println("A - " + permissible);
 		if (permissible == null) {
 			// Returns an empty string
 			return "";
@@ -630,12 +629,9 @@ public class BadOfflinePlayer {
 			// Set punished
 			setPunished(new Punished(getJsonElement("punish").getAsJsonObject()));
 
-			System.out.println("Load permissions : A");
 			// If the permission manager exists
 			if (PermissionsManager.getManager() != null) {
 				// Set permissions
-				System.out.println("Load permissions : B");
-				System.out.println("Load permissions : C : " + getJsonElement("permissions").toString());
 				setPermissions(new PermissionUser(getJsonElement("permissions").getAsJsonObject()));
 			}
 
@@ -777,8 +773,6 @@ public class BadOfflinePlayer {
 
 				// Query name
 				query.put("name", getName().toLowerCase());
-
-				System.out.println(getSavedObject().toJson());
 
 				// Updater with all data to set
 				BasicDBObject updater = new BasicDBObject("$set", getSavedObject());

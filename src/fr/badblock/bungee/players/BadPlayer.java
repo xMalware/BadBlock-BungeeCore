@@ -297,14 +297,12 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 *            message
 	 */
 	public void warn(String warnReason) {
-		System.out.println("d");
 		// If the punish is null
 		if (getPunished() == null) {
 			// Returns null
 			return;
 		}
-		System.out.println("e");
-
+		
 		// Send outgoing message
 		this.sendTranslatedOutgoingMessage("punishments.warn", null,
 				warnReason);
@@ -476,12 +474,10 @@ public final class BadPlayer extends BadOfflinePlayer {
 	private void sendTranslatedLocalMessage(String key, int[] indexesToTranslate, Object... args) {
 		// If the player isn't logged on this local node
 		if (!isOnThisNode()) {
-			System.out.println("Z");
 			// So we stop there
 			return;
 		}
-		System.out.println("u");
-
+		
 		// Send the translated local message
 		toProxiedPlayer().sendMessages(
 				ChatColorUtils.translateColors('&', I19n.getMessages(getLocale(), key, indexesToTranslate, args)));
@@ -544,14 +540,12 @@ public final class BadPlayer extends BadOfflinePlayer {
 	public void sendTranslatedOutgoingMessage(String key, int[] indexesToTranslate, Object... args) {
 		// If the player is logged on this local node
 		if (isOnThisNode()) {
-			System.out.println("f");
 			// Send a local translated message
 			sendTranslatedLocalMessage(key, indexesToTranslate, args);
 			// So we stop there
 			return;
 		}
 
-		System.out.println("g");
 		// Send a packet
 		BungeeManager.getInstance()
 				.sendPacket(new PlayerPacket(getName(),

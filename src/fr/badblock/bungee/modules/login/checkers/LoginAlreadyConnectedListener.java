@@ -30,7 +30,6 @@ public class LoginAlreadyConnectedListener extends BadListener {
 		{
 			return;
 		}
-		System.out.println("LoginAlready CALL!");
 		// We get the PendingConnection object
 		PendingConnection connection = event.getConnection();
 		// We get the BadOfflinePlayer object

@@ -25,7 +25,7 @@ public class LoginInvalidUsernameListener extends BadListener {
 		{
 			return;
 		}
-		System.out.println("LoginInvalidUsername CALL!");
+		
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// We get his/her username

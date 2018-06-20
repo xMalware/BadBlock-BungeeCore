@@ -34,7 +34,6 @@ public class PreLoginLoadPlayerListener extends BadListener {
 			return;
 		}
 
-		System.out.println("Data load CALL!");
 		// Get bungee manager
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 		// If the server ping null

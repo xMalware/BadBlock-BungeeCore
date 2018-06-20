@@ -30,7 +30,6 @@ public class ICanLogYouListener extends BadListener {
 		
 		String playerName = event.getPlayer();
 		
-		System.out.println("AsyncDataLoadRequest CALL!");
 		if (BadPlayer.has(playerName))
 		{
 			BadPlayer badPlayer = BadPlayer.get(playerName);

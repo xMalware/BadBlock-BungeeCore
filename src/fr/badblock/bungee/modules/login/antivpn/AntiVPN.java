@@ -62,7 +62,6 @@ public class AntiVPN extends Thread {
 	public void addToCheck(String ip) {
 		// Add the IP to the check queue
 		vpn.add(ip);
-		System.out.println("VPN added to check");
 	}
 
 	/**
@@ -146,8 +145,6 @@ public class AntiVPN extends Thread {
 		String url = "http://v2.api.iphub.info/ip/" + ip;
 		// Get the source code
 		String sourceCode = NetworkUtils.fetchSourceCodeWithAPI(url, apiKey);
-
-		System.out.println(sourceCode);
 		
 		// Get the IPHub object
 		IPHubObject object = GsonUtils.getGson().fromJson(sourceCode, IPHubObject.class);

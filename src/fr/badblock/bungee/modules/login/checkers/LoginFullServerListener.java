@@ -29,7 +29,7 @@ public class LoginFullServerListener extends BadListener {
 		{
 			return;
 		}
-		System.out.println("LoginFullServer CALL!");
+		
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// We'll use our bungee manager to determinate if the network is full

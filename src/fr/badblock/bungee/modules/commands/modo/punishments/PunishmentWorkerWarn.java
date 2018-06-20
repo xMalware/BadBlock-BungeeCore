@@ -87,12 +87,9 @@ public class PunishmentWorkerWarn extends PunishmentWorker
 		// Insert in the collection
 		collection.insert(punishment.toObject());
 
-		System.out.println("Online " + badOfflinePlayer.getName() + " : " + badOfflinePlayer.isOnline());
-
 		// If the player is online
 		if (badOfflinePlayer.isOnline()) {
 			// Send warn message
-			System.out.println("warn");
 			badOfflinePlayer.getOnlineBadPlayer().warn(reason);
 		}
 		// If the player is offline

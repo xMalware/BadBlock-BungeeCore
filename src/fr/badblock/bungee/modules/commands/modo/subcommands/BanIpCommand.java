@@ -58,8 +58,7 @@ public class BanIpCommand extends AbstractModCommand {
 
 		// Get the target player
 		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
-
-		System.out.println("1");
+		
 		// If he doesn't exist
 		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound()) {
 			// Send a message
@@ -70,16 +69,12 @@ public class BanIpCommand extends AbstractModCommand {
 
 		BadIP badIp = BadIP.get(badOfflinePlayer.getLastIp());
 
-		System.out.println("2");
-
 		if (badIp == null) {
 			// Send a message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			// So we stop there
 			return false;
 		}
-
-		System.out.println("3");
 
 		// If the player is already banned
 		if (badIp.getPunished() != null && badIp.getPunished().isBan()) {
@@ -174,13 +169,11 @@ public class BanIpCommand extends AbstractModCommand {
 		// Get the player name
 		String playerName = args[1];
 
-		System.out.println("0");
 		// If he can't ban
 		if (!canBeBanned(sender, playerName)) {
 			// So we stop there
 			return;
 		}
-		System.out.println("-");
 
 		// He's a player?
 		boolean isPlayer = sender instanceof ProxiedPlayer;
@@ -301,12 +294,10 @@ public class BanIpCommand extends AbstractModCommand {
 
 		BadIP badIp = BadIP.get(badOfflinePlayer.getLastIp());
 
-		System.out.println("A : " + badOfflinePlayer.getLastIp());
 		if (badIp == null) {
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			return;
 		}
-		System.out.println("B : " + badOfflinePlayer.getLastIp());
 
 		// Get the reason
 		String reason = isKey ? getPrefix("reason." + banReason.getName()) : rawBanReason;

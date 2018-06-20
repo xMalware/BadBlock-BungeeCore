@@ -48,7 +48,6 @@ public class SetUniqueIdListener extends BadListener {
 			PendingConnection pendingConnection = proxiedPlayer.getPendingConnection();
 			Field uniqueId = pendingConnection.getClass().getDeclaredField("uniqueId");
 			uniqueId.setAccessible(true);
-			System.out.println(badPlayer.getUniqueId());
 			uniqueId.set(pendingConnection, badPlayer.getUniqueId());
 		}catch(Exception error) {
 			error.printStackTrace();

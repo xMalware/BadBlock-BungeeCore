@@ -31,7 +31,6 @@ public class TooManyAccountsConnectedListener extends BadListener {
 			return;
 		}
 
-		System.out.println("Too many accounts CALL!");
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// We get his/her IP
