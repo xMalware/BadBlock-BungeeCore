@@ -10,6 +10,7 @@ import fr.badblock.bungee.modules.login.antibot.checkers.LastConnectionChecker;
 import fr.badblock.bungee.modules.login.antibot.checkers.TooManyAccountsMemoryChecker;
 import fr.badblock.bungee.modules.login.antibot.checkers.UsernameLengthChecker;
 import fr.badblock.bungee.modules.login.antibot.checkers.UsernameSyllablesChecker;
+import fr.badblock.bungee.modules.login.antibot.checkers.VPNChecker;
 
 public class AntiBotData
 {
@@ -20,7 +21,8 @@ public class AntiBotData
 			new LastConnectionChecker(),
 			new TooManyAccountsMemoryChecker(),
 			new UsernameLengthChecker(),
-			new UsernameSyllablesChecker()
+			new UsernameSyllablesChecker(),
+			new VPNChecker()
 	};
 
 	public static Map<String, Long> blockedAddresses	= new HashMap<>();

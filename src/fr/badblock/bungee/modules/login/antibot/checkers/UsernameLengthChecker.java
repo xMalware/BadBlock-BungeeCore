@@ -20,6 +20,11 @@ public class UsernameLengthChecker extends AntiBotChecker
 	@Override
 	public boolean accept(String username, String address)
 	{
+		if (username == null)
+		{
+			return true;
+		}
+		
 		int length = username.length();
 		if (!characters.containsKey(length))
 		{

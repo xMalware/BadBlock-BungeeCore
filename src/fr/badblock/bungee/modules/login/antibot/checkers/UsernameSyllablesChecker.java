@@ -20,6 +20,11 @@ public class UsernameSyllablesChecker extends AntiBotChecker
 	@Override
 	public boolean accept(String username, String address)
 	{
+		if (username == null)
+		{
+			return true;
+		}
+		
 		if (countSyllables(username) == 0)
 		{
 			return true;

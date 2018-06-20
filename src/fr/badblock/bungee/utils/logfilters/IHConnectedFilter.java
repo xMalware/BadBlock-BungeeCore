@@ -28,22 +28,9 @@ public class IHConnectedFilter extends PropagatingFilter {
 
 	@Override
 	public boolean isLoggable(LogRecord record) {
-		if (record.getMessage().contains("IOException"))
+		if (record.getMessage().toLowerCase().contains("reset by peer"))
 			return false;
-		if (record.getMessage().startsWith(
-				"Si vous voyez ce message, c'est que ce qui se trouve au-dessus n'est qu'un simple avertissement, et non pas une erreur."))
-			return false;
-		if (record.getMessage().startsWith("Anti-jeux/spawnkill"))
-			return false;
-		if (record.getMessage().startsWith("Cheat"))
-			return false;
-		if (record.getMessage().startsWith("spam/Flood"))
-			return false;
-		if (record.getMessage().startsWith("Pub (Serveur)"))
-			return false;
-		if (record.getMessage().startsWith("[SkinsRestorer]"))
-			return false;
-		if (record.getMessage().startsWith("Non respect des règles du serveur"))
+		if (record.getMessage().toLowerCase().contains("read timed out"))
 			return false;
 		if (record.getMessage().equals("net.md_5.bungee.connection.InitialHandler"))
 			return false;
