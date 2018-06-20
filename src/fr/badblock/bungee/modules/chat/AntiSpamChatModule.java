@@ -155,9 +155,11 @@ public class AntiSpamChatModule extends ChatModule {
 					return true;
 				}
 			}
+			
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	public void removeFloodCharacters(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer)

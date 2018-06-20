@@ -139,9 +139,11 @@ public class GuardianerChatModule extends ChatModule {
 					return true;
 				}
 			}
+			
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	public void checkBadwords(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
