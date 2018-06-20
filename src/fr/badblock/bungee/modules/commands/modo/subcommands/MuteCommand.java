@@ -333,7 +333,7 @@ public class MuteCommand extends AbstractModCommand {
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
 				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(),
-				time, DateUtils.getHourDate(), reason, isKey,
+				System.currentTimeMillis() + time, DateUtils.getHourDate(), reason, isKey,
 				new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		// Get the main class
