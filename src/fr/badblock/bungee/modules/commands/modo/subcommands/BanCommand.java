@@ -20,6 +20,7 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
+import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentIndex;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReason;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
@@ -418,6 +419,13 @@ public class BanCommand extends AbstractModCommand {
 				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), reason);
 
+		ModoSession modoSession = badPlayer.getModoSession();
+		
+		if (modoSession != null)
+		{
+			modoSession.incrementPunishment();
+		}
+		
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 2 } : null, badOfflinePlayer.getName(),
 				Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), reason);

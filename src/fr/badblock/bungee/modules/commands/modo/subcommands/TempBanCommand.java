@@ -17,6 +17,7 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
+import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.DateUtils;
@@ -179,6 +180,13 @@ public class TempBanCommand extends AbstractModCommand {
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"),
 				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);
+
+		ModoSession modoSession = badPlayer.getModoSession();
+
+		if (modoSession != null)
+		{
+			modoSession.incrementPunishment();
+		}
 
 		I19n.sendMessage(sender, getPrefix("banned"), null, badOfflinePlayer.getName(),
 				Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), banReason);

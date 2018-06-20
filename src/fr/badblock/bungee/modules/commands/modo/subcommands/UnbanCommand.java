@@ -15,6 +15,7 @@ import fr.badblock.api.common.utils.permissions.PermissionUser;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
+import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.DateUtils;
@@ -295,6 +296,13 @@ public class UnbanCommand extends AbstractModCommand {
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatunban"),
 				new int[] { 0, 2 }, badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName());
+
+		ModoSession modoSession = badPlayer.getModoSession();
+
+		if (modoSession != null)
+		{
+			modoSession.incrementPunishment();
+		}
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("unbanned"), null, badOfflinePlayer.getName());

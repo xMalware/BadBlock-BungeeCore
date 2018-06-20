@@ -19,6 +19,7 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
+import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentIndex;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReason;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
@@ -329,7 +330,7 @@ public class MuteCommand extends AbstractModCommand {
 				}
 			}
 		}
-		
+
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
 				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(),
@@ -404,6 +405,13 @@ public class MuteCommand extends AbstractModCommand {
 				badPlayer.getRawChatPrefix(), sender.getName(), badPlayer.getRawChatSuffix(),
 				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR),
 				reason);
+
+		ModoSession modoSession = badPlayer.getModoSession();
+
+		if (modoSession != null)
+		{
+			modoSession.incrementPunishment();
+		}
 
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("muted"), isKey ? new int[] { 1 } : null, badOfflinePlayer.getName(),

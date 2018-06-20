@@ -18,6 +18,7 @@ import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.bungee.BungeeTask;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
+import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
 import fr.badblock.bungee.rabbit.datareceivers.PlayerDataUpdateSender;
 import fr.badblock.bungee.utils.ChatColorUtils;
 import fr.badblock.bungee.utils.ObjectUtils;
@@ -113,16 +114,18 @@ public final class BadPlayer extends BadOfflinePlayer {
 	/**
 	 * Temp flags
 	 */
-	private FlagObject flags = new FlagObject();
+	private FlagObject 				flags					= new FlagObject();
 
 	/**
 	 * Last message player (tmp var)
 	 */
-	private String tmpLastMessagePlayer;
+	private String					tmpLastMessagePlayer;
 	
-	private String				lastMessage;
-	private long				lastMessageTime;
-	private Map<String, Long>	spamMessages		= new HashMap<>();
+	private String					lastMessage;
+	private long					lastMessageTime;
+	private Map<String, Long>		spamMessages			= new HashMap<>();
+	
+	private transient ModoSession	modoSession;
 
 	/**
 	 * Constructor
