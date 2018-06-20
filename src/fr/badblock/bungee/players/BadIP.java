@@ -20,6 +20,7 @@ import fr.badblock.api.common.utils.bungee.Punished;
 import fr.badblock.api.common.utils.data.Callback;
 import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.login.antivpn.IPHubObject;
 import fr.badblock.bungee.utils.ObjectUtils;
 import fr.badblock.bungee.utils.time.TimeUtils;
@@ -546,8 +547,10 @@ public final class BadIP {
 	 * 
 	 * @param string
 	 */
-	public void kick(String reason) {
-
+	public void kick() {
+		BungeeManager bungeeManager = BungeeManager.getInstance();
+		
+		bungeeManager.getLoggedPlayers(getIp()).forEach(badPlayer -> badPlayer.kick(getBanIpMessage(badPlayer)));
 	}
 
 }

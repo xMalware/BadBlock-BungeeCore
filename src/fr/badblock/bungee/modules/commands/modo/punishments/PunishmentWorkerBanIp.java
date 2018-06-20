@@ -113,6 +113,9 @@ public class PunishmentWorkerBanIp extends PunishmentWorker
 			// Set the ban
 			badIp.getPunished().setBan(punishment);
 		}
+		
+		// Kick
+		badIp.kick();
 
 		// Try to
 		try {
