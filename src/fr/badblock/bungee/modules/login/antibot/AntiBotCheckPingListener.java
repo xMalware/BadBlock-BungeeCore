@@ -89,7 +89,6 @@ public class AntiBotCheckPingListener extends BadListener
 			}
 		}
 		
-		BadBungee.log("§a[AntiBot] Accepted " + username + " from " + address + ".");
 	}
 
 }
