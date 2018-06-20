@@ -104,6 +104,10 @@ public class PunishmentWorkerUnmute extends PunishmentWorker
 		if (badOfflinePlayer.isOnline()) {
 			// Get the target player
 			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
+			if (targetPlayer.getPunished() == null)
+			{
+				targetPlayer.setPunished(new Punished());
+			}
 			// Set mute
 			targetPlayer.getPunished().setMute(punishment);
 			// Send online update

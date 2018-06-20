@@ -104,6 +104,10 @@ public class PunishmentWorkerUnban extends PunishmentWorker
 		if (badOfflinePlayer.isOnline()) {
 			// Get the target player
 			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
+			if (targetPlayer.getPunished() == null)
+			{
+				targetPlayer.setPunished(new Punished());
+			}
 			// Set ban
 			targetPlayer.getPunished().setBan(punishment);
 			// Send online update

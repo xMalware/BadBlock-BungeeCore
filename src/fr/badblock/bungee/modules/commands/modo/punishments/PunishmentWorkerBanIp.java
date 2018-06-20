@@ -132,7 +132,10 @@ public class PunishmentWorkerBanIp extends PunishmentWorker
 		if (badOfflinePlayer.isOnline()) {
 			// Get the target player
 			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
-
+			if (targetPlayer.getPunished() == null)
+			{
+				targetPlayer.setPunished(new Punished());
+			}
 			// Kick the player
 			targetPlayer.kick(targetPlayer.getBanMessage());
 		}
