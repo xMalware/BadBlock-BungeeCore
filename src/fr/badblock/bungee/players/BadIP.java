@@ -442,7 +442,7 @@ public final class BadIP {
 		// If it's not loaded
 		if (!isLoaded()) {
 			// Exception!
-			throw new Exception("Trying to save data with unloaded data.");
+			return;
 		}
 		// Mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
