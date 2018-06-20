@@ -3,8 +3,10 @@ package fr.badblock.bungee.modules.commands.modo.subcommands;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.utils.TimeUtils;
@@ -17,6 +19,7 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
+import fr.badblock.bungee.modules.commands.modo.objects.PunishmentIndex;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReason;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
 import fr.badblock.bungee.players.BadOfflinePlayer;
@@ -284,10 +287,53 @@ public class MuteCommand extends AbstractModCommand {
 		// Unique id
 		String punisherUniqueId = isPlayer ? badPlayer.getUniqueId().toString() : null;
 
+		long time = Time.YEAR.convert(1L, Time.MILLIS_SECOND);
+
+		if (muteReason != null && isKey) {
+
+			// Get mongo service
+			MongoService mongoService = BadBungee.getInstance().getMongoService();
+			// Get database collection
+			DBCollection dbCollection = mongoService.getDb().getCollection("punishments");
+			// Create query
+			BasicDBObject query = new BasicDBObject();
+			// Add punished
+			query.put("punishedUuid", badOfflinePlayer.getUniqueId().toString().toLowerCase());
+			// Add type
+			query.put("type", PunishType.MUTE.name());
+			// Add reason
+			query.put("reason", reason);
+			// Get data
+			DBCursor cursor = dbCollection.find(query);
+
+			int ban = cursor.count() + 1;
+
+			if (muteReason != null) {
+				PunishmentIndex index = null;
+				for (PunishmentIndex banIndex : muteReason.getPunishments()) {
+					if (index == null || (banIndex.getIndex() > index.getIndex() && ban >= banIndex.getIndex())) {
+						index = banIndex;
+					}
+				}
+
+				if (index != null) {
+					String rawTime = index.getTime();
+					time = Time.MILLIS_SECOND.matchTime(rawTime);
+					if (time == 0L) {
+						I19n.sendMessage(sender, getPrefix("unknowntime"), null, rawTime);
+						return;
+					}
+				} else {
+					I19n.sendMessage(sender, getPrefix("unknownreason"), null, playerName);
+					return;
+				}
+			}
+		}
+		
 		// Create the punishment object
 		Punishment punishment = new Punishment(uuid.toString(), badOfflinePlayer.getUniqueId().toString(),
 				badOfflinePlayer.getLastIp(), PunishType.MUTE, TimeUtils.time(),
-				TimeUtils.nextTime(Time.YEAR.convert(1L, Time.MILLIS_SECOND)), DateUtils.getHourDate(), reason, isKey,
+				time, DateUtils.getHourDate(), reason, isKey,
 				new String[] {}, sender.getName(), punisherUniqueId, punisherIp);
 
 		// Get the main class
