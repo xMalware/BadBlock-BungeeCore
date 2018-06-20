@@ -254,7 +254,7 @@ public class MuteCommand extends AbstractModCommand {
 		String rawMuteReason = args[2];
 
 		// Get the mute reason
-		PunishmentReason muteReason = PunishmentReasons.getInstance().getBanReasons().get(rawMuteReason);
+		PunishmentReason muteReason = PunishmentReasons.getInstance().getMuteReasons().get(rawMuteReason);
 
 		// If the ban reason doesn't exist
 		if (muteReason == null) {
