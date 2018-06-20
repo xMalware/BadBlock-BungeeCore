@@ -29,7 +29,7 @@ public class SetUniqueIdListener extends BadListener {
 		ProxiedPlayer proxiedPlayer = event.getPlayer();
 		setUniqueId(proxiedPlayer, BadPlayer.get(proxiedPlayer));
 	}
-	
+
 	/**
 	 * When someone connects to the server
 	 * 
@@ -44,8 +44,24 @@ public class SetUniqueIdListener extends BadListener {
 
 	public void setUniqueId(ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
 	{
+		if (badPlayer == null)
+		{
+			return;
+		}
+		if (proxiedPlayer == null)
+		{
+			return;
+		}
+		if (badPlayer.getUniqueId() == null)
+		{
+			return;
+		}
 		try {
 			PendingConnection pendingConnection = proxiedPlayer.getPendingConnection();
+			if (pendingConnection == null)
+			{
+				return;
+			}
 			Field uniqueId = pendingConnection.getClass().getDeclaredField("uniqueId");
 			uniqueId.setAccessible(true);
 			uniqueId.set(pendingConnection, badPlayer.getUniqueId());

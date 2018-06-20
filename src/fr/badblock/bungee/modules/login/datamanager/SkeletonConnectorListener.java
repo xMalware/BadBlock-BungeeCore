@@ -49,7 +49,10 @@ public class SkeletonConnectorListener extends BadListener {
 			ServerInfo serverInfo = this.roundrobinLogin();
 			if (serverInfo != null)
 			{
-				badPlayer.sendTranslatedOutgoingMessage("bungee.teleport.login", null);
+				if (badPlayer != null)
+				{
+					badPlayer.sendTranslatedOutgoingMessage("bungee.teleport.login", null);
+				}
 				event.setTarget(serverInfo);
 			}
 			else
@@ -58,12 +61,18 @@ public class SkeletonConnectorListener extends BadListener {
 				{
 					if (getFallbackServer() != null)
 					{
-						badPlayer.sendTranslatedOutgoingMessage("bungee.errors.nologintp", null);
+						if (badPlayer != null)
+						{
+							badPlayer.sendTranslatedOutgoingMessage("bungee.errors.nologintp", null);
+						}
 						event.setTarget(getFallbackServer());
 					}
 					else
 					{
-						badPlayer.kick(badPlayer.getTranslatedMessage("bungee.errors.nologinkick", null));
+						if (badPlayer != null)
+						{
+							badPlayer.kick(badPlayer.getTranslatedMessage("bungee.errors.nologinkick", null));
+						}
 					}
 				}
 			}
@@ -74,19 +83,28 @@ public class SkeletonConnectorListener extends BadListener {
 
 			if (serverInfo != null)
 			{
-				badPlayer.sendTranslatedOutgoingMessage("bungee.teleport.hub", null);
+				if (badPlayer != null)
+				{
+					badPlayer.sendTranslatedOutgoingMessage("bungee.teleport.hub", null);
+				}
 				event.setTarget(serverInfo);
 			}else{
 				if (getFallbackServer() == null || !getFallbackServer().equals(proxiedPlayer.getServer().getInfo()))
 				{
 					if (getFallbackServer() != null)
 					{
-						badPlayer.sendTranslatedOutgoingMessage("bungee.errors.nohubtp", null);
+						if (badPlayer != null)
+						{
+							badPlayer.sendTranslatedOutgoingMessage("bungee.errors.nohubtp", null);
+						}
 						event.setTarget(getFallbackServer());
 					}
 					else
 					{
-						badPlayer.kick(badPlayer.getTranslatedMessage("bungee.errors.nohubkick", null));
+						if (badPlayer != null)
+						{
+							badPlayer.kick(badPlayer.getTranslatedMessage("bungee.errors.nohubkick", null));
+						}
 					}
 				}
 			}
