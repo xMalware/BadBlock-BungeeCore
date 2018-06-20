@@ -115,7 +115,7 @@ public class PunishmentWorkerUnbanIp extends PunishmentWorker
 		// Try to
 		try {
 			// Save the data
-			badOfflinePlayer.saveData();
+			badIp.saveData();
 		}
 		// Error case
 		catch (Exception exception) {
