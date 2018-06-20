@@ -25,7 +25,7 @@ public class BungeeInterDataReceiver extends RabbitListener {
 	public BungeeInterDataReceiver() {
 		// Super!
 		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_DATA, RabbitListenerType.SUBSCRIBER,
-				true);
+				false);
 		// Load the listener
 		load();
 	}
