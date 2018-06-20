@@ -59,6 +59,8 @@ public class PunishmentReasons {
 	public PunishmentReasons() {
 		// Create a map!
 		banReasons = new HashMap<>();
+		// Create a map!
+		muteReasons = new HashMap<>();
 		// Load
 		load();
 	}
@@ -122,11 +124,11 @@ public class PunishmentReasons {
 			// Get database array
 			BasicDBObject[] dbArray = dbList.toArray(new BasicDBObject[] {});
 			// For each mute object
-			for (BasicDBObject banObject : dbArray) {
+			for (BasicDBObject muteObject : dbArray) {
 				// Create a mute reason
-				PunishmentReason banReason = new PunishmentReason(banObject);
+				PunishmentReason muteReason = new PunishmentReason(muteObject);
 				// Add mute reasons
-				muteReasons.put(banReason.getName(), banReason);
+				muteReasons.put(muteReason.getName(), muteReason);
 			}
 		}
 		// Close the cursor
