@@ -456,7 +456,7 @@ public final class BadIP {
 				// Get database
 				DB db = mongoService.getDb();
 				// Get collection
-				DBCollection collection = db.getCollection("ips");
+				DBCollection collection = db.getCollection("ip");
 				// New query
 				BasicDBObject query = new BasicDBObject();
 
@@ -492,7 +492,7 @@ public final class BadIP {
 				// Get database
 				DB db = mongoService.getDb();
 				// Get database collection
-				DBCollection collection = db.getCollection("ips");
+				DBCollection collection = db.getCollection("ip");
 				// New query
 				BasicDBObject query = new BasicDBObject();
 				// Update query
