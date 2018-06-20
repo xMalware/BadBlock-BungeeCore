@@ -65,6 +65,39 @@ public class ASNChecker extends AntiBotChecker
 				return false;
 			}
 
+			if (queue.size() >= 5)
+			{
+				long time = System.currentTimeMillis() - queue.poll();
+				int count = queue.size();
+				
+				if (time / count < 200)
+				{
+					return false;
+				}
+			}
+			
+			if (queue.size() >= 10)
+			{
+				long time = System.currentTimeMillis() - queue.poll();
+				int count = queue.size();
+				
+				if (time / count < 300)
+				{
+					return false;
+				}
+			}
+			
+			if (queue.size() >= 30)
+			{
+				long time = System.currentTimeMillis() - queue.poll();
+				int count = queue.size();
+				
+				if (time / count < 400)
+				{
+					return false;
+				}
+			}
+			
 			if (queue.size() >= 60)
 			{
 				long time = System.currentTimeMillis() - queue.poll();

@@ -31,15 +31,66 @@ public class LastConnectionChecker extends AntiBotChecker
 			Queue<Long> list = connections.get(address);
 			list.add(System.currentTimeMillis());
 			connections.put(address, list);
-			if (list.size() >= 30)
+			
+			if (list.size() >= 100)
 			{
-				if (list.size() >= 100)
-				{
-					list.poll();
-				}
+				list.poll();
+			}
+			
+			if (list.size() > 5)
+			{
 				long lastTime = list.peek();
 				int count = list.size();
 				long averageTime = (System.currentTimeMillis() - lastTime) / count;
+				
+				if (averageTime <= 100)
+				{
+					return false;
+				}
+			}
+			
+			if (list.size() > 10)
+			{
+				long lastTime = list.peek();
+				int count = list.size();
+				long averageTime = (System.currentTimeMillis() - lastTime) / count;
+				
+				if (averageTime <= 200)
+				{
+					return false;
+				}
+			}
+			
+			if (list.size() > 20)
+			{
+				long lastTime = list.peek();
+				int count = list.size();
+				long averageTime = (System.currentTimeMillis() - lastTime) / count;
+				
+				if (averageTime <= 300)
+				{
+					return false;
+				}
+			}
+			
+			if (list.size() > 30)
+			{
+				long lastTime = list.peek();
+				int count = list.size();
+				long averageTime = (System.currentTimeMillis() - lastTime) / count;
+				
+				if (averageTime <= 400)
+				{
+					return false;
+				}
+			}
+			
+			if (list.size() > 60)
+			{
+				long lastTime = list.peek();
+				int count = list.size();
+				long averageTime = (System.currentTimeMillis() - lastTime) / count;
+				
 				if (averageTime <= 1000)
 				{
 					return false;

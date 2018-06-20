@@ -32,16 +32,51 @@ public class UsernameLengthChecker extends AntiBotChecker
 			Queue<Long> list = characters.get(length);
 			list.add(System.currentTimeMillis());
 			characters.put(length, list);
-			if (list.size() >= 30)
+
+			if (list.size() >= 100)
 			{
-				if (list.size() >= 100)
-				{
-					list.poll();
-				}
+				list.poll();
+			}
+			
+			if (list.size() > 5)
+			{
 				long lastTime = list.peek();
 				int count = list.size();
 				long averageTime = (System.currentTimeMillis() - lastTime) / count;
-				if (averageTime <= 1000)
+				if (averageTime <= 100)
+				{
+					return false;
+				}
+			}
+			
+			if (list.size() > 10)
+			{
+				long lastTime = list.peek();
+				int count = list.size();
+				long averageTime = (System.currentTimeMillis() - lastTime) / count;
+				if (averageTime <= 200)
+				{
+					return false;
+				}
+			}
+			
+			if (list.size() > 20)
+			{
+				long lastTime = list.peek();
+				int count = list.size();
+				long averageTime = (System.currentTimeMillis() - lastTime) / count;
+				if (averageTime <= 300)
+				{
+					return false;
+				}
+			}
+			
+			if (list.size() > 50)
+			{
+				long lastTime = list.peek();
+				int count = list.size();
+				long averageTime = (System.currentTimeMillis() - lastTime) / count;
+				if (averageTime <= 500)
 				{
 					return false;
 				}

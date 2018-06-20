@@ -52,6 +52,46 @@ public class ForeignCountryChecker extends AntiBotChecker
 
 			if (!allowedCountryFlows.contains(countryCode))
 			{
+				if (unknownCountryIPs.size() >= 5)
+				{
+					long time = System.currentTimeMillis() - unknownCountryIPs.poll();
+					int size = unknownCountryIPs.size();
+					if (time / size < 100)
+					{
+						return false;
+					}
+				}
+
+				if (unknownCountryIPs.size() >= 10)
+				{
+					long time = System.currentTimeMillis() - unknownCountryIPs.poll();
+					int size = unknownCountryIPs.size();
+					if (time / size < 200)
+					{
+						return false;
+					}
+				}
+
+				if (unknownCountryIPs.size() >= 20)
+				{
+					long time = System.currentTimeMillis() - unknownCountryIPs.poll();
+					int size = unknownCountryIPs.size();
+					if (time / size < 200)
+					{
+						return false;
+					}
+				}
+
+				if (unknownCountryIPs.size() >= 30)
+				{
+					long time = System.currentTimeMillis() - unknownCountryIPs.poll();
+					int size = unknownCountryIPs.size();
+					if (time / size < 400)
+					{
+						return false;
+					}
+				}
+				
 				if (unknownCountryIPs.size() >= 60)
 				{
 					long time = System.currentTimeMillis() - unknownCountryIPs.poll();

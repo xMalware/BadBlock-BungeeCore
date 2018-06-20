@@ -24,8 +24,10 @@ public class UsernameSyllablesChecker extends AntiBotChecker
 		{
 			return true;
 		}
+
+		syllables.add(System.currentTimeMillis());
 		
-		if (syllables.size() >= 10)
+		if (syllables.size() >= 5)
 		{
 			int count = syllables.size();
 			long time = System.currentTimeMillis() - syllables.poll();
@@ -36,7 +38,6 @@ public class UsernameSyllablesChecker extends AntiBotChecker
 			}
 		}
 		
-		syllables.add(System.currentTimeMillis());
 		return true;
 	}
 	
