@@ -28,7 +28,7 @@ public class SkeletonConnectorListener extends BadListener {
 	{
 		skeleton = BungeeCord.getInstance().constructServerInfo("skeleton", new InetSocketAddress("127.0.0.1", 8889), "skeleton", false);
 		BungeeCord.getInstance().getServers().put("skeleton", skeleton);
-		lobby = BungeeCord.getInstance().constructServerInfo("lobby", new InetSocketAddress("127.0.0.1", 88890), "lobby", false);
+		lobby = BungeeCord.getInstance().constructServerInfo("lobby", new InetSocketAddress("127.0.0.1", 8890), "lobby", false);
 		BungeeCord.getInstance().getServers().put("lobby", lobby);
 	}
 
