@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -25,6 +26,7 @@ import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionUser;
 import fr.badblock.api.common.utils.permissions.PermissionsManager;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.ObjectUtils;
@@ -210,6 +212,24 @@ public class BadOfflinePlayer {
 	 * @return Returns the version
 	 */
 	private int version;
+	
+	/**
+	 * Auth key
+	 * 
+	 * @param Set
+	 *            the auth key
+	 * @return Returns the auth key
+	 */
+	private String authKey;
+	
+	/**
+	 * Online mode
+	 * 
+	 * @param Set
+	 *            the online mode
+	 * @return Returns the online mode
+	 */
+	private boolean onlineMode;
 
 	/**
 	 * Constructor (auto-create)
@@ -366,6 +386,17 @@ public class BadOfflinePlayer {
 		// Returns the raw chat suffix
 		return permissible.getRawSuffix("chat");
 	}
+	
+	/**
+	 * Get saved json object
+	 * 
+	 * @return a JsonObject
+	 */
+	@SuppressWarnings("deprecation")
+	public JsonObject getSavedJsonObject()
+	{
+		return new JsonParser().parse(JSON.serialize(getSavedObject())).getAsJsonObject();
+	}
 
 	/**
 	 * Get saved object
@@ -393,6 +424,10 @@ public class BadOfflinePlayer {
 		object.put("permissions", permissions.getDBObject());
 		// Put the user version
 		object.put("version", "0");
+		// Put the online mode
+		object.put("onlineMode", onlineMode);
+		// Put the auth key
+		object.put("authKey", authKey);
 		// TODO?
 
 		// Returns the saved object
@@ -414,6 +449,24 @@ public class BadOfflinePlayer {
 		} else {
 			// Returns an empty string
 			return "";
+		}
+	}
+	
+	/**
+	 * Get a boolean from the database object
+	 * 
+	 * @param Field
+	 * @return a String
+	 */
+	@SuppressWarnings("deprecation")
+	private boolean getBoolean(String part) {
+		// If the database object contains the key
+		if (getDbObject().containsKey(part) && getDbObject().get(part) != null) {
+			// Returns the data as a string
+			return Boolean.parseBoolean(getDbObject().get(part).toString());
+		} else {
+			// Returns an empty string
+			return false;
 		}
 	}
 
@@ -488,6 +541,10 @@ public class BadOfflinePlayer {
 		version = 0;
 		// Set the username
 		nickname = null;
+		// Set the online mode
+		onlineMode = BadBungeeConfig.DEFAULT_ONLINEMODE;
+		// Set the auth key
+		authKey = null;
 		// Get saved object
 		BasicDBObject obj = getSavedObject();
 		// Set database object
@@ -562,6 +619,10 @@ public class BadOfflinePlayer {
 			setLastIp(getString("lastIp"));
 			// Set nickname
 			setNickname(getString("nickname"));
+			// Set the auth key
+			setAuthKey(getString("authKey"));
+			// Set the online mode
+			setOnlineMode(getBoolean("onlineMode"));
 			// Set unique ID
 			setUniqueId(UUID.fromString(getString("uniqueId")));
 			// Set settings
@@ -802,6 +863,22 @@ public class BadOfflinePlayer {
 	public void updatePunishments() {
 		// Update punishments
 		updateData("punish", getPunished().getDBObject());
+	}
+
+	/**
+	 * Update online mode
+	 */
+	public void updateOnlineMode() {
+		// Update online mode
+		updateData("onlineMode", isOnlineMode());
+	}
+	
+	/**
+	 * Update auth key
+	 */
+	public void updateAuthKey() {
+		// Update auth key
+		updateData("authKey", getAuthKey());
 	}
 
 	/**

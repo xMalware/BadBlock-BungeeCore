@@ -18,6 +18,8 @@ import lombok.Setter;
  */
 public class BadBungeeConfig {
 
+	public static final boolean DEFAULT_ONLINEMODE = false;
+
 	/**
 	 * Alert prefix.
 	 * 

@@ -1,7 +1,9 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
+import fr.badblock.api.common.utils.i18n.Locale;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.players.BadPlayer;
+import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.event.AsyncDataLoadRequest;
 import net.md_5.bungee.api.event.AsyncDataLoadRequest.Result;
 import net.md_5.bungee.event.EventHandler;
@@ -31,11 +33,13 @@ public class ICanLogYouListener extends BadListener {
 		System.out.println("AsyncDataLoadRequest CALL!");
 		if (BadPlayer.has(playerName))
 		{
-			event.getDone().done(new Result(null, "§aBadPlayer OK"), null);
+			BadPlayer badPlayer = BadPlayer.get(playerName);
+			event.getDone().done(new Result(badPlayer.getSavedJsonObject(), null), null);
 		}
 		else
 		{
-			event.getDone().done(new Result(null, "§cBadPlayer NO-OK"), null);
+			Result result = new Result(null, I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.errors.unabletoloadplayerdata", null));
+			event.getDone().done(result, null);
 		}
 	}
 
