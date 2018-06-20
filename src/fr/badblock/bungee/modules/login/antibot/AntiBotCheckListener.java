@@ -7,6 +7,7 @@ import java.util.Map;
 
 import fr.badblock.api.common.utils.TimeUtils;
 import fr.badblock.api.common.utils.i18n.Locale;
+import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.antibot.checkers.ASNChecker;
 import fr.badblock.bungee.modules.login.antibot.checkers.AntiBotChecker;
@@ -79,6 +80,7 @@ public class AntiBotCheckListener extends BadListener
 			{
 				event.setCancelled(true);
 				event.setCancelReason(I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.antibot.blocked", null));
+				BadBungee.log("§c[AntiBot] Rejected " + username + " from " + address + ".");
 				return;
 			}
 		}
@@ -88,6 +90,7 @@ public class AntiBotCheckListener extends BadListener
 			{
 				event.setCancelled(true);
 				event.setCancelReason(I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.antibot.blocked", null));
+				BadBungee.log("§c[AntiBot] Rejected " + username + " from " + address + ".");
 				return;
 			}
 		}
@@ -100,9 +103,12 @@ public class AntiBotCheckListener extends BadListener
 				blockedAddresses.put(address, System.currentTimeMillis() + 300_000L);
 				event.setCancelled(true);
 				event.setCancelReason(I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.antibot.blocked", null));
+				BadBungee.log("§c[AntiBot] Rejected " + username + " from " + address + ".");
 				break;
 			}
 		}
+		
+		BadBungee.log("§a[AntiBot] Accepted " + username + " from " + address + ".");
 	}
 
 }
