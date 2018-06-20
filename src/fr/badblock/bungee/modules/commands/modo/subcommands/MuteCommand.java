@@ -1,5 +1,6 @@
 package fr.badblock.bungee.modules.commands.modo.subcommands;
 
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import com.mongodb.DB;
@@ -16,7 +17,8 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.MuteReasonType;
+import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReason;
+import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.DateUtils;
@@ -182,7 +184,7 @@ public class MuteCommand extends AbstractModCommand {
 				// Send the message
 				badPlayer.sendTranslatedOutgoingMessage(getPrefix("select_intro"), null, playerName);
 			} else
-			// If the sender isn't a player
+				// If the sender isn't a player
 			{
 				// Send the message
 				I19n.sendMessage(sender, getPrefix("select_intro"), null, playerName);
@@ -192,9 +194,9 @@ public class MuteCommand extends AbstractModCommand {
 			boolean hasReason = false;
 
 			// For each reason type
-			for (MuteReasonType muteReason : MuteReasonType.values()) {
+			for (Entry<String, PunishmentReason> entry : PunishmentReasons.getInstance().getMuteReasons().entrySet()) {
 				// If the sender doesn't have the permission to mute for this reason
-				if (!sender.hasPermission(getPermission() + "." + muteReason.getName())) {
+				if (!sender.hasPermission(getPermission() + "." + entry.getKey())) {
 					// So continue
 					continue;
 				}
@@ -207,20 +209,20 @@ public class MuteCommand extends AbstractModCommand {
 					// Get the intro message
 					String intro = badPlayer.getTranslatedMessage(getPrefix("reason_intro"), null);
 					// Get the reason message
-					String reason = badPlayer.getTranslatedMessage(getPrefix("reason." + muteReason.getName()), null);
+					String reason = badPlayer.getTranslatedMessage(getPrefix("reason." + entry.getKey()), null);
 
 					// Get the McJson
 					McJson json = new McJsonFactory(intro).finaliseComponent().initNewComponent(reason)
-							.setHoverText(reason).setClickCommand("/m mute " + playerName + " " + muteReason.getName())
+							.setHoverText(reason).setClickCommand("/m mute " + playerName + " " + entry.getKey())
 							.finaliseComponent().build();
 
 					// Send the message
 					badPlayer.sendTranslatedOutgoingMCJson(json);
 				} else
-				// If the sender isn't a player
+					// If the sender isn't a player
 				{
 					// Send the reason message
-					I19n.sendMessage(sender, getPrefix("reason." + muteReason.getName()), null);
+					I19n.sendMessage(sender, getPrefix("reason." + entry.getKey()), null);
 				}
 			}
 
@@ -249,7 +251,7 @@ public class MuteCommand extends AbstractModCommand {
 		String rawMuteReason = args[2];
 
 		// Get the mute reason
-		MuteReasonType muteReason = MuteReasonType.getFromString(rawMuteReason);
+		PunishmentReason muteReason = PunishmentReasons.getInstance().getBanReasons().get(rawMuteReason);
 
 		// If the ban reason doesn't exist
 		if (muteReason == null) {

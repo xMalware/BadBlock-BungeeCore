@@ -9,12 +9,12 @@ import lombok.Data;
 @Data
 /**
  * 
- * Ban index
+ * Punishment index
  * 
  * @author xMalware
  *
  */
-public class BanIndex {
+public class PunishmentIndex {
 
 	/**
 	 * Index
@@ -40,7 +40,7 @@ public class BanIndex {
 	 * @param Database
 	 *            object
 	 */
-	public BanIndex(BasicDBObject dbObject) {
+	public PunishmentIndex(BasicDBObject dbObject) {
 		// Set index
 		index = dbObject.getInt("index");
 		// Set time

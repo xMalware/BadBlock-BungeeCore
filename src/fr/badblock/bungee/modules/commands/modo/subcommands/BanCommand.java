@@ -20,9 +20,9 @@ import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
-import fr.badblock.bungee.modules.commands.modo.objects.BanIndex;
-import fr.badblock.bungee.modules.commands.modo.objects.BanReason;
-import fr.badblock.bungee.modules.commands.modo.objects.BanReasons;
+import fr.badblock.bungee.modules.commands.modo.objects.PunishmentIndex;
+import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReason;
+import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.DateUtils;
@@ -197,7 +197,7 @@ public class BanCommand extends AbstractModCommand {
 			boolean hasReason = false;
 
 			// For each reason type
-			for (Entry<String, BanReason> entry : BanReasons.getInstance().getBanReasons().entrySet()) {
+			for (Entry<String, PunishmentReason> entry : PunishmentReasons.getInstance().getBanReasons().entrySet()) {
 				// If the sender doesn't have the permission to ban for this reason
 				if (!sender.hasPermission(getPermission() + "." + entry.getKey())) {
 					// So continue
@@ -254,7 +254,7 @@ public class BanCommand extends AbstractModCommand {
 		String rawBanReason = StringUtils.join(args, " ", 2);
 
 		// Get the ban reason
-		BanReason banReason = BanReasons.getInstance().getBanReasons().get(rawBanReason);
+		PunishmentReason banReason = PunishmentReasons.getInstance().getBanReasons().get(rawBanReason);
 
 		// If the ban reason doesn't exist
 		if (banReason == null) {
@@ -320,8 +320,8 @@ public class BanCommand extends AbstractModCommand {
 			int ban = cursor.count() + 1;
 
 			if (banReason != null) {
-				BanIndex index = null;
-				for (BanIndex banIndex : banReason.getPunishments()) {
+				PunishmentIndex index = null;
+				for (PunishmentIndex banIndex : banReason.getPunishments()) {
 					if (index == null || (banIndex.getIndex() > index.getIndex() && ban >= banIndex.getIndex())) {
 						index = banIndex;
 					}

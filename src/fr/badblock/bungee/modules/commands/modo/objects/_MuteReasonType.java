@@ -1,6 +1,6 @@
 package fr.badblock.bungee.modules.commands.modo.objects;
 
-public enum MuteReasonType {
+public enum _MuteReasonType {
 
 	DISRESPECTFUL,
 
@@ -20,8 +20,8 @@ public enum MuteReasonType {
 
 	OTHER;
 
-	public static MuteReasonType getFromString(String string) {
-		for (MuteReasonType muteReason : values()) {
+	public static _MuteReasonType getFromString(String string) {
+		for (_MuteReasonType muteReason : values()) {
 			if (muteReason.name().equalsIgnoreCase(string)) {
 				return muteReason;
 			}

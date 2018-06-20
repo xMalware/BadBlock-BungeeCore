@@ -26,7 +26,7 @@ import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.config.ConfigLoader;
 import fr.badblock.bungee.link.bungee.BungeeTask;
-import fr.badblock.bungee.modules.commands.modo.objects.BanReasons;
+import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
 import fr.badblock.bungee.rabbit.claimants.RabbitClaimant;
 import fr.badblock.bungee.utils.PackageUtils;
 import fr.badblock.bungee.utils.logfilters.IHConnectedFilter;
@@ -111,7 +111,7 @@ public class BungeeLoader {
 	 * Load punishment table
 	 */
 	private void loadPunishmentTable() {
-		new BanReasons();
+		new PunishmentReasons();
 	}
 
 	/**

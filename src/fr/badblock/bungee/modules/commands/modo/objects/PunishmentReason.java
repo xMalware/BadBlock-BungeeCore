@@ -22,7 +22,7 @@ import lombok.Data;
  * @author xMalware
  *
  */
-public class BanReason {
+public class PunishmentReason {
 
 	/**
 	 * Collection type
@@ -46,7 +46,7 @@ public class BanReason {
 	 *            the new punishments
 	 * @return Returns the current punishments
 	 */
-	private List<BanIndex> punishments;
+	private List<PunishmentIndex> punishments;
 
 	/**
 	 * Constructor
@@ -54,7 +54,7 @@ public class BanReason {
 	 * @param Database
 	 *            object
 	 */
-	public BanReason(DBObject dbObject) {
+	public PunishmentReason(DBObject dbObject) {
 		// Set the name
 		name = dbObject.get("name").toString();
 		// Create a map!
@@ -68,7 +68,7 @@ public class BanReason {
 		// For each entry
 		for (BasicDBObject basicDbObject : dbArray) {
 			// Insert into punishment map
-			punishments.add(new BanIndex(basicDbObject));
+			punishments.add(new PunishmentIndex(basicDbObject));
 		}
 	}
 
