@@ -335,28 +335,6 @@ public final class BadPlayer extends BadOfflinePlayer {
 	}
 
 	/**
-	 * Send data to bukkit
-	 */
-	public void sendDataToBukkit() {
-		// Get the current server name
-		String serverName = getCurrentServer();
-		// Get the player data update sender
-		PlayerDataUpdateSender playerDataUpdateSender = new PlayerDataUpdateSender(
-				ObjectUtils.getJsonObject(getDbObject().toString()), getName().toLowerCase());
-		// Serialize data
-		String rawPlayerDataUpdateSender = GsonUtils.getGson().toJson(playerDataUpdateSender);
-		// Create a Rabbit packet message
-		RabbitPacketMessage rabbitPacketMessage = new RabbitPacketMessage(300_000L, rawPlayerDataUpdateSender);
-		// Get the queue
-		String builtQueue = BadBungeeQueues.BUNGEE_DATA_SENDERS + serverName;
-		// Create a Rabbit packet
-		RabbitPacket rabbitPacket = new RabbitPacket(rabbitPacketMessage, builtQueue, true, RabbitPacketEncoder.UTF8,
-				RabbitPacketType.MESSAGE_BROKER);
-		// Send the RabbitMQ packet
-		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
-	}
-
-	/**
 	 * Send a local Json message
 	 * 
 	 * @param jsons

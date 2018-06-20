@@ -66,9 +66,6 @@ public class PlayerUpdateDataReceiver extends RabbitListener {
 
 		// Merge the data
 		badPlayer.mergeData(badPlayer.getDbObject(), playerDataUpdateReceiver.getData(), true);
-
-		// Send updated data to Bukkit
-		badPlayer.sendDataToBukkit();
 	}
 
 }
