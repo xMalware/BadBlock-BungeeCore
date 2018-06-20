@@ -122,7 +122,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	
 	private String				lastMessage;
 	private long				lastMessageTime;
-	private Map<String, Long>	spamMessages;
+	private Map<String, Long>	spamMessages		= new HashMap<>();
 
 	/**
 	 * Constructor
