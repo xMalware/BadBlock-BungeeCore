@@ -56,16 +56,21 @@ public class BadOfflinePlayer {
 	 * @return a BadOfflinePlayer object
 	 */
 	public static BadOfflinePlayer get(String name) {
+		return get(name, false);
+	}
+
+	/**
+	 * Get a BadOfflinePlayer object
+	 * 
+	 * @param Username
+	 * @return a BadOfflinePlayer object
+	 */
+	public static BadOfflinePlayer get(String name, boolean create) {
 		// New object
-		BadOfflinePlayer badOfflinePlayer = new BadOfflinePlayer(name, false);
-		// Data not found?
-		if (!badOfflinePlayer.isFound()) {
-			// Returns null
-			return null;
-		} else {
-			// Returns the object
-			return badOfflinePlayer;
-		}
+		BadOfflinePlayer badOfflinePlayer = new BadOfflinePlayer(name, create);
+
+		// Returns the object
+		return badOfflinePlayer;
 	}
 
 	/**
@@ -149,7 +154,7 @@ public class BadOfflinePlayer {
 	 * @return Returns the current username
 	 */
 	private String name;
-	
+
 	/**
 	 * Nickname
 	 * 
@@ -212,7 +217,7 @@ public class BadOfflinePlayer {
 	 * @return Returns the version
 	 */
 	private int version;
-	
+
 	/**
 	 * Auth key
 	 * 
@@ -221,7 +226,7 @@ public class BadOfflinePlayer {
 	 * @return Returns the auth key
 	 */
 	private String authKey;
-	
+
 	/**
 	 * Online mode
 	 * 
@@ -385,7 +390,7 @@ public class BadOfflinePlayer {
 		// Returns the raw chat suffix
 		return permissible.getRawSuffix("chat");
 	}
-	
+
 	/**
 	 * Get saved json object
 	 * 
@@ -450,7 +455,7 @@ public class BadOfflinePlayer {
 			return "";
 		}
 	}
-	
+
 	/**
 	 * Get a boolean from the database object
 	 * 
@@ -783,7 +788,7 @@ public class BadOfflinePlayer {
 
 		});
 	}
-	
+
 	/**
 	 * Update data
 	 * 
@@ -794,7 +799,7 @@ public class BadOfflinePlayer {
 	{
 		updateData(new String[] { key }, new Object[] { value });
 	}
-	
+
 	/**
 	 * Update data
 	 * 
@@ -826,7 +831,7 @@ public class BadOfflinePlayer {
 					Object value = values[i];
 					update.put(key, value);
 				}
-				
+
 				// Query name
 				query.put("name", getName().toLowerCase());
 				// Set the updater as a setter
@@ -884,7 +889,7 @@ public class BadOfflinePlayer {
 		// Update online mode
 		updateData("onlineMode", isOnlineMode());
 	}
-	
+
 	/**
 	 * Update auth key
 	 */
@@ -903,7 +908,7 @@ public class BadOfflinePlayer {
 		// Update data
 		updateData("lastServer",
 				proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
-						? proxiedPlayer.getServer().getInfo().getName()
+				? proxiedPlayer.getServer().getInfo().getName()
 						: "");
 	}
 

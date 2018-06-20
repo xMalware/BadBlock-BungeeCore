@@ -28,7 +28,6 @@ public class ObjectUtils {
 		return (T) dbObject.get(keyName);
 	}
 
-	@SuppressWarnings("deprecation")
 	public static DBObject toDbObject(Object object) throws Exception {
 		BasicDBObject dbObject = new BasicDBObject();
 		for (Field field : object.getClass().getFields()) {
