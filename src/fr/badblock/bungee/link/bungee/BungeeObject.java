@@ -2,6 +2,7 @@ package fr.badblock.bungee.link.bungee;
 
 import java.util.Map;
 
+import fr.badblock.api.common.sync.bungee.states.BungeeState;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.time.TimeUtils;
 import lombok.AllArgsConstructor;
@@ -57,6 +58,8 @@ public class BungeeObject {
 	 * @return Current Player list of the BungeeCord node
 	 */
 	private Map<String, BadPlayer> usernames;
+	
+	private BungeeState	state;
 
 	/**
 	 * If the BungeeCord node stills valid

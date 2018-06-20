@@ -3,6 +3,7 @@ package fr.badblock.bungee.link.bungee;
 import java.util.Optional;
 import java.util.UUID;
 
+import fr.badblock.api.common.sync.bungee.states.BungeeState;
 import fr.badblock.bungee.players.BadPlayer;
 import lombok.Data;
 import lombok.Getter;
@@ -101,4 +102,9 @@ public class BungeeLocalManager {
 		return BadPlayer.getPlayers().parallelStream().filter(player -> player.getUniqueId().equals(uuid)).count() > 0;
 	}
 
+	public void setState(BungeeState bungeeState)
+	{
+		BungeeTask.bungeeObject.setState(bungeeState);
+	}
+	
 }

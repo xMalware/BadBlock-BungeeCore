@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 import fr.badblock.api.common.sync.bungee.BadBungeeQueues;
+import fr.badblock.api.common.sync.bungee.states.BungeeState;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketEncoder;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketMessage;
@@ -32,7 +33,7 @@ public class BungeeTask extends Thread {
 	 * @return The current local bungee object of the node
 	 */
 	public static BungeeObject bungeeObject = new BungeeObject(BadBungee.getInstance().getConfig().getBungeeName(),
-			getIP(), getTimestamp(), new HashMap<>());
+			getIP(), getTimestamp(), new HashMap<>(), BungeeState.PRODUCTION);
 	/**
 	 * If the task is still running
 	 * 
