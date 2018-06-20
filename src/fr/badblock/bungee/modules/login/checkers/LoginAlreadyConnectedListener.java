@@ -24,12 +24,13 @@ public class LoginAlreadyConnectedListener extends BadListener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinEvent(PreLoginEvent event) {
 		if (event.isCancelled())
 		{
 			return;
 		}
+		System.out.println("LoginAlready CALL!");
 		// We get the PendingConnection object
 		PendingConnection connection = event.getConnection();
 		// We get the BadOfflinePlayer object

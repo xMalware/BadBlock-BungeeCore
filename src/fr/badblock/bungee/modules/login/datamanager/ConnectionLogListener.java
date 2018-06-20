@@ -41,6 +41,7 @@ public class ConnectionLogListener extends BadListener {
 		String date = DateUtils.getHourDate();
 		long timestamp = System.currentTimeMillis();
 
+		System.out.println("ConnectionLog CALL!");
 		ConnectionLog connectionLog = new ConnectionLog(username, lastIp, date, timestamp);
 
 		// Get mongo service

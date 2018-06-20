@@ -36,6 +36,7 @@ public class WhitelistCheckListener extends BadListener {
 		{
 			return;
 		}
+		System.out.println("WhitelistCheck CALL!");
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 

@@ -26,7 +26,7 @@ public class PreLoginLoadPlayerListener extends BadListener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPreLogin(PreLoginEvent event) {
 		// If the connection attempt is cancelled first
 		if (event.isCancelled()) {
@@ -34,6 +34,7 @@ public class PreLoginLoadPlayerListener extends BadListener {
 			return;
 		}
 
+		System.out.println("Data load CALL!");
 		// Get bungee manager
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 		// If the server ping null

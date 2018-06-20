@@ -23,7 +23,7 @@ public class PreLoginLoadIPListener extends BadListener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPreLogin(PreLoginEvent event) {
 		// If the connection attempt is cancelled first
 		if (event.isCancelled()) {
