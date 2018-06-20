@@ -70,6 +70,8 @@ public class NetworkUtils {
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			// Set API key
 			con.setRequestProperty("X-Key", apiKey);
+			con.setConnectTimeout(5000);
+			con.setReadTimeout(5000);
 			// Get input stream
 			InputStream in = con.getInputStream();
 			// To string
@@ -80,10 +82,8 @@ public class NetworkUtils {
 		// Error case
 		catch (Exception error) {
 			// Print the error
-			error.printStackTrace();
-			System.out.println("Error: " + error.getMessage());
 			// Returns 0 (I don't remember why)
-			return "0";
+			return null;
 		}
 	}
 

@@ -125,7 +125,7 @@ public class AntiVPN extends Thread {
 	 * @return
 	 * @throws UnknownHostException
 	 */
-	private void work(String ip) throws UnknownHostException {
+	public void work(String ip) throws UnknownHostException {
 		// If the IP is local
 		if (isThisLocal(InetAddress.getByName(ip))) {
 			// Accepted
@@ -145,6 +145,12 @@ public class AntiVPN extends Thread {
 		String url = "http://v2.api.iphub.info/ip/" + ip;
 		// Get the source code
 		String sourceCode = NetworkUtils.fetchSourceCodeWithAPI(url, apiKey);
+		
+		if (sourceCode == null)
+		{
+			BadBungee.log("§c[VPN] Unable to check IP.");
+			return;
+		}
 		
 		// Get the IPHub object
 		IPHubObject object = GsonUtils.getGson().fromJson(sourceCode, IPHubObject.class);
