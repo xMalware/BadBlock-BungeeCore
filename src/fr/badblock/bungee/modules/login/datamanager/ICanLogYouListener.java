@@ -34,7 +34,7 @@ public class ICanLogYouListener extends BadListener {
 		if (BadPlayer.has(playerName))
 		{
 			BadPlayer badPlayer = BadPlayer.get(playerName);
-			event.getDone().done(new Result(badPlayer.getSavedJsonObject(), null), null);
+			event.getDone().done(new Result(badPlayer.getSavedObject(), null), null);
 		}
 		else
 		{
