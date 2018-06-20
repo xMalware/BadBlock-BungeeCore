@@ -16,6 +16,11 @@ public class VPNChecker extends AntiBotChecker
 	@Override
 	public boolean accept(String username, String address)
 	{
+		if (username == null)
+		{
+			return true;
+		}
+		
 		AntiVPN antiVpn = AntiVPN.getInstance();
 		
 		try {
