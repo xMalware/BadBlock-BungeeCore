@@ -1,6 +1,6 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
-import fr.badblock.bungee.link.bungee.BungeeTask;
+import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

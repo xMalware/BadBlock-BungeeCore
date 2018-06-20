@@ -1,7 +1,7 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
 import fr.badblock.bungee.link.bungee.BungeeManager;
-import fr.badblock.bungee.link.bungee.BungeeTask;
+import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
 import fr.badblock.bungee.players.BadPlayer;

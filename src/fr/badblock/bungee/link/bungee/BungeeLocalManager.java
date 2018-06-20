@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import fr.badblock.api.common.sync.bungee.states.BungeeState;
+import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.players.BadPlayer;
 import lombok.Data;
 import lombok.Getter;

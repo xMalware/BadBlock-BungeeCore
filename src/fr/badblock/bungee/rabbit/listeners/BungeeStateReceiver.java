@@ -7,7 +7,7 @@ import fr.badblock.api.common.sync.bungee.states.BungeeStatePacket;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListenerType;
 import fr.badblock.bungee.BadBungee;
-import fr.badblock.bungee.link.bungee.BungeeTask;
+import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 
 /**
  * 

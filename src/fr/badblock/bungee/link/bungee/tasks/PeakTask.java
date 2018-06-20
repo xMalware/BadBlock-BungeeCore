@@ -1,4 +1,4 @@
-package fr.badblock.bungee.link.bungee;
+package fr.badblock.bungee.link.bungee.tasks;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -10,6 +10,7 @@ import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
 import fr.badblock.api.common.utils.TimeUtils;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.utils.DateUtils;
 
 public class PeakTask extends Thread

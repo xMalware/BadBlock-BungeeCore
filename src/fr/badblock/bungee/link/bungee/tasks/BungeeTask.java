@@ -1,4 +1,4 @@
-package fr.badblock.bungee.link.bungee;
+package fr.badblock.bungee.link.bungee.tasks;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,7 @@ import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketEncoder;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketMessage;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketType;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.BungeeObject;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.time.TimeUtils;
 import net.md_5.bungee.BungeeCord;

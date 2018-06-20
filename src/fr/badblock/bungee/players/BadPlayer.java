@@ -15,7 +15,7 @@ import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
-import fr.badblock.bungee.link.bungee.BungeeTask;
+import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
 import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
