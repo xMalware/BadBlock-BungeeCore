@@ -463,8 +463,11 @@ public final class BadIP {
 				// Put IP in query
 				query.put("ip", getIp().toLowerCase());
 
+				// Updater with all data to set
+				BasicDBObject updater = new BasicDBObject("$set", getSavedObject());
+				
 				// Update data
-				collection.update(query, getSavedObject());
+				collection.update(query, updater);
 			}
 
 		});
