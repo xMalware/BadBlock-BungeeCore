@@ -195,6 +195,7 @@ public class AdvertisingChatModule extends ChatModule {
 				if (cancelled) {
 					chatEvent.setCancelled(cancelled);
 					I19n.sendMessage(proxiedPlayer, "bungee.chat.advertising", null);
+					return;
 				}
 			}
 		}
