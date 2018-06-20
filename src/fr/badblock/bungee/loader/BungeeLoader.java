@@ -26,6 +26,7 @@ import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.config.ConfigLoader;
 import fr.badblock.bungee.link.bungee.BungeeTask;
+import fr.badblock.bungee.link.bungee.PeakTask;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
 import fr.badblock.bungee.rabbit.claimants.RabbitClaimant;
 import fr.badblock.bungee.utils.PackageUtils;
@@ -120,6 +121,8 @@ public class BungeeLoader {
 	private void loadBungeeLinker() {
 		// Instanciate the task
 		new BungeeTask();
+		// Load peak
+		new PeakTask();
 	}
 
 	/**
