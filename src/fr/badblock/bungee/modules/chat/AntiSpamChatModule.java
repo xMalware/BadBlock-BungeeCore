@@ -1,5 +1,9 @@
 package fr.badblock.bungee.modules.chat;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -16,39 +20,20 @@ import net.md_5.bungee.api.event.ChatEvent;
 
 public class AntiSpamChatModule extends ChatModule {
 
-	private String[]		applicableCommands	= new String[]
-			{
-					"msg",
-					"whisper",
-					"mp",
-					"w",
-					"tellraw",
-					"tell",
-					"minecraft:tell",
-					"minecraft:tellraw",
-					"minecraft:whisper",
-					"minecraft:w",
-					"pm",
-					"adminchat",
-					"ac",
-					"chatfriend",
-					"cf",
-					"r",
-					"reply",
-					"party",
-					"groupe",
-					"pa",
-					"gr",
-					"modo",
-					"chatstaff",
-					"cs"
-			};
-	
-	private double 			timeBetweenEachMessage = 0L;
-	private double 			timeBetweenSameMessage = 0L;
+	private List<String>	applicableCommands		= new ArrayList<>();
+
+	private double 			timeBetweenEachMessage	= 0L;
+	private double 			timeBetweenSameMessage	= 0L;
 
 	public AntiSpamChatModule()
 	{
+		reload();
+	}
+
+	@Override
+	public void reload()
+	{
+		applicableCommands.clear();
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
@@ -78,6 +63,14 @@ public class AntiSpamChatModule extends ChatModule {
 
 						timeBetweenEachMessage = Double.parseDouble(data.get("timeBetweenEachMessage").toString());
 						timeBetweenSameMessage = Double.parseDouble(data.get("timeBetweenSameMessage").toString());
+
+						BasicDBList applicableCommandlist = (BasicDBList) data.get("applicableCommands");
+
+						applicableCommandlist.forEach(object ->
+						{
+							String name = object.toString();
+							applicableCommands.add(name);
+						});
 
 					}
 				}
@@ -113,7 +106,7 @@ public class AntiSpamChatModule extends ChatModule {
 		{
 			return event;
 		}
-		
+
 		if (proxiedPlayer.hasPermission("chat.bypass"))
 		{
 			return event;
@@ -131,7 +124,7 @@ public class AntiSpamChatModule extends ChatModule {
 		{
 			return event;
 		}
-		
+
 		avoidSameMessages(event, proxiedPlayer, badPlayer);
 
 		return event;
@@ -155,7 +148,7 @@ public class AntiSpamChatModule extends ChatModule {
 					return true;
 				}
 			}
-			
+
 			return false;
 		}
 

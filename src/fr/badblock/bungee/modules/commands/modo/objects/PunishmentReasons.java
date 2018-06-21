@@ -67,6 +67,8 @@ public class PunishmentReasons {
 
 	public void load()
 	{
+		banReasons.clear();
+		muteReasons.clear();
 		// Get the mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Get database collection

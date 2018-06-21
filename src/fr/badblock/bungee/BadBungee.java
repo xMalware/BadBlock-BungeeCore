@@ -101,6 +101,8 @@ public class BadBungee extends Plugin {
 	 * @return Returns if the plugin is unloaded
 	 */
 	private boolean unloaded;
+	
+	private BungeeLoader bungeeLoader;
 
 	@Override
 	/**
@@ -117,7 +119,7 @@ public class BadBungee extends Plugin {
 	 */
 	public void onEnable() {
 		// Call the loader
-		new BungeeLoader(this);
+		setBungeeLoader(new BungeeLoader(this));
 	}
 
 }

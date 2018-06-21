@@ -27,6 +27,14 @@ public class GuardianerChatModule extends ChatModule {
 
 	public GuardianerChatModule()
 	{
+		reload();
+	}
+
+	@Override
+	public void reload()
+	{
+		words.clear();
+		applicableCommands.clear();
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
@@ -61,7 +69,7 @@ public class GuardianerChatModule extends ChatModule {
 							String name = object.toString();
 							words.add(name);
 						});
-						
+
 						BasicDBList applicableCommandlist = (BasicDBList) data.get("applicableCommands");
 
 						applicableCommandlist.forEach(object ->
@@ -117,7 +125,7 @@ public class GuardianerChatModule extends ChatModule {
 
 		// Check badwords
 		checkBadwords(event, proxiedPlayer, badPlayer);
-		
+
 		return event;
 	}
 
@@ -139,7 +147,7 @@ public class GuardianerChatModule extends ChatModule {
 					return true;
 				}
 			}
-			
+
 			return false;
 		}
 

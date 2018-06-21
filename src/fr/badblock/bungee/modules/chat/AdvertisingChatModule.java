@@ -28,6 +28,15 @@ public class AdvertisingChatModule extends ChatModule {
 
 	public AdvertisingChatModule()
 	{
+		reload();
+	}
+
+	@Override
+	public void reload()
+	{
+		blockedFirstTopLevelDomains.clear();
+		excludedWebsites.clear();
+		blockedWebsites.clear();
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
@@ -126,7 +135,7 @@ public class AdvertisingChatModule extends ChatModule {
 		{
 			return event;
 		}
-		
+
 		// Check blocked website
 		hasBlockedWebsite(event, proxiedPlayer, badPlayer);
 
@@ -137,7 +146,7 @@ public class AdvertisingChatModule extends ChatModule {
 
 		// Check blocked first top level domain
 		hasBlockedFirstTopLevelDomain(event, proxiedPlayer, badPlayer);
-		
+
 		return event;
 	}
 
@@ -180,18 +189,18 @@ public class AdvertisingChatModule extends ChatModule {
 					I19n.sendMessage(proxiedPlayer, "bungee.chat.advertising", null);
 					return;
 				}
-				
+
 				String[] splitter = filteredMessage.split(blockedFirstTopLevelDomain);
 				String domain = splitter[0];
 				boolean cancelled = true;
-				
+
 				for (String excludedWebsite : excludedWebsites) {
 					if (domain.endsWith(excludedWebsite)) {
 						cancelled = false;
 						break;
 					}
 				}
-				
+
 				if (cancelled) {
 					chatEvent.setCancelled(cancelled);
 					I19n.sendMessage(proxiedPlayer, "bungee.chat.advertising", null);

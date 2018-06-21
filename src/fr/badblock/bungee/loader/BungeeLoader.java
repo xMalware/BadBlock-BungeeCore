@@ -28,6 +28,7 @@ import fr.badblock.bungee.config.ConfigLoader;
 import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.bungee.tasks.PeakTask;
 import fr.badblock.bungee.link.bungee.tasks.PlayerCleanerTask;
+import fr.badblock.bungee.modules.chat.ChatModule;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
 import fr.badblock.bungee.rabbit.claimants.RabbitClaimant;
 import fr.badblock.bungee.utils.PackageUtils;
@@ -66,6 +67,8 @@ public class BungeeLoader {
 	 * @return Returns the current BadBungee config
 	 */
 	private BadBungeeConfig config;
+	
+	private PunishmentReasons punishmentReasons;
 
 	/**
 	 * Constructor
@@ -113,7 +116,16 @@ public class BungeeLoader {
 	 * Load punishment table
 	 */
 	private void loadPunishmentTable() {
-		new PunishmentReasons();
+		setPunishmentReasons(new PunishmentReasons());
+	}
+	
+	/**
+	 * Reload table
+	 */
+	public void reload()
+	{
+		getPunishmentReasons().load();
+		ChatModule.getModules().forEach(chatModule -> chatModule.reload());
 	}
 
 	/**
