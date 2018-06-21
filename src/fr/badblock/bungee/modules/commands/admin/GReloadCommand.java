@@ -16,7 +16,7 @@ public class GReloadCommand extends BadCommand {
 	 * Command constructor
 	 */
 	public GReloadCommand() {
-		super("greload", "bungee.command.greload", "gr");
+		super("grl", "bungee.command.greload");
 	}
 
 	/**
