@@ -24,9 +24,10 @@ public class GReloadCommand extends BadCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
+		long time = System.currentTimeMillis();
 		I19n.getMessages(sender, "bungee.commands.greload.reloading", null);
 		BadBungee.getInstance().getBungeeLoader().reload();
-		I19n.getMessages(sender, "bungee.commands.greload.reloaded", null);
+		I19n.getMessages(sender, "bungee.commands.greload.reloaded", null, System.currentTimeMillis() - time);
 	}
 
 }
