@@ -255,7 +255,7 @@ public class PermissionsCommand extends BadCommand {
 		// perms user <pseudo> destroy
 		if (args.length != 3)
 		{
-			I19n.sendMessage(sender, prefix + "user.destroy.destroyed", null);
+			I19n.sendMessage(sender, prefix + "user.destroy.usage", null);
 			return;
 		}
 
