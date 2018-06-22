@@ -704,14 +704,14 @@ public class BadOfflinePlayer {
 			// Log => data doesn't exist
 			BadBungee.log(getName() + " doesn't exist in the player table.");
 
-			// Set loaded
-			setLoaded(true);
-
 			if (!isLoaded())
 			{
 				// Load default values
 				loadDefaultValues();
 			}
+			
+			// Set loaded
+			setLoaded(true);
 
 			// If we are allowed to create data
 			if (create)
