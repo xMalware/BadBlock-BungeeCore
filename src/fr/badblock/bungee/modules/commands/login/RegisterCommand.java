@@ -34,7 +34,7 @@ public class RegisterCommand extends BadCommand {
 
 		if (args.length != 2)
 		{
-			badPlayer.sendTranslatedOutgoingMessage(prefix + "usage", null);
+			badPlayer.sendTranslatedOutgoingMessage(prefix + "usage", null, proxiedPlayer.getName());
 			return;
 		}
 
@@ -79,7 +79,7 @@ public class RegisterCommand extends BadCommand {
 			return;
 		}
 
-		badPlayer.sendTranslatedOutgoingMessage(prefix + "registered", null);
+		badPlayer.sendTranslatedOutgoingMessage(prefix + "registered", null, badPlayer.getName());
 		badPlayer.setLoginStepOk(true);
 
 		proxiedPlayer.connect(server);
