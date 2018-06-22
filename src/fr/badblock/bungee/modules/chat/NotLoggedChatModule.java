@@ -3,6 +3,7 @@ package fr.badblock.bungee.modules.chat;
 import java.util.Arrays;
 import java.util.List;
 
+import fr.badblock.bungee.modules.commands.login.HashLogin;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -71,6 +72,7 @@ public class NotLoggedChatModule extends ChatModule {
 			if (!commands.contains(command))
 			{
 				event.setCancelled(true);
+				HashLogin.sendLoginMessage(badPlayer);
 				return event;
 			}
 		}

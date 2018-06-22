@@ -19,11 +19,11 @@ public class HashLogin
 	{
 		// Set login step ok
 		badPlayer.setLoginStepOk(true);
-		
+
 		// Call logged event
 		BungeeCord.getInstance().getPluginManager().callEvent(new PlayerLoggedEvent(badPlayer));
 	}
-	
+
 	public static boolean isValidPassword(String password)
 	{
 		boolean atleastOneUpper = false;
@@ -47,6 +47,21 @@ public class HashLogin
 		}
 
 		return (atleastOneUpper && atleastOneLower && atleastOneDigit);
+	}
+
+	/**
+	 * Send login message
+	 * @param badPlayer
+	 */
+	public static void sendLoginMessage(BadPlayer badPlayer)
+	{
+		if (badPlayer.getLoginPassword() == null || badPlayer.getLoginPassword().isEmpty())
+		{
+			badPlayer.sendTranslatedOutgoingMessage("bungee.commands.register.usage", null, badPlayer.getName());
+			return;
+		}
+
+		badPlayer.sendTranslatedOutgoingMessage("bungee.commands.login.usage", null, badPlayer.getName());
 	}
 
 }

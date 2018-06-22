@@ -1,6 +1,7 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
 import fr.badblock.bungee.modules.abstracts.BadListener;
+import fr.badblock.bungee.modules.commands.login.HashLogin;
 import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.event.EventHandler;
@@ -33,13 +34,7 @@ public class SendLoginMessageListener extends BadListener {
 			return;
 		}
 		
-		if (badPlayer.getLoginPassword() == null || badPlayer.getLoginPassword().isEmpty())
-		{
-			badPlayer.sendTranslatedOutgoingMessage("bungee.commands.register.usage", null, badPlayer.getName());
-			return;
-		}
-		
-		badPlayer.sendTranslatedOutgoingMessage("bungee.commands.login.usage", null, badPlayer.getName());
+		HashLogin.sendLoginMessage(badPlayer);
 	}
 
 }
