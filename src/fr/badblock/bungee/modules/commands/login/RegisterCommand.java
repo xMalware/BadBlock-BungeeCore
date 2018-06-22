@@ -32,15 +32,15 @@ public class RegisterCommand extends BadCommand {
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		if (args.length != 2)
-		{
-			badPlayer.sendTranslatedOutgoingMessage(prefix + "usage", null, proxiedPlayer.getName());
-			return;
-		}
-
 		if (badPlayer.getLoginPassword() != null && !badPlayer.getLoginPassword().isEmpty())
 		{
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "pleaselogin", null);
+			return;
+		}
+
+		if (args.length != 2)
+		{
+			badPlayer.sendTranslatedOutgoingMessage(prefix + "usage", null, proxiedPlayer.getName());
 			return;
 		}
 
@@ -70,7 +70,7 @@ public class RegisterCommand extends BadCommand {
 		{
 			exception.printStackTrace();
 		}
-		
+
 		ServerInfo server = SkeletonConnectorListener.roundrobinHub();
 
 		if (server == null)

@@ -31,16 +31,16 @@ public class LoginCommand extends BadCommand {
 	public void run(CommandSender sender, String[] args) {
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
+
+		if (badPlayer.getLoginPassword() == null || badPlayer.getLoginPassword().isEmpty())
+		{
+			badPlayer.sendTranslatedOutgoingMessage(prefix + "pleaseregister", null);
+			return;
+		}
 		
 		if (args.length != 1)
 		{
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "usage", null, proxiedPlayer.getName());
-			return;
-		}
-		
-		if (badPlayer.getLoginPassword() == null || badPlayer.getLoginPassword().isEmpty())
-		{
-			badPlayer.sendTranslatedOutgoingMessage(prefix + "pleaseregister", null);
 			return;
 		}
 		
