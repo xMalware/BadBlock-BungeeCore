@@ -45,7 +45,7 @@ public class RegisterCommand extends BadCommand {
 		}
 
 		String password = args[0];
-		String repeatPassword = args[0];
+		String repeatPassword = args[1];
 
 		if (!HashLogin.isValidPassword(password))
 		{
