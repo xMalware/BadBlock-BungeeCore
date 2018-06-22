@@ -124,6 +124,8 @@ public final class BadPlayer extends BadOfflinePlayer {
 	private Map<String, Long>		spamMessages			= new HashMap<>();
 	
 	private transient ModoSession	modoSession;
+	
+	private boolean					loginStep;
 
 	/**
 	 * Constructor
@@ -219,7 +221,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public void sendDataToBukkit()
 	{
-		RabbitPacketMessage message = new RabbitPacketMessage(-1L, getSavedObject().toJson());
+		RabbitPacketMessage message = new RabbitPacketMessage(-1L, getSavedObject().toString());
 		String queueName = BadBungeeQueues.BUNGEE_DATA_PLAYERS + getLastServer();
 		RabbitPacket rabbitPacket = new RabbitPacket(message, queueName, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER);
 		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
