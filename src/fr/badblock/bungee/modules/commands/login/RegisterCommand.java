@@ -75,7 +75,7 @@ public class RegisterCommand extends BadCommand {
 
 		if (server == null)
 		{
-			badPlayer.sendTranslatedOutgoingMessage(prefix + "nohubavailable", null);
+			badPlayer.sendTranslatedOutgoingMessage(prefix + "nohubavailable", null, badPlayer.getName());
 			return;
 		}
 

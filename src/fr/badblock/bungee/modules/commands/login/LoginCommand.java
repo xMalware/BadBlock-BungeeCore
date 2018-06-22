@@ -58,7 +58,7 @@ public class LoginCommand extends BadCommand {
 		
 		if (server == null)
 		{
-			badPlayer.sendTranslatedOutgoingMessage(prefix + "nohubavailable", null);
+			badPlayer.sendTranslatedOutgoingMessage(prefix + "nohubavailable", null, badPlayer.getName());
 			return;
 		}
 		
