@@ -29,18 +29,18 @@ public class ServerConnectSendDataListener extends BadListener {
 		ProxiedPlayer proxiedPlayer = event.getPlayer();
 		// We get the BadPlayer object
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
-		if (badPlayer != null)
+
+		if (badPlayer == null)
 		{
-			if (!badPlayer.isLoginStepOk())
-			{
-				return;
-			}
-			badPlayer.sendDataToBukkit(event.getTarget().getName());
+			return;
 		}
-		else
+
+		if (!badPlayer.isLoginStepOk())
 		{
-			System.out.println("Error.");
+			return;
 		}
+		
+		badPlayer.sendDataToBukkit(event.getTarget().getName());
 	}
 
 }

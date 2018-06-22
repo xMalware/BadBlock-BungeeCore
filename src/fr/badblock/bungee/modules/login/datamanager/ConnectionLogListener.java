@@ -9,7 +9,7 @@ import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.datamanager.connectionlogs.ConnectionLog;
-import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
+import fr.badblock.bungee.modules.login.events.PlayerLoggedEvent;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.DateUtils;
 import net.md_5.bungee.event.EventHandler;
@@ -28,11 +28,7 @@ public class ConnectionLogListener extends BadListener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerJoinEvent(PlayerJoinEvent event) {
-		if (event.isCancelled())
-		{
-			return;
-		}
+	public void onPlayerLogged(PlayerLoggedEvent event) {
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// We get his/her username

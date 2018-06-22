@@ -1,6 +1,9 @@
 package fr.badblock.bungee.modules.commands.login;
 
 import fr.badblock.api.common.utils.general.HashUtils;
+import fr.badblock.bungee.modules.login.events.PlayerLoggedEvent;
+import fr.badblock.bungee.players.BadPlayer;
+import net.md_5.bungee.BungeeCord;
 
 public class HashLogin
 {
@@ -12,6 +15,15 @@ public class HashLogin
 		return HashUtils.sha512(password, salt);
 	}
 
+	public static void log(BadPlayer badPlayer)
+	{
+		// Set login step ok
+		badPlayer.setLoginStepOk(true);
+		
+		// Call logged event
+		BungeeCord.getInstance().getPluginManager().callEvent(new PlayerLoggedEvent(badPlayer));
+	}
+	
 	public static boolean isValidPassword(String password)
 	{
 		boolean atleastOneUpper = false;

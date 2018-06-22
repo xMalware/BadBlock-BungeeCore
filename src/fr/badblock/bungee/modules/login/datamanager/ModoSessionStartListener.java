@@ -2,7 +2,7 @@ package fr.badblock.bungee.modules.login.datamanager;
 
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
-import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
+import fr.badblock.bungee.modules.login.events.PlayerLoggedEvent;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
@@ -20,12 +20,7 @@ public class ModoSessionStartListener extends BadListener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerJoinEvent(PlayerJoinEvent event) {
-		if (event.isCancelled())
-		{
-			return;
-		}
-		
+	public void onPlayerJoinEvent(PlayerLoggedEvent event) {
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		
