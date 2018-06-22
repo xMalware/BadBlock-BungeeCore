@@ -627,11 +627,6 @@ public class BadOfflinePlayer {
 	 *            if data doesn't exist
 	 */
 	protected void loadData(boolean create) {
-		if (create)
-		{
-			throw new NullPointerException("AAAAH");
-		}
-		
 		// New query
 		BasicDBObject query = new BasicDBObject();
 
