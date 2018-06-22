@@ -3,13 +3,15 @@ package fr.badblock.bungee.link.bungee.tasks;
 import java.util.Iterator;
 
 import fr.badblock.api.common.utils.TimeUtils;
+import fr.badblock.api.common.utils.flags.GlobalFlags;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class PlayerCleanerTask extends Thread
 {
-
+	
 	public PlayerCleanerTask()
 	{
 		start();
@@ -26,12 +28,18 @@ public class PlayerCleanerTask extends Thread
 			while (iterator.hasNext())
 			{
 				BadPlayer badPlayer = iterator.next();
-				if (bungeeCord.getPlayer(badPlayer.getName()) == null)
+				ProxiedPlayer proxiedPlayer = bungeeCord.getPlayer(badPlayer.getName());
+				
+				if (proxiedPlayer == null)
 				{
-					iterator.remove();
-					removed++;
+					if (!GlobalFlags.has(badPlayer.getName() + "_margin"))
+					{
+						iterator.remove();
+						removed++;
+					}
 				}
 			}
+			
 			if (removed > 0)
 			{
 				BungeeManager.getInstance().log("§e[BadBungee] Cleaned " + removed + " players. Bungee name: " + BungeeTask.bungeeObject.getName());

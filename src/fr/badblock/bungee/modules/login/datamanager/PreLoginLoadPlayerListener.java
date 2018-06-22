@@ -1,5 +1,6 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
+import fr.badblock.api.common.utils.flags.GlobalFlags;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.modules.abstracts.BadListener;
@@ -43,6 +44,9 @@ public class PreLoginLoadPlayerListener extends BadListener {
 			bungeeManager.generatePing();
 		}
 
+		// Set a margin flag
+		GlobalFlags.set(event.getConnection().getName() + "_margin", 5000);
+		
 		// We create a BadPlayer object
 		BadPlayer badPlayer = new BadPlayer(event.getConnection());
 
