@@ -126,6 +126,7 @@ public class BungeeLoader {
 	{
 		getPunishmentReasons().load();
 		ChatModule.getModules().forEach(chatModule -> chatModule.reload());
+		loadPermissions();
 	}
 
 	/**

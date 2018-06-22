@@ -19,9 +19,7 @@ import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
 import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
-import fr.badblock.bungee.rabbit.datareceivers.PlayerDataUpdateSender;
 import fr.badblock.bungee.utils.ChatColorUtils;
-import fr.badblock.bungee.utils.ObjectUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
 import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.mcjson.McJsonUtils;
@@ -214,6 +212,17 @@ public final class BadPlayer extends BadOfflinePlayer {
 
 		// Returns the kick message
 		return stringBuilder.toString();
+	}
+	
+	/**
+	 * Send data to bukkit
+	 */
+	public void sendDataToBukkit()
+	{
+		RabbitPacketMessage message = new RabbitPacketMessage(-1L, getSavedObject().toJson());
+		String queueName = BadBungeeQueues.BUNGEE_DATA_PLAYERS + "." + getLastServer();
+		RabbitPacket rabbitPacket = new RabbitPacket(message, queueName, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER);
+		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
 	}
 
 	/**
