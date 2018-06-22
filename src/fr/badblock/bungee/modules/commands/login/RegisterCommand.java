@@ -82,7 +82,8 @@ public class RegisterCommand extends BadCommand {
 		System.out.println(server.getName());
 
 		badPlayer.sendTranslatedOutgoingMessage(prefix + "registered", null, badPlayer.getName());
-		badPlayer.setLoginStepOk(true);
+	
+		HashLogin.log(badPlayer);
 
 		proxiedPlayer.connect(server);
 	}
