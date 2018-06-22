@@ -79,7 +79,7 @@ public class SkeletonConnectorListener extends BadListener {
 		}
 		else if(target == null || (target != null && target.getName().equals("lobby")))
 		{
-			ServerInfo serverInfo = this.roundrobinHub();
+			ServerInfo serverInfo = roundrobinHub();
 
 			if (serverInfo != null)
 			{
@@ -137,7 +137,7 @@ public class SkeletonConnectorListener extends BadListener {
 		return servers.get(new SecureRandom().nextInt(servers.size()));
 	}
 
-	public ServerInfo roundrobinHub() {
+	public static ServerInfo roundrobinHub() {
 		List<ServerInfo> servers = new ArrayList<>();
 		for (ServerInfo serverInfo : BungeeCord.getInstance().getServers().values()) {
 			if (serverInfo == null) continue;
