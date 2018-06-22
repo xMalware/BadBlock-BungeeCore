@@ -226,6 +226,15 @@ public class BadOfflinePlayer {
 	 * @return Returns the auth key
 	 */
 	private String authKey;
+	
+	/**
+	 * Login password
+	 * 
+	 * @param Set
+	 *            the login password
+	 * @return Returns the login password
+	 */
+	private String loginPassword;
 
 	/**
 	 * Online mode
@@ -430,6 +439,8 @@ public class BadOfflinePlayer {
 		object.put("version", "0");
 		// Put the online mode
 		object.put("onlineMode", onlineMode);
+		// Put the login password
+		object.put("loginPassword", loginPassword);
 		// Put the auth key
 		object.put("authKey", authKey);
 		// TODO?
@@ -547,6 +558,8 @@ public class BadOfflinePlayer {
 		nickname = null;
 		// Set the online mode
 		onlineMode = BadBungeeConfig.DEFAULT_ONLINEMODE;
+		// Set the login password
+		loginPassword = null;
 		// Set the auth key
 		authKey = null;
 		// Get saved object
@@ -625,6 +638,8 @@ public class BadOfflinePlayer {
 			setNickname(getString("nickname"));
 			// Set the auth key
 			setAuthKey(getString("authKey"));
+			// Set the login password
+			setLoginPassword(getString("loginPassword"));
 			// Set the online mode
 			setOnlineMode(getBoolean("onlineMode"));
 			// Set unique ID
@@ -888,6 +903,14 @@ public class BadOfflinePlayer {
 	public void updateOnlineMode() {
 		// Update online mode
 		updateData("onlineMode", isOnlineMode());
+	}
+
+	/**
+	 * Update login password
+	 */
+	public void updateLoginPassword() {
+		// Update login password
+		updateData("loginPassword", getLoginPassword());
 	}
 
 	/**
