@@ -440,11 +440,11 @@ public class BadOfflinePlayer {
 		// Put the unique ID
 		object.put("uniqueId", getUniqueId());
 		// Put the settings
-		object.put("settings", settings.getDBObject());
+		object.put("settings", settings != null ? settings.getDBObject() : null);
 		// Put the punish object
-		object.put("punish", punished.getDBObject());
+		object.put("punish", punished != null ? punished.getDBObject() : null);
 		// Put the permissions
-		object.put("permissions", permissions.getDBObject());
+		object.put("permissions", permissions != null ? permissions.getDBObject() : null);
 		// Put the user version
 		object.put("version", "0");
 		// Put the online mode
@@ -545,13 +545,10 @@ public class BadOfflinePlayer {
 	}
 
 	/**
-	 * Insert data
+	 * Load default values
 	 */
-	public void insert() {
-		// Log => create data
-		BadBungee.log("§aCreating it...");
-		// Get mongo service
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
+	public void loadDefaultValues()
+	{
 		// Set new punished object
 		punished = new Punished();
 		// Set new permission object
@@ -584,6 +581,16 @@ public class BadOfflinePlayer {
 		setFound(true);
 		// Set new
 		setNew(true);
+	}
+	
+	/**
+	 * Insert data
+	 */
+	public void insert() {
+		// Log => create data
+		BadBungee.log("§aCreating it...");
+		// Get mongo service
+		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
 		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 			/**
@@ -596,7 +603,7 @@ public class BadOfflinePlayer {
 				// Get database collection
 				DBCollection collection = db.getCollection("players");
 				// Insert data into collection
-				collection.insert(obj);
+				collection.insert(getDbObject());
 				// Log => created
 				BadBungee.log("§aCreated!");
 			}
@@ -700,14 +707,18 @@ public class BadOfflinePlayer {
 			// Set loaded
 			setLoaded(true);
 			
+			// Load default values
+			loadDefaultValues();
+			
 			// If we are allowed to create data
 			if (create)
 			{
-				// Insert data
+				throw new NullPointerException();
+				/*// Insert data
 				insert();
 				
 				// Set new
-				setNew(false);
+				setNew(false);*/
 			}
 			// If we're not allowed to create data
 			else {
