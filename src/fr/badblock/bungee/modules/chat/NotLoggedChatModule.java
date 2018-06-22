@@ -3,6 +3,7 @@ package fr.badblock.bungee.modules.chat;
 import java.util.Arrays;
 import java.util.List;
 
+import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
@@ -31,6 +32,14 @@ public class NotLoggedChatModule extends ChatModule {
 
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) event.getSender();
 
+		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
+		
+		if (badPlayer == null)
+		{
+			event.setCancelled(true);
+			return event;
+		}
+		
 		Server server = proxiedPlayer.getServer();
 
 		if (server == null)
@@ -51,12 +60,12 @@ public class NotLoggedChatModule extends ChatModule {
 
 		String command = splitter[0];
 
-		if (splitter[0].equalsIgnoreCase(""))
+		if (splitter[0].isEmpty())
 		{
 			return event;
 		}
 
-		if (serverInfo.getName().startsWith("login"))
+		if (!badPlayer.isLoginStepOk())
 		{
 			command = command.toLowerCase();
 			if (!commands.contains(command))

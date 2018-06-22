@@ -125,7 +125,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	
 	private transient ModoSession	modoSession;
 	
-	private boolean					loginStep;
+	private boolean					loginStepOk;
 
 	/**
 	 * Constructor
@@ -267,7 +267,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public boolean isLogged() {
 		// Returns if the last server doesn't start with login
-		return getLastServer() != null && !getLastServer().startsWith("login");
+		return this.getLastServer() != null && this.isLoginStepOk();
 	}
 
 	/**

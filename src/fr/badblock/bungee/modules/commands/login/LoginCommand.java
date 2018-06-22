@@ -62,7 +62,7 @@ public class LoginCommand extends BadCommand {
 			return;
 		}
 		
-		badPlayer.setLoginStep(true);
+		badPlayer.setLoginStepOk(true);
 		badPlayer.sendTranslatedOutgoingMessage(prefix + "validpassword", null);
 		proxiedPlayer.connect(server);
 	}

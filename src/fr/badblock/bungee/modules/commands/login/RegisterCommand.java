@@ -80,7 +80,7 @@ public class RegisterCommand extends BadCommand {
 		}
 
 		badPlayer.sendTranslatedOutgoingMessage(prefix + "registered", null);
-		badPlayer.setLoginStep(true);
+		badPlayer.setLoginStepOk(true);
 
 		proxiedPlayer.connect(server);
 	}
