@@ -13,7 +13,7 @@ import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.abstracts.BadListener;
-import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
+import fr.badblock.bungee.modules.login.events.PlayerLoggedEvent;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.mcjson.McJson;
@@ -34,7 +34,7 @@ public class MessageReconnectListener extends BadListener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerJoinEvent(PlayerJoinEvent event) {
+	public void onPlayerJoinEvent(PlayerLoggedEvent event) {
 		// Getting the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 
