@@ -35,11 +35,11 @@ public class SendLoginMessageListener extends BadListener {
 		
 		if (badPlayer.getLoginPassword() == null || badPlayer.getLoginPassword().isEmpty())
 		{
-			badPlayer.sendTranslatedOutgoingMessage("bungee.comamnds.register.usage", null, badPlayer.getName());
+			badPlayer.sendTranslatedOutgoingMessage("bungee.commands.register.usage", null, badPlayer.getName());
 			return;
 		}
 		
-		badPlayer.sendTranslatedOutgoingMessage("bungee.comamnds.login.usage", null, badPlayer.getName());
+		badPlayer.sendTranslatedOutgoingMessage("bungee.commands.login.usage", null, badPlayer.getName());
 	}
 
 }
