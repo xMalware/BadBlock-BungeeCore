@@ -603,7 +603,7 @@ public class BadOfflinePlayer {
 				// Get database collection
 				DBCollection collection = db.getCollection("players");
 				// Insert data into collection
-				collection.insert(getDbObject());
+				collection.insert(getSavedObject());
 				// Log => created
 				BadBungee.log("§aCreated!");
 			}
