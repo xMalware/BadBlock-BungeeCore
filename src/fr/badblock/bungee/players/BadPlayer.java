@@ -222,7 +222,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	public void sendDataToBukkit(String serverName)
 	{
 		RabbitPacketMessage message = new RabbitPacketMessage(-1L, getSavedObject().toString());
-		String queueName = BadBungeeQueues.BUNGEE_DATA_PLAYERS + getLastServer();
+		String queueName = BadBungeeQueues.BUNGEE_DATA_PLAYERS + serverName;
 		RabbitPacket rabbitPacket = new RabbitPacket(message, queueName, true, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER);
 		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
 	}
