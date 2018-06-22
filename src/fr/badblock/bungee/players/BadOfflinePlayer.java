@@ -118,7 +118,7 @@ public class BadOfflinePlayer {
 	 * @return Returns if data was found
 	 */
 	private boolean found 	= false;
-	
+
 	private boolean	isNew	= false;
 
 	/**
@@ -228,7 +228,7 @@ public class BadOfflinePlayer {
 	 * @return Returns the auth key
 	 */
 	private String authKey;
-	
+
 	/**
 	 * Login password
 	 * 
@@ -246,7 +246,7 @@ public class BadOfflinePlayer {
 	 * @return Returns the online mode
 	 */
 	private boolean onlineMode;
-	
+
 	/**
 	 * Last login
 	 * 
@@ -582,7 +582,7 @@ public class BadOfflinePlayer {
 		// Set new
 		setNew(true);
 	}
-	
+
 	/**
 	 * Insert data
 	 */
@@ -682,7 +682,7 @@ public class BadOfflinePlayer {
 			try {
 				// Set the version by parsing integer
 				setVersion(Integer.parseInt(getString("version")));
-				
+
 				// Set the last login
 				setLastLogin(Integer.parseInt(getString("lastLogin")));
 			}
@@ -696,7 +696,7 @@ public class BadOfflinePlayer {
 
 			// Set loaded
 			setLoaded(true);
-			
+
 			// Set new
 			setNew(false);
 
@@ -706,16 +706,19 @@ public class BadOfflinePlayer {
 
 			// Set loaded
 			setLoaded(true);
-			
-			// Load default values
-			loadDefaultValues();
-			
+
+			if (!isLoaded())
+			{
+				// Load default values
+				loadDefaultValues();
+			}
+
 			// If we are allowed to create data
 			if (create)
 			{
 				// Insert data
 				insert();
-				
+
 				// Set new
 				setNew(false);
 			}
