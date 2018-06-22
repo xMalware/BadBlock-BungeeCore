@@ -244,6 +244,14 @@ public class BadOfflinePlayer {
 	 * @return Returns the online mode
 	 */
 	private boolean onlineMode;
+	
+	/**
+	 * Last login
+	 * 
+	 * @param Set the last login
+	 * @return Returns the last login
+	 */
+	private long lastLogin;
 
 	/**
 	 * Constructor (auto-create)
@@ -439,6 +447,8 @@ public class BadOfflinePlayer {
 		object.put("version", "0");
 		// Put the online mode
 		object.put("onlineMode", onlineMode);
+		// Put the last login
+		object.put("lastLogin", lastLogin);
 		// Put the login password
 		object.put("loginPassword", loginPassword);
 		// Put the auth key
@@ -558,6 +568,8 @@ public class BadOfflinePlayer {
 		nickname = null;
 		// Set the online mode
 		onlineMode = BadBungeeConfig.DEFAULT_ONLINEMODE;
+		// Set the last login
+		lastLogin = 0;
 		// Set the login password
 		loginPassword = null;
 		// Set the auth key
@@ -658,7 +670,10 @@ public class BadOfflinePlayer {
 			// Try to?
 			try {
 				// Set the version by parsing integer
-				setVersion(Integer.valueOf(getString("version")));
+				setVersion(Integer.parseInt(getString("version")));
+				
+				// Set the last login
+				setLastLogin(Integer.parseInt(getString("lastLogin")));
 			}
 			// Error case
 			catch (Exception error) {
@@ -903,6 +918,14 @@ public class BadOfflinePlayer {
 	public void updateOnlineMode() {
 		// Update online mode
 		updateData("onlineMode", isOnlineMode());
+	}
+
+	/**
+	 * Update last login
+	 */
+	public void updateLastLogin() {
+		// Update last login
+		updateData("lastLogin", getLastLogin());
 	}
 
 	/**
