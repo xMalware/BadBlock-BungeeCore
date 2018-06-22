@@ -215,16 +215,24 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Returns the kick message
 		return stringBuilder.toString();
 	}
+
+	/**
+	 * Send data to bukkit
+	 */
+	public void sendDataToBukkit(String serverName)
+	{
+		RabbitPacketMessage message = new RabbitPacketMessage(-1L, getSavedObject().toString());
+		String queueName = BadBungeeQueues.BUNGEE_DATA_PLAYERS + getLastServer();
+		RabbitPacket rabbitPacket = new RabbitPacket(message, queueName, true, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER);
+		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
+	}
 	
 	/**
 	 * Send data to bukkit
 	 */
 	public void sendDataToBukkit()
 	{
-		RabbitPacketMessage message = new RabbitPacketMessage(-1L, getSavedObject().toString());
-		String queueName = BadBungeeQueues.BUNGEE_DATA_PLAYERS + getLastServer();
-		RabbitPacket rabbitPacket = new RabbitPacket(message, queueName, false, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER);
-		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
+		sendDataToBukkit(getLastServer());
 	}
 
 	/**

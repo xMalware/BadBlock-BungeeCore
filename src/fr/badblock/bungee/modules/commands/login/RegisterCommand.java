@@ -78,6 +78,8 @@ public class RegisterCommand extends BadCommand {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "nohubavailable", null, badPlayer.getName());
 			return;
 		}
+		
+		System.out.println(server.getName());
 
 		badPlayer.sendTranslatedOutgoingMessage(prefix + "registered", null, badPlayer.getName());
 		badPlayer.setLoginStepOk(true);

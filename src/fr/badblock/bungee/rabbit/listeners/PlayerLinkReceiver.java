@@ -74,6 +74,7 @@ public class PlayerLinkReceiver extends RabbitListener {
 			return;
 		}
 
+		System.out.println("A : " + playerPacket.getPlayerName());
 		// Process.
 		processing.work(playerPacket);
 	}

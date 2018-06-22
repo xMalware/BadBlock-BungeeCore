@@ -19,15 +19,23 @@ public class ServerConnectSendDataListener extends BadListener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onServerConnect(ServerConnectEvent event) {
+		if (event.isCancelled())
+		{
+			return;
+		}
 		// We get the player
 		ProxiedPlayer proxiedPlayer = event.getPlayer();
 		// We get the BadPlayer object
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 		if (badPlayer != null)
 		{
-			badPlayer.sendDataToBukkit();
+			if (!badPlayer.isLoginStepOk())
+			{
+				return;
+			}
+			badPlayer.sendDataToBukkit(event.getTarget().getName());
 		}
 		else
 		{

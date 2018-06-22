@@ -47,11 +47,14 @@ public abstract class _PlayerProcessing {
 	public void work(PlayerPacket playerPacket) {
 		// Get the proxied player from the player packet
 		ProxiedPlayer proxiedPlayer = getProxiedPlayerByPacket(playerPacket);
+		System.out.println("B : " + playerPacket.getPlayerName());
 		// If the player isn't online on this node
 		if (proxiedPlayer == null) {
 			// So we stop there
+			System.out.println("C : " + playerPacket.getPlayerName());
 			return;
 		}
+		System.out.println("D : " + playerPacket.getPlayerName());
 		// Work
 		done(proxiedPlayer, playerPacket);
 	}

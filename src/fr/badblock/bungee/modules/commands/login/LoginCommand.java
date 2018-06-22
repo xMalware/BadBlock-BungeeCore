@@ -62,6 +62,8 @@ public class LoginCommand extends BadCommand {
 			return;
 		}
 		
+		System.out.println(server.getName());
+		
 		badPlayer.setLoginStepOk(true);
 		badPlayer.sendTranslatedOutgoingMessage(prefix + "validpassword", null, badPlayer.getName());
 		proxiedPlayer.connect(server);
