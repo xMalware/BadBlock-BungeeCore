@@ -191,6 +191,7 @@ public class BungeeLoader {
 					"fr.badblock.bungee.modules.commands.basic", "fr.badblock.bungee.modules.commands.basic.friends",
 					"fr.badblock.bungee.modules.commands.basic.msg", "fr.badblock.bungee.modules.commands.basic.party",
 					"fr.badblock.bungee.modules.commands.modo", "fr.badblock.bungee.modules.commands.staff",
+					"fr.badblock.bungee.modules.commands.login",
 
 					// Login
 					"fr.badblock.bungee.modules.login.antivpn", "fr.badblock.bungee.modules.login.antibot",
