@@ -5,14 +5,15 @@
 	<groupId>BadBlockBungee</groupId>
 	<artifactId>BadBlockBungee</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
 	<build>
 		<resources>
 			<resource>
 				<targetPath>.</targetPath>
 				<filtering>true</filtering>
-				<directory>${basedir}/src/main/resources/</directory>
+				<directory></directory>
 				<includes>
-					<include>plugin.yml</include>
+					<include>bungee.yml</include>
 				</includes>
 			</resource>
 		</resources>
