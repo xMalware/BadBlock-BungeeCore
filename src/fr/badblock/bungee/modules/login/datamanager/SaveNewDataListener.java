@@ -1,8 +1,7 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
 import fr.badblock.bungee.modules.abstracts.BadListener;
-import fr.badblock.bungee.modules.commands.login.HashLogin;
-import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
+import fr.badblock.bungee.modules.login.events.PlayerLoggedEvent;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
@@ -12,7 +11,7 @@ import net.md_5.bungee.event.EventPriority;
  * @author xMalware
  *
  */
-public class SendLoginMessageListener extends BadListener {
+public class SaveNewDataListener extends BadListener {
 
 	/**
 	 * When a player joins the server
@@ -20,22 +19,17 @@ public class SendLoginMessageListener extends BadListener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerJoinEvent(PlayerJoinEvent event) {
-		if (event.isCancelled())
-		{
-			return;
-		}
-		
+	public void onPlayerLogged(PlayerLoggedEvent event) {
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		
-		if (badPlayer.isOnlineMode())
+		if (!badPlayer.isNew())
 		{
-			HashLogin.log(badPlayer);
 			return;
 		}
-		
-		HashLogin.sendLoginMessage(badPlayer);
+
+		badPlayer.insert();
+		badPlayer.setNew(false);
 	}
 
 }

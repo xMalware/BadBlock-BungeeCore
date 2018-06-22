@@ -81,8 +81,7 @@ public class AntiBotCheckPingListener extends BadListener
 		{
 			if (!checker.accept(username, address))
 			{
-				AntiBotData.blockedUsernames.put(username, System.currentTimeMillis() + 300_000L);
-				AntiBotData.blockedAddresses.put(address, System.currentTimeMillis() + 300_000L);
+				AntiBotData.reject(address, username);
 				event.setResponse(bannedPing);
 				BadBungee.log("§c[AntiBot] Rejected " + username + " from " + address + ".");
 				return;

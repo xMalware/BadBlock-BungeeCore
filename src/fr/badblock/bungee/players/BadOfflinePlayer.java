@@ -117,7 +117,9 @@ public class BadOfflinePlayer {
 	 *            if data was found
 	 * @return Returns if data was found
 	 */
-	private boolean found = false;
+	private boolean found 	= false;
+	
+	private boolean	isNew	= false;
 
 	/**
 	 * Last IP
@@ -545,7 +547,7 @@ public class BadOfflinePlayer {
 	/**
 	 * Insert data
 	 */
-	private void insert() {
+	public void insert() {
 		// Log => create data
 		BadBungee.log("§aCreating it...");
 		// Get mongo service
@@ -580,6 +582,8 @@ public class BadOfflinePlayer {
 		setDbObject(obj);
 		// Set found
 		setFound(true);
+		// Set new
+		setNew(true);
 		// Use async mongo
 		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
 			/**
@@ -685,26 +689,33 @@ public class BadOfflinePlayer {
 
 			// Set loaded
 			setLoaded(true);
+			
+			// Set new
+			setNew(false);
 
 		} else {
 			// Log => data doesn't exist
 			BadBungee.log(getName() + " doesn't exist in the player table.");
 
+			// Set loaded
+			setLoaded(true);
+			
 			// If we are allowed to create data
-			if (create) {
+			if (create)
+			{
 				// Insert data
 				insert();
-
-				// Set loaded
-				setLoaded(true);
+				
+				// Set new
+				setNew(false);
 			}
 			// If we're not allowed to create data
 			else {
 				// Not found..
 				setFound(false);
 
-				// Set loaded
-				setLoaded(true);
+				// Set new
+				setNew(true);
 			}
 		}
 	}

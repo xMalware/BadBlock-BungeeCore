@@ -1,14 +1,13 @@
 package fr.badblock.bungee.modules.chat;
 
-import fr.badblock.api.common.utils.i18n.Locale;
+import fr.badblock.api.common.utils.TimeUtils;
+import fr.badblock.bungee.modules.login.antibot.AntiBotData;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 
-public class AttackKickChatModule extends ChatModule {
+public class TooFastLoginChatModule extends ChatModule {
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public ChatEvent check(ChatEvent event)
 	{
@@ -26,15 +25,20 @@ public class AttackKickChatModule extends ChatModule {
 
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		if (badPlayer.getPunished() != null && badPlayer.getPunished().isMute())
+		if (badPlayer.isLoginStepOk() || badPlayer.isOnlineMode())
 		{
 			return event;
 		}
 		
-		if (event.getMessage().toLowerCase().contains("mcbot"))
+		long time = TimeUtils.time() - badPlayer.getLoginTimestamp();
+		
+		if (time <= 1000)
 		{
 			event.setCancelled(true);
-			event.getSender().disconnect(I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.antibot.blocked", null));
+			
+			String address = badPlayer.getLastIp();
+			AntiBotData.reject(address, badPlayer.getName());
+			return event;	
 		}
 		
 		return event;

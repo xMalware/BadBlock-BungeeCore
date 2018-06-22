@@ -28,4 +28,10 @@ public class AntiBotData
 	public static Map<String, Long> blockedAddresses	= new HashMap<>();
 	public static Map<String, Long> blockedUsernames	= new HashMap<>();
 	
+	public static void reject(String address, String username)
+	{
+		AntiBotData.blockedUsernames.put(username, System.currentTimeMillis() + 300_000L);
+		AntiBotData.blockedAddresses.put(address, System.currentTimeMillis() + 300_000L);
+	}
+	
 }

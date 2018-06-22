@@ -137,7 +137,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public BadPlayer(PendingConnection pendingConnection) {
 		// Super!
-		super(pendingConnection.getName());
+		super(pendingConnection.getName(), false);
 		// Log => loaded data
 		BadBungee.log(ChatColor.GREEN + "Loaded data for " + pendingConnection.getName());
 		// Set the last IP
