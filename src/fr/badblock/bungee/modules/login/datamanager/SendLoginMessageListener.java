@@ -31,6 +31,7 @@ public class SendLoginMessageListener extends BadListener {
 		
 		if (badPlayer.isOnlineMode())
 		{
+			badPlayer.setLoginStepOk(true);
 			return;
 		}
 		
