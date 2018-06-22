@@ -20,6 +20,7 @@ public class HashLogin
 		// Set login step ok
 		badPlayer.setLoginStepOk(true);
 
+		System.out.println("isNew: " + badPlayer.isNew());
 		// Call logged event
 		BungeeCord.getInstance().getPluginManager().callEvent(new PlayerLoggedEvent(badPlayer));
 	}

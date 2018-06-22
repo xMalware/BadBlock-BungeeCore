@@ -2,8 +2,10 @@ package fr.badblock.bungee.modules.login.datamanager;
 
 import fr.badblock.api.common.utils.i18n.Locale;
 import fr.badblock.bungee.modules.abstracts.BadListener;
+import fr.badblock.bungee.modules.login.events.PlayerCreatedEvent;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.i18n.I19n;
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.event.AsyncDataLoadRequest;
 import net.md_5.bungee.api.event.AsyncDataLoadRequest.Result;
 import net.md_5.bungee.event.EventHandler;
@@ -34,6 +36,7 @@ public class ICanLogYouListener extends BadListener {
 		{
 			BadPlayer badPlayer = BadPlayer.get(playerName);
 			event.getDone().done(new Result(badPlayer.getSavedObject(), null), null);
+			BungeeCord.getInstance().getPluginManager().callEvent(new PlayerCreatedEvent(badPlayer));
 		}
 		else
 		{

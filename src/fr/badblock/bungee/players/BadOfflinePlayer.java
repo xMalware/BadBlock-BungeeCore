@@ -627,6 +627,11 @@ public class BadOfflinePlayer {
 	 *            if data doesn't exist
 	 */
 	protected void loadData(boolean create) {
+		if (create)
+		{
+			throw new NullPointerException("AAAAH");
+		}
+		
 		// New query
 		BasicDBObject query = new BasicDBObject();
 
@@ -713,12 +718,11 @@ public class BadOfflinePlayer {
 			// If we are allowed to create data
 			if (create)
 			{
-				throw new NullPointerException();
-				/*// Insert data
+				// Insert data
 				insert();
 				
 				// Set new
-				setNew(false);*/
+				setNew(false);
 			}
 			// If we're not allowed to create data
 			else {
@@ -859,6 +863,12 @@ public class BadOfflinePlayer {
 	 * @param value
 	 */
 	public void updateData(String[] keys, Object[] values) {
+		// If the player is new
+		if (isNew())
+		{
+			// Don't do that!
+			return;
+		}
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
