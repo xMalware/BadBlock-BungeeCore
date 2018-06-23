@@ -21,11 +21,10 @@ public abstract class ChatModule {
 				.sendMessage("§e[BadBungee] §aLoaded chat module: " + getClass().getSimpleName());
 	}
 
-	public void reload()
-	{
-		
+	public void reload() {
+
 	}
-	
+
 	public abstract ChatEvent check(ChatEvent event);
 
 }

@@ -20,19 +20,17 @@ import net.md_5.bungee.api.event.ChatEvent;
 
 public class AntiSpamChatModule extends ChatModule {
 
-	private List<String>	applicableCommands		= new ArrayList<>();
+	private List<String> applicableCommands = new ArrayList<>();
 
-	private double 			timeBetweenEachMessage	= 0L;
-	private double 			timeBetweenSameMessage	= 0L;
+	private double timeBetweenEachMessage = 0L;
+	private double timeBetweenSameMessage = 0L;
 
-	public AntiSpamChatModule()
-	{
+	public AntiSpamChatModule() {
 		reload();
 	}
 
 	@Override
-	public void reload()
-	{
+	public void reload() {
 		applicableCommands.clear();
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
@@ -55,10 +53,8 @@ public class AntiSpamChatModule extends ChatModule {
 				// Get results
 				DBCursor cursor = collection.find(query);
 
-				try
-				{
-					while (cursor.hasNext())
-					{
+				try {
+					while (cursor.hasNext()) {
 						DBObject data = cursor.next();
 
 						timeBetweenEachMessage = Double.parseDouble(data.get("timeBetweenEachMessage").toString());
@@ -66,16 +62,13 @@ public class AntiSpamChatModule extends ChatModule {
 
 						BasicDBList applicableCommandlist = (BasicDBList) data.get("applicableCommands");
 
-						applicableCommandlist.forEach(object ->
-						{
+						applicableCommandlist.forEach(object -> {
 							String name = object.toString();
 							applicableCommands.add(name);
 						});
 
 					}
-				}
-				catch (Exception error)
-				{
+				} catch (Exception error) {
 					error.printStackTrace();
 				}
 
@@ -86,15 +79,12 @@ public class AntiSpamChatModule extends ChatModule {
 	}
 
 	@Override
-	public ChatEvent check(ChatEvent event)
-	{
-		if (event.isCancelled())
-		{
+	public ChatEvent check(ChatEvent event) {
+		if (event.isCancelled()) {
 			return event;
 		}
 
-		if (!(event.getSender() instanceof ProxiedPlayer))
-		{
+		if (!(event.getSender() instanceof ProxiedPlayer)) {
 			return event;
 		}
 
@@ -102,26 +92,22 @@ public class AntiSpamChatModule extends ChatModule {
 
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		if (badPlayer.getPunished() != null && badPlayer.getPunished().isMute())
-		{
+		if (badPlayer.getPunished() != null && badPlayer.getPunished().isMute()) {
 			return event;
 		}
 
-		if (proxiedPlayer.hasPermission("chat.bypass"))
-		{
+		if (proxiedPlayer.hasPermission("chat.bypass")) {
 			return event;
 		}
 
-		if (!isApplicable(event))
-		{
+		if (!isApplicable(event)) {
 			return event;
 		}
 
 		// Remove flood characters
 		removeFloodCharacters(event, proxiedPlayer);
 
-		if (event.isCancelled())
-		{
+		if (event.isCancelled()) {
 			return event;
 		}
 
@@ -130,21 +116,16 @@ public class AntiSpamChatModule extends ChatModule {
 		return event;
 	}
 
-	private boolean isApplicable(ChatEvent chatEvent)
-	{
+	private boolean isApplicable(ChatEvent chatEvent) {
 		String message = chatEvent.getMessage();
 
-		if (message.startsWith("%"))
-		{
+		if (message.startsWith("%")) {
 			return true;
 		}
 
-		if (message.startsWith("/"))
-		{
-			for (String command : applicableCommands)
-			{
-				if (message.startsWith("/" + command + " "))
-				{
+		if (message.startsWith("/")) {
+			for (String command : applicableCommands) {
+				if (message.startsWith("/" + command + " ")) {
 					return true;
 				}
 			}
@@ -155,8 +136,7 @@ public class AntiSpamChatModule extends ChatModule {
 		return true;
 	}
 
-	public void removeFloodCharacters(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer)
-	{
+	public void removeFloodCharacters(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer) {
 		int nb = 0;
 		Character lastCharacter = null;
 		int upperCase = 0;
@@ -173,7 +153,7 @@ public class AntiSpamChatModule extends ChatModule {
 					}
 					I19n.sendMessage(proxiedPlayer, "bungee.chat.antispam.flood", null);
 					chatEvent.setCancelled(true);
-					return ;
+					return;
 				}
 			} else {
 				nb = 0;
@@ -190,8 +170,7 @@ public class AntiSpamChatModule extends ChatModule {
 		chatEvent.setMessage(okMessage);
 	}
 
-	public void avoidSameMessages(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
-	{
+	public void avoidSameMessages(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer) {
 		String filteredMessage = applyFilter(chatEvent.getMessage());
 		if (badPlayer.getLastMessage() != null && badPlayer.getLastMessageTime() > System.currentTimeMillis()) {
 			chatEvent.setCancelled(true);

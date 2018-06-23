@@ -22,18 +22,16 @@ import net.md_5.bungee.api.event.ChatEvent;
 
 public class AdvertisingChatModule extends ChatModule {
 
-	private List<String>	blockedFirstTopLevelDomains	= new ArrayList<>();
-	private List<String>	excludedWebsites			= new ArrayList<>();
-	private List<String>	blockedWebsites				= new ArrayList<>();
+	private List<String> blockedFirstTopLevelDomains = new ArrayList<>();
+	private List<String> excludedWebsites = new ArrayList<>();
+	private List<String> blockedWebsites = new ArrayList<>();
 
-	public AdvertisingChatModule()
-	{
+	public AdvertisingChatModule() {
 		reload();
 	}
 
 	@Override
-	public void reload()
-	{
+	public void reload() {
 		blockedFirstTopLevelDomains.clear();
 		excludedWebsites.clear();
 		blockedWebsites.clear();
@@ -58,40 +56,34 @@ public class AdvertisingChatModule extends ChatModule {
 				// Get results
 				DBCursor cursor = collection.find(query);
 
-				try
-				{
-					while (cursor.hasNext())
-					{
+				try {
+					while (cursor.hasNext()) {
 						DBObject data = cursor.next();
 
-						BasicDBList blockedFirstTopLevelDomainList = (BasicDBList) data.get("blockedFirstTopLevelDomains");
+						BasicDBList blockedFirstTopLevelDomainList = (BasicDBList) data
+								.get("blockedFirstTopLevelDomains");
 
-						blockedFirstTopLevelDomainList.forEach(object ->
-						{
+						blockedFirstTopLevelDomainList.forEach(object -> {
 							String name = object.toString();
 							blockedFirstTopLevelDomains.add(name);
 						});
 
 						BasicDBList excludedWebsiteList = (BasicDBList) data.get("excludedWebsites");
 
-						excludedWebsiteList.forEach(object ->
-						{
+						excludedWebsiteList.forEach(object -> {
 							String name = object.toString();
 							excludedWebsites.add(name);
 						});
 
 						BasicDBList blockedWebsitesList = (BasicDBList) data.get("blockedWebsites");
 
-						blockedWebsitesList.forEach(object ->
-						{
+						blockedWebsitesList.forEach(object -> {
 							String name = object.toString();
 							blockedWebsites.add(name);
 						});
 
 					}
-				}
-				catch (Exception error)
-				{
+				} catch (Exception error) {
 					error.printStackTrace();
 				}
 
@@ -102,15 +94,12 @@ public class AdvertisingChatModule extends ChatModule {
 	}
 
 	@Override
-	public ChatEvent check(ChatEvent event)
-	{
-		if (event.isCancelled())
-		{
+	public ChatEvent check(ChatEvent event) {
+		if (event.isCancelled()) {
 			return event;
 		}
 
-		if (!(event.getSender() instanceof ProxiedPlayer))
-		{
+		if (!(event.getSender() instanceof ProxiedPlayer)) {
 			return event;
 		}
 
@@ -118,29 +107,25 @@ public class AdvertisingChatModule extends ChatModule {
 
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		if (badPlayer.getPunished() != null && badPlayer.getPunished().isMute())
-		{
+		if (badPlayer.getPunished() != null && badPlayer.getPunished().isMute()) {
 			return event;
 		}
 
-		if (proxiedPlayer.hasPermission("chat.bypass"))
-		{
+		if (proxiedPlayer.hasPermission("chat.bypass")) {
 			return event;
 		}
 
 		// Check IP
 		hasIP(event, proxiedPlayer, badPlayer);
 
-		if (event.isCancelled())
-		{
+		if (event.isCancelled()) {
 			return event;
 		}
 
 		// Check blocked website
 		hasBlockedWebsite(event, proxiedPlayer, badPlayer);
 
-		if (event.isCancelled())
-		{
+		if (event.isCancelled()) {
 			return event;
 		}
 
@@ -150,8 +135,7 @@ public class AdvertisingChatModule extends ChatModule {
 		return event;
 	}
 
-	public void hasIP(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
-	{
+	public void hasIP(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer) {
 		String message = chatEvent.getMessage();
 		String filteredMessage = applyFilter(message);
 
@@ -162,13 +146,11 @@ public class AdvertisingChatModule extends ChatModule {
 		}
 	}
 
-	public void hasBlockedWebsite(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
-	{
+	public void hasBlockedWebsite(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer) {
 		String message = chatEvent.getMessage();
 		String filteredMessage = applyFilter(message);
 
-		for (String blockedWebsite : blockedWebsites)
-		{
+		for (String blockedWebsite : blockedWebsites) {
 			if (message.contains(blockedWebsite) || filteredMessage.contains(blockedWebsite)) {
 				chatEvent.setCancelled(true);
 				I19n.sendMessage(proxiedPlayer, "bungee.chat.advertising", null);
@@ -177,14 +159,14 @@ public class AdvertisingChatModule extends ChatModule {
 		}
 	}
 
-	public void hasBlockedFirstTopLevelDomain(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
-	{
+	public void hasBlockedFirstTopLevelDomain(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer) {
 		String message = chatEvent.getMessage();
 		String filteredMessage = applyFilterN(message);
 
 		for (String blockedFirstTopLevelDomain : blockedFirstTopLevelDomains) {
 			if (message.contains(blockedFirstTopLevelDomain) || filteredMessage.contains(blockedFirstTopLevelDomain)) {
-				if (message.equalsIgnoreCase(blockedFirstTopLevelDomain) || filteredMessage.equalsIgnoreCase(blockedFirstTopLevelDomain)) {
+				if (message.equalsIgnoreCase(blockedFirstTopLevelDomain)
+						|| filteredMessage.equalsIgnoreCase(blockedFirstTopLevelDomain)) {
 					chatEvent.setCancelled(true);
 					I19n.sendMessage(proxiedPlayer, "bungee.chat.advertising", null);
 					return;
@@ -235,7 +217,6 @@ public class AdvertisingChatModule extends ChatModule {
 		string = o;
 		return o;
 	}
-
 
 	public static boolean hasIPv4IP(String text) {
 		Pattern p = Pattern.compile(

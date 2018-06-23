@@ -48,7 +48,7 @@ public class BungeeTask extends Thread {
 	/**
 	 * Task thread
 	 */
-	private static Thread syncThread	= Thread.currentThread();
+	private static Thread syncThread = Thread.currentThread();
 
 	/**
 	 * Get the current BungeeCord node IP
@@ -73,8 +73,7 @@ public class BungeeTask extends Thread {
 	 * Keep alive the current BungeeCord node
 	 */
 	public static void keepAlive() {
-		synchronized (syncThread)
-		{
+		synchronized (syncThread) {
 			// Get main class
 			BadBungee badBungee = BadBungee.getInstance();
 			// New map of players

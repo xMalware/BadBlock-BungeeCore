@@ -13,22 +13,18 @@ import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.utils.DateUtils;
 
-public class PeakTask extends Thread
-{
+public class PeakTask extends Thread {
 
-	public static int	totalPeak;
-	public static int	todayPeak;
+	public static int totalPeak;
+	public static int todayPeak;
 
-	public PeakTask()
-	{
+	public PeakTask() {
 		start();
 	}
 
 	@Override
-	public void run()
-	{
-		while (true)
-		{
+	public void run() {
+		while (true) {
 			int onlinePlayers = BungeeManager.getInstance().getRealTimeOnlinePlayers();
 			// Get mongo service
 			MongoService mongoService = BadBungee.getInstance().getMongoService();
@@ -51,16 +47,13 @@ public class PeakTask extends Thread
 					// Get results
 					DBCursor cursor = collection.find(query);
 
-					try
-					{
-						while (cursor.hasNext())
-						{
+					try {
+						while (cursor.hasNext()) {
 							BasicDBObject data = (BasicDBObject) cursor.next();
 
 							totalPeak = data.getInt("allTimePeak");
 
-							if (onlinePlayers > totalPeak)
-							{
+							if (onlinePlayers > totalPeak) {
 								// Update query
 								BasicDBObject update = new BasicDBObject("allTimePeak", onlinePlayers);
 
@@ -69,20 +62,19 @@ public class PeakTask extends Thread
 
 								// Update the collection with the query & updater
 								collection.update(query, updater);
-								
+
 								totalPeak = onlinePlayers;
 							}
-							
+
 							todayPeak = data.getInt("todayPeak");
 							String date = data.getString("date");
-							
+
 							String currentDate = DateUtils.getDate();
-							
-							if (!date.equalsIgnoreCase(currentDate) || onlinePlayers > todayPeak)
-							{
+
+							if (!date.equalsIgnoreCase(currentDate) || onlinePlayers > todayPeak) {
 								// Update query
 								BasicDBObject update = new BasicDBObject();
-								
+
 								update.put("todayPeak", onlinePlayers);
 								update.put("date", currentDate);
 
@@ -91,13 +83,11 @@ public class PeakTask extends Thread
 
 								// Update the collection with the query & updater
 								collection.update(query, updater);
-								
+
 								todayPeak = onlinePlayers;
 							}
 						}
-					}
-					catch (Exception error)
-					{
+					} catch (Exception error) {
 						error.printStackTrace();
 					}
 

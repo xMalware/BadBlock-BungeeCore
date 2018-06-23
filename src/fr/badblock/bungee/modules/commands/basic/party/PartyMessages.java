@@ -967,24 +967,27 @@ public class PartyMessages {
 		// Get the message
 		String message = null;
 
-		if (partyPlayerRole.equals(PartyPlayerRole.ADMIN))
-		{
-			message = badPlayer.getTranslatedMessage(prefix + "msg.admin", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName(), msg);
-		}else if (partyPlayerRole.equals(PartyPlayerRole.MODO))
-		{
-			message = badPlayer.getTranslatedMessage(prefix + "msg.modo", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName(), msg);
-		}else
-		{
-			message = badPlayer.getTranslatedMessage(prefix + "msg.default", new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName(), msg);
+		if (partyPlayerRole.equals(PartyPlayerRole.ADMIN)) {
+			message = badPlayer.getTranslatedMessage(prefix + "msg.admin", new int[] { 0 },
+					badPlayer.getRawChatPrefix(), badPlayer.getName(), msg);
+		} else if (partyPlayerRole.equals(PartyPlayerRole.MODO)) {
+			message = badPlayer.getTranslatedMessage(prefix + "msg.modo", new int[] { 0 }, badPlayer.getRawChatPrefix(),
+					badPlayer.getName(), msg);
+		} else {
+			message = badPlayer.getTranslatedMessage(prefix + "msg.default", new int[] { 0 },
+					badPlayer.getRawChatPrefix(), badPlayer.getName(), msg);
 		}
 
 		// Create McJson message
-		McJson json = new McJsonFactory(message).setHoverText(badPlayer.getTranslatedMessage(prefix + "msg.hover", new int[] { 0 },
-				badPlayer.getRawChatPrefix(), badPlayer.getName())).setClickSuggest("/party msg ").build();
+		McJson json = new McJsonFactory(message).setHoverText(badPlayer.getTranslatedMessage(prefix + "msg.hover",
+				new int[] { 0 }, badPlayer.getRawChatPrefix(), badPlayer.getName())).setClickSuggest("/party msg ")
+				.build();
 
 		// Send the translated message
-		party.getPlayers().values().parallelStream().filter(partyPlayer -> BungeeManager.getInstance().hasUsername(partyPlayer.getName()))
-		.forEach(partyPlayer -> BungeeManager.getInstance().getBadPlayer(partyPlayer.getName()).sendTranslatedOutgoingMCJson(json));
+		party.getPlayers().values().parallelStream()
+				.filter(partyPlayer -> BungeeManager.getInstance().hasUsername(partyPlayer.getName()))
+				.forEach(partyPlayer -> BungeeManager.getInstance().getBadPlayer(partyPlayer.getName())
+						.sendTranslatedOutgoingMCJson(json));
 	}
 
 }

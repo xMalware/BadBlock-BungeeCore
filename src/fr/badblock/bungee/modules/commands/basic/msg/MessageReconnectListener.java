@@ -62,39 +62,39 @@ public class MessageReconnectListener extends BadListener {
 				// Get results
 				DBCursor cursor = collection.find(query);
 
-				try
-				{
-					while (cursor.hasNext())
-					{
+				try {
+					while (cursor.hasNext()) {
 						DBObject data = cursor.next();
-						
+
 						// Raw message
 						String message = data.get("message").toString();
-						
+
 						// Sender
 						String senderRawUuid = data.get("senderUuid").toString();
-						
+
 						UUID senderUuid = UUID.fromString(senderRawUuid);
-						
-						if (senderUuid == null)
-						{
+
+						if (senderUuid == null) {
 							continue;
 						}
-						
+
 						BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(senderUuid);
-						
+
 						// Get the intro message
 						String Dintro = badPlayer.getTranslatedMessage(MsgCommand.prefix + "receive.intro", null);
 						// Get the message
-						String Dmessage = badPlayer.getTranslatedMessage(MsgCommand.prefix + "receive.message", new int[] { 0, 2 },
-								badOfflinePlayer.getRawChatPrefix(), badOfflinePlayer.getName(), badOfflinePlayer.getRawChatSuffix(), message);
+						String Dmessage = badPlayer.getTranslatedMessage(MsgCommand.prefix + "receive.message",
+								new int[] { 0, 2 }, badOfflinePlayer.getRawChatPrefix(), badOfflinePlayer.getName(),
+								badOfflinePlayer.getRawChatSuffix(), message);
 						// Get the message hover
-						String Dmessage_hover = badPlayer.getTranslatedMessage(MsgCommand.prefix + "receive.message_hover",
-								new int[] { 0, 2 }, badOfflinePlayer.getRawChatPrefix(), badOfflinePlayer.getName(), badOfflinePlayer.getRawChatSuffix(),
-								message);
+						String Dmessage_hover = badPlayer.getTranslatedMessage(
+								MsgCommand.prefix + "receive.message_hover", new int[] { 0, 2 },
+								badOfflinePlayer.getRawChatPrefix(), badOfflinePlayer.getName(),
+								badOfflinePlayer.getRawChatSuffix(), message);
 
 						// Get the McJson
-						McJson json = new McJsonFactory(Dintro).finaliseComponent().initNewComponent(Dmessage).setHoverText(Dmessage_hover)
+						McJson json = new McJsonFactory(Dintro).finaliseComponent().initNewComponent(Dmessage)
+								.setHoverText(Dmessage_hover)
 								.setClickSuggest("/msg " + badOfflinePlayer.getName() + " ").build();
 
 						// Send the message
@@ -102,7 +102,7 @@ public class MessageReconnectListener extends BadListener {
 
 						// Set reply
 						badPlayer.setTmpLastMessagePlayer(badOfflinePlayer.getName());
-						
+
 						// New query
 						BasicDBObject newQuery = new BasicDBObject();
 						// Update query
@@ -116,9 +116,7 @@ public class MessageReconnectListener extends BadListener {
 						// Update the collection with the query & updater
 						collection.update(newQuery, updater);
 					}
-				}
-				catch (Exception error)
-				{
+				} catch (Exception error) {
 					error.printStackTrace();
 				}
 

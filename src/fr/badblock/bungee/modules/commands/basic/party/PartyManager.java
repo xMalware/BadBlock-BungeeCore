@@ -480,7 +480,8 @@ public class PartyManager {
 						// If the state is accepted
 						if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED)) {
 							// Send the message
-							PartyManager.getMessages().sendMsg(currPlayer, partyPlayer.getRole(), StringUtils.join(args, " ", 1), party);
+							PartyManager.getMessages().sendMsg(currPlayer, partyPlayer.getRole(),
+									StringUtils.join(args, " ", 1), party);
 						}
 						// Else
 						else {

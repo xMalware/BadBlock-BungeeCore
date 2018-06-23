@@ -20,25 +20,20 @@ import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class PunishmentWorkerUnmute extends PunishmentWorker
-{
+public class PunishmentWorkerUnmute extends PunishmentWorker {
 
 	@Override
-	public PunishmentType getType()
-	{
+	public PunishmentType getType() {
 		return PunishmentType.UNMUTE;
 	}
 
 	@Override
-	public void process(CommandSender sender, String playerName, String reason, boolean isKey, long time)
-	{
+	public void process(CommandSender sender, String playerName, String reason, boolean isKey, long time) {
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
-		if (badOfflinePlayer == null || !badOfflinePlayer.isFound() || !badOfflinePlayer.isLoaded())
-		{
-			if (sender != null)
-			{
+		if (badOfflinePlayer == null || !badOfflinePlayer.isFound() || !badOfflinePlayer.isLoaded()) {
+			if (sender != null) {
 				I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			}
 			return;
@@ -53,8 +48,7 @@ public class PunishmentWorkerUnmute extends PunishmentWorker
 
 		BadPlayer badPlayer = null;
 
-		if (sender != null && sender instanceof ProxiedPlayer)
-		{
+		if (sender != null && sender instanceof ProxiedPlayer) {
 			ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 			badPlayer = BadPlayer.get(proxiedPlayer);
 			byPlayer = badPlayer.getName();
@@ -104,8 +98,7 @@ public class PunishmentWorkerUnmute extends PunishmentWorker
 		if (badOfflinePlayer.isOnline()) {
 			// Get the target player
 			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
-			if (targetPlayer.getPunished() == null)
-			{
+			if (targetPlayer.getPunished() == null) {
 				targetPlayer.setPunished(new Punished());
 			}
 			// Set mute
@@ -138,23 +131,19 @@ public class PunishmentWorkerUnmute extends PunishmentWorker
 		}
 
 		int[] arr = null;
-		
-		if (badPlayer != null)
-		{
+
+		if (badPlayer != null) {
 			arr = new int[] { 0, 2 };
 		}
-		
-		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatunmute"),
-				arr, rawPrefix, byPlayer, rawSuffix,
-				badOfflinePlayer.getName());
 
-		if (badPlayer != null)
-		{
+		// We send the message and the sender to all concerned
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatunmute"), arr,
+				rawPrefix, byPlayer, rawSuffix, badOfflinePlayer.getName());
+
+		if (badPlayer != null) {
 			ModoSession modoSession = badPlayer.getModoSession();
 
-			if (modoSession != null)
-			{
+			if (modoSession != null) {
 				modoSession.incrementPunishment();
 			}
 		}

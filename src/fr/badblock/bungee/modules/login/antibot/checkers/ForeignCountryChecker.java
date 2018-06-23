@@ -12,18 +12,16 @@ import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.record.Country;
 
-public class ForeignCountryChecker extends AntiBotChecker
-{
+public class ForeignCountryChecker extends AntiBotChecker {
 
-	public Queue<Long> 		unknownCountryIPs	= Queues.newLinkedBlockingDeque();
-	public Queue<Long> 		invalidCountryIPs	= Queues.newLinkedBlockingDeque();
+	public Queue<Long> unknownCountryIPs = Queues.newLinkedBlockingDeque();
+	public Queue<Long> invalidCountryIPs = Queues.newLinkedBlockingDeque();
 
-	public List<String> 	allowedCountryFlows = Arrays.asList("BE", "FR", "CA", "CH");
+	public List<String> allowedCountryFlows = Arrays.asList("BE", "FR", "CA", "CH");
 
-	private	DatabaseReader	reader;
+	private DatabaseReader reader;
 
-	public ForeignCountryChecker()
-	{
+	public ForeignCountryChecker() {
 		File database = new File("geoip/GeoIP2-City.mmdb");
 
 		try {
@@ -32,16 +30,14 @@ public class ForeignCountryChecker extends AntiBotChecker
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return 2;
 	}
-	
+
 	@Override
-	public boolean accept(String username, String address)
-	{
+	public boolean accept(String username, String address) {
 		try {
 			InetAddress ipAddress = InetAddress.getByName(address);
 
@@ -50,54 +46,43 @@ public class ForeignCountryChecker extends AntiBotChecker
 			Country country = response.getCountry();
 			String countryCode = country.getIsoCode();
 
-			if (!allowedCountryFlows.contains(countryCode))
-			{
-				if (unknownCountryIPs.size() >= 5)
-				{
+			if (!allowedCountryFlows.contains(countryCode)) {
+				if (unknownCountryIPs.size() >= 5) {
 					long time = System.currentTimeMillis() - unknownCountryIPs.poll();
 					int size = unknownCountryIPs.size();
-					if (time / size < 100)
-					{
+					if (time / size < 100) {
 						return false;
 					}
 				}
 
-				if (unknownCountryIPs.size() >= 10)
-				{
+				if (unknownCountryIPs.size() >= 10) {
 					long time = System.currentTimeMillis() - unknownCountryIPs.poll();
 					int size = unknownCountryIPs.size();
-					if (time / size < 200)
-					{
+					if (time / size < 200) {
 						return false;
 					}
 				}
 
-				if (unknownCountryIPs.size() >= 20)
-				{
+				if (unknownCountryIPs.size() >= 20) {
 					long time = System.currentTimeMillis() - unknownCountryIPs.poll();
 					int size = unknownCountryIPs.size();
-					if (time / size < 200)
-					{
+					if (time / size < 200) {
 						return false;
 					}
 				}
 
-				if (unknownCountryIPs.size() >= 30)
-				{
+				if (unknownCountryIPs.size() >= 30) {
 					long time = System.currentTimeMillis() - unknownCountryIPs.poll();
 					int size = unknownCountryIPs.size();
-					if (time / size < 400)
-					{
+					if (time / size < 400) {
 						return false;
 					}
 				}
-				
-				if (unknownCountryIPs.size() >= 60)
-				{
+
+				if (unknownCountryIPs.size() >= 60) {
 					long time = System.currentTimeMillis() - unknownCountryIPs.poll();
 					int size = unknownCountryIPs.size();
-					if (time / size < 1000)
-					{
+					if (time / size < 1000) {
 						return false;
 					}
 				}
@@ -106,12 +91,10 @@ public class ForeignCountryChecker extends AntiBotChecker
 
 			return true;
 		} catch (Exception e) {
-			if (invalidCountryIPs.size() >= 5)
-			{
+			if (invalidCountryIPs.size() >= 5) {
 				int count = invalidCountryIPs.size();
 				long time = System.currentTimeMillis() - invalidCountryIPs.poll();
-				if (time / count <= 600)
-				{
+				if (time / count <= 600) {
 					return false;
 				}
 			}

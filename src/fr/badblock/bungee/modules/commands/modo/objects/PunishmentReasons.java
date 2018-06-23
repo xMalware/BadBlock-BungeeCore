@@ -65,8 +65,7 @@ public class PunishmentReasons {
 		load();
 	}
 
-	public void load()
-	{
+	public void load() {
 		banReasons.clear();
 		muteReasons.clear();
 		// Get the mongo service
@@ -76,7 +75,7 @@ public class PunishmentReasons {
 		loadBans(dbCollection);
 		loadMutes(dbCollection);
 	}
-	
+
 	/**
 	 * Load bans
 	 */
@@ -106,7 +105,7 @@ public class PunishmentReasons {
 		// Close the cursor
 		cursor.close();
 	}
-	
+
 	/**
 	 * Load mutes
 	 */

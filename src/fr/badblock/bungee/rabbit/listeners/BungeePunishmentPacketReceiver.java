@@ -24,7 +24,8 @@ public class BungeePunishmentPacketReceiver extends RabbitListener {
 	 */
 	public BungeePunishmentPacketReceiver() {
 		// Super!
-		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_PUNISHMENT, RabbitListenerType.MESSAGE_BROKER, false);
+		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_PUNISHMENT,
+				RabbitListenerType.MESSAGE_BROKER, false);
 		// Load the listener
 		load();
 	}
@@ -59,7 +60,7 @@ public class BungeePunishmentPacketReceiver extends RabbitListener {
 			// We stop there
 			return;
 		}
-		
+
 		// Process.
 		punishmentPacket.process();
 	}

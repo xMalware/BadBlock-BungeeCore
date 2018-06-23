@@ -344,8 +344,7 @@ public final class BadIP {
 			// Set punished
 			setPunished(new Punished(getJsonElement("punish").getAsJsonObject()));
 			// If the API data isn't null
-			if (!getJsonElement("apiData").isJsonNull())
-			{
+			if (!getJsonElement("apiData").isJsonNull()) {
 				// Set API data
 				setApiData(new IPHubObject(getJsonElement("apiData").getAsJsonObject()));
 			}
@@ -466,7 +465,7 @@ public final class BadIP {
 
 				// Updater with all data to set
 				BasicDBObject updater = new BasicDBObject("$set", getSavedObject());
-				
+
 				// Update data
 				collection.update(query, updater);
 			}
@@ -549,7 +548,7 @@ public final class BadIP {
 	 */
 	public void kick() {
 		BungeeManager bungeeManager = BungeeManager.getInstance();
-		
+
 		bungeeManager.getLoggedPlayers(getIp()).forEach(badPlayer -> badPlayer.kick(getBanIpMessage(badPlayer)));
 	}
 

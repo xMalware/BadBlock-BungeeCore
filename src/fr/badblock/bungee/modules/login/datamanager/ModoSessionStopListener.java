@@ -44,8 +44,7 @@ public class ModoSessionStopListener extends BadListener {
 		ModoSession modoSession = badPlayer.getModoSession();
 
 		// If the modo session object is null
-		if (modoSession == null)
-		{
+		if (modoSession == null) {
 			// So we stop there
 			return;
 		}
@@ -56,8 +55,7 @@ public class ModoSessionStopListener extends BadListener {
 		modoSession.setTimestamp(time);
 
 		long punishmentTime = modoSession.getPunishments() * (60 * 5);
-		if (punishmentTime > modoSession.getTotalTime())
-		{
+		if (punishmentTime > modoSession.getTotalTime()) {
 			punishmentTime = modoSession.getTotalTime();
 		}
 

@@ -5,13 +5,12 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class NickLog
-{
+public class NickLog {
 
-	private String	realName;
-	private String	realUuid;
-	private String	date;
-	private long	timestamp;
-	private String	nickname;
-	
+	private String realName;
+	private String realUuid;
+	private String date;
+	private long timestamp;
+	private String nickname;
+
 }

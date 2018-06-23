@@ -44,25 +44,20 @@ public class PartyMessageListener extends BadListener {
 
 		String message = event.getMessage();
 
-		if (message == null)
-		{
+		if (message == null) {
 			return;
 		}
 
-		if (message.startsWith("%"))
-		{
+		if (message.startsWith("%")) {
 			event.setCancelled(true);
-			if (message.length() > 1)
-			{
+			if (message.length() > 1) {
 				// Send the message
 				List<String> argList = new ArrayList<>();
 				argList.add("msg");
 				String[] array = message.split(" ");
-				for (int i = 0; i < array.length; i++)
-				{
+				for (int i = 0; i < array.length; i++) {
 					String word = array[i];
-					if (i == 0)
-					{
+					if (i == 0) {
 						word = word.substring(1, word.length());
 					}
 					argList.add(word);
@@ -70,9 +65,7 @@ public class PartyMessageListener extends BadListener {
 				String[] arr = new String[argList.size()];
 				arr = argList.toArray(arr);
 				PartyManager.msg(proxiedPlayer, arr);
-			}
-			else
-			{
+			} else {
 				// Usage
 				PartyManager.msg(proxiedPlayer, null);
 			}

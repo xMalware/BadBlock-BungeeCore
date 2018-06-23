@@ -21,7 +21,8 @@ public class BungeeStateReceiver extends RabbitListener {
 	 */
 	public BungeeStateReceiver() {
 		// Super!
-		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_STATE, RabbitListenerType.SUBSCRIBER, false);
+		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_STATE, RabbitListenerType.SUBSCRIBER,
+				false);
 		// Load the listener
 		load();
 	}
@@ -46,11 +47,10 @@ public class BungeeStateReceiver extends RabbitListener {
 			return;
 		}
 
-		if (!BungeeTask.bungeeObject.getName().equalsIgnoreCase(bungeeStatePacket.getName()))
-		{
+		if (!BungeeTask.bungeeObject.getName().equalsIgnoreCase(bungeeStatePacket.getName())) {
 			return;
 		}
-		
+
 		// Process.
 		BungeeTask.bungeeObject.setState(bungeeStatePacket.getState());
 	}

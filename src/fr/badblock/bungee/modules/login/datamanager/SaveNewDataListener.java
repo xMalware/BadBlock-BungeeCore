@@ -22,9 +22,8 @@ public class SaveNewDataListener extends BadListener {
 	public void onPlayerLogged(PlayerLoggedEvent event) {
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
-		
-		if (!badPlayer.isNew())
-		{
+
+		if (!badPlayer.isNew()) {
 			return;
 		}
 

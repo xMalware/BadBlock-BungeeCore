@@ -34,16 +34,14 @@ public class GWhitelistCommand extends BadCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		if (args.length == 0)
-		{
+		if (args.length == 0) {
 			I19n.sendMessage(sender, prefix + "usage", null);
 			return;
 		}
 
 		String subcommand = args[0];
 
-		switch (subcommand)
-		{
+		switch (subcommand) {
 		case "?":
 		case "help":
 		case "aide":
@@ -73,10 +71,8 @@ public class GWhitelistCommand extends BadCommand {
 		}
 	}
 
-	public void add(CommandSender sender, String[] args)
-	{
-		if (args.length != 2)
-		{
+	public void add(CommandSender sender, String[] args) {
+		if (args.length != 2) {
 			I19n.sendMessage(sender, prefix + "add.usage", null);
 			return;
 		}
@@ -105,14 +101,10 @@ public class GWhitelistCommand extends BadCommand {
 				// Get results
 				DBCursor cursor = collection.find(query);
 
-				try
-				{
-					if (cursor.hasNext())
-					{
+				try {
+					if (cursor.hasNext()) {
 						I19n.sendMessage(sender, prefix + "add.alreadyexists", null, username);
-					}
-					else
-					{
+					} else {
 						// Create query
 						DBObject adder = new BasicDBObject();
 
@@ -123,9 +115,7 @@ public class GWhitelistCommand extends BadCommand {
 
 						I19n.sendMessage(sender, prefix + "add.added", null, username);
 					}
-				}
-				catch (Exception error)
-				{
+				} catch (Exception error) {
 					error.printStackTrace();
 					I19n.sendMessage(sender, prefix + "add.erroroccurred", null, username);
 				}
@@ -136,10 +126,8 @@ public class GWhitelistCommand extends BadCommand {
 		});
 	}
 
-	public void remove(CommandSender sender, String[] args)
-	{
-		if (args.length != 2)
-		{
+	public void remove(CommandSender sender, String[] args) {
+		if (args.length != 2) {
 			I19n.sendMessage(sender, prefix + "remove.usage", null);
 			return;
 		}
@@ -168,14 +156,10 @@ public class GWhitelistCommand extends BadCommand {
 				// Get results
 				DBCursor cursor = collection.find(query);
 
-				try
-				{
-					if (!cursor.hasNext())
-					{
+				try {
+					if (!cursor.hasNext()) {
 						I19n.sendMessage(sender, prefix + "remove.notinwhitelist", null, username);
-					}
-					else
-					{
+					} else {
 						// Create query
 						DBObject remover = new BasicDBObject();
 
@@ -186,9 +170,7 @@ public class GWhitelistCommand extends BadCommand {
 
 						I19n.sendMessage(sender, prefix + "remove.removed", null, username);
 					}
-				}
-				catch (Exception error)
-				{
+				} catch (Exception error) {
 					error.printStackTrace();
 					I19n.sendMessage(sender, prefix + "remove.erroroccurred", null, username);
 				}
@@ -198,9 +180,8 @@ public class GWhitelistCommand extends BadCommand {
 			}
 		});
 	}
-	
-	public void list(CommandSender sender, String[] args)
-	{
+
+	public void list(CommandSender sender, String[] args) {
 		I19n.sendMessage(sender, prefix + "list.intro", null);
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
@@ -222,23 +203,18 @@ public class GWhitelistCommand extends BadCommand {
 				DBCursor cursor = collection.find(query);
 
 				boolean c = true;
-				try
-				{
-					while (cursor.hasNext())
-					{
+				try {
+					while (cursor.hasNext()) {
 						c = false;
 						DBObject dbObject = cursor.next();
 						String username = dbObject.get("name").toString();
 						I19n.sendMessage(sender, prefix + "list.message", null, username);
 					}
-					
-					if (c)
-					{
+
+					if (c) {
 						I19n.sendMessage(sender, prefix + "list.nobody", null);
 					}
-				}
-				catch (Exception error)
-				{
+				} catch (Exception error) {
 					error.printStackTrace();
 					I19n.sendMessage(sender, prefix + "list.erroroccurred", null);
 				}

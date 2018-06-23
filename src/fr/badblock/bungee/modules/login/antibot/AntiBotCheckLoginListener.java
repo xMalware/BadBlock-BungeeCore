@@ -19,8 +19,7 @@ import net.md_5.bungee.event.EventPriority;
  * @author xMalware
  *
  */
-public class AntiBotCheckLoginListener extends BadListener
-{
+public class AntiBotCheckLoginListener extends BadListener {
 
 	/**
 	 * When a player joins the server
@@ -28,64 +27,54 @@ public class AntiBotCheckLoginListener extends BadListener
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPreLogin(PreLoginEvent event)
-	{
+	public void onPreLogin(PreLoginEvent event) {
 		PendingConnection pendingConnection = event.getConnection();
 
-		if (pendingConnection == null)
-		{
+		if (pendingConnection == null) {
 			return;
 		}
 
 		InetSocketAddress inetSocketAddress = pendingConnection.getAddress();
 
-		if (inetSocketAddress == null)
-		{
+		if (inetSocketAddress == null) {
 			return;
 		}
 
 		InetAddress inetAddress = inetSocketAddress.getAddress();
 
-		if (inetAddress == null)
-		{
+		if (inetAddress == null) {
 			return;
 		}
 
 		String address = inetAddress.getHostAddress();
 		String username = pendingConnection.getName();
-		
-		if (AntiBotData.blockedAddresses.containsKey(address))
-		{
-			if (AntiBotData.blockedAddresses.get(address) > TimeUtils.time())
-			{
+
+		if (AntiBotData.blockedAddresses.containsKey(address)) {
+			if (AntiBotData.blockedAddresses.get(address) > TimeUtils.time()) {
 				event.setCancelled(true);
 				event.setCancelReason(I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.antibot.blocked", null));
 				return;
 			}
-		}
-		else if (AntiBotData.blockedUsernames.containsKey(username))
-		{
-			if (AntiBotData.blockedUsernames.get(username) > TimeUtils.time())
-			{
+		} else if (AntiBotData.blockedUsernames.containsKey(username)) {
+			if (AntiBotData.blockedUsernames.get(username) > TimeUtils.time()) {
 				event.setCancelled(true);
 				event.setCancelReason(I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.antibot.blocked", null));
 				return;
 			}
 		}
 
-		for (AntiBotChecker checker : AntiBotData.checkers)
-		{
-			if (!checker.accept(username, address))
-			{
+		for (AntiBotChecker checker : AntiBotData.checkers) {
+			if (!checker.accept(username, address)) {
 				AntiBotData.blockedUsernames.put(username, System.currentTimeMillis() + 300_000L);
 				AntiBotData.blockedAddresses.put(address, System.currentTimeMillis() + 300_000L);
 				event.setCancelled(true);
-				event.setCancelReason(I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.antibot.blockeddetails", null, checker.getId()));
+				event.setCancelReason(
+						I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.antibot.blockeddetails", null, checker.getId()));
 				BadBungee.log("§c[AntiBot] Rejected " + username + " from " + address + ".");
 				return;
 			}
 		}
-		
+
 		BadBungee.log("§a[AntiBot] Accepted " + username + " from " + address + ".");
 	}
 

@@ -9,40 +9,33 @@ import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class PlayerCleanerTask extends Thread
-{
-	
-	public PlayerCleanerTask()
-	{
+public class PlayerCleanerTask extends Thread {
+
+	public PlayerCleanerTask() {
 		start();
 	}
 
 	@Override
-	public void run()
-	{
-		while (true)
-		{
+	public void run() {
+		while (true) {
 			int removed = 0;
 			Iterator<BadPlayer> iterator = BadPlayer.getPlayers().iterator();
 			BungeeCord bungeeCord = BungeeCord.getInstance();
-			while (iterator.hasNext())
-			{
+			while (iterator.hasNext()) {
 				BadPlayer badPlayer = iterator.next();
 				ProxiedPlayer proxiedPlayer = bungeeCord.getPlayer(badPlayer.getName());
-				
-				if (proxiedPlayer == null)
-				{
-					if (!GlobalFlags.has(badPlayer.getName() + "_margin"))
-					{
+
+				if (proxiedPlayer == null) {
+					if (!GlobalFlags.has(badPlayer.getName() + "_margin")) {
 						iterator.remove();
 						removed++;
 					}
 				}
 			}
-			
-			if (removed > 0)
-			{
-				BungeeManager.getInstance().log("§e[BadBungee] Cleaned " + removed + " players. Bungee name: " + BungeeTask.bungeeObject.getName());
+
+			if (removed > 0) {
+				BungeeManager.getInstance().log("§e[BadBungee] Cleaned " + removed + " players. Bungee name: "
+						+ BungeeTask.bungeeObject.getName());
 			}
 			TimeUtils.sleepInSeconds(1);
 		}

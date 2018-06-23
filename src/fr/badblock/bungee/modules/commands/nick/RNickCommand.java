@@ -36,20 +36,18 @@ public class RNickCommand extends BadCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		if (args.length == 0)
-		{
+		if (args.length == 0) {
 			I19n.sendMessage(sender, prefix + "usage", null);
 			return;
 		}
-		
+
 		String name = args[0];
 
-		if (!name.matches("^\\w{3,16}$"))
-		{
+		if (!name.matches("^\\w{3,16}$")) {
 			I19n.sendMessage(sender, prefix + "invalidusername", null, name);
 			return;
 		}
-		
+
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();
 		// Use async mongo
@@ -71,10 +69,8 @@ public class RNickCommand extends BadCommand {
 				// Get results
 				DBCursor cursor = collection.find(query);
 
-				try
-				{
-					if (!cursor.hasNext())
-					{
+				try {
+					if (!cursor.hasNext()) {
 						I19n.sendMessage(sender, prefix + "nousername", null, name);
 						return;
 					}
@@ -84,11 +80,9 @@ public class RNickCommand extends BadCommand {
 
 					DBObject dbObject = cursor.next();
 					String realName = dbObject.get("name").toString();
-					
+
 					I19n.sendMessage(sender, prefix + "found", null, name, realName);
-				}
-				catch (Exception error)
-				{
+				} catch (Exception error) {
 					error.printStackTrace();
 					I19n.sendMessage(sender, prefix + "erroroccurred", null);
 				}

@@ -32,14 +32,12 @@ public class RegisterCommand extends BadCommand {
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		if (badPlayer.getLoginPassword() != null && !badPlayer.getLoginPassword().isEmpty())
-		{
+		if (badPlayer.getLoginPassword() != null && !badPlayer.getLoginPassword().isEmpty()) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "pleaselogin", null);
 			return;
 		}
 
-		if (args.length != 2)
-		{
+		if (args.length != 2) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "usage", null, proxiedPlayer.getName());
 			return;
 		}
@@ -47,14 +45,12 @@ public class RegisterCommand extends BadCommand {
 		String password = args[0];
 		String repeatPassword = args[1];
 
-		if (!HashLogin.isValidPassword(password))
-		{
+		if (!HashLogin.isValidPassword(password)) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "notsecureenough", null);
 			return;
 		}
 
-		if (!password.equals(repeatPassword))
-		{
+		if (!password.equals(repeatPassword)) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "notsamepasswords", null);
 			return;
 		}
@@ -62,27 +58,23 @@ public class RegisterCommand extends BadCommand {
 		String passwordHash = HashLogin.hash(password);
 
 		badPlayer.setLoginPassword(passwordHash);
-		try
-		{
+		try {
 			badPlayer.saveData();
-		}
-		catch (Exception exception)
-		{
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
 
 		ServerInfo server = SkeletonConnectorListener.roundrobinHub();
 
-		if (server == null)
-		{
+		if (server == null) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "nohubavailable", null, badPlayer.getName());
 			return;
 		}
-		
+
 		System.out.println(server.getName());
 
 		badPlayer.sendTranslatedOutgoingMessage(prefix + "registered", null, badPlayer.getName());
-	
+
 		HashLogin.log(badPlayer);
 
 		proxiedPlayer.connect(server);

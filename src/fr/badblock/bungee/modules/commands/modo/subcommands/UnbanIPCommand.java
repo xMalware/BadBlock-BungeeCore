@@ -55,8 +55,7 @@ public class UnbanIPCommand extends AbstractModCommand {
 
 		BadIP badIp = BadIP.get(badOfflinePlayer.getLastIp());
 
-		if (badIp == null || !badIp.isFound() || !badIp.isLoaded())
-		{
+		if (badIp == null || !badIp.isFound() || !badIp.isLoaded()) {
 			// Send a message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			// So we stop there
@@ -65,8 +64,7 @@ public class UnbanIPCommand extends AbstractModCommand {
 
 		Punished punished = badIp.getPunished();
 
-		if (punished == null)
-		{
+		if (punished == null) {
 			punished = new Punished();
 		}
 
@@ -225,8 +223,7 @@ public class UnbanIPCommand extends AbstractModCommand {
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
-		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound())
-		{
+		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound()) {
 			// Send a message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			// So we stop there
@@ -235,8 +232,7 @@ public class UnbanIPCommand extends AbstractModCommand {
 
 		BadIP badIp = BadIP.get(badOfflinePlayer.getLastIp());
 
-		if (badIp == null || !badIp.isLoaded() || !badIp.isFound())
-		{
+		if (badIp == null || !badIp.isLoaded() || !badIp.isFound()) {
 			// Send a message
 			I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			// So we stop there

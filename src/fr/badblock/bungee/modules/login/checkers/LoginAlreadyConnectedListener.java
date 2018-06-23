@@ -26,8 +26,7 @@ public class LoginAlreadyConnectedListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinEvent(PreLoginEvent event) {
-		if (event.isCancelled())
-		{
+		if (event.isCancelled()) {
 			return;
 		}
 		// We get the PendingConnection object
@@ -41,7 +40,9 @@ public class LoginAlreadyConnectedListener extends BadListener {
 		if (bungeeManager.hasUsername(connection.getName())) {
 			// We cancel the player connection with a specific message
 			event.setCancelled(true);
-			event.setCancelReason(StringUtils.join(badOfflinePlayer.getTranslatedMessages("bungee.login.alreadyconnected", null), System.lineSeparator()));
+			event.setCancelReason(
+					StringUtils.join(badOfflinePlayer.getTranslatedMessages("bungee.login.alreadyconnected", null),
+							System.lineSeparator()));
 		}
 	}
 

@@ -15,7 +15,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public class LoginCommand extends BadCommand {
 
 	private static String prefix = "bungee.commands.login.";
-	
+
 	/**
 	 * Command constructor
 	 */
@@ -32,38 +32,34 @@ public class LoginCommand extends BadCommand {
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		if (badPlayer.getLoginPassword() == null || badPlayer.getLoginPassword().isEmpty())
-		{
+		if (badPlayer.getLoginPassword() == null || badPlayer.getLoginPassword().isEmpty()) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "pleaseregister", null);
 			return;
 		}
-		
-		if (args.length != 1)
-		{
+
+		if (args.length != 1) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "usage", null, proxiedPlayer.getName());
 			return;
 		}
-		
+
 		String password = args[0];
-		
+
 		password = HashLogin.hash(password);
-		
-		if (!badPlayer.getLoginPassword().equals(password))
-		{
+
+		if (!badPlayer.getLoginPassword().equals(password)) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "invalidpassword", null);
 			return;
 		}
-		
+
 		ServerInfo server = SkeletonConnectorListener.roundrobinHub();
-		
-		if (server == null)
-		{
+
+		if (server == null) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "nohubavailable", null, badPlayer.getName());
 			return;
 		}
-		
+
 		HashLogin.log(badPlayer);
-		
+
 		badPlayer.sendTranslatedOutgoingMessage(prefix + "validpassword", null, badPlayer.getName());
 		proxiedPlayer.connect(server);
 	}

@@ -13,19 +13,16 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 
 public class TooFastLoginChatModule extends ChatModule {
-	
+
 	private Map<String, Queue<Long>> map = new HashMap<>();
-	
+
 	@Override
-	public ChatEvent check(ChatEvent event)
-	{
-		if (event.isCancelled())
-		{
+	public ChatEvent check(ChatEvent event) {
+		if (event.isCancelled()) {
 			return event;
 		}
 
-		if (!(event.getSender() instanceof ProxiedPlayer))
-		{
+		if (!(event.getSender() instanceof ProxiedPlayer)) {
 			return event;
 		}
 
@@ -33,41 +30,37 @@ public class TooFastLoginChatModule extends ChatModule {
 
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		if (badPlayer.isLoginStepOk() || badPlayer.isOnlineMode())
-		{
+		if (badPlayer.isLoginStepOk() || badPlayer.isOnlineMode()) {
 			return event;
 		}
-		
+
 		long time = TimeUtils.time() - badPlayer.getLoginTimestamp();
-		
-		if (time <= 1000)
-		{
+
+		if (time <= 1000) {
 			event.setCancelled(true);
-			
+
 			String address = badPlayer.getLastIp();
 			AntiBotData.reject(address, badPlayer.getName());
-			return event;	
+			return event;
 		}
-		
+
 		String message = event.getMessage();
 		Queue<Long> queue = !map.containsKey(message) ? Queues.newLinkedBlockingDeque() : map.get(message);
 		queue.add(TimeUtils.time());
-		
+
 		map.put(message, queue);
-		
-		if (queue.size() >= 5)
-		{
+
+		if (queue.size() >= 5) {
 			long between = TimeUtils.time() - queue.poll();
-			if (between <= 3000)
-			{
+			if (between <= 3000) {
 				event.setCancelled(true);
-				
+
 				String address = badPlayer.getLastIp();
 				AntiBotData.reject(address, badPlayer.getName());
 				return event;
 			}
 		}
-		
+
 		return event;
 	}
 

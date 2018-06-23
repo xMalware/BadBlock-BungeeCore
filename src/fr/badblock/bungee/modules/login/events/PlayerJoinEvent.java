@@ -36,7 +36,7 @@ public class PlayerJoinEvent extends Event {
 	 * @return Returns the PreLoginEvent object
 	 */
 	private PreLoginEvent preLoginEvent;
-	
+
 	/**
 	 * Cancel the message
 	 * 
@@ -50,9 +50,8 @@ public class PlayerJoinEvent extends Event {
 		// Remove the BadPlayer
 		badPlayer.remove();
 	}
-	
-	public boolean isCancelled()
-	{
+
+	public boolean isCancelled() {
 		return preLoginEvent.isCancelled();
 	}
 

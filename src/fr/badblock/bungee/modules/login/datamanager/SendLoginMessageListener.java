@@ -21,16 +21,15 @@ public class SendLoginMessageListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerCreated(PlayerCreatedEvent event) {
-		
+
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
-		
-		if (badPlayer.isOnlineMode())
-		{
+
+		if (badPlayer.isOnlineMode()) {
 			HashLogin.log(badPlayer);
 			return;
 		}
-		
+
 		HashLogin.sendLoginMessage(badPlayer);
 	}
 

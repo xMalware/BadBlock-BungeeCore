@@ -58,7 +58,7 @@ public class BanIpCommand extends AbstractModCommand {
 
 		// Get the target player
 		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
-		
+
 		// If he doesn't exist
 		if (badOfflinePlayer == null || !badOfflinePlayer.isLoaded() || !badOfflinePlayer.isFound()) {
 			// Send a message
@@ -192,7 +192,7 @@ public class BanIpCommand extends AbstractModCommand {
 				// Send the message
 				badPlayer.sendTranslatedOutgoingMessage(getPrefix("select_intro"), null, playerName);
 			} else
-				// If the sender isn't a player
+			// If the sender isn't a player
 			{
 				// Send the message
 				I19n.sendMessage(sender, getPrefix("select_intro"), null, playerName);
@@ -227,7 +227,7 @@ public class BanIpCommand extends AbstractModCommand {
 					// Send the message
 					badPlayer.sendTranslatedOutgoingMCJson(json);
 				} else
-					// If the sender isn't a player
+				// If the sender isn't a player
 				{
 					// Send the reason message
 					I19n.sendMessage(sender, getPrefix("reason." + entry.getKey()), null);
@@ -273,11 +273,8 @@ public class BanIpCommand extends AbstractModCommand {
 
 			// Not a key, just a message
 			isKey = false;
-		}
-		else
-		{
-			if (!sender.hasPermission(getPermission() + "." + rawBanReason))
-			{
+		} else {
+			if (!sender.hasPermission(getPermission() + "." + rawBanReason)) {
 				I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, playerName);
 				// So we stop there
 				return;

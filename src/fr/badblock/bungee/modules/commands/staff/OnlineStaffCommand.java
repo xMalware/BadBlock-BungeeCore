@@ -21,8 +21,8 @@ import net.md_5.bungee.api.CommandSender;
  */
 public class OnlineStaffCommand extends BadCommand {
 
-	private static String	prefix = "bungee.commands.onlinestaff.";
-	
+	private static String prefix = "bungee.commands.onlinestaff.";
+
 	/**
 	 * Command constructor
 	 */
@@ -36,31 +36,30 @@ public class OnlineStaffCommand extends BadCommand {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		Set<Permissible> permissibles = BungeeManager.getInstance().getLoggedPlayers(player -> player.hasPermission(getPermission()) &&
-				player.getPermissions().getHighestRank("bungee", true) != null)
-				.parallelStream().map(player -> player.getPermissions().getHighestRank("bungee", true)).sorted(new Comparator<Permissible>() {
+		Set<Permissible> permissibles = BungeeManager.getInstance()
+				.getLoggedPlayers(player -> player.hasPermission(getPermission())
+						&& player.getPermissions().getHighestRank("bungee", true) != null)
+				.parallelStream().map(player -> player.getPermissions().getHighestRank("bungee", true))
+				.sorted(new Comparator<Permissible>() {
 					public int compare(Permissible o1, Permissible o2) {
 						return Integer.valueOf(o1.getPower()).compareTo(o2.getPower());
 					}
 				}).collect(Collectors.toSet());
-		permissibles.forEach(permissible -> 
-		{
+		permissibles.forEach(permissible -> {
 			StringBuilder data = new StringBuilder();
 			data.append(I19n.getMessage(sender, prefix + "intro", new int[] { 0 }, permissible.getRawPrefix("chat")));
-			List<BadPlayer> usernames = BungeeManager.getInstance().getLoggedPlayers(player -> player.getPermissions().getHighestRank("bungee", true) != null
-					&& player.getPermissions().getHighestRank("bungee", false).getName().equalsIgnoreCase(permissible.getName()));
+			List<BadPlayer> usernames = BungeeManager.getInstance().getLoggedPlayers(
+					player -> player.getPermissions().getHighestRank("bungee", true) != null && player.getPermissions()
+							.getHighestRank("bungee", false).getName().equalsIgnoreCase(permissible.getName()));
 			boolean first = true;
-			for (BadPlayer badPlayer : usernames)
-			{
-				if (!first)
-				{
+			for (BadPlayer badPlayer : usernames) {
+				if (!first) {
 					data.append(I19n.getMessage(sender, prefix + "separator", null));
-				}
-				else
-				{
+				} else {
 					first = false;
 				}
-				data.append(I19n.getMessage(sender, prefix + "player", null, badPlayer.getName(), badPlayer.getLastServer()));
+				data.append(I19n.getMessage(sender, prefix + "player", null, badPlayer.getName(),
+						badPlayer.getLastServer()));
 			}
 			sender.sendMessage(data.toString());
 		});

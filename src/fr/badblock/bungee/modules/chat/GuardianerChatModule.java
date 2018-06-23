@@ -22,17 +22,15 @@ import net.md_5.bungee.api.event.ChatEvent;
 
 public class GuardianerChatModule extends ChatModule {
 
-	private List<String>	words = new ArrayList<>();
-	private List<String>	applicableCommands = new ArrayList<>();
+	private List<String> words = new ArrayList<>();
+	private List<String> applicableCommands = new ArrayList<>();
 
-	public GuardianerChatModule()
-	{
+	public GuardianerChatModule() {
 		reload();
 	}
 
 	@Override
-	public void reload()
-	{
+	public void reload() {
 		words.clear();
 		applicableCommands.clear();
 		// Get mongo service
@@ -56,32 +54,26 @@ public class GuardianerChatModule extends ChatModule {
 				// Get results
 				DBCursor cursor = collection.find(query);
 
-				try
-				{
-					while (cursor.hasNext())
-					{
+				try {
+					while (cursor.hasNext()) {
 						DBObject data = cursor.next();
 
 						BasicDBList wordlist = (BasicDBList) data.get("words");
 
-						wordlist.forEach(object ->
-						{
+						wordlist.forEach(object -> {
 							String name = object.toString();
 							words.add(name);
 						});
 
 						BasicDBList applicableCommandlist = (BasicDBList) data.get("applicableCommands");
 
-						applicableCommandlist.forEach(object ->
-						{
+						applicableCommandlist.forEach(object -> {
 							String name = object.toString();
 							applicableCommands.add(name);
 						});
 
 					}
-				}
-				catch (Exception error)
-				{
+				} catch (Exception error) {
 					error.printStackTrace();
 				}
 
@@ -92,15 +84,12 @@ public class GuardianerChatModule extends ChatModule {
 	}
 
 	@Override
-	public ChatEvent check(ChatEvent event)
-	{
-		if (event.isCancelled())
-		{
+	public ChatEvent check(ChatEvent event) {
+		if (event.isCancelled()) {
 			return event;
 		}
 
-		if (!(event.getSender() instanceof ProxiedPlayer))
-		{
+		if (!(event.getSender() instanceof ProxiedPlayer)) {
 			return event;
 		}
 
@@ -108,18 +97,15 @@ public class GuardianerChatModule extends ChatModule {
 
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		if (badPlayer.getPunished() != null && badPlayer.getPunished().isMute())
-		{
+		if (badPlayer.getPunished() != null && badPlayer.getPunished().isMute()) {
 			return event;
 		}
 
-		if (proxiedPlayer.hasPermission("chat.bypass"))
-		{
+		if (proxiedPlayer.hasPermission("chat.bypass")) {
 			return event;
 		}
 
-		if (!isApplicable(event))
-		{
+		if (!isApplicable(event)) {
 			return event;
 		}
 
@@ -129,21 +115,16 @@ public class GuardianerChatModule extends ChatModule {
 		return event;
 	}
 
-	private boolean isApplicable(ChatEvent chatEvent)
-	{
+	private boolean isApplicable(ChatEvent chatEvent) {
 		String message = chatEvent.getMessage();
 
-		if (message.startsWith("%"))
-		{
+		if (message.startsWith("%")) {
 			return true;
 		}
 
-		if (message.startsWith("/"))
-		{
-			for (String command : applicableCommands)
-			{
-				if (message.startsWith("/" + command + " "))
-				{
+		if (message.startsWith("/")) {
+			for (String command : applicableCommands) {
+				if (message.startsWith("/" + command + " ")) {
 					return true;
 				}
 			}
@@ -154,8 +135,7 @@ public class GuardianerChatModule extends ChatModule {
 		return true;
 	}
 
-	public void checkBadwords(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
-	{
+	public void checkBadwords(ChatEvent chatEvent, ProxiedPlayer proxiedPlayer, BadPlayer badPlayer) {
 		String message = chatEvent.getMessage();
 		String filteredMessage = applyFilter(message);
 
@@ -163,10 +143,10 @@ public class GuardianerChatModule extends ChatModule {
 		for (String badword : words) {
 
 			System.out.println("B - " + filteredMessage + " - " + badword);
-			if (filteredMessage.contains(badword) || message.contains(badword))
-			{
+			if (filteredMessage.contains(badword) || message.contains(badword)) {
 				System.out.println("C - " + filteredMessage + " - " + badword);
-				BadWord badWord = new BadWord("Guardianer", proxiedPlayer.getName(), message, System.currentTimeMillis(), DateUtils.getHourDate(), false, false);
+				BadWord badWord = new BadWord("Guardianer", proxiedPlayer.getName(), message,
+						System.currentTimeMillis(), DateUtils.getHourDate(), false, false);
 
 				// Get mongo service
 				MongoService mongoService = BadBungee.getInstance().getMongoService();
@@ -186,12 +166,12 @@ public class GuardianerChatModule extends ChatModule {
 						collection.insert(query);
 					}
 				});
-				
+
 				System.out.println("ok");
 
 				// We send the message and the sender to all concerned
-				BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.chat.reportbadword", "bungee.chat.reportbadword",
-						null, "Guardianer", badPlayer.getName(), message);
+				BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.chat.reportbadword",
+						"bungee.chat.reportbadword", null, "Guardianer", badPlayer.getName(), message);
 
 				break;
 				// player.sendMessage(BadBlockBungeeOthers.getInstance().getMessage(this.insultError));

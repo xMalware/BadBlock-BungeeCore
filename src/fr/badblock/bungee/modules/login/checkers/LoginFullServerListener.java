@@ -25,11 +25,10 @@ public class LoginFullServerListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
-		if (event.isCancelled())
-		{
+		if (event.isCancelled()) {
 			return;
 		}
-		
+
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// We'll use our bungee manager to determinate if the network is full
@@ -43,7 +42,8 @@ public class LoginFullServerListener extends BadListener {
 		// slots of the network
 		if (bungeeManager.getOnlinePlayers() >= bungeeManager.getSlots()) {
 			// We cancel his connection to the server
-			event.cancel(StringUtils.join(badPlayer.getTranslatedMessages("bungee.login.full", null), System.lineSeparator()));
+			event.cancel(StringUtils.join(badPlayer.getTranslatedMessages("bungee.login.full", null),
+					System.lineSeparator()));
 		}
 	}
 

@@ -29,12 +29,9 @@ public class NickConnectListener extends BadListener {
 
 		UserConnection userConnection = (UserConnection) proxiedPlayer;
 
-		if (badPlayer.getNickname() != null && !badPlayer.getNickname().isEmpty())
-		{
+		if (badPlayer.getNickname() != null && !badPlayer.getNickname().isEmpty()) {
 			userConnection.getPendingConnection().getLoginRequest().setData(badPlayer.getNickname());
-		}
-		else
-		{
+		} else {
 			userConnection.getPendingConnection().getLoginRequest().setData(proxiedPlayer.getName());
 		}
 	}

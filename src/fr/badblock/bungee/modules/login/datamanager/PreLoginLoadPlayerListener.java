@@ -46,7 +46,7 @@ public class PreLoginLoadPlayerListener extends BadListener {
 
 		// Set a margin flag
 		GlobalFlags.set(event.getConnection().getName() + "_margin", 5000);
-		
+
 		// We create a BadPlayer object
 		BadPlayer badPlayer = new BadPlayer(event.getConnection());
 

@@ -25,22 +25,19 @@ public class ICanLogYouListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onAsyncLoadData(AsyncDataLoadRequest event) {
-		if (event.isCancelled())
-		{
+		if (event.isCancelled()) {
 			return;
 		}
-		
+
 		String playerName = event.getPlayer();
-		
-		if (BadPlayer.has(playerName))
-		{
+
+		if (BadPlayer.has(playerName)) {
 			BadPlayer badPlayer = BadPlayer.get(playerName);
 			event.getDone().done(new Result(badPlayer.getSavedObject(), null), null);
 			BungeeCord.getInstance().getPluginManager().callEvent(new PlayerCreatedEvent(badPlayer));
-		}
-		else
-		{
-			Result result = new Result(null, I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.errors.unabletoloadplayerdata", null));
+		} else {
+			Result result = new Result(null,
+					I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.errors.unabletoloadplayerdata", null));
 			event.getDone().done(result, null);
 		}
 	}

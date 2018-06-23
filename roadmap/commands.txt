@@ -2,29 +2,7 @@ ToDo BadBlockBungee:
 
 
 - Commands:
-/onlinestaff
-/scale
-/spymsg
-/done
-/gnick
-/rnick
-
-T - /ban
-T - /btps
-T - /msg
-T - /r
-T - /addserver
-T - /removeserver
-T - /connect
-T - /ghostconnect
-T - /fkick
-T - /kick
-T - /modo
-T - /report
-T - /tempban
-T - /mute
-T - /unmute
-T - /unban
-T - /warn
-T - /sanction
-T - /track
+/done - serveur idle
+/????? - changer les paramètres de confidentialité du /msg
+/changepassword - Changer son mot de passe
+/login /register - Ajouter un fix : déjà connecté

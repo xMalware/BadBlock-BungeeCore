@@ -83,7 +83,7 @@ public class ReportCommand extends BadCommand {
 			boolean hasReason = false;
 
 			int reasons = 0;
-			
+
 			// For each type
 			for (ReportType reportType : ReportType.values()) {
 				// If the sender doesn't have the permission

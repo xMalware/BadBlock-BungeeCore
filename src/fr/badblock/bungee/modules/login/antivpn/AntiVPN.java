@@ -144,8 +144,7 @@ public class AntiVPN extends Thread {
 		// Get the source code
 		String sourceCode = NetworkUtils.fetchSourceCodeWithAPI(url, apiKey);
 
-		if (sourceCode == null)
-		{
+		if (sourceCode == null) {
 			BadBungee.log("§c[VPN] Unable to check IP.");
 			return false;
 		}

@@ -66,24 +66,24 @@ public class PartyCommand extends BadCommand {
 			help(proxiedPlayer);
 			break;
 
-			// Follow the party
+		// Follow the party
 		case "follow":
 		case "suivi":
 		case "suivre":
 			PartyManager.follow(proxiedPlayer);
 			break;
 
-			// Toggle parties
+		// Toggle parties
 		case "toggle":
 			PartyManager.toggle(proxiedPlayer, args);
 			break;
 
-			// Msg parties
+		// Msg parties
 		case "msg":
 			PartyManager.msg(proxiedPlayer, args);
 			break;
 
-			// Invite a player
+		// Invite a player
 		case "invite":
 		case "create":
 		case "creer":
@@ -93,13 +93,13 @@ public class PartyCommand extends BadCommand {
 			PartyManager.invite(proxiedPlayer, args);
 			break;
 
-			// Accept a player
+		// Accept a player
 		case "accept":
 		case "accepter":
 			PartyManager.accept(proxiedPlayer, args);
 			break;
 
-			// Remove a player
+		// Remove a player
 		case "remove":
 		case "delete":
 		case "erase":
@@ -108,26 +108,26 @@ public class PartyCommand extends BadCommand {
 			PartyManager.remove(proxiedPlayer, args);
 			break;
 
-			// Set as modo
+		// Set as modo
 		case "modo":
 		case "mod":
 			PartyManager.modo(proxiedPlayer, args);
 			break;
 
-			// List
+		// List
 		case "list":
 		case "liste":
 			PartyManager.list(proxiedPlayer);
 			break;
 
-			// Leave
+		// Leave
 		case "leave":
 		case "quit":
 		case "quitter":
 			PartyManager.leave(proxiedPlayer, args);
 			break;
 
-			// Teleport a player
+		// Teleport a player
 		case "tp":
 		case "teleport":
 		case "connect":
@@ -135,7 +135,7 @@ public class PartyCommand extends BadCommand {
 			PartyManager.tp(proxiedPlayer, args);
 			break;
 
-			// Unknown subcommand
+		// Unknown subcommand
 		default:
 			unknown(proxiedPlayer);
 			break;

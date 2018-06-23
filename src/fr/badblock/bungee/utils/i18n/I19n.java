@@ -100,7 +100,7 @@ public class I19n {
 		// Get the message
 		return I18n.getInstance().get(locale, key, resultArgs);
 	}
-	
+
 	/**
 	 * Get message
 	 * 

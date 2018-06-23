@@ -182,7 +182,7 @@ public class MuteCommand extends AbstractModCommand {
 				// Send the message
 				badPlayer.sendTranslatedOutgoingMessage(getPrefix("select_intro"), null, playerName);
 			} else
-				// If the sender isn't a player
+			// If the sender isn't a player
 			{
 				// Send the message
 				I19n.sendMessage(sender, getPrefix("select_intro"), null, playerName);
@@ -217,7 +217,7 @@ public class MuteCommand extends AbstractModCommand {
 					// Send the message
 					badPlayer.sendTranslatedOutgoingMCJson(json);
 				} else
-					// If the sender isn't a player
+				// If the sender isn't a player
 				{
 					// Send the reason message
 					I19n.sendMessage(sender, getPrefix("reason." + entry.getKey()), null);
@@ -257,11 +257,8 @@ public class MuteCommand extends AbstractModCommand {
 			I19n.sendMessage(sender, getPrefix("unknownreason"), null);
 			// So we stop there
 			return;
-		}
-		else
-		{
-			if (!sender.hasPermission(getPermission() + "." + rawMuteReason))
-			{
+		} else {
+			if (!sender.hasPermission(getPermission() + "." + rawMuteReason)) {
 				I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, playerName);
 				// So we stop there
 				return;

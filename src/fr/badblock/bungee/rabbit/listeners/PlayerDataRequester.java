@@ -28,8 +28,7 @@ public class PlayerDataRequester extends RabbitRequestListener {
 	 * When we receive a packet
 	 */
 	@Override
-	public String reply(String playerName)
-	{
+	public String reply(String playerName) {
 		System.out.println("Requester A");
 		// Get the local manager
 		BungeeLocalManager bungeeLocalManager = BungeeLocalManager.getInstance();
@@ -40,8 +39,7 @@ public class PlayerDataRequester extends RabbitRequestListener {
 			// Get offline player
 			BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 			System.out.println("Requester C");
-			if (badOfflinePlayer.getDbObject() == null)
-			{
+			if (badOfflinePlayer.getDbObject() == null) {
 				System.out.println("Requester D");
 				return null;
 			}
@@ -61,8 +59,7 @@ public class PlayerDataRequester extends RabbitRequestListener {
 			// Get offline player
 			BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 			System.out.println("Requester I");
-			if (badOfflinePlayer.getDbObject() == null)
-			{
+			if (badOfflinePlayer.getDbObject() == null) {
 				System.out.println("Requester J");
 				return null;
 			}
@@ -71,15 +68,13 @@ public class PlayerDataRequester extends RabbitRequestListener {
 			return badOfflinePlayer.getDbObject().toJson();
 		}
 
-
-		if (badPlayer.getDbObject() == null)
-		{
+		if (badPlayer.getDbObject() == null) {
 			System.out.println("Requester L");
 			return null;
 		}
-		
+
 		System.out.println("Requester M");
-		
+
 		return badPlayer.getDbObject().toJson();
 	}
 

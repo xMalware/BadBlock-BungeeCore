@@ -13,16 +13,14 @@ import lombok.Data;
  */
 @AllArgsConstructor
 @Data
-public class ConnectionLog
-{
+public class ConnectionLog {
 
-	private String	username;
-	private String	lastIp;
-	private String	date;
-	private long	timestamp;
-	
-	public DBObject toDatabaseObject()
-	{
+	private String username;
+	private String lastIp;
+	private String date;
+	private long timestamp;
+
+	public DBObject toDatabaseObject() {
 		DBObject dbObject = new BasicDBObject();
 		dbObject.put("username", username);
 		dbObject.put("lastIp", lastIp);
@@ -30,5 +28,5 @@ public class ConnectionLog
 		dbObject.put("timestamp", timestamp);
 		return dbObject;
 	}
-	
+
 }

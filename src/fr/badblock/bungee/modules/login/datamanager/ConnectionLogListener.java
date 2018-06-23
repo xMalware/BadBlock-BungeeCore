@@ -52,10 +52,10 @@ public class ConnectionLogListener extends BadListener {
 				DB db = mongoService.getDb();
 				// Get the collection
 				DBCollection collection = db.getCollection("connectionLogs");
-				
+
 				// Create query
 				DBObject query = connectionLog.toDatabaseObject();
-				
+
 				// Insert
 				collection.insert(query);
 			}

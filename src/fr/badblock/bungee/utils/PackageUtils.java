@@ -18,8 +18,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 public class PackageUtils {
 
 	private static boolean inheritFrom(Class<?> clazz, Class<?> from) {
-		if (Modifier.isAbstract(clazz.getModifiers()))
-		{
+		if (Modifier.isAbstract(clazz.getModifiers())) {
 			return false;
 		}
 		while (clazz != Object.class) {
@@ -62,9 +61,9 @@ public class PackageUtils {
 
 					Class<?> clazz = plugin.getClass().getClassLoader().loadClass(className);
 
-					if (inheritFrom(clazz, BadListener.class) || inheritFrom(clazz, RabbitListener.class)|| inheritFrom(clazz, RabbitRequestListener.class)
-							|| inheritFrom(clazz, BadCommand.class) || inheritFrom(clazz, _BungeeProcessing.class)
-							|| inheritFrom(clazz, ChatModule.class)) {
+					if (inheritFrom(clazz, BadListener.class) || inheritFrom(clazz, RabbitListener.class)
+							|| inheritFrom(clazz, RabbitRequestListener.class) || inheritFrom(clazz, BadCommand.class)
+							|| inheritFrom(clazz, _BungeeProcessing.class) || inheritFrom(clazz, ChatModule.class)) {
 						instanciate(clazz);
 					}
 				} catch (Exception exception) {

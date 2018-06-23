@@ -40,8 +40,7 @@ public class GNickCommand extends BadCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		if (args.length == 0)
-		{
+		if (args.length == 0) {
 			I19n.sendMessage(sender, prefix + "usage", null);
 			return;
 		}
@@ -51,14 +50,10 @@ public class GNickCommand extends BadCommand {
 
 		String name = args[0];
 
-		if (name.equalsIgnoreCase("off"))
-		{
-			if (badPlayer.getNickname() == null || badPlayer.getNickname().isEmpty())
-			{
+		if (name.equalsIgnoreCase("off")) {
+			if (badPlayer.getNickname() == null || badPlayer.getNickname().isEmpty()) {
 				I19n.sendMessage(sender, prefix + "nonickname", null);
-			}
-			else
-			{
+			} else {
 				badPlayer.setNickname(null);
 				badPlayer.updateNickname();
 				I19n.sendMessage(sender, prefix + "removed", null);
@@ -66,14 +61,12 @@ public class GNickCommand extends BadCommand {
 			return;
 		}
 
-		if (!name.matches("^\\w{3,16}$"))
-		{
+		if (!name.matches("^\\w{3,16}$")) {
 			I19n.sendMessage(sender, prefix + "invalidusername", null, name);
 			return;
 		}
 
-		if (badPlayer.getNickname().equals(name))
-		{
+		if (badPlayer.getNickname().equals(name)) {
 			I19n.sendMessage(sender, prefix + "youalreadyhavethisnickname", null, name);
 		}
 
@@ -98,23 +91,21 @@ public class GNickCommand extends BadCommand {
 				// Get results
 				DBCursor cursor = collection.find(query);
 
-				try
-				{
-					if (!cursor.hasNext())
-					{
+				try {
+					if (!cursor.hasNext()) {
 						I19n.sendMessage(sender, prefix + "alreadynickname", null, name);
 						return;
 					}
 
 					// Close the cursor
 					cursor.close();
-					
+
 					badPlayer.setNickname(name);
 					badPlayer.updateNickname();
-					
+
 					NickLog nickLog = new NickLog(badPlayer.getName().toLowerCase(), badPlayer.getUniqueId().toString(),
 							DateUtils.getHourDate(), System.currentTimeMillis(), name);
-					
+
 					// Get the database
 					DB logDb = mongoService.getDb();
 					// Get the collection
@@ -129,11 +120,9 @@ public class GNickCommand extends BadCommand {
 					logQuery.put("nickname", nickLog.getNickname());
 
 					logCollection.insert(logQuery);
-					
+
 					I19n.sendMessage(sender, prefix + "set", null, name);
-				}
-				catch (Exception error)
-				{
+				} catch (Exception error) {
 					error.printStackTrace();
 					I19n.sendMessage(sender, prefix + "erroroccurred", null);
 				}

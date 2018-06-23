@@ -36,15 +36,13 @@ public class PermissionsCommand extends BadCommand {
 	 */
 	@Override
 	public void run(CommandSender sender, String[] args) {
-		if (args.length == 0)
-		{
+		if (args.length == 0) {
 			I19n.sendMessage(sender, prefix + "usage", null);
 		}
 
 		String subcommand = args[0];
 
-		switch (subcommand)
-		{
+		switch (subcommand) {
 		case "help":
 		case "?":
 		case "aide":
@@ -59,34 +57,29 @@ public class PermissionsCommand extends BadCommand {
 		}
 	}
 
-	public void user(CommandSender sender, String[] args)
-	{
-		if (args.length < 2)
-		{
+	public void user(CommandSender sender, String[] args) {
+		if (args.length < 2) {
 			I19n.sendMessage(sender, prefix + "user.usage", null);
 			return;
 		}
 
 		String playerName = args[1];
 
-		if (args.length < 3)
-		{
+		if (args.length < 3) {
 			I19n.sendMessage(sender, prefix + "user.usage", null);
 			return;
 		}
 
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
-		if (badOfflinePlayer == null || !badOfflinePlayer.isFound() || !badOfflinePlayer.isLoaded())
-		{
+		if (badOfflinePlayer == null || !badOfflinePlayer.isFound() || !badOfflinePlayer.isLoaded()) {
 			I19n.sendMessage(sender, prefix + "user.unknownplayer", null);
 			return;
 		}
 
 		String subcommand = args[2];
 
-		switch (subcommand)
-		{
+		switch (subcommand) {
 		case "group":
 		case "groups":
 			userGroup(sender, args, badOfflinePlayer);
@@ -101,19 +94,16 @@ public class PermissionsCommand extends BadCommand {
 		}
 	}
 
-	private void userGroup(CommandSender sender, String[] args, BadOfflinePlayer badOfflinePlayer)
-	{
+	private void userGroup(CommandSender sender, String[] args, BadOfflinePlayer badOfflinePlayer) {
 		// perms user <pseudo> groups <something>
-		if (args.length < 4)
-		{
+		if (args.length < 4) {
 			I19n.sendMessage(sender, prefix + "user.group.usage", null);
 			return;
 		}
 
 		String subcommand = args[3];
 
-		switch (subcommand)
-		{
+		switch (subcommand) {
 		case "add":
 		case "ajouter":
 		case "a":
@@ -132,43 +122,31 @@ public class PermissionsCommand extends BadCommand {
 		}
 	}
 
-	public void userGroupAdd(CommandSender sender, String[] args, BadOfflinePlayer badOfflinePlayer)
-	{
+	public void userGroupAdd(CommandSender sender, String[] args, BadOfflinePlayer badOfflinePlayer) {
 		// perms user <pseudo> group add <server> <permission> <time>
-		if (args.length < 6)
-		{
+		if (args.length < 6) {
 			I19n.sendMessage(sender, prefix + "user.groups.add.usage", null);
 			return;
 		}
 
 		long time = Long.MIN_VALUE;
 
-		if (args.length == 7)
-		{
-			try
-			{
-				if (args[6].equalsIgnoreCase("-1"))
-				{
+		if (args.length == 7) {
+			try {
+				if (args[6].equalsIgnoreCase("-1")) {
 					time = -1;
-				}
-				else
-				{
+				} else {
 					time = Time.MILLIS_SECOND.matchTime(args[6]);
 				}
-			}
-			catch (Exception error)
-			{
+			} catch (Exception error) {
 				I19n.sendMessage(sender, prefix + "user.groups.add.errortime", null);
 				return;
 			}
-		}
-		else
-		{
+		} else {
 			time = -1L;
 		}
 
-		if (time == Long.MIN_VALUE)
-		{
+		if (time == Long.MIN_VALUE) {
 			I19n.sendMessage(sender, prefix + "user.groups.add.errortime", null);
 			return;
 		}
@@ -178,30 +156,24 @@ public class PermissionsCommand extends BadCommand {
 
 		Permissible permissible = PermissionsManager.getManager().getGroup(group);
 
-		if (permissible == null)
-		{
+		if (permissible == null) {
 			I19n.sendMessage(sender, prefix + "user.groups.add.unknowngroup", null);
 			return;
 		}
 
 		Map<String, Long> map = null;
-		if (!badOfflinePlayer.getPermissions().getGroups().containsKey(server))
-		{
+		if (!badOfflinePlayer.getPermissions().getGroups().containsKey(server)) {
 			map = new HashMap<>();
-		}
-		else
-		{
+		} else {
 			map = badOfflinePlayer.getPermissions().getGroups().get(server);
 		}
 
 		long currentTime = 0L;
-		if (map.containsKey(permissible.getName()))
-		{
+		if (map.containsKey(permissible.getName())) {
 			currentTime = map.get(permissible.getName());
 		}
 
-		if (currentTime == -1 || !TimeUtils.isExpired(currentTime))
-		{
+		if (currentTime == -1 || !TimeUtils.isExpired(currentTime)) {
 			I19n.sendMessage(sender, prefix + "user.groups.add.alreadyingroup", null);
 			return;
 		}
@@ -209,14 +181,13 @@ public class PermissionsCommand extends BadCommand {
 		map.put(permissible.getName(), System.currentTimeMillis() + time);
 		badOfflinePlayer.getPermissions().getGroups().put(server, map);
 		save(badOfflinePlayer);
-		I19n.sendMessage(sender, prefix + "user.groups.add.added", null, badOfflinePlayer.getName(), permissible.getName(), server, Time.MILLIS_SECOND.toFrench(time));
+		I19n.sendMessage(sender, prefix + "user.groups.add.added", null, badOfflinePlayer.getName(),
+				permissible.getName(), server, Time.MILLIS_SECOND.toFrench(time));
 	}
 
-	public void userGroupRemove(CommandSender sender, String[] args, BadOfflinePlayer badOfflinePlayer)
-	{
+	public void userGroupRemove(CommandSender sender, String[] args, BadOfflinePlayer badOfflinePlayer) {
 		// perms user <pseudo> group remove <server> <permission>
-		if (args.length != 6)
-		{
+		if (args.length != 6) {
 			I19n.sendMessage(sender, prefix + "user.groups.remove.usage", null);
 			return;
 		}
@@ -226,20 +197,17 @@ public class PermissionsCommand extends BadCommand {
 
 		Permissible permissible = PermissionsManager.getManager().getGroup(group);
 
-		if (permissible == null)
-		{
+		if (permissible == null) {
 			I19n.sendMessage(sender, prefix + "user.groups.remove.unknowngroup", null);
 			return;
 		}
 
 		Map<String, Long> map = null;
-		if (badOfflinePlayer.getPermissions().getGroups().containsKey(server))
-		{
+		if (badOfflinePlayer.getPermissions().getGroups().containsKey(server)) {
 			map = badOfflinePlayer.getPermissions().getGroups().get(server);
 		}
 
-		if (map == null || !map.containsKey(permissible.getName()))
-		{
+		if (map == null || !map.containsKey(permissible.getName())) {
 			I19n.sendMessage(sender, prefix + "user.groups.remove.notingroup", null);
 			return;
 		}
@@ -247,14 +215,13 @@ public class PermissionsCommand extends BadCommand {
 		map.remove(permissible.getName());
 		badOfflinePlayer.getPermissions().getGroups().put(server, map);
 		save(badOfflinePlayer);
-		I19n.sendMessage(sender, prefix + "user.groups.remove.removed", null, badOfflinePlayer.getName(), permissible.getName(), server);
+		I19n.sendMessage(sender, prefix + "user.groups.remove.removed", null, badOfflinePlayer.getName(),
+				permissible.getName(), server);
 	}
 
-	public void userDestroy(CommandSender sender, String[] args, BadOfflinePlayer badOfflinePlayer)
-	{
+	public void userDestroy(CommandSender sender, String[] args, BadOfflinePlayer badOfflinePlayer) {
 		// perms user <pseudo> destroy
-		if (args.length != 3)
-		{
+		if (args.length != 3) {
 			I19n.sendMessage(sender, prefix + "user.destroy.usage", null);
 			return;
 		}
@@ -264,20 +231,17 @@ public class PermissionsCommand extends BadCommand {
 		HashMap<String, Long> defaultBungeePermissions = new HashMap<>();
 		defaultBungeePermissions.put("default", -1L);
 		permissions.getGroups().put("bungee", defaultBungeePermissions);
-		
+
 		badOfflinePlayer.setPermissions(permissions);
-		
+
 		save(badOfflinePlayer);
 		I19n.sendMessage(sender, prefix + "user.destroy.destroyed", null, badOfflinePlayer.getName());
 	}
 
-	public void save(BadOfflinePlayer badOfflinePlayer)
-	{
-		if (badOfflinePlayer.isOnline())
-		{
+	public void save(BadOfflinePlayer badOfflinePlayer) {
+		if (badOfflinePlayer.isOnline()) {
 			BadPlayer targetPlayer = badOfflinePlayer.getOnlineBadPlayer();
-			if (targetPlayer == null)
-			{
+			if (targetPlayer == null) {
 				try {
 					badOfflinePlayer.saveData();
 				} catch (Exception e) {

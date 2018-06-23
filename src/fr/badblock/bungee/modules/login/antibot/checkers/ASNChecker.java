@@ -11,18 +11,16 @@ import com.google.common.collect.Queues;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.AsnResponse;
 
-public class ASNChecker extends AntiBotChecker
-{
+public class ASNChecker extends AntiBotChecker {
 
-	public Map<Integer, Queue<Long>> 	asn				= new HashMap<>();
-	public Map<Integer, Queue<Long>>	blockedAsn		= new HashMap<>();
+	public Map<Integer, Queue<Long>> asn = new HashMap<>();
+	public Map<Integer, Queue<Long>> blockedAsn = new HashMap<>();
 
-	public Queue<Long>					invalidASNIPs	= Queues.newLinkedBlockingDeque();
+	public Queue<Long> invalidASNIPs = Queues.newLinkedBlockingDeque();
 
-	private	DatabaseReader	reader;
+	private DatabaseReader reader;
 
-	public ASNChecker()
-	{
+	public ASNChecker() {
 		File database = new File("geoip/GeoIP2-ASN.mmdb");
 
 		try {
@@ -33,14 +31,12 @@ public class ASNChecker extends AntiBotChecker
 	}
 
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return 1;
 	}
-	
+
 	@Override
-	public boolean accept(String username, String address)
-	{
+	public boolean accept(String username, String address) {
 		try {
 			InetAddress ipAddress = InetAddress.getByName(address);
 
@@ -48,8 +44,7 @@ public class ASNChecker extends AntiBotChecker
 
 			int id = response.getAutonomousSystemNumber();
 
-			if (!asn.containsKey(id))
-			{
+			if (!asn.containsKey(id)) {
 				Queue<Long> queue = Queues.newLinkedBlockingDeque();
 				asn.put(id, queue);
 				return true;
@@ -60,67 +55,56 @@ public class ASNChecker extends AntiBotChecker
 			queue.add(System.currentTimeMillis());
 			asn.put(id, queue);
 
-			if (blockedAsn.containsKey(id))
-			{
+			if (blockedAsn.containsKey(id)) {
 				return false;
 			}
 
-			if (queue.size() >= 5)
-			{
+			if (queue.size() >= 5) {
 				long time = System.currentTimeMillis() - queue.poll();
 				int count = queue.size();
-				
-				if (time / count < 200)
-				{
+
+				if (time / count < 200) {
 					return false;
 				}
 			}
-			
-			if (queue.size() >= 10)
-			{
+
+			if (queue.size() >= 10) {
 				long time = System.currentTimeMillis() - queue.poll();
 				int count = queue.size();
-				
-				if (time / count < 300)
-				{
+
+				if (time / count < 300) {
 					return false;
 				}
 			}
-			
-			if (queue.size() >= 30)
-			{
+
+			if (queue.size() >= 30) {
 				long time = System.currentTimeMillis() - queue.poll();
 				int count = queue.size();
-				
-				if (time / count < 400)
-				{
+
+				if (time / count < 400) {
 					return false;
 				}
 			}
-			
-			if (queue.size() >= 60)
-			{
+
+			if (queue.size() >= 60) {
 				long time = System.currentTimeMillis() - queue.poll();
 				int count = queue.size();
-				
-				if (time / count < 500)
-				{
+
+				if (time / count < 500) {
 					return false;
 				}
 			}
 
 			return true;
 		} catch (Exception e) {
-			if (invalidASNIPs.size() >= 5)
-			{
+			if (invalidASNIPs.size() >= 5) {
 				int count = invalidASNIPs.size();
 				long time = System.currentTimeMillis() - invalidASNIPs.poll();
-				if (time / count <= 600)
-				{
+				if (time / count <= 600) {
 					return false;
 				}
 			}
-			
+
 			invalidASNIPs.add(System.currentTimeMillis());
 			return true;
 		}

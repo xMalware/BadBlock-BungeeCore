@@ -32,11 +32,10 @@ public class WhitelistCheckListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
-		if (event.isCancelled())
-		{
+		if (event.isCancelled()) {
 			return;
 		}
-		
+
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 
@@ -53,15 +52,12 @@ public class WhitelistCheckListener extends BadListener {
 		// Get results
 		DBCursor cursor = collection.find(query);
 
-		if (badPlayer.hasPermission("bungee.command.whitelist.bypass"))
-		{
+		if (badPlayer.hasPermission("bungee.command.whitelist.bypass")) {
 			return;
 		}
-		
-		try
-		{
-			if (!cursor.hasNext())
-			{
+
+		try {
+			if (!cursor.hasNext()) {
 				return;
 			}
 
@@ -72,14 +68,12 @@ public class WhitelistCheckListener extends BadListener {
 
 			cursor = collection.find(checker);
 
-			if (!cursor.hasNext())
-			{
-				event.cancel(StringUtils.join(badPlayer.getTranslatedMessages("bungee.login.notinwhitelist", null), System.lineSeparator()));
+			if (!cursor.hasNext()) {
+				event.cancel(StringUtils.join(badPlayer.getTranslatedMessages("bungee.login.notinwhitelist", null),
+						System.lineSeparator()));
 			}
 
-		}
-		catch (Exception error)
-		{
+		} catch (Exception error) {
 			error.printStackTrace();
 		}
 

@@ -67,7 +67,7 @@ public class BungeeLoader {
 	 * @return Returns the current BadBungee config
 	 */
 	private BadBungeeConfig config;
-	
+
 	private PunishmentReasons punishmentReasons;
 
 	/**
@@ -118,12 +118,11 @@ public class BungeeLoader {
 	private void loadPunishmentTable() {
 		setPunishmentReasons(new PunishmentReasons());
 	}
-	
+
 	/**
 	 * Reload table
 	 */
-	public void reload()
-	{
+	public void reload() {
 		getPunishmentReasons().load();
 		ChatModule.getModules().forEach(chatModule -> chatModule.reload());
 		loadPermissions();

@@ -50,7 +50,7 @@ public class ModoCommand extends BadCommand {
 			I19n.sendMessage(sender, prefix + "pleasewait", null);
 			return;
 		}
-		
+
 		badPlayer.getFlags().set("modomessage", 120_000L);
 
 		String message = StringUtils.join(args, " ");

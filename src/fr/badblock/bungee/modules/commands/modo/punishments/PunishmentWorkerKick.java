@@ -18,24 +18,19 @@ import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class PunishmentWorkerKick extends PunishmentWorker
-{
+public class PunishmentWorkerKick extends PunishmentWorker {
 
 	@Override
-	public PunishmentType getType()
-	{
+	public PunishmentType getType() {
 		return PunishmentType.KICK;
 	}
 
 	@Override
-	public void process(CommandSender sender, String playerName, String reason, boolean isKey, long time)
-	{
+	public void process(CommandSender sender, String playerName, String reason, boolean isKey, long time) {
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 
-		if (!bungeeManager.hasUsername(playerName))
-		{
-			if (sender != null)
-			{
+		if (!bungeeManager.hasUsername(playerName)) {
+			if (sender != null) {
 				I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			}
 			return;
@@ -44,10 +39,8 @@ public class PunishmentWorkerKick extends PunishmentWorker
 		// Get the online target player
 		BadPlayer badOnlinePlayer = BungeeManager.getInstance().getBadPlayer(playerName);
 
-		if (badOnlinePlayer == null || !badOnlinePlayer.isFound() || !badOnlinePlayer.isLoaded())
-		{
-			if (sender != null)
-			{
+		if (badOnlinePlayer == null || !badOnlinePlayer.isFound() || !badOnlinePlayer.isLoaded()) {
+			if (sender != null) {
 				I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			}
 			return;
@@ -62,8 +55,7 @@ public class PunishmentWorkerKick extends PunishmentWorker
 
 		BadPlayer badPlayer = null;
 
-		if (sender != null && sender instanceof ProxiedPlayer)
-		{
+		if (sender != null && sender instanceof ProxiedPlayer) {
 			ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 			badPlayer = BadPlayer.get(proxiedPlayer);
 			byPlayer = badPlayer.getName();
@@ -102,26 +94,20 @@ public class PunishmentWorkerKick extends PunishmentWorker
 		// Array to translate
 		int[] arr = null;
 
-		if (badPlayer != null)
-		{
+		if (badPlayer != null) {
 			arr = isKey ? new int[] { 0, 2, 5 } : new int[] { 0, 2 };
-		}
-		else
-		{
+		} else {
 			arr = isKey ? new int[] { 5 } : null;
 		}
 
 		// We send the message and the sender to all concerned
-		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatkick"),
-				arr, rawPrefix, byPlayer, rawSuffix,
-				badOnlinePlayer.getName(), reason);
+		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatkick"), arr,
+				rawPrefix, byPlayer, rawSuffix, badOnlinePlayer.getName(), reason);
 
-		if (badPlayer != null)
-		{
+		if (badPlayer != null) {
 			ModoSession modoSession = badPlayer.getModoSession();
 
-			if (modoSession != null)
-			{
+			if (modoSession != null) {
 				modoSession.incrementPunishment();
 			}
 		}

@@ -22,25 +22,20 @@ import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class PunishmentWorkerBanIp extends PunishmentWorker
-{
+public class PunishmentWorkerBanIp extends PunishmentWorker {
 
 	@Override
-	public PunishmentType getType()
-	{
+	public PunishmentType getType() {
 		return PunishmentType.BANIP;
 	}
 
 	@Override
-	public void process(CommandSender sender, String playerName, String reason, boolean isKey, long time)
-	{
+	public void process(CommandSender sender, String playerName, String reason, boolean isKey, long time) {
 		// Get the offline target player
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
-		if (badOfflinePlayer == null || !badOfflinePlayer.isFound() || !badOfflinePlayer.isLoaded())
-		{
-			if (sender != null)
-			{
+		if (badOfflinePlayer == null || !badOfflinePlayer.isFound() || !badOfflinePlayer.isLoaded()) {
+			if (sender != null) {
 				I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			}
 			return;
@@ -48,10 +43,8 @@ public class PunishmentWorkerBanIp extends PunishmentWorker
 
 		BadIP badIp = BadIP.get(badOfflinePlayer.getLastIp());
 
-		if (badIp == null)
-		{
-			if (sender != null)
-			{
+		if (badIp == null) {
+			if (sender != null) {
 				I19n.sendMessage(sender, getPrefix("unknownplayer"), null, playerName);
 			}
 			return;
@@ -66,8 +59,7 @@ public class PunishmentWorkerBanIp extends PunishmentWorker
 
 		BadPlayer badPlayer = null;
 
-		if (sender != null && sender instanceof ProxiedPlayer)
-		{
+		if (sender != null && sender instanceof ProxiedPlayer) {
 			ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 			badPlayer = BadPlayer.get(proxiedPlayer);
 			byPlayer = badPlayer.getName();
@@ -113,7 +105,7 @@ public class PunishmentWorkerBanIp extends PunishmentWorker
 			// Set the ban
 			badIp.getPunished().setBan(punishment);
 		}
-		
+
 		// Kick
 		badIp.kick();
 
@@ -132,8 +124,7 @@ public class PunishmentWorkerBanIp extends PunishmentWorker
 		if (badOfflinePlayer.isOnline()) {
 			// Get the target player
 			BadPlayer targetPlayer = BungeeManager.getInstance().getBadPlayer(badOfflinePlayer.getName());
-			if (targetPlayer.getPunished() == null)
-			{
+			if (targetPlayer.getPunished() == null) {
 				targetPlayer.setPunished(new Punished());
 			}
 			// Kick the player
@@ -143,26 +134,21 @@ public class PunishmentWorkerBanIp extends PunishmentWorker
 		// Array to translate
 		int[] arr = null;
 
-		if (badPlayer == null)
-		{
+		if (badPlayer == null) {
 			arr = isKey ? new int[] { 5 } : null;
-		}
-		else
-		{
+		} else {
 			arr = isKey ? new int[] { 0, 2, 5 } : new int[] { 0, 2 };
 		}
 
 		// We send the message and the sender to all concerned
 		BungeeManager.getInstance().targetedTranslatedBroadcast(getPermission(), getPrefix("staffchatban"), arr,
-				rawPrefix, byPlayer, rawSuffix,
-				badOfflinePlayer.getName(), Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), reason);
+				rawPrefix, byPlayer, rawSuffix, badOfflinePlayer.getName(),
+				Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), reason);
 
-		if (badPlayer != null)
-		{
+		if (badPlayer != null) {
 			ModoSession modoSession = badPlayer.getModoSession();
 
-			if (modoSession != null)
-			{
+			if (modoSession != null) {
 				modoSession.incrementPunishment();
 			}
 		}

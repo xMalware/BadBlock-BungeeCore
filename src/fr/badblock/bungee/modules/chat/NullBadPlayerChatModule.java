@@ -10,15 +10,13 @@ public class NullBadPlayerChatModule extends ChatModule {
 
 	@Override
 	public ChatEvent check(ChatEvent event) {
-		if (event.getSender() == null)
-		{
+		if (event.getSender() == null) {
 			return event;
 		}
 
 		Connection connection = event.getSender();
 
-		if (!(connection instanceof ProxiedPlayer))
-		{
+		if (!(connection instanceof ProxiedPlayer)) {
 			return event;
 		}
 
@@ -26,8 +24,7 @@ public class NullBadPlayerChatModule extends ChatModule {
 
 		BadPlayer badPlayer = BadPlayer.get(bPlayer);
 
-		if (badPlayer == null)
-		{
+		if (badPlayer == null) {
 			I19n.sendMessage(bPlayer, "bungee.chat.unabletochat", null);
 			return event;
 		}

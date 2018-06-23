@@ -43,22 +43,19 @@ public class PreLoginLoadIPListener extends BadListener {
 		// Get pending connection
 		PendingConnection pendingConnection = event.getConnection();
 
-		if (pendingConnection == null)
-		{
+		if (pendingConnection == null) {
 			return;
 		}
 
 		InetSocketAddress address = pendingConnection.getAddress();
 
-		if (address == null)
-		{
+		if (address == null) {
 			return;
 		}
 
 		InetAddress inetAddress = address.getAddress();
 
-		if (inetAddress == null)
-		{
+		if (inetAddress == null) {
 			return;
 		}
 

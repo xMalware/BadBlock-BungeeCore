@@ -164,7 +164,7 @@ public class WarnCommand extends AbstractModCommand {
 
 		// Get the warn reason
 		String warnReason = StringUtils.join(args, " ", 2);
-		
+
 		PunishmentType.WARN.process(sender, playerName, warnReason, false, -1);
 
 		// Send banned message

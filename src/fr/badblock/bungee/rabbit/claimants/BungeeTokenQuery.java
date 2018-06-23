@@ -36,7 +36,8 @@ public class BungeeTokenQuery extends RabbitClaimant {
 		RabbitService rabbitService = badBungee.getRabbitService();
 
 		// Create a new rabbit packet message
-		RabbitPacketMessage rabbitPacketMessage = new RabbitPacketMessage(-1, Integer.toString(BungeeManager.getInstance().getLoggedPlayers().size()));
+		RabbitPacketMessage rabbitPacketMessage = new RabbitPacketMessage(-1,
+				Integer.toString(BungeeManager.getInstance().getLoggedPlayers().size()));
 		// Create a rabbit packet
 		RabbitPacket rabbitPacket = new RabbitPacket(rabbitPacketMessage, BadBungeeQueues.BUNGEE_TOKEN_QUERY, false,
 				RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER);

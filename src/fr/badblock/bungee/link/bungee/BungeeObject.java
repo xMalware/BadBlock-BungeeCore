@@ -59,8 +59,8 @@ public class BungeeObject {
 	 * @return Current Player list of the BungeeCord node
 	 */
 	private Map<String, BadPlayer> usernames;
-	
-	private BungeeState	state;
+
+	private BungeeState state;
 
 	/**
 	 * If the BungeeCord node stills valid

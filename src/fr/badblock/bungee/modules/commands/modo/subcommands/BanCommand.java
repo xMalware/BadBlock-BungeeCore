@@ -263,11 +263,8 @@ public class BanCommand extends AbstractModCommand {
 
 			// Not a key, just a message
 			isKey = false;
-		}
-		else
-		{
-			if (!sender.hasPermission(getPermission() + "." + rawBanReason))
-			{
+		} else {
+			if (!sender.hasPermission(getPermission() + "." + rawBanReason)) {
 				I19n.sendMessage(sender, getPrefix("notenoughpermissions"), null, playerName);
 				// So we stop there
 				return;
@@ -329,7 +326,7 @@ public class BanCommand extends AbstractModCommand {
 		}
 
 		PunishmentType.BAN.process(sender, badOfflinePlayer.getName(), reason, isKey, time);
-		
+
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("banned"), isKey ? new int[] { 2 } : null, badOfflinePlayer.getName(),
 				Time.MILLIS_SECOND.toFrench(time, Time.MINUTE, Time.YEAR), reason);

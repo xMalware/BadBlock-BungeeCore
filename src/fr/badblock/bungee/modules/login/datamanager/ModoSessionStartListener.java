@@ -23,16 +23,16 @@ public class ModoSessionStartListener extends BadListener {
 	public void onPlayerJoinEvent(PlayerLoggedEvent event) {
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
-		
-		if (!badPlayer.hasPermission("modo.sessions"))
-		{
+
+		if (!badPlayer.hasPermission("modo.sessions")) {
 			return;
 		}
 
 		long time = System.currentTimeMillis();
-		
-		ModoSession modoSession = new ModoSession(badPlayer.getName(), badPlayer.getUniqueId().toString(), time, time, time, 0L, 0L, 0L);
-		
+
+		ModoSession modoSession = new ModoSession(badPlayer.getName(), badPlayer.getUniqueId().toString(), time, time,
+				time, 0L, 0L, 0L);
+
 		badPlayer.setModoSession(modoSession);
 	}
 

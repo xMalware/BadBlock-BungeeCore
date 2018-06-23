@@ -117,9 +117,9 @@ public class BadOfflinePlayer {
 	 *            if data was found
 	 * @return Returns if data was found
 	 */
-	private boolean found 	= false;
+	private boolean found = false;
 
-	private boolean	isNew	= false;
+	private boolean isNew = false;
 
 	/**
 	 * Last IP
@@ -250,7 +250,8 @@ public class BadOfflinePlayer {
 	/**
 	 * Last login
 	 * 
-	 * @param Set the last login
+	 * @param Set
+	 *            the last login
 	 * @return Returns the last login
 	 */
 	private long lastLogin;
@@ -416,8 +417,7 @@ public class BadOfflinePlayer {
 	 * @return a JsonObject
 	 */
 	@SuppressWarnings("deprecation")
-	public JsonObject getSavedJsonObject()
-	{
+	public JsonObject getSavedJsonObject() {
 		return new JsonParser().parse(JSON.serialize(getSavedObject())).getAsJsonObject();
 	}
 
@@ -547,8 +547,7 @@ public class BadOfflinePlayer {
 	/**
 	 * Load default values
 	 */
-	public void loadDefaultValues()
-	{
+	public void loadDefaultValues() {
 		// Set new punished object
 		punished = new Punished();
 		// Set new permission object
@@ -704,18 +703,16 @@ public class BadOfflinePlayer {
 			// Log => data doesn't exist
 			BadBungee.log(getName() + " doesn't exist in the player table.");
 
-			if (!isLoaded())
-			{
+			if (!isLoaded()) {
 				// Load default values
 				loadDefaultValues();
 			}
-			
+
 			// Set loaded
 			setLoaded(true);
 
 			// If we are allowed to create data
-			if (create)
-			{
+			if (create) {
 				// Insert data
 				insert();
 
@@ -849,8 +846,7 @@ public class BadOfflinePlayer {
 	 * @param key
 	 * @param value
 	 */
-	public void updateData(String key, Object value)
-	{
+	public void updateData(String key, Object value) {
 		updateData(new String[] { key }, new Object[] { value });
 	}
 
@@ -862,8 +858,7 @@ public class BadOfflinePlayer {
 	 */
 	public void updateData(String[] keys, Object[] values) {
 		// If the player is new
-		if (isNew())
-		{
+		if (isNew()) {
 			// Don't do that!
 			return;
 		}
@@ -885,8 +880,7 @@ public class BadOfflinePlayer {
 				// Update query
 				BasicDBObject update = new BasicDBObject();
 
-				for (int i = 0; i < keys.length; i++)
-				{
+				for (int i = 0; i < keys.length; i++) {
 					String key = keys[i];
 					Object value = values[i];
 					update.put(key, value);
@@ -984,7 +978,7 @@ public class BadOfflinePlayer {
 		// Update data
 		updateData("lastServer",
 				proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
-				? proxiedPlayer.getServer().getInfo().getName()
+						? proxiedPlayer.getServer().getInfo().getName()
 						: "");
 	}
 

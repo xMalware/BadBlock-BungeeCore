@@ -24,8 +24,7 @@ public class SetUniqueIdListener extends BadListener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onServerConnect(ServerConnectEvent event)
-	{
+	public void onServerConnect(ServerConnectEvent event) {
 		ProxiedPlayer proxiedPlayer = event.getPlayer();
 		setUniqueId(proxiedPlayer, BadPlayer.get(proxiedPlayer));
 	}
@@ -36,36 +35,30 @@ public class SetUniqueIdListener extends BadListener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPostLogin(PostLoginEvent event)
-	{
+	public void onPostLogin(PostLoginEvent event) {
 		ProxiedPlayer proxiedPlayer = event.getPlayer();
 		setUniqueId(proxiedPlayer, BadPlayer.get(proxiedPlayer));
 	}
 
-	public void setUniqueId(ProxiedPlayer proxiedPlayer, BadPlayer badPlayer)
-	{
-		if (badPlayer == null)
-		{
+	public void setUniqueId(ProxiedPlayer proxiedPlayer, BadPlayer badPlayer) {
+		if (badPlayer == null) {
 			return;
 		}
-		if (proxiedPlayer == null)
-		{
+		if (proxiedPlayer == null) {
 			return;
 		}
-		if (badPlayer.getUniqueId() == null)
-		{
+		if (badPlayer.getUniqueId() == null) {
 			return;
 		}
 		try {
 			PendingConnection pendingConnection = proxiedPlayer.getPendingConnection();
-			if (pendingConnection == null)
-			{
+			if (pendingConnection == null) {
 				return;
 			}
 			Field uniqueId = pendingConnection.getClass().getDeclaredField("uniqueId");
 			uniqueId.setAccessible(true);
 			uniqueId.set(pendingConnection, badPlayer.getUniqueId());
-		}catch(Exception error) {
+		} catch (Exception error) {
 			error.printStackTrace();
 		}
 	}

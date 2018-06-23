@@ -207,7 +207,7 @@ public class UnmuteCommand extends AbstractModCommand {
 		BadOfflinePlayer badOfflinePlayer = BadOfflinePlayer.get(playerName);
 
 		PunishmentType.UNMUTE.process(sender, playerName, null, false, -1);
-		
+
 		// Send banned message
 		I19n.sendMessage(sender, getPrefix("unmuted"), null, badOfflinePlayer.getName());
 	}

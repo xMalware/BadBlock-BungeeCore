@@ -101,7 +101,7 @@ public class BadBungee extends Plugin {
 	 * @return Returns if the plugin is unloaded
 	 */
 	private boolean unloaded;
-	
+
 	private BungeeLoader bungeeLoader;
 
 	@Override

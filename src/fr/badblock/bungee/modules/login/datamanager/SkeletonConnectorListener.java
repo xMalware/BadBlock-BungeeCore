@@ -21,14 +21,15 @@ import net.md_5.bungee.event.EventPriority;
  */
 public class SkeletonConnectorListener extends BadListener {
 
-	private ServerInfo	skeleton;
-	private ServerInfo	lobby;
+	private ServerInfo skeleton;
+	private ServerInfo lobby;
 
-	public SkeletonConnectorListener()
-	{
-		skeleton = BungeeCord.getInstance().constructServerInfo("skeleton", new InetSocketAddress("127.0.0.1", 8889), "skeleton", false);
+	public SkeletonConnectorListener() {
+		skeleton = BungeeCord.getInstance().constructServerInfo("skeleton", new InetSocketAddress("127.0.0.1", 8889),
+				"skeleton", false);
 		BungeeCord.getInstance().getServers().put("skeleton", skeleton);
-		lobby = BungeeCord.getInstance().constructServerInfo("lobby", new InetSocketAddress("127.0.0.1", 8890), "lobby", false);
+		lobby = BungeeCord.getInstance().constructServerInfo("lobby", new InetSocketAddress("127.0.0.1", 8890), "lobby",
+				false);
 		BungeeCord.getInstance().getServers().put("lobby", lobby);
 	}
 
@@ -38,71 +39,49 @@ public class SkeletonConnectorListener extends BadListener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onServerConnect(ServerConnectEvent event)
-	{
+	public void onServerConnect(ServerConnectEvent event) {
 		ProxiedPlayer proxiedPlayer = event.getPlayer();
 		ServerInfo target = event.getTarget();
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
-		if (target != null && target.getName().equalsIgnoreCase( skeleton.getName() ))
-		{
+		if (target != null && target.getName().equalsIgnoreCase(skeleton.getName())) {
 			ServerInfo serverInfo = this.roundrobinLogin();
-			if (serverInfo != null)
-			{
-				if (badPlayer != null)
-				{
+			if (serverInfo != null) {
+				if (badPlayer != null) {
 					badPlayer.sendTranslatedOutgoingMessage("bungee.teleport.login", null);
 				}
 				event.setTarget(serverInfo);
-			}
-			else
-			{
-				if (getFallbackServer() == null || !getFallbackServer().equals(proxiedPlayer.getServer().getInfo()))
-				{
-					if (getFallbackServer() != null)
-					{
-						if (badPlayer != null)
-						{
+			} else {
+				if (getFallbackServer() == null || !getFallbackServer().equals(proxiedPlayer.getServer().getInfo())) {
+					if (getFallbackServer() != null) {
+						if (badPlayer != null) {
 							badPlayer.sendTranslatedOutgoingMessage("bungee.errors.nologintp", null);
 						}
 						event.setTarget(getFallbackServer());
-					}
-					else
-					{
-						if (badPlayer != null)
-						{
+					} else {
+						if (badPlayer != null) {
 							badPlayer.kick(badPlayer.getTranslatedMessage("bungee.errors.nologinkick", null));
 						}
 					}
 				}
 			}
-		}
-		else if(target == null || (target != null && target.getName().equals("lobby")))
-		{
+		} else if (target == null || (target != null && target.getName().equals("lobby"))) {
 			ServerInfo serverInfo = roundrobinHub();
 
-			if (serverInfo != null)
-			{
-				if (badPlayer != null)
-				{
+			if (serverInfo != null) {
+				if (badPlayer != null) {
 					badPlayer.sendTranslatedOutgoingMessage("bungee.teleport.hub", null);
 				}
 				event.setTarget(serverInfo);
-			}else{
-				if (getFallbackServer() == null || !getFallbackServer().equals(proxiedPlayer.getServer().getInfo()))
-				{
-					if (getFallbackServer() != null)
-					{
-						if (badPlayer != null)
-						{
+			} else {
+				if (getFallbackServer() == null || !getFallbackServer().equals(proxiedPlayer.getServer().getInfo())) {
+					if (getFallbackServer() != null) {
+						if (badPlayer != null) {
 							badPlayer.sendTranslatedOutgoingMessage("bungee.errors.nohubtp", null);
 						}
 						event.setTarget(getFallbackServer());
-					}
-					else
-					{
-						if (badPlayer != null)
-						{
+					} else {
+						if (badPlayer != null) {
 							badPlayer.kick(badPlayer.getTranslatedMessage("bungee.errors.nohubkick", null));
 						}
 					}
@@ -111,50 +90,51 @@ public class SkeletonConnectorListener extends BadListener {
 		}
 	}
 
-	private ServerInfo getFallbackServer()
-	{
+	private ServerInfo getFallbackServer() {
 		return BungeeCord.getInstance().getServerInfo("fallback");
 	}
 
 	private ServerInfo roundrobinLogin() {
 		List<ServerInfo> servers = new ArrayList<>();
 		for (ServerInfo serverInfo : BungeeCord.getInstance().getServers().values()) {
-			if (serverInfo == null) continue;
-			if (!serverInfo.getName().startsWith("login")) continue;
+			if (serverInfo == null)
+				continue;
+			if (!serverInfo.getName().startsWith("login"))
+				continue;
 			int maxPlayers = Integer.MAX_VALUE;
-			try
-			{
+			try {
 				maxPlayers = Integer.parseInt(serverInfo.getMotd());
-			}
-			catch (Exception error)
-			{
+			} catch (Exception error) {
 
 			}
-			if (serverInfo.getPlayers().size() >= maxPlayers) continue;
+			if (serverInfo.getPlayers().size() >= maxPlayers)
+				continue;
 			servers.add(serverInfo);
 		}
-		if (servers == null || servers.isEmpty()) return null;
+		if (servers == null || servers.isEmpty())
+			return null;
 		return servers.get(new SecureRandom().nextInt(servers.size()));
 	}
 
 	public static ServerInfo roundrobinHub() {
 		List<ServerInfo> servers = new ArrayList<>();
 		for (ServerInfo serverInfo : BungeeCord.getInstance().getServers().values()) {
-			if (serverInfo == null) continue;
-			if (!serverInfo.getName().startsWith("hub")) continue;
+			if (serverInfo == null)
+				continue;
+			if (!serverInfo.getName().startsWith("hub"))
+				continue;
 			int maxPlayers = Integer.MAX_VALUE;
-			try
-			{
+			try {
 				maxPlayers = Integer.parseInt(serverInfo.getMotd());
-			}
-			catch (Exception error)
-			{
+			} catch (Exception error) {
 
 			}
-			if (serverInfo.getPlayers().size() >= maxPlayers) continue;
+			if (serverInfo.getPlayers().size() >= maxPlayers)
+				continue;
 			servers.add(serverInfo);
 		}
-		if (servers == null || servers.isEmpty()) return null;
+		if (servers == null || servers.isEmpty())
+			return null;
 		return servers.get(new SecureRandom().nextInt(servers.size()));
 	}
 

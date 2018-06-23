@@ -103,9 +103,8 @@ public class BungeeLocalManager {
 		return BadPlayer.getPlayers().parallelStream().filter(player -> player.getUniqueId().equals(uuid)).count() > 0;
 	}
 
-	public void setState(BungeeState bungeeState)
-	{
+	public void setState(BungeeState bungeeState) {
 		BungeeTask.bungeeObject.setState(bungeeState);
 	}
-	
+
 }

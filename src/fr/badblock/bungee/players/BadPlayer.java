@@ -112,22 +112,22 @@ public final class BadPlayer extends BadOfflinePlayer {
 	/**
 	 * Temp flags
 	 */
-	private FlagObject 				flags					= new FlagObject();
+	private FlagObject flags = new FlagObject();
 
 	/**
 	 * Last message player (tmp var)
 	 */
-	private String					tmpLastMessagePlayer;
+	private String tmpLastMessagePlayer;
 
-	private String					lastMessage;
-	private long					lastMessageTime;
-	private Map<String, Long>		spamMessages			= new HashMap<>();
+	private String lastMessage;
+	private long lastMessageTime;
+	private Map<String, Long> spamMessages = new HashMap<>();
 
-	private transient ModoSession	modoSession;
+	private transient ModoSession modoSession;
 
-	private boolean					loginStepOk;
+	private boolean loginStepOk;
 
-	private long					loginTimestamp;
+	private long loginTimestamp;
 
 	/**
 	 * Constructor
@@ -151,10 +151,8 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Set the last login
 		setLastLogin(getLoginTimestamp());
 		// Update multiple values
-		updateData(
-				new String[] { "lastIp", "version", "lastServer", "lastLogin"},
-				new Object[] { getLastIp(), getVersion(), getLastServer(), getLastLogin() }
-				);
+		updateData(new String[] { "lastIp", "version", "lastServer", "lastLogin" },
+				new Object[] { getLastIp(), getVersion(), getLastServer(), getLastLogin() });
 		// Put in the map
 		put();
 	}
@@ -204,7 +202,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 		// Returns the name
 		return proxiedPlayer != null && proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
 				? proxiedPlayer.getServer().getInfo().getName()
-						: getLastServer();
+				: getLastServer();
 	}
 
 	/**
@@ -228,19 +226,18 @@ public final class BadPlayer extends BadOfflinePlayer {
 	/**
 	 * Send data to bukkit
 	 */
-	public void sendDataToBukkit(String serverName)
-	{
+	public void sendDataToBukkit(String serverName) {
 		RabbitPacketMessage message = new RabbitPacketMessage(-1L, getSavedObject().toString());
 		String queueName = BadBungeeQueues.BUNGEE_DATA_PLAYERS + serverName;
-		RabbitPacket rabbitPacket = new RabbitPacket(message, queueName, true, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER);
+		RabbitPacket rabbitPacket = new RabbitPacket(message, queueName, true, RabbitPacketEncoder.UTF8,
+				RabbitPacketType.PUBLISHER);
 		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
 	}
 
 	/**
 	 * Send data to bukkit
 	 */
-	public void sendDataToBukkit()
-	{
+	public void sendDataToBukkit() {
 		sendDataToBukkit(getLastServer());
 	}
 
@@ -330,8 +327,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 		}
 
 		// Send outgoing message
-		this.sendTranslatedOutgoingMessage("punishments.warn", null,
-				warnReason);
+		this.sendTranslatedOutgoingMessage("punishments.warn", null, warnReason);
 	}
 
 	/**
@@ -507,9 +503,9 @@ public final class BadPlayer extends BadOfflinePlayer {
 
 		// Send a packet
 		BungeeManager.getInstance()
-		.sendPacket(new PlayerPacket(getName(),
-				StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args)),
-				PlayerPacketType.SEND_JSON_MESSAGE));
+				.sendPacket(new PlayerPacket(getName(),
+						StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args)),
+						PlayerPacketType.SEND_JSON_MESSAGE));
 	}
 
 	/**
@@ -529,7 +525,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 
 		// Send a translated MCJson message
 		BungeeManager.getInstance()
-		.sendPacket(new PlayerPacket(getName(), mcjson.toString(), PlayerPacketType.SEND_JSON_MESSAGE));
+				.sendPacket(new PlayerPacket(getName(), mcjson.toString(), PlayerPacketType.SEND_JSON_MESSAGE));
 	}
 
 	/**
@@ -552,9 +548,9 @@ public final class BadPlayer extends BadOfflinePlayer {
 
 		// Send a packet
 		BungeeManager.getInstance()
-		.sendPacket(new PlayerPacket(getName(),
-				StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args)),
-				PlayerPacketType.SEND_MESSAGE));
+				.sendPacket(new PlayerPacket(getName(),
+						StringUtils.toOneString(I19n.getMessages(getLocale(), key, indexesToTranslate, args)),
+						PlayerPacketType.SEND_MESSAGE));
 	}
 
 	/**

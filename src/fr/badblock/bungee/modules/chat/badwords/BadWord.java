@@ -8,19 +8,17 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class BadWord
-{
+public class BadWord {
 
-	private String	byPlayerName;
-	private String	playerName;
-	private String	message;
-	private long	timestamp;
-	private String	date;
-	private boolean	processed;
-	private boolean	punished;
+	private String byPlayerName;
+	private String playerName;
+	private String message;
+	private long timestamp;
+	private String date;
+	private boolean processed;
+	private boolean punished;
 
-	public DBObject toDatabaseObject()
-	{
+	public DBObject toDatabaseObject() {
 		DBObject dbObject = new BasicDBObject();
 		dbObject.put("byPlayerName", getByPlayerName());
 		dbObject.put("playerName", getByPlayerName());

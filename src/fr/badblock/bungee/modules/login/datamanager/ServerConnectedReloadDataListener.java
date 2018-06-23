@@ -29,19 +29,17 @@ public class ServerConnectedReloadDataListener extends BadListener {
 	public void onServerConnected(ServerConnectedEvent event) {
 		// Server
 		Server server = event.getServer();
-		
-		if (server == null)
-		{
+
+		if (server == null) {
 			return;
 		}
-		
+
 		ServerInfo serverInfo = server.getInfo();
-		
-		if (serverInfo == null)
-		{
+
+		if (serverInfo == null) {
 			return;
 		}
-		
+
 		// We create a new thread
 		ThreadRunnable.run(() -> {
 			// We get the player

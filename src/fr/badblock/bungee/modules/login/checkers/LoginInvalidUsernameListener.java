@@ -21,11 +21,10 @@ public class LoginInvalidUsernameListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
-		if (event.isCancelled())
-		{
+		if (event.isCancelled()) {
 			return;
 		}
-		
+
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		// We get his/her username
@@ -33,7 +32,8 @@ public class LoginInvalidUsernameListener extends BadListener {
 		// If the username isn't valid
 		if (!username.matches("^\\w{3,16}$")) {
 			// We cancel the player connection with a specific message
-			event.cancel(StringUtils.join(badPlayer.getTranslatedMessages("bungee.login.invalidusername", null), System.lineSeparator()));
+			event.cancel(StringUtils.join(badPlayer.getTranslatedMessages("bungee.login.invalidusername", null),
+					System.lineSeparator()));
 		}
 	}
 

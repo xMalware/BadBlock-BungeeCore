@@ -26,8 +26,7 @@ public class TooManyAccountsConnectedListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
-		if (event.isCancelled())
-		{
+		if (event.isCancelled()) {
 			return;
 		}
 
@@ -43,7 +42,8 @@ public class TooManyAccountsConnectedListener extends BadListener {
 		// Check how many players connected
 		if (loggedPlayers.size() > 3) {
 			// Kick the players
-			loggedPlayers.forEach(loggedPlayer -> loggedPlayer.kick(loggedPlayer.getTranslatedMessage("bungee.antibot.toomanyaccountsconnected", null)));
+			loggedPlayers.forEach(loggedPlayer -> loggedPlayer
+					.kick(loggedPlayer.getTranslatedMessage("bungee.antibot.toomanyaccountsconnected", null)));
 			// Kick the player
 			event.cancel(badPlayer.getTranslatedMessage("bungee.antibot.toomanyaccountsconnected", null));
 		}

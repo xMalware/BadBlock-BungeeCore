@@ -28,12 +28,11 @@ public class PunishmentBannedIPListener extends BadListener {
 		// Getting the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 		BadIP badIp = BadIP.get(badPlayer.getLastIp());
-		
-		if (badIp == null)
-		{
+
+		if (badIp == null) {
 			return;
 		}
-		
+
 		// Getting punishment information
 		Punished punished = badIp.getPunished();
 
