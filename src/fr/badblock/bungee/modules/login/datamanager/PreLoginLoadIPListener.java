@@ -60,7 +60,9 @@ public class PreLoginLoadIPListener extends BadListener {
 		}
 
 		// We create a BadIP object
-		new BadIP(inetAddress.getHostAddress(), true);
+		BadIP badIp = new BadIP(inetAddress.getHostAddress(), true);
+		
+		
 	}
 
 }

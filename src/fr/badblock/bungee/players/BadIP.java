@@ -139,6 +139,8 @@ public final class BadIP {
 	 * @return Returns if VPN
 	 */
 	private boolean vpn;
+	
+	private List<String> usernames;
 
 	/**
 	 * Constructor
@@ -220,6 +222,8 @@ public final class BadIP {
 		object.put("punish", punished != null ? punished.getDBObject() : null);
 		// Set the API data object
 		object.put("apiData", apiData != null ? apiData.toDbObject() : null);
+		// Set usernames
+		object.put("usernames", usernames);
 		// Returns the object
 		return object;
 	}
