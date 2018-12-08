@@ -185,7 +185,6 @@ public final class BadIP {
 		return Boolean.parseBoolean(getString(part));
 	}
 
-	@SuppressWarnings("deprecation")
 	/**
 	 * Get a JsonElement
 	 * 

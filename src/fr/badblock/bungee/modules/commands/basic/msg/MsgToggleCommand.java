@@ -1,8 +1,6 @@
 package fr.badblock.bungee.modules.commands.basic.msg;
 
 import fr.badblock.bungee.modules.commands.BadCommand;
-import fr.badblock.bungee.modules.commands.basic.friends.FriendListable;
-import fr.badblock.bungee.modules.commands.basic.party.Partyable;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.i18n.I19n;

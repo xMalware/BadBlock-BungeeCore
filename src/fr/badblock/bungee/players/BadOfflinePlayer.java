@@ -324,7 +324,6 @@ public class BadOfflinePlayer {
 		return permissible.getPrefix(locale, "chat") + getName() + permissible.getSuffix(locale, "chat");
 	}
 
-	@SuppressWarnings("deprecation")
 	/**
 	 * Get JsonElement from the database object
 	 * 
@@ -417,7 +416,6 @@ public class BadOfflinePlayer {
 	 * 
 	 * @return a JsonObject
 	 */
-	@SuppressWarnings("deprecation")
 	public JsonObject getSavedJsonObject() {
 		return new JsonParser().parse(JSON.serialize(getSavedObject())).getAsJsonObject();
 	}
@@ -462,7 +460,6 @@ public class BadOfflinePlayer {
 		return object;
 	}
 
-	@SuppressWarnings("deprecation")
 	/**
 	 * Get a string from the database object
 	 * 
@@ -486,7 +483,6 @@ public class BadOfflinePlayer {
 	 * @param Field
 	 * @return a String
 	 */
-	@SuppressWarnings("deprecation")
 	private boolean getBoolean(String part) {
 		// If the database object contains the key
 		if (getDbObject().containsKey(part) && getDbObject().get(part) != null) {
