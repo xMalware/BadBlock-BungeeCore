@@ -32,6 +32,18 @@ public class LoginCommand extends BadCommand {
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 		BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
 
+		if (badPlayer.isLoginStepOk())
+		{
+			if (badPlayer.isLogged())
+			{
+				badPlayer.sendTranslatedOutgoingMessage(prefix + "alreadylogged", null);
+				return;
+			}
+			
+			badPlayer.sendTranslatedOutgoingMessage(prefix + "logintakenintoaccountmaybeissue", null);
+			return;
+		}
+		
 		if (badPlayer.getLoginPassword() == null || badPlayer.getLoginPassword().isEmpty()) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "pleaseregister", null);
 			return;
