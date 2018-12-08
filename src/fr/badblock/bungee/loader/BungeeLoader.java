@@ -19,6 +19,8 @@ import fr.badblock.api.common.tech.mongodb.MongoConnector;
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.rabbitmq.RabbitConnector;
 import fr.badblock.api.common.tech.rabbitmq.RabbitService;
+import fr.badblock.api.common.tech.redis.RedisConnector;
+import fr.badblock.api.common.tech.redis.RedisService;
 import fr.badblock.api.common.utils.i18n.I18n;
 import fr.badblock.api.common.utils.permissions.Permissible;
 import fr.badblock.api.common.utils.permissions.PermissionsManager;
@@ -93,6 +95,8 @@ public class BungeeLoader {
 		loadRabbit();
 		// Load MongoDB
 		loadMongo();
+		// Load Redis
+		loadRedis();
 		// Load Bungee linker
 		loadBungeeLinker();
 		// Load listeners
@@ -212,6 +216,15 @@ public class BungeeLoader {
 		// Set the service
 		getBadBungee().setMongoService(MongoConnector.getInstance()
 				.registerService(new MongoService("default", getConfig().getMongoSettings())));
+	}
+	
+	/**
+	 * Load Redis
+	 */
+	private void loadRedis() {
+		// Set the service
+		getBadBungee().setRedisService(RedisConnector.getInstance()
+				.registerService(new RedisService("default", getConfig().getRedisSettings())));
 	}
 
 	/**
