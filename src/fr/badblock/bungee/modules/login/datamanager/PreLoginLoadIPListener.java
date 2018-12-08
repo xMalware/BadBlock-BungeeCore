@@ -3,9 +3,11 @@ package fr.badblock.bungee.modules.login.datamanager;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
+import fr.badblock.api.common.utils.i18n.Locale;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.players.BadIP;
+import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.event.EventHandler;
@@ -62,7 +64,19 @@ public class PreLoginLoadIPListener extends BadListener {
 		// We create a BadIP object
 		BadIP badIp = new BadIP(inetAddress.getHostAddress(), true);
 		
+		if (badIp.getUsernames().size() >= 5 && !badIp.getUsernames().contains(pendingConnection.getName().toLowerCase()))
+		{
+			event.setCancelled(true);
+			event.setCancelReason(I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.errors.toomanyaccounts", null));
+			return;
+		}
 		
+		badIp.getUsernames().add(pendingConnection.getName().toLowerCase());
+		try {
+			badIp.saveData();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

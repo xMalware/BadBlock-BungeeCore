@@ -28,6 +28,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+@SuppressWarnings("deprecation")
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 /**
