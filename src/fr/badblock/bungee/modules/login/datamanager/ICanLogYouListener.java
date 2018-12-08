@@ -1,5 +1,7 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
+import com.google.gson.JsonParser;
+
 import fr.badblock.api.common.utils.i18n.Locale;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerCreatedEvent;
@@ -33,7 +35,7 @@ public class ICanLogYouListener extends BadListener {
 
 		if (BadPlayer.has(playerName)) {
 			BadPlayer badPlayer = BadPlayer.get(playerName);
-			event.getDone().done(new Result(badPlayer.getSavedObject(), null), null);
+			event.getDone().done(new Result(new JsonParser().parse(badPlayer.getSavedObject().toJson()).getAsJsonObject(), null), null);
 			BungeeCord.getInstance().getPluginManager().callEvent(new PlayerCreatedEvent(badPlayer));
 		} else {
 			Result result = new Result(null,

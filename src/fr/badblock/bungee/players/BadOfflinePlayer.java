@@ -37,6 +37,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+@SuppressWarnings("deprecation")
 @EqualsAndHashCode(callSuper = false)
 @Getter
 @Setter
