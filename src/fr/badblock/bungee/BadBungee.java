@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.rabbitmq.RabbitService;
+import fr.badblock.api.common.tech.redis.RedisService;
 import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.loader.BungeeLoader;
 import fr.badblock.bungee.loader.BungeeUnloader;
@@ -74,6 +75,15 @@ public class BadBungee extends Plugin {
 	 * @return Returns the current Mongo service
 	 */
 	private MongoService mongoService;
+
+	/**
+	 * Redis service
+	 * 
+	 * @param Set
+	 *            the new Redis service
+	 * @return Returns the current Redis service
+	 */
+	private RedisService redisService;
 
 	/**
 	 * Pretty Gson
