@@ -1,7 +1,5 @@
 package fr.badblock.bungee.link.processing.bungee;
 
-import java.util.logging.Level;
-
 import fr.badblock.api.common.sync.bungee._BungeeProcessing;
 import fr.badblock.api.common.sync.bungee.packets.BungeePacketType;
 import fr.badblock.bungee.BadBungee;
@@ -28,7 +26,7 @@ public class BungeeLogProcessing extends _BungeeProcessing {
 		// For each message
 		for (String string : message.split(System.lineSeparator())) {
 			// Log it
-			BadBungee.getInstance().getLogger().log(Level.INFO, string);
+			BadBungee.log(string);
 		}
 	}
 

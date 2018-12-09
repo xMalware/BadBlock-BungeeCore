@@ -548,7 +548,7 @@ public class BadOfflinePlayer {
 		// Set new punished object
 		punished = new Punished();
 		// Set new permission object
-		permissions = new PermissionUser(new HashMap<>(), new ArrayList<>());
+		permissions = new PermissionUser();
 		// Set default
 		HashMap<String, Long> defaultBungeePermissions = new HashMap<>();
 		defaultBungeePermissions.put("default", -1L);

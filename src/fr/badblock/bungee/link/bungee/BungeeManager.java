@@ -2,10 +2,13 @@ package fr.badblock.bungee.link.bungee;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -27,6 +30,7 @@ import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketMessage;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketType;
 import fr.badblock.api.common.utils.flags.GlobalFlags;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
@@ -83,6 +87,29 @@ public class BungeeManager {
 	 */
 	private CachedPlayerToken token;
 
+	public boolean isMaster()
+	{
+		Map<String, BungeeObject> treeMap = new TreeMap<String, BungeeObject>(
+				new Comparator<String>() {
+					@Override
+					public int compare(String o1, String o2) {
+						return o2.compareTo(o1);
+					}
+				});
+		
+		Iterator<Entry<String, BungeeObject>> iterator = treeMap.entrySet().iterator();
+		if (iterator.hasNext())
+		{
+			Entry<String, BungeeObject> entry = iterator.next();
+			if (entry.getKey() != null && entry.getKey().equals(BungeeTask.bungeeObject.getIp() + "_" + BungeeTask.bungeeObject.getName()))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
 	/**
 	 * Add a BungeeCord node
 	 * 
@@ -91,8 +118,6 @@ public class BungeeManager {
 	 */
 	public void add(BungeeObject bungeeObject) {
 		// Add in the map
-		System.out.println(
-				bungeeObject.getIp() + "_" + bungeeObject.getName() + " : " + bungeeObject.getUsernames().size());
 		bungees.put(bungeeObject.getIp() + "_" + bungeeObject.getName(), bungeeObject);
 	}
 
@@ -394,7 +419,7 @@ public class BungeeManager {
 	public void targetedBrodcast(String permission, String... messages) {
 		// Get logged players, filter with the permision and send the message
 		getLoggedPlayers(player -> player.hasPermission(permission))
-				.forEach(player -> player.sendOutgoingMessage(messages));
+		.forEach(player -> player.sendOutgoingMessage(messages));
 	}
 
 	/**
@@ -420,7 +445,7 @@ public class BungeeManager {
 	public void targetedJsonBrodcast(String permission, String... messages) {
 		// Get logged players, filter with the permission and send the JSON message
 		getLoggedPlayers(player -> player.hasPermission(permission))
-				.forEach(player -> player.sendOutgoingJsonMessage(messages));
+		.forEach(player -> player.sendOutgoingJsonMessage(messages));
 	}
 
 	/**
@@ -438,7 +463,7 @@ public class BungeeManager {
 			Object... args) {
 		// Filter the logged players and send them translated messages
 		filter.filterList(getLoggedPlayers())
-				.forEach(player -> player.sendTranslatedOutgoingMessage(key, indexesToTranslate, args));
+		.forEach(player -> player.sendTranslatedOutgoingMessage(key, indexesToTranslate, args));
 	}
 
 	/**
@@ -458,7 +483,7 @@ public class BungeeManager {
 		// Get logged players, filter with the permission and send the translated
 		// message
 		getLoggedPlayers(player -> player.hasPermission(permission))
-				.forEach(player -> player.sendTranslatedOutgoingMessage(key, indexesToTranslate, args));
+		.forEach(player -> player.sendTranslatedOutgoingMessage(key, indexesToTranslate, args));
 	}
 
 	/**
@@ -476,7 +501,7 @@ public class BungeeManager {
 			Object... args) {
 		// Filter the logged players and send them a tranlated JSON message
 		filter.filterList(getLoggedPlayers())
-				.forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, indexesToTranslate, args));
+		.forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, indexesToTranslate, args));
 	}
 
 	/**
@@ -496,7 +521,7 @@ public class BungeeManager {
 		// Get logged players, filter with the permission and send the translated JSON
 		// message
 		getLoggedPlayers(player -> player.hasPermission(permission))
-				.forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, indexesToTranslate, args));
+		.forEach(player -> player.sendTranslatedOutgoingJsonMessage(key, indexesToTranslate, args));
 	}
 
 	/**
@@ -523,7 +548,7 @@ public class BungeeManager {
 		// Get logged players, filter with the permission and send the translated MCJson
 		// object (message)
 		getLoggedPlayers(player -> player.hasPermission(permission))
-				.forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
+		.forEach(player -> player.sendTranslatedOutgoingMCJson(mcJson));
 	}
 
 }

@@ -139,12 +139,9 @@ public class GuardianerChatModule extends ChatModule {
 		String message = chatEvent.getMessage();
 		String filteredMessage = applyFilter(message);
 
-		System.out.println("A");
 		for (String badword : words) {
 
-			System.out.println("B - " + filteredMessage + " - " + badword);
 			if (filteredMessage.contains(badword) || message.contains(badword)) {
-				System.out.println("C - " + filteredMessage + " - " + badword);
 				BadWord badWord = new BadWord("Guardianer", proxiedPlayer.getName(), message,
 						System.currentTimeMillis(), DateUtils.getHourDate(), false, false);
 
@@ -166,8 +163,6 @@ public class GuardianerChatModule extends ChatModule {
 						collection.insert(query);
 					}
 				});
-
-				System.out.println("ok");
 
 				// We send the message and the sender to all concerned
 				BungeeManager.getInstance().targetedTranslatedBroadcast("bungee.chat.reportbadword",

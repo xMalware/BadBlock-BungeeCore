@@ -7,6 +7,8 @@ import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListenerType;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeLocalManager;
+import fr.badblock.bungee.link.bungee.BungeeManager;
+import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.rabbit.datareceivers.PlayerDataUpdateReceiver;
 
@@ -26,7 +28,7 @@ public class PlayerUpdateDataReceiver extends RabbitListener {
 	public PlayerUpdateDataReceiver() {
 		// Super!
 		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_DATA_RECEIVERS_UPDATE,
-				RabbitListenerType.MESSAGE_BROKER, false);
+				RabbitListenerType.SUBSCRIBER, false);
 		// Load the listener
 		load();
 	}
@@ -49,23 +51,38 @@ public class PlayerUpdateDataReceiver extends RabbitListener {
 		// Get the local manager
 		BungeeLocalManager bungeeLocalManager = BungeeLocalManager.getInstance();
 
-		// If the player isn't online
-		if (!bungeeLocalManager.isOnline(playerName)) {
-			// Mmh.. How can we work?
+		// TODO commentaires en anglais
+		
+		// Si le joueur est en ligne localement sur le bungee
+		if (bungeeLocalManager.isOnline(playerName)) {
+			// Sauvegarde des informations
+			BadPlayer badPlayer = bungeeLocalManager.getPlayer(playerName);
+
+			// If the BadPlayer is null
+			if (badPlayer == null) {
+				// So we stop there
+				return;
+			}
+
+			// Merge the data
+			badPlayer.mergeData(badPlayer.getDbObject(), playerDataUpdateReceiver.getData(), true);
 			return;
 		}
-
-		// Get the BadPlayer
-		BadPlayer badPlayer = bungeeLocalManager.getPlayer(playerName);
-
-		// If the BadPlayer is null
-		if (badPlayer == null) {
-			// So we stop there
+		
+		// Sinon, à la recherche d'un master qui fera la save mongo
+		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
+		
+		if (!BungeeManager.getInstance().isMaster())
+		{
 			return;
 		}
-
-		// Merge the data
-		badPlayer.mergeData(badPlayer.getDbObject(), playerDataUpdateReceiver.getData(), true);
+		
+		badOfflinePlayer.mergeData(badOfflinePlayer.getDbObject(), playerDataUpdateReceiver.getData(), true);
+		try {
+			badOfflinePlayer.saveData();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

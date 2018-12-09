@@ -35,7 +35,7 @@ public class ICanLogYouListener extends BadListener {
 
 		if (BadPlayer.has(playerName)) {
 			BadPlayer badPlayer = BadPlayer.get(playerName);
-			event.getDone().done(new Result(new JsonParser().parse(badPlayer.getSavedObject().toJson()).getAsJsonObject(), null), null);
+			event.getDone().done(new Result(badPlayer.getSavedObject(), null), null);
 			BungeeCord.getInstance().getPluginManager().callEvent(new PlayerCreatedEvent(badPlayer));
 		} else {
 			Result result = new Result(null,

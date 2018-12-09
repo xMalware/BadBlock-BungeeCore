@@ -2,6 +2,7 @@ package fr.badblock.bungee.modules.login.datamanager;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 
 import fr.badblock.api.common.utils.i18n.Locale;
 import fr.badblock.bungee.link.bungee.BungeeManager;
@@ -63,6 +64,11 @@ public class PreLoginLoadIPListener extends BadListener {
 
 		// We create a BadIP object
 		BadIP badIp = new BadIP(inetAddress.getHostAddress(), true);
+		
+		if (badIp.getUsernames() == null)
+		{
+			badIp.setUsernames(new ArrayList<>());
+		}
 		
 		if (badIp.getUsernames().size() >= 5 && !badIp.getUsernames().contains(pendingConnection.getName().toLowerCase()))
 		{

@@ -12,7 +12,7 @@ public class DockerServerData
 
 	private String	serverName;
 
-	private String		source;
+	private String	source;
 	private String	ip;
 	private int			port;
 

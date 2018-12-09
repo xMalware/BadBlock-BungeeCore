@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.google.gson.JsonArray;
@@ -29,9 +30,8 @@ import redis.clients.jedis.Jedis;
 public class BungeeServerSyncTask extends Thread {
 
 	public static Map<String, DockerServerData> serverData = new HashMap<>();
-	
 	public static Map<String, List<JsonObject>> clusterData = new HashMap<>();
-	
+
 	/**
 	 * If the task is still running
 	 * 
@@ -45,7 +45,7 @@ public class BungeeServerSyncTask extends Thread {
 	 * Task thread
 	 */
 	private static Thread syncThread = Thread.currentThread();
-	
+
 	/**
 	 * Json parser ready to be used
 	 */
@@ -66,7 +66,7 @@ public class BungeeServerSyncTask extends Thread {
 	public static void sync() {
 		Jedis jedis = BadBungee.getInstance().getRedisService().getJedis();
 		Map<String, DockerServerData> tempServerData = new HashMap<>();
-		
+
 		for (String cluster : BadBungee.getInstance().getConfig().getDockerClusters())
 		{
 			Set<String> keys = jedis.keys("clusters:" + cluster + ":*");
@@ -82,55 +82,58 @@ public class BungeeServerSyncTask extends Thread {
 				JsonElement jsonElement = jsonParser.parse(data);
 				JsonObject jsonObject = jsonElement.getAsJsonObject();
 				JsonObject idCardObject = jsonObject.getAsJsonObject("idCard");
-				
+
 				String fullId = idCardObject.get("fullId").getAsString();
 				JsonObject dataObject = jsonObject.getAsJsonObject("data");
 				JsonObject entityObject = dataObject.getAsJsonObject("entities");
-				
-				for (String key : entityObject.keySet())
+
+				for (Entry<String, JsonElement> entr : entityObject.entrySet())
 				{
-					JsonArray jsonArray = entityObject.getAsJsonArray(key);
+					JsonArray jsonArray = entityObject.getAsJsonArray(entr.getKey());
 					Iterator<JsonElement> iterator = jsonArray.iterator();
 					while (iterator.hasNext())
 					{
 						JsonObject jsonServer = iterator.next().getAsJsonObject();
-						String name = key + "_" + jsonServer.get("id").getAsInt();
+						String name = entr.getKey() + "_" + jsonServer.get("id").getAsInt();
 						String ip = jsonServer.get("ip").getAsString();
 						int port = jsonServer.get("port").getAsInt();
 						DockerServerData dockerServerData = new DockerServerData(name, fullId, ip, port);
 						tempServerData.put(name, dockerServerData);
 					}
 				}
-				
+
 				clusters.add(jsonObject);
 			}
-			
+
 			clusterData.put(cluster, clusters);
 		}
-		
-		for (String key : tempServerData.keySet())
+
+		synchronized (syncThread)
 		{
-			if (!serverData.containsKey(key))
+			for (String key : tempServerData.keySet())
 			{
-				DockerServerData dockerServerData =tempServerData.get(key);
-				ServerInfo server = BungeeCord.getInstance().constructServerInfo(dockerServerData.getServerName(),
-						new InetSocketAddress(dockerServerData.getIp(), dockerServerData.getPort()), dockerServerData.getServerName(), false);
-				// Add the server
-				BungeeCord.getInstance().getServers().put(dockerServerData.getServerName(), server);
-				BadBungee.log("§d[Docker] §aAdded server: §e" + key + " §ahosted by §e" + dockerServerData.getSource());
+				if (!serverData.containsKey(key))
+				{
+					DockerServerData dockerServerData =tempServerData.get(key);
+					ServerInfo server = BungeeCord.getInstance().constructServerInfo(dockerServerData.getServerName(),
+							new InetSocketAddress(dockerServerData.getIp(), dockerServerData.getPort()), dockerServerData.getServerName(), false);
+					// Add the server
+					BungeeCord.getInstance().getServers().put(dockerServerData.getServerName(), server);
+					BadBungee.log("§d[Docker] §aAdded server: §e" + key + " §ahosted by §e" + dockerServerData.getSource());
+				}
+			}
+
+			for (String key : serverData.keySet())
+			{
+				if (!tempServerData.containsKey(key))
+				{
+					DockerServerData dockerServerData = serverData.get(key);
+					BungeeCord.getInstance().getServers().remove(dockerServerData.getServerName());
+					BadBungee.log("§d[Docker] §cRemoved server: §e" + key + " §chosted by §e" + dockerServerData.getSource());
+				}
 			}
 		}
-		
-		for (String key : serverData.keySet())
-		{
-			if (!tempServerData.containsKey(key))
-			{
-				DockerServerData dockerServerData =tempServerData.get(key);
-				BungeeCord.getInstance().getServers().remove(dockerServerData.getServerName());
-				BadBungee.log("§d[Docker] §cRemoved server: §e" + key + " §chosted by §e" + dockerServerData.getSource());
-			}
-		}
-		
+
 		serverData = tempServerData;
 	}
 

@@ -71,7 +71,7 @@ public class LoginCommand extends BadCommand {
 		}
 
 		HashLogin.log(badPlayer);
-
+		
 		badPlayer.sendTranslatedOutgoingMessage(prefix + "validpassword", null, badPlayer.getName());
 		proxiedPlayer.connect(server);
 	}

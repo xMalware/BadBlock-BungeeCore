@@ -30,6 +30,7 @@ import fr.badblock.bungee.config.ConfigLoader;
 import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.bungee.tasks.PeakTask;
 import fr.badblock.bungee.link.bungee.tasks.PlayerCleanerTask;
+import fr.badblock.bungee.link.docker.BungeeServerSyncTask;
 import fr.badblock.bungee.modules.chat.ChatModule;
 import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
 import fr.badblock.bungee.rabbit.claimants.RabbitClaimant;
@@ -105,6 +106,8 @@ public class BungeeLoader {
 		loadPunishmentTable();
 		// Load permissions
 		loadPermissions();
+		// load docker
+		loadDocker();
 	}
 
 	private void loadFilters() {
@@ -279,6 +282,11 @@ public class BungeeLoader {
 		getBadBungee().setPrettyGson(new GsonBuilder().setPrettyPrinting().create());
 	}
 
+	private void loadDocker()
+	{
+		new BungeeServerSyncTask();
+	}
+	
 	/**
 	 * Set the instance of BadBungee
 	 */

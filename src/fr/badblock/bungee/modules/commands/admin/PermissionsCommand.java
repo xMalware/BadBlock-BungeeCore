@@ -1,6 +1,5 @@
 package fr.badblock.bungee.modules.commands.admin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -226,7 +225,7 @@ public class PermissionsCommand extends BadCommand {
 			return;
 		}
 
-		PermissionUser permissions = new PermissionUser(new HashMap<>(), new ArrayList<>());
+		PermissionUser permissions = new PermissionUser();
 		// Set default
 		HashMap<String, Long> defaultBungeePermissions = new HashMap<>();
 		defaultBungeePermissions.put("default", -1L);
