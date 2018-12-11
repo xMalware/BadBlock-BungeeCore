@@ -3,6 +3,7 @@ package fr.badblock.bungee.link.processing.players;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts._PlayerProcessing;
 import fr.badblock.bungee.utils.i18n.I19n;
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -24,7 +25,7 @@ public class PlayerSendServerProcessing extends _PlayerProcessing {
 		// Get the server name
 		String serverName = playerPacket.getContent();
 		// Get the server info
-		ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(serverName);
+		ServerInfo serverInfo = BungeeCord.getInstance().getServers().get(serverName);
 
 		// If the serverInfo is null
 		if (serverInfo == null) {
