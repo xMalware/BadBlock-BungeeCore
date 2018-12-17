@@ -409,6 +409,7 @@ public final class FriendListManager {
 		case PLAYER_DO_NOT_ACCEPT_REQUEST:
 			// Send the message
 			message.sendDoNotAcceptRequests(wantBadPlayer, wantedBadPlayer);
+			break;
 
 			// Unknown
 		default:
