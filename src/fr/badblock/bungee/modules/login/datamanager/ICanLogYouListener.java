@@ -1,7 +1,5 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
-import com.google.gson.JsonParser;
-
 import fr.badblock.api.common.utils.i18n.Locale;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerCreatedEvent;

@@ -28,7 +28,7 @@ public class PlayerUpdateDataReceiver extends RabbitListener {
 	public PlayerUpdateDataReceiver() {
 		// Super!
 		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_DATA_RECEIVERS_UPDATE,
-				RabbitListenerType.SUBSCRIBER, false);
+				RabbitListenerType.SUBSCRIBER, true);
 		// Load the listener
 		load();
 	}
@@ -69,7 +69,7 @@ public class PlayerUpdateDataReceiver extends RabbitListener {
 			return;
 		}
 		
-		// Sinon, à la recherche d'un master qui fera la save mongo
+		// Sinon, ï¿½ la recherche d'un master qui fera la save mongo
 		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
 		
 		if (!BungeeManager.getInstance().isMaster())

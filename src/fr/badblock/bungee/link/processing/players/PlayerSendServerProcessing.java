@@ -4,7 +4,6 @@ import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts._PlayerProcessing;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -22,8 +21,19 @@ public class PlayerSendServerProcessing extends _PlayerProcessing {
 	 */
 	@Override
 	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket) {
-		// Get the server name
-		String serverName = playerPacket.getContent();
+		// Get data
+		String data = playerPacket.getContent();
+		
+		String[] info = data.split("\\|");
+		
+		String serverName = info[0];
+		String reason = "";
+		
+		if (info.length == 2)
+		{
+			reason = info[1];
+		}
+		
 		// Get the server info
 		ServerInfo serverInfo = BungeeCord.getInstance().getServers().get(serverName);
 
@@ -37,8 +47,16 @@ public class PlayerSendServerProcessing extends _PlayerProcessing {
 
 		// Connect the proxied player
 		proxiedPlayer.connect(serverInfo);
+		
+		if (reason.equals("MATCHMAKING"))
+		{
+			// You've been moved
+			I19n.sendMessage(proxiedPlayer, "bungee.commands.send.serverfound", serverName);
+			return;
+		}
+		
 		// You've been moved
-		I19n.sendMessage(proxiedPlayer, "bungee.commands.send.youvebeenmoved", null);
+		I19n.sendMessage(proxiedPlayer, "bungee.commands.send.youvebeenmoved", serverName);
 	}
 
 }

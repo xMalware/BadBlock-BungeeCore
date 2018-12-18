@@ -95,46 +95,23 @@ public class PartyManager {
 		}
 
 		// Get the party
-		PartyManager.getParty(otherPlayer.getName(), new Callback<Party>() {
-
+		PartyManager.getParty(currPlayer.getName(), new Callback<Party>() {
+			
 			/**
 			 * When we receive the data
 			 */
 			@Override
-			public void done(Party party, Throwable error) {
-				// If the party is null
-				if (party == null) {
-					// Send expire message
-					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
-					// So we stop there
-					return;
-				}
-
-				// Get the party player
-				PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
-
-				// If the party player is null
-				if (partyPlayer == null) {
-					// Send message
-					PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
-					// So we stop there
-					return;
-				}
-
-				// If the state isn't in 'waiting'
-				if (!partyPlayer.getState().equals(PartyPlayerState.WAITING)) {
-					// Send message
+			public void done(Party party, Throwable error)
+			{
+				if (party != null)
+				{
+					// Send party
 					PartyManager.getMessages().sendAcceptAlreadyInParty(sender, otherPlayer.getName());
 					// So we stop there
 					return;
 				}
-
-				// Accept party player
-				party.accept(sender.getName());
-				// Send accepted message
-				PartyManager.getMessages().sendAcceptAccepted(sender, otherPlayer.getName());
 			}
-
+			
 		});
 	}
 

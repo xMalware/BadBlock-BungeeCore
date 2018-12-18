@@ -96,7 +96,7 @@ public class PermissionsCommand extends BadCommand {
 	private void userGroup(CommandSender sender, String[] args, BadOfflinePlayer badOfflinePlayer) {
 		// perms user <pseudo> groups <something>
 		if (args.length < 4) {
-			I19n.sendMessage(sender, prefix + "user.group.usage", null);
+			I19n.sendMessage(sender, prefix + "user.groups.usage", null);
 			return;
 		}
 
@@ -116,21 +116,21 @@ public class PermissionsCommand extends BadCommand {
 			userGroupRemove(sender, args, badOfflinePlayer);
 			break;
 		default:
-			I19n.sendMessage(sender, prefix + "user.group.unknowncommand", null);
+			I19n.sendMessage(sender, prefix + "user.groups.unknowncommand", null);
 			break;
 		}
 	}
 
 	public void userGroupAdd(CommandSender sender, String[] args, BadOfflinePlayer badOfflinePlayer) {
 		// perms user <pseudo> group add <server> <permission> <time>
-		if (args.length < 6) {
+		if (args.length < 5) {
 			I19n.sendMessage(sender, prefix + "user.groups.add.usage", null);
 			return;
 		}
 
 		long time = Long.MIN_VALUE;
 
-		if (args.length == 7) {
+		if (args.length == 6) {
 			try {
 				if (args[6].equalsIgnoreCase("-1")) {
 					time = -1;

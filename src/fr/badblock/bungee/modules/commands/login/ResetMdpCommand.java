@@ -60,7 +60,7 @@ public class ResetMdpCommand extends BadCommand {
 
 		String newpassword2 = HashLogin.hash(newpassword);
 
-		if (!badPlayer.getLoginPassword().equals(newpassword2)) {
+		if (badPlayer.getLoginPassword().equals(newpassword2)) {
 			badPlayer.sendTranslatedOutgoingMessage(prefix + "same", null);
 			return;
 		}

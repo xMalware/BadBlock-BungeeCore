@@ -132,6 +132,7 @@ public class BungeeLoader {
 	public void reload() {
 		getPunishmentReasons().load();
 		ChatModule.getModules().forEach(chatModule -> chatModule.reload());
+		loadI18n();
 		loadPermissions();
 	}
 
@@ -198,6 +199,7 @@ public class BungeeLoader {
 					"fr.badblock.bungee.modules.commands.basic.msg", "fr.badblock.bungee.modules.commands.basic.party",
 					"fr.badblock.bungee.modules.commands.modo", "fr.badblock.bungee.modules.commands.staff",
 					"fr.badblock.bungee.modules.commands.login",
+					"fr.badblock.bungee.modules.commands.nick",
 
 					// Login
 					"fr.badblock.bungee.modules.login.antivpn", "fr.badblock.bungee.modules.login.antibot",

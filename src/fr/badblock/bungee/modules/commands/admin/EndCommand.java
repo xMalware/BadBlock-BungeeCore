@@ -4,7 +4,6 @@ import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.modules.commands.BadCommand;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
 
 /**
  * 
