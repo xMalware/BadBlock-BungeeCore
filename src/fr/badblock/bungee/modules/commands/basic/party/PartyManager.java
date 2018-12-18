@@ -253,7 +253,18 @@ public class PartyManager {
 				// If the cursor isn't null
 				if (cursor != null && cursor.hasNext()) {
 					// Get the DBObject
-					DBObject dbObject = cursor.next();
+					BasicDBObject dbObject = (BasicDBObject) cursor.next();
+					BasicDBObject players = (BasicDBObject) dbObject.get("players");
+					
+					BasicDBObject obj = (BasicDBObject) players.get(player.toLowerCase());
+					String s = obj.getString("state");
+					
+					if (s != null && !s.equals("ACCEPTED"))
+					{
+						callback.done(null, null);
+						return;
+					}
+					
 					// Done callback
 					callback.done(new Party(dbObject), null);
 				} else {

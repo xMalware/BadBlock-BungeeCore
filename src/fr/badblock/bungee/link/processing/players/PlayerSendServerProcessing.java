@@ -51,12 +51,12 @@ public class PlayerSendServerProcessing extends _PlayerProcessing {
 		if (reason.equals("MATCHMAKING"))
 		{
 			// You've been moved
-			I19n.sendMessage(proxiedPlayer, "bungee.commands.send.serverfound", serverName);
+			I19n.sendMessage(proxiedPlayer, "bungee.commands.send.serverfound", new int[] {}, serverName);
 			return;
 		}
 		
 		// You've been moved
-		I19n.sendMessage(proxiedPlayer, "bungee.commands.send.youvebeenmoved", serverName);
+		I19n.sendMessage(proxiedPlayer, "bungee.commands.send.youvebeenmoved", new int[] {}, serverName);
 	}
 
 }
