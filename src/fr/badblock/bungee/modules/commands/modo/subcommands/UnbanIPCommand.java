@@ -28,7 +28,7 @@ public class UnbanIPCommand extends AbstractModCommand {
 	 */
 	public UnbanIPCommand() {
 		// Super!
-		super("unbanip", new String[] { "ub", "ubi", "ubip" });
+		super("unbanip", new String[] { "ubi", "ubip" });
 	}
 
 	/**

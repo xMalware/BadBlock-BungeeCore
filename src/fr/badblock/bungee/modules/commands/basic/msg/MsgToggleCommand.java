@@ -24,7 +24,7 @@ public class MsgToggleCommand extends BadCommand {
 	 * Command constructor
 	 */
 	public MsgToggleCommand() {
-		super("msgtoggle", "");
+		super("msgtoggle", null, "msgp");
 		this.setForPlayersOnly(true);
 	}
 

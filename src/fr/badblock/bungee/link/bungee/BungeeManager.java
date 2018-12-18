@@ -34,6 +34,7 @@ import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
+import fr.badblock.bungee.rabbit.listeners.PlayerLinkReceiver;
 import fr.badblock.bungee.utils.Filter;
 import fr.badblock.bungee.utils.mcjson.McJson;
 import fr.badblock.bungee.utils.time.TimeUtils;
@@ -386,6 +387,15 @@ public class BungeeManager {
 	 *            packet object
 	 */
 	public void sendPacket(PlayerPacket playerPacket) {
+		// Process local
+		if (BungeeLocalManager.getInstance().isOnline(playerPacket.getPlayerName().toLowerCase()))
+		{
+			// local process
+			PlayerLinkReceiver.process(playerPacket);
+			// Stop there
+			return;
+		}
+		
 		// Get main class
 		BadBungee badBungee = BadBungee.getInstance();
 		// Deserialize the player packet

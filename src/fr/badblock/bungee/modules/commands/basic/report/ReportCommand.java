@@ -24,7 +24,7 @@ public class ReportCommand extends BadCommand {
 	 */
 	public ReportCommand() {
 		// Super!
-		super("report", "", "rp");
+		super("report", "bungee.command.report", "rp");
 	}
 
 	public String getPrefix(String string) {

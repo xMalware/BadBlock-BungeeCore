@@ -2,14 +2,13 @@ package fr.badblock.bungee.modules.commands.basic.party;
 
 import java.util.Map.Entry;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-
+import fr.badblock.api.common.minecraft.party.Party;
+import fr.badblock.api.common.minecraft.party.PartyPlayer;
+import fr.badblock.api.common.minecraft.party.PartyPlayerRole;
+import fr.badblock.api.common.minecraft.party.PartyPlayerState;
+import fr.badblock.api.common.minecraft.party.PartySyncManager;
+import fr.badblock.api.common.minecraft.party.Partyable;
 import fr.badblock.api.common.tech.mongodb.MongoService;
-import fr.badblock.api.common.tech.mongodb.methods.MongoMethod;
 import fr.badblock.api.common.utils.data.Callback;
 import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.bungee.BadBungee;
@@ -42,6 +41,9 @@ public class PartyManager {
 	@Setter
 	private static PartyMessages messages = new PartyMessages();
 
+	private static MongoService mongo = BadBungee.getInstance().getMongoService();
+	public static PartySyncManager sync = new PartySyncManager(mongo);
+	
 	/**
 	 * Send the invitation message
 	 * 
@@ -95,7 +97,7 @@ public class PartyManager {
 		}
 
 		// Get the party
-		PartyManager.getParty(currPlayer.getName(), new Callback<Party>() {
+		sync.getParty(currPlayer.getName(), new Callback<Party>() {
 			
 			/**
 			 * When we receive the data
@@ -110,39 +112,51 @@ public class PartyManager {
 					// So we stop there
 					return;
 				}
+
+				// Get the party
+				sync.getParty(otherPlayer.getName(), new Callback<Party>() {
+
+					/**
+					 * When we receive the data
+					 */
+					@Override
+					public void done(Party party, Throwable error) {
+						// If the party is null
+						if (party == null) {
+							// Send expire message
+							PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
+							// So we stop there
+							return;
+						}
+
+						// Get the party player
+						PartyPlayer partyPlayer = party.getPartyPlayer(sender.getName());
+
+						// If the party player is null
+						if (partyPlayer == null) {
+							// Send message
+							PartyManager.getMessages().sendAcceptExpired(sender, otherPlayer.getName());
+							// So we stop there
+							return;
+						}
+
+						// If the state isn't in 'waiting'
+						if (!partyPlayer.getState().equals(PartyPlayerState.WAITING)) {
+							// Send message
+							PartyManager.getMessages().sendAcceptAlreadyInParty(sender, otherPlayer.getName());
+							// So we stop there
+							return;
+						}
+
+						// Accept party player
+						party.accept(mongo, sender.getName());
+						// Send accepted message
+						PartyManager.getMessages().sendAcceptAccepted(sender, otherPlayer.getName());
+					}
+				});
+
 			}
 			
-		});
-	}
-
-	/**
-	 * Remove party data
-	 * 
-	 * @param party
-	 */
-	public static void delete(Party party) {
-		// Mongo service
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
-			/**
-			 * Asynchronously
-			 */
-			@Override
-			public void run(MongoService mongoService) {
-				// Get the database
-				DB db = mongoService.getDb();
-				// Get the collection
-				DBCollection collection = db.getCollection("parties");
-				// New query
-				BasicDBObject query = new BasicDBObject();
-
-				// Set the id
-				query.put("uuid", party.getUuid());
-
-				// Update in the collection
-				collection.remove(query);
-			}
 		});
 	}
 
@@ -153,7 +167,7 @@ public class PartyManager {
 	 */
 	public static void follow(ProxiedPlayer sender) {
 		// Get the party
-		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+		sync.getParty(sender.getName(), new Callback<Party>() {
 
 			@Override
 			/**
@@ -217,110 +231,10 @@ public class PartyManager {
 					partyPlayer.setFollow(!follow);
 
 					// Save party
-					party.save();
+					party.save(mongo);
 				}
 			}
 
-		});
-	}
-
-	/**
-	 * Get the party
-	 * 
-	 * @param player
-	 * @param callback
-	 */
-	public static void getParty(String player, Callback<Party> callback) {
-		// Get mongo service
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
-			/**
-			 * Use asynchronously
-			 */
-			@Override
-			public void run(MongoService mongoService) {
-				// Get the database
-				DB db = mongoService.getDb();
-				// Get the collection
-				DBCollection collection = db.getCollection("parties");
-				// Create empty query
-				DBObject query = new BasicDBObject("players." + player.toLowerCase(),
-						new BasicDBObject("$exists", true));
-				// Cursor
-				DBCursor cursor = collection.find(query);
-
-				// If the cursor isn't null
-				if (cursor != null && cursor.hasNext()) {
-					// Get the DBObject
-					BasicDBObject dbObject = (BasicDBObject) cursor.next();
-					BasicDBObject players = (BasicDBObject) dbObject.get("players");
-					
-					BasicDBObject obj = (BasicDBObject) players.get(player.toLowerCase());
-					String s = obj.getString("state");
-					
-					if (s != null && !s.equals("ACCEPTED"))
-					{
-						callback.done(null, null);
-						return;
-					}
-					
-					// Done callback
-					callback.done(new Party(dbObject), null);
-				} else {
-					// Empty callback
-					callback.done(null, null);
-				}
-			}
-		});
-	}
-
-	/**
-	 * In group
-	 * 
-	 * @param player
-	 * @param callback
-	 */
-	public static void inGroup(String player, Callback<Boolean> callback) {
-		// Set to lower case username
-		player = player.toLowerCase();
-		// Get party
-		getParty(player, new Callback<Party>() {
-
-			/**
-			 * When we receive the party data
-			 */
-			@Override
-			public void done(Party result, Throwable error) {
-				// Callback
-				callback.done(result != null, null);
-			}
-
-		});
-	}
-
-	/**
-	 * Insert the party
-	 * 
-	 * @param party
-	 */
-	public static void insert(Party party) {
-		// Get mongo service
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
-			/**
-			 * Asynchronously
-			 */
-			@Override
-			public void run(MongoService mongoService) {
-				// Get database
-				DB db = mongoService.getDb();
-				// Get collection
-				DBCollection collection = db.getCollection("parties");
-				// Insert the collection
-				collection.insert(party.toObject());
-			}
 		});
 	}
 
@@ -375,7 +289,7 @@ public class PartyManager {
 		}
 
 		// Get the party
-		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+		sync.getParty(sender.getName(), new Callback<Party>() {
 
 			/**
 			 * When you receive the party data
@@ -387,9 +301,9 @@ public class PartyManager {
 					// Set flag
 					currPlayer.getFlags().set(flagName, 60 * 2 * 1000);
 					// Create party
-					party = new Party(sender.getName(), invited);
+					party = new Party(mongo, sender.getName(), invited);
 					// Insert into the database
-					PartyManager.insert(party);
+					sync.insert(party);
 					// Send invite message
 					_inviteMessage(currPlayer, otherPlayer);
 				}
@@ -416,7 +330,7 @@ public class PartyManager {
 						// Set flag
 						currPlayer.getFlags().set(flagName, 60 * 2 * 1000);
 						// Invite the party player
-						party.invite(otherPlayer.getName(), PartyPlayerRole.DEFAULT);
+						party.invite(mongo, otherPlayer.getName(), PartyPlayerRole.DEFAULT);
 						// Send the message
 						PartyManager.getMessages().sendInviteYouInvited(currPlayer, otherPlayer.getName());
 						// Send the message
@@ -447,7 +361,7 @@ public class PartyManager {
 		BadPlayer currPlayer = BadPlayer.get(sender);
 
 		// Get the party
-		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+		sync.getParty(sender.getName(), new Callback<Party>() {
 
 			/**
 			 * When you receive the party data
@@ -496,7 +410,7 @@ public class PartyManager {
 	 */
 	public static void leave(ProxiedPlayer sender, String[] args) {
 		// Todo
-		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+		sync.getParty(sender.getName(), new Callback<Party>() {
 
 			/**
 			 * When we receive the data
@@ -524,13 +438,13 @@ public class PartyManager {
 							.forEach(entry -> PartyManager.getMessages().sendOwnerQuit(
 									BungeeManager.getInstance().getBadPlayer(entry.getKey()), sender.getName()));
 					// Delete the party
-					party.remove();
+					party.remove(mongo);
 					// So we stop there
 					return;
 				}
 
 				// Remove player
-				party.remove(sender.getName());
+				party.remove(mongo, sender.getName());
 
 				// Send message
 				if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED)) {
@@ -559,7 +473,7 @@ public class PartyManager {
 	 */
 	public static void list(ProxiedPlayer sender) {
 		// Get party
-		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+		sync.getParty(sender.getName(), new Callback<Party>() {
 
 			/**
 			 * When we receive the data
@@ -675,7 +589,7 @@ public class PartyManager {
 		String rawType = args[1];
 
 		// Get the party
-		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+		sync.getParty(sender.getName(), new Callback<Party>() {
 
 			/**
 			 * When we receive the data
@@ -748,7 +662,7 @@ public class PartyManager {
 				// If the current party player is moderator
 				if (partyPlayer.getRole().equals(PartyPlayerRole.MODO)) {
 					// Set default
-					party.setRole(partyPlayer, PartyPlayerRole.DEFAULT);
+					party.setRole(mongo, partyPlayer, PartyPlayerRole.DEFAULT);
 					// Send message
 					PartyManager.getMessages().sendModoSetDefault(sender, partyPlayer.getName());
 					// So we stop there
@@ -756,7 +670,7 @@ public class PartyManager {
 				}
 
 				// Set moderator
-				party.setRole(partyPlayer, PartyPlayerRole.MODO);
+				party.setRole(mongo, partyPlayer, PartyPlayerRole.MODO);
 				// Send message
 				PartyManager.getMessages().sendModoSetModo(sender, partyPlayer.getName());
 
@@ -791,7 +705,7 @@ public class PartyManager {
 		}
 
 		// Get party
-		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+		sync.getParty(sender.getName(), new Callback<Party>() {
 
 			/**
 			 * When we receive the data
@@ -848,7 +762,7 @@ public class PartyManager {
 				}
 
 				// Remove player
-				party.remove(toRemove);
+				party.remove(mongo, toRemove);
 
 				// Send message
 				if (partyPlayer.getState().equals(PartyPlayerState.ACCEPTED)) {
@@ -941,7 +855,7 @@ public class PartyManager {
 		BungeeManager bungeeManager = BungeeManager.getInstance();
 
 		// Get the party
-		PartyManager.getParty(sender.getName(), new Callback<Party>() {
+		sync.getParty(sender.getName(), new Callback<Party>() {
 
 			/**
 			 * When we receive the data
@@ -1052,39 +966,5 @@ public class PartyManager {
 
 		});
 	}
-
-	/**
-	 * Update party data
-	 * 
-	 * @param party
-	 */
-	public static void update(Party party) {
-		// Mongo service
-		MongoService mongoService = BadBungee.getInstance().getMongoService();
-		// Use async mongo
-		mongoService.useAsyncMongo(new MongoMethod(mongoService) {
-			/**
-			 * Asynchronously
-			 */
-			@Override
-			public void run(MongoService mongoService) {
-				// Get the database
-				DB db = mongoService.getDb();
-				// Get the collection
-				DBCollection collection = db.getCollection("parties");
-				// New query
-				BasicDBObject query = new BasicDBObject();
-
-				// Set the id
-				query.put("uuid", party.getUuid());
-
-				// Set the updater as a setter
-				BasicDBObject updater = new BasicDBObject("$set", party.toObject());
-
-				// Update in the collection
-				collection.update(query, updater);
-			}
-		});
-	}
-
+	
 }

@@ -745,25 +745,20 @@ public class BadOfflinePlayer {
 			JsonElement element = toAdd.get(key);
 			// If it's not a JsonObject
 			if (!base.containsField(key) || !element.isJsonObject()) {
+				System.out.println("Put: " + key + " / " + element.toString());
 				// Put JsonObject
 				base.put(key, element);
-				// Returns the base object
-				return base;
 			}
 			// If it's a JsonObject
 			else {
 				// Try to?
 				try {
+					System.out.println("Merge: " + key);
 					// Merge DBObject
 					DBObject dbObject = mergeData(ObjectUtils.toDbObject(base.get(key)), element.getAsJsonObject(),
 							false);
 					// Put the DBObject into base
 					base.put(key, dbObject);
-					// If this is the base point
-					if (basePoint) {
-						// Save data
-						saveData();
-					}
 					// Returns the database object
 					return dbObject;
 				}
@@ -772,6 +767,17 @@ public class BadOfflinePlayer {
 					// Print stack trace to logs
 					error.printStackTrace();
 				}
+			}
+		}
+		// If this is the base point
+		if (basePoint) {
+			// Save data
+			System.out.println("Save to");
+			try {
+				saveData();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		// Returns null

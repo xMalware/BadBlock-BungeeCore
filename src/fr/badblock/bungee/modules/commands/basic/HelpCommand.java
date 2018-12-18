@@ -17,7 +17,7 @@ public class HelpCommand extends BadCommand {
 	 * Command constructor
 	 */
 	public HelpCommand() {
-		super("help", "", "?", "bukkit:help", "minecraft:help", "craftbukkit:help", "bukkit:?", "minecraft:?",
+		super("help", "", "?", "aide", "bukkit:help", "minecraft:help", "craftbukkit:help", "bukkit:?", "minecraft:?",
 				"craftbukkit:?");
 	}
 

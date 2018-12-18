@@ -21,7 +21,7 @@ public class TechCommand extends BadCommand {
 	 * Command constructor
 	 */
 	public TechCommand() {
-		super("tech");
+		super("tech", "bukkit.command.tech");
 	}
 
 	/**

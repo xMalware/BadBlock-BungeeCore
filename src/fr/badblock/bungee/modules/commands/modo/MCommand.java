@@ -40,7 +40,7 @@ public class MCommand extends BadCommand {
 	 */
 	public MCommand() {
 		// Super!
-		super("m", null, "md");
+		super("m", "bungee.command.mod", "md");
 
 		moderationCommands = new ArrayList<>();
 		moderationCommands.add(new BanIpCommand());

@@ -1,12 +1,12 @@
 package fr.badblock.bungee.modules.commands.modo.subcommands;
 
+import fr.badblock.api.common.minecraft.party.Party;
+import fr.badblock.api.common.minecraft.party.Partyable;
 import fr.badblock.api.common.utils.data.Callback;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.modules.commands.basic.friends.FriendListable;
 import fr.badblock.bungee.modules.commands.basic.msg.PMPrivacy;
-import fr.badblock.bungee.modules.commands.basic.party.Party;
 import fr.badblock.bungee.modules.commands.basic.party.PartyManager;
-import fr.badblock.bungee.modules.commands.basic.party.Partyable;
 import fr.badblock.bungee.modules.commands.modo.AbstractModCommand;
 import fr.badblock.bungee.players.BadIP;
 import fr.badblock.bungee.players.BadPlayer;
@@ -73,7 +73,7 @@ public class TrackCommand extends AbstractModCommand {
 
 		String locale = badOnlinePlayer.getLocale().name();
 
-		PartyManager.getParty(playerName, new Callback<Party>() {
+		PartyManager.sync.getParty(playerName, new Callback<Party>() {
 
 			@Override
 			public void done(Party result, Throwable error) {

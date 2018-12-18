@@ -24,7 +24,7 @@ public class ConnectServerCommand extends BadCommand {
 	 */
 	public ConnectServerCommand() {
 		// Super!
-		super("connectserver", null, "cos");
+		super("connectserver", "bungee.command.connectserver", "cos");
 		this.setForPlayersOnly(true);
 	}
 

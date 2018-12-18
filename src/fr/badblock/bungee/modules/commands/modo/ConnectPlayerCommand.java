@@ -26,7 +26,7 @@ public class ConnectPlayerCommand extends BadCommand {
 	 */
 	public ConnectPlayerCommand() {
 		// Super!
-		super("connectplayer", null, "cop");
+		super("connectplayer", "bungee.command.connectplayer", "cop");
 		this.setForPlayersOnly(true);
 	}
 

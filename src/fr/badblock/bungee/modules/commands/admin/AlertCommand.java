@@ -35,7 +35,7 @@ public class AlertCommand extends BadCommand {
 	 * Command constructor
 	 */
 	public AlertCommand() {
-		super("lalert", "bungee.command.alert", "lalert");
+		super("lalert", "bungee.command.alert", "alert");
 	}
 
 	/**

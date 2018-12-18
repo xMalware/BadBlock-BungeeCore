@@ -35,7 +35,13 @@ public class PlayerLinkReceiver extends RabbitListener {
 	 * When we receive a packet
 	 */
 	@Override
-	public void onPacketReceiving(String body) {
+	public void onPacketReceiving(String body)
+	{
+		process(body);
+	}
+
+	public static void process(String body)
+	{
 		// Get the main class
 		BadBungee badBungee = BadBungee.getInstance();
 		// Get Gson
@@ -44,10 +50,15 @@ public class PlayerLinkReceiver extends RabbitListener {
 		// Get the player packet
 		PlayerPacket playerPacket = gson.fromJson(body, PlayerPacket.class);
 
+		process(playerPacket);
+	}
+
+	public static void process(PlayerPacket playerPacket)
+	{
 		// If the player packet is null
 		if (playerPacket == null) {
 			// Log the error
-			System.out.println("Error: Received a null PlayerPacket (" + body + ")");
+			System.out.println("Error: Received a null PlayerPacket.");
 			// So we stop there
 			return;
 		}
@@ -58,7 +69,7 @@ public class PlayerLinkReceiver extends RabbitListener {
 		// If the packet type is null
 		if (playerPacketType == null) {
 			// Log the error
-			System.out.println("Error: Working with a null PlayerPacketType (" + body + ")");
+			System.out.println("Error: Working with a null PlayerPacketType.");
 			// We stop there
 			return;
 		}
@@ -69,7 +80,7 @@ public class PlayerLinkReceiver extends RabbitListener {
 		// If the processing is null
 		if (processing == null) {
 			// Log the error
-			System.out.println("Error: Working with a null Processing (" + body + ")");
+			System.out.println("Error: Working with a null Processing.");
 			// We stop there
 			return;
 		}

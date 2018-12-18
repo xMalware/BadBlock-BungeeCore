@@ -1,5 +1,7 @@
 package fr.badblock.bungee.modules.commands.basic.party;
 
+import fr.badblock.api.common.minecraft.party.Party;
+import fr.badblock.api.common.minecraft.party.PartyPlayerRole;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.i18n.I19n;
