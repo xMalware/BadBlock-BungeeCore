@@ -1,4 +1,4 @@
-package fr.badblock.bungee.rabbit.listeners;
+package fr.badblock.bungee.link.listeners;
 
 import com.google.gson.Gson;
 
@@ -8,9 +8,9 @@ import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListenerType;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.BungeeLocalManager;
 import fr.badblock.bungee.link.bungee.BungeeManager;
+import fr.badblock.bungee.link.datareceivers.PlayerDataUpdateReceiver;
 import fr.badblock.bungee.players.BadOfflinePlayer;
 import fr.badblock.bungee.players.BadPlayer;
-import fr.badblock.bungee.rabbit.datareceivers.PlayerDataUpdateReceiver;
 
 /**
  * 

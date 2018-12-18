@@ -1,4 +1,4 @@
-package fr.badblock.bungee.rabbit.listeners;
+package fr.badblock.bungee.link.listeners;
 
 import com.google.gson.Gson;
 

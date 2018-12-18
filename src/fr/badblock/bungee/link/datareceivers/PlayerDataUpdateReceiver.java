@@ -1,4 +1,4 @@
-package fr.badblock.bungee.rabbit.datareceivers;
+package fr.badblock.bungee.link.datareceivers;
 
 import com.google.gson.JsonObject;
 

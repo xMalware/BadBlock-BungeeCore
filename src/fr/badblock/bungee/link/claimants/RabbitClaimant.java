@@ -1,4 +1,4 @@
-package fr.badblock.bungee.rabbit.claimants;
+package fr.badblock.bungee.link.claimants;
 
 import fr.badblock.bungee.utils.time.TaskManager;
 

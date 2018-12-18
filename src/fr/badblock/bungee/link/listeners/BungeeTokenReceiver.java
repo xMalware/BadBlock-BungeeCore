@@ -1,4 +1,4 @@
-package fr.badblock.bungee.rabbit.listeners;
+package fr.badblock.bungee.link.listeners;
 
 import fr.badblock.api.common.sync.bungee.BadBungeeQueues;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
