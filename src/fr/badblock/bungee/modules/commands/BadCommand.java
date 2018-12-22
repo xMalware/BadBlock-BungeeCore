@@ -12,6 +12,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
 /**
@@ -38,17 +39,31 @@ public abstract class BadCommand extends Command {
 	 *            > name of the command
 	 */
 	public BadCommand(String name) {
-		// Sends the name of the command to the superclass
-		super(name);
-		// Load the command when it is instantiated.
-		this.load();
+		this(BadBungee.getInstance(), name);
 	}
 
 	public BadCommand(String name, String permission, String... aliases) {
+		this(BadBungee.getInstance(), name, permission, aliases);
+	}
+	
+	/**
+	 * Typical command builder
+	 * 
+	 * @param name
+	 *            > name of the command
+	 */
+	public BadCommand(Plugin plugin, String name) {
+		// Sends the name of the command to the superclass
+		super(name);
+		// Load the command when it is instantiated.
+		this.load(plugin);
+	}
+
+	public BadCommand(Plugin plugin, String name, String permission, String... aliases) {
 		// Sends the details of the command to the superclass
 		super(name, permission, aliases);
 		// Load the command when it is instantiated.
-		this.load();
+		this.load(plugin);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -78,13 +93,13 @@ public abstract class BadCommand extends Command {
 	/**
 	 * Registration of the command
 	 */
-	private void load() {
+	private void load(Plugin plugin) {
 		// We get the plugin manager
 		PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
 		// We register the command
-		pluginManager.registerCommand(BadBungee.getInstance(), this);
+		pluginManager.registerCommand(plugin, this);
 		// We say that the command has been registered
-		BadBungee.log("§aLoaded command: " + getClass().getSimpleName());
+		BadBungee.log("§aLoaded command: " + getClass().getSimpleName() + " by " + plugin.getDescription().getName());
 	}
 
 	/**

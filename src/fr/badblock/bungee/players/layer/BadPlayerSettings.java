@@ -4,9 +4,9 @@ import com.google.gson.JsonObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
+import fr.badblock.api.common.minecraft.PMPrivacy;
+import fr.badblock.api.common.minecraft.friends.FriendListable;
 import fr.badblock.api.common.minecraft.party.Partyable;
-import fr.badblock.bungee.modules.commands.basic.friends.FriendListable;
-import fr.badblock.bungee.modules.commands.basic.msg.PMPrivacy;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

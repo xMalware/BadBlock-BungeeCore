@@ -2,6 +2,7 @@ package fr.badblock.bungee;
 
 import com.google.gson.Gson;
 
+import fr.badblock.api.common.minecraft.party.PartySyncManager;
 import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.rabbitmq.RabbitService;
 import fr.badblock.api.common.tech.redis.RedisService;
@@ -113,6 +114,8 @@ public class BadBungee extends Plugin {
 	private boolean unloaded;
 
 	private BungeeLoader bungeeLoader;
+	
+	private PartySyncManager syncManager;
 
 	@Override
 	/**

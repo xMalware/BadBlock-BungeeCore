@@ -31,9 +31,8 @@ import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.bungee.tasks.PeakTask;
 import fr.badblock.bungee.link.bungee.tasks.PlayerCleanerTask;
 import fr.badblock.bungee.link.claimants.RabbitClaimant;
-import fr.badblock.bungee.link.docker.BungeeServerSyncTask;
+import fr.badblock.bungee.modules.ModuleLoader;
 import fr.badblock.bungee.modules.chat.ChatModule;
-import fr.badblock.bungee.modules.commands.modo.objects.PunishmentReasons;
 import fr.badblock.bungee.utils.PackageUtils;
 import fr.badblock.bungee.utils.logfilters.IHConnectedFilter;
 import fr.badblock.bungee.utils.logfilters.IHResetByPeerFilter;
@@ -71,8 +70,6 @@ public class BungeeLoader {
 	 */
 	private BadBungeeConfig config;
 
-	private PunishmentReasons punishmentReasons;
-
 	/**
 	 * Constructor
 	 * 
@@ -100,14 +97,14 @@ public class BungeeLoader {
 		loadRedis();
 		// Load Bungee linker
 		loadBungeeLinker();
+		// Load all modules
+		new ModuleLoader();
 		// Load listeners
 		loadListeners();
 		// Load punishment table
-		loadPunishmentTable();
+		//loadPunishmentTable();
 		// Load permissions
 		loadPermissions();
-		// load docker
-		loadDocker();
 	}
 
 	private void loadFilters() {
@@ -120,17 +117,10 @@ public class BungeeLoader {
 	}
 
 	/**
-	 * Load punishment table
-	 */
-	private void loadPunishmentTable() {
-		setPunishmentReasons(new PunishmentReasons());
-	}
-
-	/**
 	 * Reload table
 	 */
 	public void reload() {
-		getPunishmentReasons().load();
+		//getPunishmentReasons().load();
 		ChatModule.getModules().forEach(chatModule -> chatModule.reload());
 		loadI18n();
 		loadPermissions();
@@ -195,7 +185,7 @@ public class BungeeLoader {
 
 					// Commands
 					"fr.badblock.bungee.modules.commands.admin", "fr.badblock.bungee.modules.commands.badfriends",
-					"fr.badblock.bungee.modules.commands.basic", "fr.badblock.bungee.modules.commands.basic.friends",
+					"fr.badblock.bungee.modules.commands.basic",
 					"fr.badblock.bungee.modules.commands.basic.msg", "fr.badblock.bungee.modules.commands.basic.party",
 					"fr.badblock.bungee.modules.commands.modo", "fr.badblock.bungee.modules.commands.staff",
 					"fr.badblock.bungee.modules.commands.login",
@@ -284,11 +274,6 @@ public class BungeeLoader {
 		getBadBungee().setPrettyGson(new GsonBuilder().setPrettyPrinting().create());
 	}
 
-	private void loadDocker()
-	{
-		new BungeeServerSyncTask();
-	}
-	
 	/**
 	 * Set the instance of BadBungee
 	 */

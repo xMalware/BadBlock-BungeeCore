@@ -3,6 +3,7 @@ package fr.badblock.bungee.modules.abstracts;
 import fr.badblock.bungee.BadBungee;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
 /**
@@ -18,12 +19,19 @@ public class BadListener implements Listener {
 	/**
 	 * Constructor of the BadListener class
 	 */
-	@SuppressWarnings("deprecation")
 	public BadListener() {
+		this(BadBungee.getInstance());
+	}
+
+	/**
+	 * Constructor of the BadListener class
+	 */
+	@SuppressWarnings("deprecation")
+	public BadListener(Plugin plugin) {
 		// We get the BungeeCord plugin manager
 		PluginManager pluginManager = BungeeCord.getInstance().getPluginManager();
 		// We register the listener
-		pluginManager.registerListener(BadBungee.getInstance(), this);
+		pluginManager.registerListener(plugin, this);
 		// We mark in the logs that the listener is loaded
 		BungeeCord.getInstance().getConsole()
 				.sendMessage("§e[BadBungee] §aLoaded listener: " + getClass().getSimpleName());

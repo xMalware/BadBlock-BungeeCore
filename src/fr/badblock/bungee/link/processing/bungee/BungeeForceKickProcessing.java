@@ -2,7 +2,6 @@ package fr.badblock.bungee.link.processing.bungee;
 
 import fr.badblock.api.common.sync.bungee._BungeeProcessing;
 import fr.badblock.api.common.sync.bungee.packets.BungeePacketType;
-import fr.badblock.bungee.modules.commands.admin.ForceKickCommand;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.BungeeCord;
@@ -37,7 +36,7 @@ public class BungeeForceKickProcessing extends _BungeeProcessing {
 		ProxiedPlayer proxiedPlayer = BungeeCord.getInstance().getPlayer(badPlayer.getName());
 		if (proxiedPlayer != null) {
 			proxiedPlayer
-					.disconnect(I19n.getMessage(proxiedPlayer, ForceKickCommand.prefix + "youhavebeenkicked", null));
+					.disconnect(I19n.getMessage(proxiedPlayer, "bungee.commands.forcekick.youhavebeenkicked", null));
 		}
 		// Remove the bad player
 		badPlayer.remove();

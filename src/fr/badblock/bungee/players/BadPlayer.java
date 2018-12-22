@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.badblock.api.common.minecraft.ModoSession;
 import fr.badblock.api.common.sync.bungee.BadBungeeQueues;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketEncoder;
@@ -18,7 +19,6 @@ import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
-import fr.badblock.bungee.modules.commands.modo.objects.ModoSession;
 import fr.badblock.bungee.utils.ChatColorUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
 import fr.badblock.bungee.utils.mcjson.McJson;

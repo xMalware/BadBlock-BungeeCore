@@ -1,13 +1,10 @@
 package fr.badblock.bungee.link.listeners;
 
-import com.google.gson.Gson;
-
 import fr.badblock.api.common.sync.bungee.BadBungeeQueues;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListenerType;
 import fr.badblock.bungee.BadBungee;
-import fr.badblock.bungee.modules.commands.modo.punishments.PunishmentPacket;
-import fr.badblock.bungee.modules.commands.modo.punishments.PunishmentType;
+import fr.badblock.bungee.modules.modo.commands.punishments.PunishmentManager;
 
 /**
  * 
@@ -35,34 +32,7 @@ public class BungeePunishmentPacketReceiver extends RabbitListener {
 	 */
 	@Override
 	public void onPacketReceiving(String body) {
-		// Get the main class
-		BadBungee badBungee = BadBungee.getInstance();
-		// Get Gson object
-		Gson gson = badBungee.getGson();
-		// Get Punishment packet object
-		PunishmentPacket punishmentPacket = gson.fromJson(body, PunishmentPacket.class);
-
-		// If the packet is null
-		if (punishmentPacket == null) {
-			// Log the error
-			System.out.println("Error: Received a null PunishmentPacket (" + body + ")");
-			// We stop there
-			return;
-		}
-
-		// Get the packet type
-		PunishmentType punishmentType = punishmentPacket.getPunishmentType();
-
-		// If the packet type is null
-		if (punishmentType == null) {
-			// Log the error
-			System.out.println("Error: Working with a null PunishmentType (" + body + ")");
-			// We stop there
-			return;
-		}
-
-		// Process.
-		punishmentPacket.process();
+		PunishmentManager.handle(body);
 	}
 
 }
