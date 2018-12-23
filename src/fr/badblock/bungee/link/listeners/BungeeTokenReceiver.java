@@ -24,7 +24,7 @@ public class BungeeTokenReceiver extends RabbitListener {
 	public BungeeTokenReceiver() {
 		// Super!
 		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_TOKEN_RESULT,
-				RabbitListenerType.SUBSCRIBER, true);
+				RabbitListenerType.SUBSCRIBER, false);
 		// Load the listener
 		load();
 	}

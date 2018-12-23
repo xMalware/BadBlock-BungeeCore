@@ -1,5 +1,7 @@
 package fr.badblock.bungee.link.bungee;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,8 +34,24 @@ public class BungeeLocalManager {
 	 */
 	@Getter
 	@Setter
-	private static BungeeLocalManager instance = new BungeeLocalManager();
+	private static BungeeLocalManager instance;
+	
+	/**
+	 * BadPlayer map
+	 * 
+	 * @param Set
+	 *            the new BadPlayer map
+	 * @return Returns the new BadPlayer map
+	 */
+	@Getter
+	private Map<String, BadPlayer> maps;
 
+	public BungeeLocalManager()
+	{
+		instance = this;
+		maps = new HashMap<>();
+	}
+	
 	/**
 	 * Get a local player with a ProxiedPlayer object
 	 * 

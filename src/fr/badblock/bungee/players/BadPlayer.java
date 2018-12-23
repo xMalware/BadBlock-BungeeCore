@@ -15,6 +15,7 @@ import fr.badblock.api.common.utils.flags.FlagObject;
 import fr.badblock.api.common.utils.general.StringUtils;
 import fr.badblock.api.common.utils.time.Time;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.BungeeLocalManager;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
@@ -44,15 +45,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public final class BadPlayer extends BadOfflinePlayer {
 
 	/**
-	 * BadPlayer map
-	 * 
-	 * @param Set
-	 *            the new BadPlayer map
-	 * @return Returns the new BadPlayer map
-	 */
-	private static Map<String, BadPlayer> maps = new HashMap<>();
-
-	/**
 	 * Get a BadPlayer object
 	 * 
 	 * @param The
@@ -72,7 +64,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public static BadPlayer get(String name) {
 		// Get from the map
-		return maps.getOrDefault(name, null);
+		return BungeeLocalManager.getInstance().getMaps().getOrDefault(name, null);
 	}
 
 	/**
@@ -82,7 +74,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public static Collection<BadPlayer> getPlayers() {
 		// Get the map values
-		return maps.values();
+		return BungeeLocalManager.getInstance().getMaps().values();
 	}
 
 	/**
@@ -93,7 +85,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public static boolean has(String name) {
 		// Contains in the map?
-		return maps.containsKey(name);
+		return BungeeLocalManager.getInstance().getMaps().containsKey(name);
 	}
 
 	/**
@@ -103,7 +95,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public static void put(BadPlayer badPlayer) {
 		// Put in map
-		maps.put(badPlayer.getName(), badPlayer);
+		BungeeLocalManager.getInstance().getMaps().put(badPlayer.getName(), badPlayer);
 
 		// Keep alive update
 		BungeeTask.keepAlive();
@@ -335,7 +327,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	private void put() {
 		// Put in the map
-		maps.put(getName(), this);
+		BungeeLocalManager.getInstance().getMaps().put(getName(), this);
 		// Global logging
 		BungeeManager.getInstance().log(ChatColor.GREEN + getName() + " is now connected.");
 	}
@@ -353,7 +345,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public void remove() {
 		// Remove from the map
-		maps.remove(getName());
+		BungeeLocalManager.getInstance().getMaps().remove(getName());
 		// Global logging
 		BungeeManager.getInstance().log(ChatColor.RED + getName() + " is now disconnected.");
 	}

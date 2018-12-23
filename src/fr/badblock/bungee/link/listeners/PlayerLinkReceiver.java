@@ -26,7 +26,7 @@ public class PlayerLinkReceiver extends RabbitListener {
 	public PlayerLinkReceiver() {
 		// Super!
 		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.PLAYER_PROCESSING,
-				RabbitListenerType.SUBSCRIBER, true);
+				RabbitListenerType.SUBSCRIBER, false);
 		// Load the listener
 		load();
 	}

@@ -19,7 +19,7 @@ public class PlayerDataRequester extends RabbitRequestListener {
 	 */
 	public PlayerDataRequester() {
 		// Super!
-		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_DATA_PLAYERS_RPC, true);
+		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_DATA_PLAYERS_RPC, false);
 		// Load the listener
 		load();
 	}

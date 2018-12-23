@@ -21,9 +21,12 @@ public abstract class ChatModule {
 				.sendMessage("§e[BadBungee] §aLoaded chat module: " + getClass().getSimpleName());
 	}
 
+	@SuppressWarnings("deprecation")
 	public void remove()
 	{
 		modules.remove(this);
+		BungeeCord.getInstance().getConsole()
+		.sendMessage("§e[BadBungee] §cUnloaded chat module: " + getClass().getSimpleName());
 	}
 	
 	public void reload() {

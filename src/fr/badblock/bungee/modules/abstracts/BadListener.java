@@ -34,7 +34,7 @@ public class BadListener implements Listener {
 		pluginManager.registerListener(plugin, this);
 		// We mark in the logs that the listener is loaded
 		BungeeCord.getInstance().getConsole()
-				.sendMessage("§e[BadBungee] §aLoaded listener: " + getClass().getSimpleName());
+				.sendMessage("§e[BadBungee] §aLoaded listener: " + getClass().getSimpleName() + " by " + plugin.getDescription().getName());
 	}
 
 }

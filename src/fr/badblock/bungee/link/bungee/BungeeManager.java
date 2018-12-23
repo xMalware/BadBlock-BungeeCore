@@ -13,17 +13,10 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-
 import fr.badblock.api.common.sync.bungee.BadBungeeQueues;
 import fr.badblock.api.common.sync.bungee.BungeeUtils;
 import fr.badblock.api.common.sync.bungee.packets.BungeePacket;
 import fr.badblock.api.common.sync.bungee.packets.BungeePacketType;
-import fr.badblock.api.common.tech.mongodb.MongoService;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacket;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketEncoder;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketMessage;
@@ -62,7 +55,7 @@ public class BungeeManager {
 	 */
 	@Getter
 	@Setter
-	private static BungeeManager instance = new BungeeManager();
+	private static BungeeManager instance;
 
 	/**
 	 * BungeeCord nodes
@@ -87,7 +80,14 @@ public class BungeeManager {
 	 * Cached player token
 	 */
 	private CachedPlayerToken token;
+	
+	private MaintenanceObject	maintenance;
 
+	public BungeeManager()
+	{
+		instance = this;
+	}
+	
 	public boolean isMaster()
 	{
 		Map<String, BungeeObject> treeMap = new TreeMap<String, BungeeObject>(
@@ -144,51 +144,14 @@ public class BungeeManager {
 		sendPacket(new BungeePacket(BungeePacketType.BROADCAST, stringBuilder.toString()));
 	}
 
-	@SuppressWarnings("deprecation")
 	/**
 	 * Generate the server ping by using network data
 	 * 
 	 * @return a ServerPing object
 	 */
 	public ServerPing generatePing() {
-		// If a server ping has already been created recently
-		if (serverPing != null && GlobalFlags.has(serverPing)) {
-			// Returns the current server ping
-			return serverPing;
-		}
-		// Get main class
-		BadBungee bungee = BadBungee.getInstance();
-		// Get Mongo service by using the main class
-		MongoService mongoService = bungee.getMongoService();
-		// Get database object
-		DB db = mongoService.getDb();
-		// Get the collection
-		DBCollection collection = db.getCollection("serverInfo");
-		// New query
-		BasicDBObject query = new BasicDBObject();
-		// Find all data with an empty query
-		DBCursor cursor = collection.find(query);
-		// For each data
-		while (cursor.hasNext()) {
-			// Get it
-			DBObject dbObject = cursor.next();
-			// Get deserialize object
-			String json = dbObject.toString();
-			// Serialize as a ServerPing object
-			ServerPing serverPing = bungee.getGson().fromJson(json, ServerPing.class);
-			// Replace {} to \n => escape lines
-			serverPing.setDescription(serverPing.getDescription().replace("{}", "\n"));
-			// Set slots
-			setSlots(serverPing.getPlayers().getMax());
-			// Add a flag for the server ping object to avoid spam
-			GlobalFlags.set(serverPing, 1000);
-			// Set online players
-			serverPing.getPlayers().setOnline(getOnlinePlayers());
-			// Returns the server ping object
-			return serverPing;
-		}
 		// Returns null
-		return null;
+		return serverPing;
 	}
 
 	/**
@@ -342,6 +305,7 @@ public class BungeeManager {
 		// Get the lower player username
 		final String toLowerName = name.toLowerCase();
 
+		System.out.println("HasUsername : " + name + " : " + (!getLoggedPlayers(n -> n.getName().toLowerCase().equals(toLowerName)).isEmpty()));
 		return !getLoggedPlayers(n -> n.getName().toLowerCase().equals(toLowerName)).isEmpty();
 	}
 

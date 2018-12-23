@@ -28,7 +28,7 @@ public class PlayerUpdateDataReceiver extends RabbitListener {
 	public PlayerUpdateDataReceiver() {
 		// Super!
 		super(BadBungee.getInstance().getRabbitService(), BadBungeeQueues.BUNGEE_DATA_RECEIVERS_UPDATE,
-				RabbitListenerType.SUBSCRIBER, true);
+				RabbitListenerType.SUBSCRIBER, false);
 		// Load the listener
 		load();
 	}

@@ -27,8 +27,11 @@ import fr.badblock.api.common.utils.permissions.PermissionsManager;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.config.ConfigLoader;
+import fr.badblock.bungee.link.bungee.BungeeLocalManager;
+import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.bungee.tasks.PeakTask;
+import fr.badblock.bungee.link.bungee.tasks.PingUpdaterTask;
 import fr.badblock.bungee.link.bungee.tasks.PlayerCleanerTask;
 import fr.badblock.bungee.link.claimants.RabbitClaimant;
 import fr.badblock.bungee.modules.ModuleLoader;
@@ -83,6 +86,8 @@ public class BungeeLoader {
 		setInstance();
 		// Set the Gson object
 		setGson();
+		new BungeeLocalManager();
+		new BungeeManager();
 		// Load filters
 		loadFilters();
 		// Load configuration
@@ -132,6 +137,7 @@ public class BungeeLoader {
 	private void loadBungeeLinker() {
 		// Instanciate the task
 		new BungeeTask();
+		new PingUpdaterTask();
 		// Load peak
 		new PeakTask();
 		// Player Cleaner task
@@ -175,7 +181,7 @@ public class BungeeLoader {
 			// Instanciate listeners/commmands
 			PackageUtils.instanciateListeners(getBadBungee(),
 					// Rabbit listeners
-					"fr.badblock.bungee.rabbit.listeners",
+					"fr.badblock.bungee.link.listeners",
 
 					// Chat modules
 					"fr.badblock.bungee.modules.chat",

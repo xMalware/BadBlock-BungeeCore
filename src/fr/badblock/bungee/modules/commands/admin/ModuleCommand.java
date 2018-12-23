@@ -45,7 +45,7 @@ public class ModuleCommand extends BadCommand {
 		case "reload":
 			reload(sender, args);
 			break;
-		case "unload":
+		case "unload":  
 			unload(sender, args);
 			break;
 		case "list":
