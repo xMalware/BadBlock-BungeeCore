@@ -59,14 +59,12 @@ public class PlayerUpdateDataReceiver extends RabbitListener {
 			// Sauvegarde des informations
 			BadPlayer badPlayer = bungeeLocalManager.getPlayer(playerName);
 
-			System.out.println("Merge DATA point 1 : 1");
 			// If the BadPlayer is null
 			if (badPlayer == null) {
 				// So we stop there
 				return;
 			}
 
-			System.out.println("Merge DATA point 1 : 2");
 			// Merge the data
 			badPlayer.mergeData(badPlayer.getDbObject(), playerDataUpdateReceiver.getData(), true);
 			return;
@@ -75,14 +73,11 @@ public class PlayerUpdateDataReceiver extends RabbitListener {
 		// Sinon, à la recherche d'un master qui fera la save mongo
 		BadOfflinePlayer badOfflinePlayer = BungeeManager.getInstance().getBadOfflinePlayer(playerName);
 
-		System.out.println("Merge DATA point 2 : 1");
-		
 		if (!BungeeManager.getInstance().isMaster())
 		{
 			return;
 		}
 
-		System.out.println("Merge DATA point 2 : 2");
 		badOfflinePlayer.mergeData(badOfflinePlayer.getDbObject(), playerDataUpdateReceiver.getData(), true);
 		try {
 			badOfflinePlayer.saveData();

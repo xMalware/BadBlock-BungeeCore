@@ -54,7 +54,7 @@ public class BadBungeeConfig {
 	 */
 	@Getter
 	@Setter
-	private String ipHubApiKey;
+	private String[] ipHubApiKey;
 
 	/**
 	 * Docker clusters to fetch for Bungee sync

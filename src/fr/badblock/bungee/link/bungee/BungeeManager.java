@@ -305,7 +305,6 @@ public class BungeeManager {
 		// Get the lower player username
 		final String toLowerName = name.toLowerCase();
 
-		System.out.println("HasUsername : " + name + " : " + (!getLoggedPlayers(n -> n.getName().toLowerCase().equals(toLowerName)).isEmpty()));
 		return !getLoggedPlayers(n -> n.getName().toLowerCase().equals(toLowerName)).isEmpty();
 	}
 

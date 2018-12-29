@@ -53,7 +53,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public static BadPlayer get(ProxiedPlayer bPlayer) {
 		// Get from another method
-		return get(bPlayer.getName());
+		return get(bPlayer.getName().toLowerCase());
 	}
 
 	/**
@@ -64,7 +64,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public static BadPlayer get(String name) {
 		// Get from the map
-		return BungeeLocalManager.getInstance().getMaps().getOrDefault(name, null);
+		return BungeeLocalManager.getInstance().getMaps().getOrDefault(name.toLowerCase(), null);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public static boolean has(String name) {
 		// Contains in the map?
-		return BungeeLocalManager.getInstance().getMaps().containsKey(name);
+		return BungeeLocalManager.getInstance().getMaps().containsKey(name.toLowerCase());
 	}
 
 	/**
@@ -95,7 +95,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	 */
 	public static void put(BadPlayer badPlayer) {
 		// Put in map
-		BungeeLocalManager.getInstance().getMaps().put(badPlayer.getName(), badPlayer);
+		BungeeLocalManager.getInstance().getMaps().put(badPlayer.getName().toLowerCase(), badPlayer);
 
 		// Keep alive update
 		BungeeTask.keepAlive();
@@ -118,8 +118,12 @@ public final class BadPlayer extends BadOfflinePlayer {
 	private transient ModoSession modoSession;
 
 	private boolean loginStepOk;
+	private boolean doubleAuth;
+	private boolean passedServer;
 
 	private long loginTimestamp;
+	
+	private transient Thread	teleportThread;
 
 	/**
 	 * Constructor
@@ -221,7 +225,7 @@ public final class BadPlayer extends BadOfflinePlayer {
 	public void sendDataToBukkit(String serverName) {
 		RabbitPacketMessage message = new RabbitPacketMessage(-1L, getSavedObject().toString());
 		String queueName = BadBungeeQueues.BUNGEE_DATA_PLAYERS + serverName;
-		RabbitPacket rabbitPacket = new RabbitPacket(message, queueName, true, RabbitPacketEncoder.UTF8,
+		RabbitPacket rabbitPacket = new RabbitPacket(message, queueName, false, RabbitPacketEncoder.UTF8,
 				RabbitPacketType.PUBLISHER);
 		BadBungee.getInstance().getRabbitService().sendPacket(rabbitPacket);
 	}

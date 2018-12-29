@@ -1,5 +1,6 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
+import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.time.ThreadRunnable;
@@ -46,10 +47,23 @@ public class ServerConnectedReloadDataListener extends BadListener {
 			ProxiedPlayer proxiedPlayer = event.getPlayer();
 			// We get the BadPlayer object
 			BadPlayer badPlayer = BadPlayer.get(proxiedPlayer);
+			
+			if (badPlayer == null)
+			{
+				return;
+			}
+			
+			if (serverInfo != null && serverInfo.getName() != null && !serverInfo.getName().startsWith("login"))
+			{
+				badPlayer.setPassedServer(true);
+			}
+			
 			// Set the last server
 			badPlayer.setLastServer(serverInfo.getName());
 			// We update the last server in the player data
 			badPlayer.updateLastServer(proxiedPlayer);
+			
+			BadBungee.log("§a<=> " + proxiedPlayer.getName() + " has been moved to " + serverInfo.getName() + ".");
 		});
 	}
 

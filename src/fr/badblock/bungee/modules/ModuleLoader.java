@@ -38,7 +38,6 @@ public class ModuleLoader
 		yamlConstructor.setPropertyUtils( propertyUtils );
 		yaml = new Yaml( yamlConstructor );
 
-		System.out.println(folder.getAbsolutePath());
 		this.detectAll();
 	}
 

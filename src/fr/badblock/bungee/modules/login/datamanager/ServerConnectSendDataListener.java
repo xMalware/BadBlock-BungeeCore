@@ -1,6 +1,7 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
 import fr.badblock.bungee.modules.abstracts.BadListener;
+import fr.badblock.bungee.modules.chat.TabCompleteListener;
 import fr.badblock.bungee.players.BadPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -33,10 +34,12 @@ public class ServerConnectSendDataListener extends BadListener {
 			return;
 		}
 
-		if (!badPlayer.isLoginStepOk()) {
+		if (!badPlayer.isLoginStepOk())
+		{
 			return;
 		}
-
+		
+		TabCompleteListener.put(proxiedPlayer.getName());
 		badPlayer.sendDataToBukkit(event.getTarget().getName());
 	}
 

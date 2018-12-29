@@ -29,13 +29,13 @@ public class IHConnectedFilter extends PropagatingFilter {
 	@Override
 	public boolean isLoggable(LogRecord record) {
 		if (record.getMessage().toLowerCase().contains("reset by peer"))
-			return false;
+			return true;
 		if (record.getMessage().toLowerCase().contains("read timed out"))
-			return false;
+			return true;
 		if (record.getMessage().equals("net.md_5.bungee.connection.InitialHandler"))
 			return false;
-		if (record.getMessage().endsWith("has disconnected") || record.getMessage().endsWith("has connected")
-				|| record.getMessage().equals("No client connected for pending server!"))
+		if ((record.getMessage().endsWith("has disconnected") || record.getMessage().endsWith("has connected")
+				|| record.getMessage().equals("No client connected for pending server!")) && !record.getMessage().contains("disconnected with"))
 			return false;
 		if ((!filterPings && !filterJoins) || !"{0} has connected".equals(record.getMessage())
 				|| record.getParameters().length != 1) {

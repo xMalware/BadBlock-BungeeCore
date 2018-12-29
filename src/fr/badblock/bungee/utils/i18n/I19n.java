@@ -33,6 +33,63 @@ public class I19n {
 	}
 
 	/**
+	 * Get a message
+	 * 
+	 * @param with
+	 *            the Command sender
+	 * @param The
+	 *            message key
+	 * @param Indexes
+	 *            to translate
+	 * @param Arguments
+	 * @return Returns the message
+	 */
+	public static String getFullMessage(CommandSender commandSender, String key, int[] indexesToTranslate, Object... args) {
+		// Get all messages and only the first in the array
+		String[] messages = getMessages(commandSender, key, indexesToTranslate, args);
+		StringBuilder result = new StringBuilder();
+		boolean b = false;
+		for (String message : messages)
+		{
+			if (b)
+			{
+				message += System.lineSeparator();
+			}
+			b = true;
+			result.append(message);
+		}
+		return result.toString();
+	}
+	/**
+	 * Get a message
+	 * 
+	 * @param with
+	 *            the Command sender
+	 * @param The
+	 *            message key
+	 * @param Indexes
+	 *            to translate
+	 * @param Arguments
+	 * @return Returns the message
+	 */
+	public static String getFullMessage(Locale locale, String key, int[] indexesToTranslate, Object... args) {
+		// Get all messages and only the first in the array
+		String[] messages = getMessages(locale, key, indexesToTranslate, args);
+		StringBuilder result = new StringBuilder();
+		boolean b = false;
+		for (String message : messages)
+		{
+			if (b)
+			{
+				message += System.lineSeparator();
+			}
+			b = true;
+			result.append(message);
+		}
+		return result.toString();
+	}
+
+	/**
 	 * Get messages
 	 * 
 	 * @param with

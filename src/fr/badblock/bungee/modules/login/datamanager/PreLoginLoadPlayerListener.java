@@ -1,11 +1,13 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
 import fr.badblock.api.common.utils.flags.GlobalFlags;
-import fr.badblock.bungee.link.bungee.BungeeManager;
+import fr.badblock.api.common.utils.i18n.Locale;
+import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
 import fr.badblock.bungee.players.BadPlayer;
+import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.event.EventHandler;
@@ -27,34 +29,45 @@ public class PreLoginLoadPlayerListener extends BadListener {
 	 * 
 	 * @param event
 	 */
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPreLogin(PreLoginEvent event) {
 		// If the connection attempt is cancelled first
 		if (event.isCancelled()) {
 			// So we stop there
 			return;
 		}
-
-		// Get bungee manager
-		BungeeManager bungeeManager = BungeeManager.getInstance();
-		// If the server ping null
-		if (bungeeManager.getServerPing() == null) {
-			// Generate the server ping to init slots/players values
-			// to avoid "this server is fucking full!"
-			bungeeManager.generatePing();
-		}
-
+		
 		// Set a margin flag
-		GlobalFlags.set(event.getConnection().getName() + "_margin", 5000);
+		GlobalFlags.set(event.getConnection().getName().toLowerCase() + "_margin", 5000);
 
 		// We create a BadPlayer object
-		BadPlayer badPlayer = new BadPlayer(event.getConnection());
+		new BadPlayer(event.getConnection());
 
 		// We synchronize all the other proxies
 		BungeeTask.keepAlive();
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPreLoginHigh(PreLoginEvent event) {
+		if (event.isCancelled())
+		{
+			return;
+		}
+
+		// We create a BadPlayer object
+		BadPlayer badPlayer = BadPlayer.get(event.getConnection().getName());
+		
+		if (badPlayer == null)
+		{
+			event.setCancelled(true);
+			BadBungee.log("§4§l[ERROR] Unable to load player data for " + event.getConnection().getName() + " (code: NVZT33)");
+			event.setCancelReason(
+					I19n.getFullMessage(Locale.FRENCH_FRANCE, "bungee.errors.unabletoloadplayerdata", null, "NVTZ33"));
+					return;
+		}
 
 		// We send an event that says the player tried to join the server
 		ProxyServer.getInstance().getPluginManager().callEvent(new PlayerJoinEvent(badPlayer, event));
 	}
-
+	
 }

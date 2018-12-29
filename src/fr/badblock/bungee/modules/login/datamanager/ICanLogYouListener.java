@@ -1,6 +1,7 @@
 package fr.badblock.bungee.modules.login.datamanager;
 
 import fr.badblock.api.common.utils.i18n.Locale;
+import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerCreatedEvent;
 import fr.badblock.bungee.players.BadPlayer;
@@ -29,15 +30,16 @@ public class ICanLogYouListener extends BadListener {
 			return;
 		}
 
-		String playerName = event.getPlayer();
+		String playerName = event.getPlayer().toLowerCase();
 
 		if (BadPlayer.has(playerName)) {
 			BadPlayer badPlayer = BadPlayer.get(playerName);
 			event.getDone().done(new Result(badPlayer.getSavedObject(), null), null);
 			BungeeCord.getInstance().getPluginManager().callEvent(new PlayerCreatedEvent(badPlayer));
 		} else {
+			BadBungee.log("§4§l[ERROR] Unable to load player data for " + playerName + " (code: CBPAQ6)");
 			Result result = new Result(null,
-					I19n.getMessage(Locale.FRENCH_FRANCE, "bungee.errors.unabletoloadplayerdata", null));
+					I19n.getFullMessage(Locale.FRENCH_FRANCE, "bungee.errors.unabletoloadplayerdata", null, "CBPAQ6"));
 			event.getDone().done(result, null);
 		}
 	}

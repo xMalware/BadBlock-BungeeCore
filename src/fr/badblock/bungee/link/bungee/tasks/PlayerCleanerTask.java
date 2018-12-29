@@ -26,7 +26,7 @@ public class PlayerCleanerTask extends Thread {
 				ProxiedPlayer proxiedPlayer = bungeeCord.getPlayer(badPlayer.getName());
 
 				if (proxiedPlayer == null) {
-					if (!GlobalFlags.has(badPlayer.getName() + "_margin")) {
+					if (!GlobalFlags.has(badPlayer.getName().toLowerCase() + "_margin") && badPlayer.getLoginTimestamp() + 10000 > System.currentTimeMillis()) {
 						iterator.remove();
 						removed++;
 					}

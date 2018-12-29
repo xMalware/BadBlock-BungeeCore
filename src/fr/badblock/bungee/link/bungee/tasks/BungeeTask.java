@@ -12,6 +12,7 @@ import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketEncoder;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketMessage;
 import fr.badblock.api.common.tech.rabbitmq.packet.RabbitPacketType;
 import fr.badblock.bungee.BadBungee;
+import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.bungee.BungeeObject;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.time.TimeUtils;
@@ -72,15 +73,16 @@ public class BungeeTask extends Thread {
 	 * Keep alive the current BungeeCord node
 	 */
 	public static void keepAlive() {
+		// Get main class
+		BadBungee badBungee = BadBungee.getInstance();
+		// New map of players
+		final Map<String, BadPlayer> players = new HashMap<>();
+		// Put players in the map
+		BadPlayer.getPlayers().forEach(player -> players.put(player.getName(), player));
+		// Refresh with the new player list
+		bungeeObject.refresh(players);
+		BungeeManager.getInstance().add(bungeeObject);
 		synchronized (syncThread) {
-			// Get main class
-			BadBungee badBungee = BadBungee.getInstance();
-			// New map of players
-			final Map<String, BadPlayer> players = new HashMap<>();
-			// Put players in the map
-			BadPlayer.getPlayers().forEach(player -> players.put(player.getName(), player));
-			// Refresh with the new player list
-			bungeeObject.refresh(players);
 			// Get gson
 			Gson gson = badBungee.getGson();
 			// Deserialize the object

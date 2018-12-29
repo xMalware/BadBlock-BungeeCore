@@ -29,6 +29,10 @@ public class ObjectUtils {
 	}
 
 	public static DBObject toDbObject(Object object) throws Exception {
+		if (object == null)
+		{
+			return new BasicDBObject();
+		}
 		BasicDBObject dbObject = new BasicDBObject();
 		for (Field field : object.getClass().getFields()) {
 			field.setAccessible(true);

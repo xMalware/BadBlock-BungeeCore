@@ -13,7 +13,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
 import fr.badblock.api.common.tech.mongodb.MongoService;
@@ -29,7 +28,6 @@ import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
-import fr.badblock.bungee.utils.ObjectUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
 import fr.badblock.bungee.utils.time.TimeUtils;
 import lombok.EqualsAndHashCode;
@@ -281,7 +279,7 @@ public class BadOfflinePlayer {
 	 */
 	public BadOfflinePlayer(String name, boolean create) {
 		// Set name
-		setName(name);
+		setName(name.toLowerCase());
 		// Load data (create or not?)
 		loadData(create);
 	}
@@ -352,7 +350,9 @@ public class BadOfflinePlayer {
 	 */
 	public Locale getLocale() {
 		// Get from the database object
-		return ObjectUtils.getOr(getDbObject(), "locale", Locale.FRENCH_FRANCE);
+		return Locale.FRENCH_FRANCE;
+		// TODO
+		//return ObjectUtils.getOr(getDbObject(), "locale", Locale.FRENCH_FRANCE);
 	}
 
 	/**
@@ -428,6 +428,20 @@ public class BadOfflinePlayer {
 	public BasicDBObject getSavedObject() {
 		// Create a new BasicDBObject object
 		BasicDBObject object = new BasicDBObject();
+
+		if (getDbObject() != null)
+		{
+			for (String k : getDbObject().keySet())
+			{
+				if (k == null || "_id".equals(k))
+				{
+					continue;
+				}
+
+				object.put(k, getDbObject().get(k));
+			}
+		}
+
 		// Put the lower-case name
 		object.put("name", getName().toLowerCase());
 		// Put the real name
@@ -454,7 +468,6 @@ public class BadOfflinePlayer {
 		object.put("loginPassword", loginPassword);
 		// Put the auth key
 		object.put("authKey", authKey);
-		// TODO?
 
 		// Returns the saved object
 		return object;
@@ -648,7 +661,7 @@ public class BadOfflinePlayer {
 			// Set database object by casting a 'basic DBObject'
 			setDbObject((BasicDBObject) cursor.next());
 			// Set name
-			setName(getString("realName"));
+			setName(getString("name").toLowerCase());
 			// Log => already exists!
 			BadBungee.log("§c" + getName() + " exists in the player table.");
 			// Set last IP
@@ -736,52 +749,33 @@ public class BadOfflinePlayer {
 	 * @param basePoint
 	 * @return
 	 */
-	public DBObject mergeData(DBObject base, JsonObject toAdd, boolean basePoint) {
+	public BasicDBObject mergeData(BasicDBObject base, JsonObject toAddJson, boolean basePoint) {
 		// For each object to add
-		for (final Entry<String, JsonElement> entry : toAdd.entrySet()) {
+		BasicDBObject toAdd = BasicDBObject.parse(toAddJson.toString());
+		for (final Entry<String, Object> entry : toAdd.entrySet()) {
 			// Get object key
 			String key = entry.getKey();
 			// Get element
-			JsonElement element = toAdd.get(key);
+			Object element = entry.getValue();
 			// If it's not a JsonObject
-			if (!base.containsField(key) || !element.isJsonObject()) {
-				System.out.println("Put: " + key + " / " + element.toString());
-				// Put JsonObject
+			if (!base.containsField(key) || !base.get(key).toString().equals(entry.getValue())) 
+			{
 				base.put(key, element);
-			}
-			// If it's a JsonObject
-			else {
-				// Try to?
-				try {
-					System.out.println("Merge: " + key);
-					// Merge DBObject
-					DBObject dbObject = mergeData(ObjectUtils.toDbObject(base.get(key)), element.getAsJsonObject(),
-							false);
-					// Put the DBObject into base
-					base.put(key, dbObject);
-					// Returns the database object
-					return dbObject;
-				}
-				// Error case
-				catch (Exception error) {
-					// Print stack trace to logs
-					error.printStackTrace();
-				}
 			}
 		}
 		// If this is the base point
 		if (basePoint) {
 			// Save data
-			System.out.println("Save to");
 			try {
+				setDbObject(base);
 				saveData();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		// Returns null
-		return null;
+		// Returns the database object
+		return base;
 	}
 
 	/**
@@ -981,7 +975,7 @@ public class BadOfflinePlayer {
 		// Update data
 		updateData("lastServer",
 				proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
-						? proxiedPlayer.getServer().getInfo().getName()
+				? proxiedPlayer.getServer().getInfo().getName()
 						: "");
 	}
 
