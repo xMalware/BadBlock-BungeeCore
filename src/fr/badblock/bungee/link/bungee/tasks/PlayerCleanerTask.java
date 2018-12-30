@@ -31,6 +31,10 @@ public class PlayerCleanerTask extends Thread {
 						removed++;
 					}
 				}
+				else
+				{
+					badPlayer.setPing(proxiedPlayer.getPing());
+				}
 			}
 
 			if (removed > 0) {

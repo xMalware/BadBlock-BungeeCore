@@ -4,6 +4,7 @@ import fr.badblock.api.common.utils.i18n.Locale;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.modules.abstracts.BadListener;
 import fr.badblock.bungee.modules.login.events.PlayerCreatedEvent;
+import fr.badblock.bungee.modules.login.events.PlayerJoinEvent;
 import fr.badblock.bungee.players.BadPlayer;
 import fr.badblock.bungee.utils.i18n.I19n;
 import net.md_5.bungee.BungeeCord;
@@ -19,6 +20,16 @@ import net.md_5.bungee.event.EventPriority;
  */
 public class ICanLogYouListener extends BadListener {
 
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerJoin(PlayerJoinEvent event)
+	{
+		if (event.isCancelled())
+		{
+			BadBungee.log("§c[ERROR] Connection of " + event.getBadPlayer().getName() + " was cancelled (PlayerJoin): " + event.getPreLoginEvent().getCancelReason());
+			return;
+		}
+	}
+	
 	/**
 	 * When a player joins the server
 	 * 

@@ -51,6 +51,7 @@ public class PreLoginLoadPlayerListener extends BadListener {
 	public void onPreLoginHigh(PreLoginEvent event) {
 		if (event.isCancelled())
 		{
+			BadBungee.log("§c[ERROR] Connection of " + event.getConnection().getName() + " was  (PreLogin-Highest): " + event.getCancelReason());
 			return;
 		}
 

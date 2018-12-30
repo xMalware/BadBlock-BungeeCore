@@ -124,6 +124,8 @@ public final class BadPlayer extends BadOfflinePlayer {
 	private long loginTimestamp;
 	
 	private transient Thread	teleportThread;
+	
+	private int ping;
 
 	/**
 	 * Constructor

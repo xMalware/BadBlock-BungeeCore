@@ -29,6 +29,7 @@ import fr.badblock.bungee.config.BadBungeeConfig;
 import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.players.layer.BadPlayerSettings;
 import fr.badblock.bungee.utils.i18n.I19n;
+import fr.badblock.bungee.utils.premium.PremiumCheck;
 import fr.badblock.bungee.utils.time.TimeUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -582,6 +583,8 @@ public class BadOfflinePlayer {
 		loginPassword = null;
 		// Set the auth key
 		authKey = null;
+		// Premium check
+		PremiumCheck.premiumAutoSet(this);
 		// Get saved object
 		BasicDBObject obj = getSavedObject();
 		// Set database object
@@ -674,6 +677,9 @@ public class BadOfflinePlayer {
 			setLoginPassword(getString("loginPassword"));
 			// Set the online mode
 			setOnlineMode(getBoolean("onlineMode"));
+
+			PremiumCheck.premiumAutoSet(this);
+			
 			// Set unique ID
 			setUniqueId(UUID.fromString(getString("uniqueId")));
 			// Set settings

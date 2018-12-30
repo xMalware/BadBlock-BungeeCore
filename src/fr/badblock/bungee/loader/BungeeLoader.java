@@ -257,6 +257,8 @@ public class BungeeLoader {
 		}
 		// Create a permission manager, with the 'bungee' place
 		PermissionsManager.createPermissionManager(groups, "bungee");
+		
+		System.out.println("Groups bungee : " + groups.toString());
 	}
 
 	/**
