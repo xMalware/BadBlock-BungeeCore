@@ -10,6 +10,7 @@ import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListener;
 import fr.badblock.api.common.tech.rabbitmq.listener.RabbitListenerType;
 import fr.badblock.bungee.BadBungee;
 import fr.badblock.bungee.link.processing.bungee.BungeeAddServerProcessing;
+import fr.badblock.bungee.link.processing.bungee.BungeeBroadcastPermissionProcessing;
 import fr.badblock.bungee.link.processing.bungee.BungeeBroadcastProcessing;
 import fr.badblock.bungee.link.processing.bungee.BungeeForceKickProcessing;
 import fr.badblock.bungee.link.processing.bungee.BungeeLogProcessing;
@@ -41,6 +42,7 @@ public class BungeeLinkReceiver extends RabbitListener {
 		BungeePacketType.LOG.setProcess(new BungeeLogProcessing());
 		BungeePacketType.REMOVE_SERVER.setProcess(new BungeeRemoveServerProcessing());
 		BungeePacketType.SERVER_BROADCAST.setProcess(new BungeeServerBroadcastProcessing());
+		BungeePacketType.PERMISSION_BROADCAST.setProcess(new BungeeBroadcastPermissionProcessing());
 	}
 
 	/**

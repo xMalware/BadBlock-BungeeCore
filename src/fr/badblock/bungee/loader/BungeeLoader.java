@@ -113,12 +113,12 @@ public class BungeeLoader {
 	}
 
 	private void loadFilters() {
-		filters.clear();
+		/*filters.clear();
 		filters.add(new IHConnectedFilter());
 		filters.add(new IHResetByPeerFilter());
 		for (InjectableFilter filter : filters) {
 			filter.inject();
-		}
+		}*/
 	}
 
 	/**
