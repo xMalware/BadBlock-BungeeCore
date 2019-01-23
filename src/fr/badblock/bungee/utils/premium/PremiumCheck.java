@@ -23,7 +23,7 @@ public class PremiumCheck
 				Future<String> future = executor.submit(new SetPremiumTask(badPlayer));
 
 				try {
-					String s = future.get(2, TimeUnit.SECONDS);
+					future.get(2, TimeUnit.SECONDS);
 				} catch (Exception e) {
 					BadBungee.log("§c[PremiumCheck] Unable to finish at time.");
 					future.cancel(true);
