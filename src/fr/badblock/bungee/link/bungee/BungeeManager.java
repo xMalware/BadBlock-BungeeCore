@@ -145,6 +145,17 @@ public class BungeeManager {
 	}
 
 	/**
+	 * Broadcast sound
+	 * @param soundName > name of the sound according to Sound enum from Bukkit
+	 */
+	public void broadcastSound(String soundName)
+	{
+		// Send the packet over RabbitMQ
+		BadBungee.getInstance().getRabbitService().sendPacket(new RabbitPacket(new RabbitPacketMessage(5000, soundName),
+				"gameapi.sound", true, RabbitPacketEncoder.UTF8, RabbitPacketType.PUBLISHER));
+	}
+	
+	/**
 	 * Generate the server ping by using network data
 	 * 
 	 * @return a ServerPing object

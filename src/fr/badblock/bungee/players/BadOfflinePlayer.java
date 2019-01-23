@@ -652,6 +652,11 @@ public class BadOfflinePlayer {
 			// Add it to the query
 			query.append("uniqueId", getUniqueId().toString().toLowerCase());
 		}
+		
+		if (getName() == null)
+		{
+			setName("null");
+		}
 
 		// Get mongo service
 		MongoService mongoService = BadBungee.getInstance().getMongoService();

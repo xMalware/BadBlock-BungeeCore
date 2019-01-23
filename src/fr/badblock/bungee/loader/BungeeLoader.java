@@ -36,9 +36,8 @@ import fr.badblock.bungee.link.bungee.tasks.PlayerCleanerTask;
 import fr.badblock.bungee.link.claimants.RabbitClaimant;
 import fr.badblock.bungee.modules.ModuleLoader;
 import fr.badblock.bungee.modules.chat.ChatModule;
+import fr.badblock.bungee.packets.BungeePackets;
 import fr.badblock.bungee.utils.PackageUtils;
-import fr.badblock.bungee.utils.logfilters.IHConnectedFilter;
-import fr.badblock.bungee.utils.logfilters.IHResetByPeerFilter;
 import fr.badblock.bungee.utils.logfilters.InjectableFilter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -102,6 +101,7 @@ public class BungeeLoader {
 		loadRedis();
 		// Load Bungee linker
 		loadBungeeLinker();
+		new BungeePackets(badBungee);
 		// Load all modules
 		new ModuleLoader();
 		// Load listeners
