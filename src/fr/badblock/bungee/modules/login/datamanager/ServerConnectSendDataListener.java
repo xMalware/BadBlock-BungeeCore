@@ -22,6 +22,7 @@ public class ServerConnectSendDataListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onServerConnect(ServerConnectEvent event) {
+		System.out.println(event.getPlayer().getName() + " ServerConnectSendDataListener: ServerConnectEvent (cancelled: " + event.isCancelled() + ") #A");
 		if (event.isCancelled()) {
 			return;
 		}
@@ -38,6 +39,8 @@ public class ServerConnectSendDataListener extends BadListener {
 		{
 			return;
 		}
+
+		System.out.println(event.getPlayer().getName() + " ServerConnectSendDataListener: ServerConnectEvent (cancelled: " + event.isCancelled() + ") #B : " + event.getTarget().getName());
 		
 		TabCompleteListener.put(proxiedPlayer.getName());
 		badPlayer.sendDataToBukkit(event.getTarget().getName());

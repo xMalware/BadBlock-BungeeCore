@@ -20,6 +20,7 @@ public class SaveNewDataListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerLogged(PlayerLoggedEvent event) {
+		System.out.println(event.getBadPlayer().getName() + " SaveNewDataListener: PlayerLoggedEvent");
 		// We get the BadPlayer object
 		BadPlayer badPlayer = event.getBadPlayer();
 

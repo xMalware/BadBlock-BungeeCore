@@ -25,6 +25,7 @@ public class QuitListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDisconnect(PlayerDisconnectEvent event) {
+		System.out.println(event.getPlayer().getName() + " QuitListener: PlayerDisconnectEvent");
 		// We get the player
 		ProxiedPlayer player = event.getPlayer();
 		// We get the BadPlayer object

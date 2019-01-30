@@ -28,6 +28,8 @@ public class PreLoginLoadIPListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPreLogin(PreLoginEvent event) {
+
+		System.out.println(event.getConnection().getName() + " PreLoginLoadIPListener: PreLoginEvent (cancelled: " + event.isCancelled() + ")");
 		// If the connection attempt is cancelled first
 		if (event.isCancelled()) {
 			// So we stop there

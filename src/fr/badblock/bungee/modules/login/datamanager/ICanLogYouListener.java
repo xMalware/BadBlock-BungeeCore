@@ -23,13 +23,14 @@ public class ICanLogYouListener extends BadListener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
+		System.out.println(event.getBadPlayer().getName() + " ICanLogYouListener: PlayerJoinEvent (cancelled: " + event.isCancelled() + ")");
 		if (event.isCancelled())
 		{
 			BadBungee.log("§c[ERROR] Connection of " + event.getBadPlayer().getName() + " was cancelled (PlayerJoin): " + event.getPreLoginEvent().getCancelReason());
 			return;
 		}
 	}
-	
+
 	/**
 	 * When a player joins the server
 	 * 
@@ -37,6 +38,7 @@ public class ICanLogYouListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onAsyncLoadData(AsyncDataLoadRequest event) {
+		System.out.println(event.getPlayer() + " ICanLogYouListener: AsyncDataLoadRequest (cancelled: " + event.isCancelled() + ")");
 		if (event.isCancelled()) {
 			return;
 		}
@@ -47,12 +49,13 @@ public class ICanLogYouListener extends BadListener {
 			BadPlayer badPlayer = BadPlayer.get(playerName);
 			event.getDone().done(new Result(badPlayer.getSavedObject(), null), null);
 			BungeeCord.getInstance().getPluginManager().callEvent(new PlayerCreatedEvent(badPlayer));
-		} else {
-			BadBungee.log("§4§l[ERROR] Unable to load player data for " + playerName + " (code: CBPAQ6)");
-			Result result = new Result(null,
-					I19n.getFullMessage(Locale.FRENCH_FRANCE, "bungee.errors.unabletoloadplayerdata", null, "CBPAQ6"));
-			event.getDone().done(result, null);
+			return;
 		}
+
+		BadBungee.log("§4§l[ERROR] Unable to load player data for " + playerName + " (code: CBPAQ6)");
+		Result result = new Result(null,
+				I19n.getFullMessage(Locale.FRENCH_FRANCE, "bungee.errors.unabletoloadplayerdata", null, "CBPAQ6"));
+		event.getDone().done(result, null);
 	}
 
 }

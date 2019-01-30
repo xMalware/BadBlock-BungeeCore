@@ -25,6 +25,7 @@ public class SetUniqueIdListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onServerConnect(ServerConnectEvent event) {
+		System.out.println(event.getPlayer().getName() + " SetUniqueIdListener: ServerConnectEvent (cancelled: " + event.isCancelled() + ")");
 		ProxiedPlayer proxiedPlayer = event.getPlayer();
 		setUniqueId(proxiedPlayer, BadPlayer.get(proxiedPlayer));
 	}
@@ -36,6 +37,7 @@ public class SetUniqueIdListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPostLogin(PostLoginEvent event) {
+		System.out.println(event.getPlayer().getName() + " SetUniqueIdListener: PostLoginEvent");
 		ProxiedPlayer proxiedPlayer = event.getPlayer();
 		setUniqueId(proxiedPlayer, BadPlayer.get(proxiedPlayer));
 	}

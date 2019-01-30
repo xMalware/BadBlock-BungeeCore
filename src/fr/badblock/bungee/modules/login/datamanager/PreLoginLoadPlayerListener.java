@@ -31,6 +31,7 @@ public class PreLoginLoadPlayerListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPreLogin(PreLoginEvent event) {
+		System.out.println(event.getConnection().getName() + " PreLoginLoadPlayerListener: onPreLogin (cancelled: " + event.isCancelled() + ")");
 		// If the connection attempt is cancelled first
 		if (event.isCancelled()) {
 			// So we stop there
@@ -49,6 +50,7 @@ public class PreLoginLoadPlayerListener extends BadListener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPreLoginHigh(PreLoginEvent event) {
+		System.out.println(event.getConnection().getName() + " PreLoginLoadPlayerListener: onPreLoginHigh (cancelled: " + event.isCancelled() + ")");
 		if (event.isCancelled())
 		{
 			BadBungee.log("§c[ERROR] Connection of " + event.getConnection().getName() + " was  (PreLogin-Highest): " + event.getCancelReason());

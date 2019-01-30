@@ -28,6 +28,7 @@ public class ServerConnectedReloadDataListener extends BadListener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onServerConnected(ServerConnectedEvent event) {
+		System.out.println(event.getPlayer().getName() + " ServerConnectedReloadDataListener: ServerConnectedEvent");
 		// Server
 		Server server = event.getServer();
 

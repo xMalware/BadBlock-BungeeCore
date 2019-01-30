@@ -18,28 +18,35 @@ public class PlayerCleanerTask extends Thread {
 	@Override
 	public void run() {
 		while (true) {
-			int removed = 0;
-			Iterator<BadPlayer> iterator = BadPlayer.getPlayers().iterator();
-			BungeeCord bungeeCord = BungeeCord.getInstance();
-			while (iterator.hasNext()) {
-				BadPlayer badPlayer = iterator.next();
-				ProxiedPlayer proxiedPlayer = bungeeCord.getPlayer(badPlayer.getName());
+			try
+			{
+				int removed = 0;
+				Iterator<BadPlayer> iterator = BadPlayer.getPlayers().iterator();
+				BungeeCord bungeeCord = BungeeCord.getInstance();
+				while (iterator.hasNext()) {
+					BadPlayer badPlayer = iterator.next();
+					ProxiedPlayer proxiedPlayer = bungeeCord.getPlayer(badPlayer.getName());
 
-				if (proxiedPlayer == null) {
-					if (!GlobalFlags.has(badPlayer.getName().toLowerCase() + "_margin") && badPlayer.getLoginTimestamp() + 10000 > System.currentTimeMillis()) {
-						iterator.remove();
-						removed++;
+					if (proxiedPlayer == null) {
+						if (!GlobalFlags.has(badPlayer.getName().toLowerCase() + "_margin") && badPlayer.getLoginTimestamp() + 10000 > System.currentTimeMillis()) {
+							iterator.remove();
+							removed++;
+						}
+					}
+					else
+					{
+						badPlayer.setPing(proxiedPlayer.getPing());
 					}
 				}
-				else
-				{
-					badPlayer.setPing(proxiedPlayer.getPing());
+
+				if (removed > 0) {
+					BungeeManager.getInstance().log("§e[BadBungee] Cleaned " + removed + " players. Bungee name: "
+							+ BungeeTask.bungeeObject.getName());
 				}
 			}
-
-			if (removed > 0) {
-				BungeeManager.getInstance().log("§e[BadBungee] Cleaned " + removed + " players. Bungee name: "
-						+ BungeeTask.bungeeObject.getName());
+			catch (Exception error)
+			{
+				error.printStackTrace();
 			}
 			TimeUtils.sleepInSeconds(1);
 		}
