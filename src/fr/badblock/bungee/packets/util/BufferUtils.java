@@ -8,7 +8,6 @@ import com.flowpowered.nbt.CompoundTag;
 import com.flowpowered.nbt.stream.NBTInputStream;
 import com.flowpowered.nbt.stream.NBTOutputStream;
 
-import fr.badblock.bungee.packets.BungeePackets;
 import fr.badblock.bungee.packets.item.ItemStack;
 import fr.badblock.bungee.packets.item.ItemType;
 import fr.badblock.bungee.packets.item.ItemTypes;
@@ -77,7 +76,6 @@ public class BufferUtils {
 
         Optional<ItemType> typeOptional = ItemTypes.fromId(id, durability);
         if(!typeOptional.isPresent()) {
-            BungeePackets.logger.warning("There's no type registry for ID:"+id+", durability:"+durability+" - Returning EMPTY ItemStack");
             return ItemStack.EMPTY();
         }
 

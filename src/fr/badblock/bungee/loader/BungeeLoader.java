@@ -255,10 +255,9 @@ public class BungeeLoader {
 			// Put the object in the groups map
 			groups.put(dbObject.get("name").toString(), permissible);
 		}
+		
 		// Create a permission manager, with the 'bungee' place
 		PermissionsManager.createPermissionManager(groups, "bungee");
-		
-		System.out.println("Groups bungee : " + groups.toString());
 	}
 
 	/**

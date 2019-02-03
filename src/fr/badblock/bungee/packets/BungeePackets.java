@@ -1,10 +1,6 @@
 package fr.badblock.bungee.packets;
 
-import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.protocol.*;
-
 import java.lang.reflect.Method;
-import java.util.logging.Logger;
 
 import fr.badblock.bungee.packets.listener.ConnectionListener;
 import fr.badblock.bungee.packets.listener.PacketEventListener;
@@ -16,15 +12,13 @@ import fr.badblock.bungee.packets.packets.protocol.game.server.ClickWindowPacket
 import fr.badblock.bungee.packets.packets.protocol.game.shared.CloseWindowPacket;
 import fr.badblock.bungee.packets.packets.protocol.game.shared.ConfirmTransactionPacket;
 import fr.badblock.bungee.packets.util.ProtocolMapping;
+import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.ProtocolConstants;
 
 public class BungeePackets {
 
     public static BungeePackets instance;
-
-    /**
-     * The logger for BungeeNet
-     */
-    public static Logger logger;
 
     /**
      * Registers a packet in the Bungeecord packet registries
@@ -57,7 +51,6 @@ public class BungeePackets {
 
     public BungeePackets(Plugin plugin) {
         instance = this;
-        logger = plugin.getLogger();
 
         plugin.getProxy().getPluginManager().registerListener(plugin, new ConnectionListener());
         plugin.getProxy().getPluginManager().registerListener(plugin, new PacketEventListener());
