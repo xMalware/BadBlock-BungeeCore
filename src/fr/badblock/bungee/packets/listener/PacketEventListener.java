@@ -21,38 +21,46 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class PacketEventListener implements Listener {
 
-    @EventHandler
-    public void onPacket(PacketEvent evt) {
-        if(evt.getPacket() instanceof ClickWindowPacket) {
-            ClickWindowPacket packet = ((ClickWindowPacket) evt.getPacket());
-            Optional<Window> openWindow = WindowManager.instance.getOpenWindow(evt.getPlayer());//, packet.getWindowID());
-            if(openWindow.isPresent()) {
-                // Cancel event
-                evt.setCancelled(true);
+	@EventHandler
+	public void onPacket(PacketEvent evt)
+	{
+		try
+		{
+			if(evt.getPacket() instanceof ClickWindowPacket) {
+				ClickWindowPacket packet = ((ClickWindowPacket) evt.getPacket());
+				Optional<Window> openWindow = WindowManager.instance.getOpenWindow(evt.getPlayer());//, packet.getWindowID());
+				if(openWindow.isPresent()) {
+					// Cancel event
+					evt.setCancelled(true);
 
-                Window window = openWindow.get();
-                ConfirmTransactionPacket confirmPacket = new ConfirmTransactionPacket(window, window.getNextActionNumber(), false);
-                SetWindowSlotPacket clearCursorPacket = new SetWindowSlotPacket((byte) -1, (short) -1, ItemStack.EMPTY());
-                SetWindowSlotPacket resetWindowSlotPacket = new SetWindowSlotPacket(window, packet.getSlot(), window.get(packet.getSlot()));
+					Window window = openWindow.get();
+					ConfirmTransactionPacket confirmPacket = new ConfirmTransactionPacket(window, window.getNextActionNumber(), false);
+					SetWindowSlotPacket clearCursorPacket = new SetWindowSlotPacket((byte) -1, (short) -1, ItemStack.EMPTY());
+					SetWindowSlotPacket resetWindowSlotPacket = new SetWindowSlotPacket(window, packet.getSlot(), window.get(packet.getSlot()));
 
-                InteractWindowEvent event = new InteractWindowEvent(window, evt.getPlayer(), packet.getClickType(), packet.getSlot());
-                ProxyServer.getInstance().getPluginManager().callEvent(event);
+					InteractWindowEvent event = new InteractWindowEvent(window, evt.getPlayer(), packet.getClickType(), packet.getSlot());
+					ProxyServer.getInstance().getPluginManager().callEvent(event);
 
-                evt.getPlayer().unsafe().sendPacket(confirmPacket);
-                evt.getPlayer().unsafe().sendPacket(clearCursorPacket);
-                evt.getPlayer().unsafe().sendPacket(resetWindowSlotPacket);
-            }
-        }
+					evt.getPlayer().unsafe().sendPacket(confirmPacket);
+					evt.getPlayer().unsafe().sendPacket(clearCursorPacket);
+					evt.getPlayer().unsafe().sendPacket(resetWindowSlotPacket);
+				}
+			}
 
-        if(evt.getPacket() instanceof ConfirmTransactionPacket) {
-            if(evt.getSender() instanceof UserConnection && WindowManager.instance.getOpenWindow(evt.getPlayer()).isPresent()) {
-                evt.setCancelled(true);
-            }
-        }
+			if(evt.getPacket() instanceof ConfirmTransactionPacket) {
+				if(evt.getSender() instanceof UserConnection && WindowManager.instance.getOpenWindow(evt.getPlayer()).isPresent()) {
+					evt.setCancelled(true);
+				}
+			}
 
-        if(evt.getPacket() instanceof CloseWindowPacket) {
-            WindowManager.instance.closeWindow(evt.getPlayer().getUniqueId());
-        }
-    }
+			if(evt.getPacket() instanceof CloseWindowPacket) {
+				WindowManager.instance.closeWindow(evt.getPlayer().getUniqueId());
+			}
+		}
+		catch (Exception error)
+		{
+			error.printStackTrace();
+		}
+	}
 
 }
