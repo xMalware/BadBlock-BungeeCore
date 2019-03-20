@@ -20,9 +20,6 @@ import fr.badblock.bungee.link.bungee.BungeeManager;
 import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacketType;
-import fr.badblock.bungee.packets.packets.protocol.game.shared.CloseWindowPacket;
-import fr.badblock.bungee.packets.window.Window;
-import fr.badblock.bungee.packets.window.WindowManager;
 import fr.badblock.bungee.utils.ChatColorUtils;
 import fr.badblock.bungee.utils.i18n.I19n;
 import fr.badblock.bungee.utils.mcjson.McJson;
@@ -127,7 +124,6 @@ public final class BadPlayer extends BadOfflinePlayer {
 	private long loginTimestamp;
 
 	private transient Thread	teleportThread;
-	private transient Window openWindow;
 	
 	private int ping;
 
@@ -566,31 +562,6 @@ public final class BadPlayer extends BadOfflinePlayer {
 						PlayerPacketType.SEND_MESSAGE));
 	}
 	
-	@SuppressWarnings("deprecation")
-	public void open(Window window)
-	{
-		if (this.getVersion() != 340)
-		{
-			toProxiedPlayer().sendMessage("§cFonctionnalité disponible en 1.12.2 seulement pour le moment.");
-			return;
-		}
-		
-		WindowManager.instance.closeWindow(this.getUniqueId());
-		this.setOpenWindow(window);
-		window.open(toProxiedPlayer());
-	}
-
-	public void closeInventory()
-	{
-		if (this.getOpenWindow() == null)
-		{
-			return;
-		}
-		
-		CloseWindowPacket packet = new CloseWindowPacket(this.getOpenWindow());
-        toProxiedPlayer().unsafe().sendPacket(packet);
-	}
-
 	/**
 	 * To ProxiedPlayer object
 	 * 
