@@ -320,7 +320,7 @@ public class BadOfflinePlayer {
 			return getName();
 		}
 		// Returns the prefix + username + suffix
-		return permissible.getPrefix(locale, "chat") + getName() + permissible.getSuffix(locale, "chat");
+		return permissible.getPrefix() + getName() + permissible.getSuffix();
 	}
 
 	/**
@@ -430,19 +430,6 @@ public class BadOfflinePlayer {
 		// Create a new BasicDBObject object
 		BasicDBObject object = new BasicDBObject();
 
-		if (getDbObject() != null)
-		{
-			for (String k : getDbObject().keySet())
-			{
-				if (k == null || "_id".equals(k))
-				{
-					continue;
-				}
-
-				object.put(k, getDbObject().get(k));
-			}
-		}
-
 		// Put the lower-case name
 		object.put("name", getName().toLowerCase());
 		// Put the real name
@@ -470,6 +457,19 @@ public class BadOfflinePlayer {
 		// Put the auth key
 		object.put("authKey", authKey);
 
+		if (getDbObject() != null)
+		{
+			for (String k : getDbObject().keySet())
+			{
+				if (k == null || "_id".equals(k))
+				{
+					continue;
+				}
+
+				object.put(k, getDbObject().get(k));
+			}
+		}
+		
 		// Returns the saved object
 		return object;
 	}
