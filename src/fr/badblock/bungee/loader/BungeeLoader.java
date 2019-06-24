@@ -33,6 +33,7 @@ import fr.badblock.bungee.link.bungee.tasks.BungeeTask;
 import fr.badblock.bungee.link.bungee.tasks.PeakTask;
 import fr.badblock.bungee.link.bungee.tasks.PingUpdaterTask;
 import fr.badblock.bungee.link.bungee.tasks.PlayerCleanerTask;
+import fr.badblock.bungee.link.bungee.tasks.PlayerKeepAliveTask;
 import fr.badblock.bungee.link.claimants.RabbitClaimant;
 import fr.badblock.bungee.modules.ModuleLoader;
 import fr.badblock.bungee.modules.chat.ChatModule;
@@ -140,6 +141,7 @@ public class BungeeLoader {
 		new PeakTask();
 		// Player Cleaner task
 		new PlayerCleanerTask();
+		new PlayerKeepAliveTask();
 	}
 
 	/**

@@ -255,6 +255,11 @@ public class BadOfflinePlayer {
 	 * @return Returns the last login
 	 */
 	private long lastLogin;
+	
+	/**
+	 * Kill
+	 */
+	private boolean kill;
 
 	/**
 	 * Constructor (auto-create)
@@ -429,7 +434,20 @@ public class BadOfflinePlayer {
 	public BasicDBObject getSavedObject() {
 		// Create a new BasicDBObject object
 		BasicDBObject object = new BasicDBObject();
+		
+		if (getDbObject() != null)
+		{
+			for (String k : getDbObject().keySet())
+			{
+				if (k == null || "_id".equals(k))
+				{
+					continue;
+				}
 
+				object.put(k, getDbObject().get(k));
+			}
+		}
+		
 		// Put the lower-case name
 		object.put("name", getName().toLowerCase());
 		// Put the real name
@@ -446,30 +464,16 @@ public class BadOfflinePlayer {
 		object.put("punish", punished != null ? punished.getDBObject() : null);
 		// Put the permissions
 		object.put("permissions", permissions != null ? permissions.getDBObject() : null);
-		// Put the user version
-		object.put("version", "0");
-		// Put the online mode
-		object.put("onlineMode", onlineMode);
 		// Put the last login
 		object.put("lastLogin", lastLogin);
 		// Put the login password
 		object.put("loginPassword", loginPassword);
-		// Put the auth key
-		object.put("authKey", authKey);
 
-		if (getDbObject() != null)
+		if (kill)
 		{
-			for (String k : getDbObject().keySet())
-			{
-				if (k == null || "_id".equals(k))
-				{
-					continue;
-				}
-
-				object.put(k, getDbObject().get(k));
-			}
+			object.put("keepalive", 0);
 		}
-		
+
 		// Returns the saved object
 		return object;
 	}
@@ -920,6 +924,11 @@ public class BadOfflinePlayer {
 		});
 	}
 
+	public void keepAlive()
+	{
+		updateData("keepalive", System.currentTimeMillis() + 300_000L);
+	}
+	
 	/**
 	 * Update last IP
 	 */
@@ -988,6 +997,17 @@ public class BadOfflinePlayer {
 				proxiedPlayer.getServer() != null && proxiedPlayer.getServer().getInfo() != null
 				? proxiedPlayer.getServer().getInfo().getName()
 						: "");
+	}
+	
+	/**
+	 * Update the last server
+	 * 
+	 * @param The
+	 *            ProxiedPlayer object
+	 */
+	public void updateLastServer(ProxiedPlayer proxiedPlayer, String serverName) {
+		// Update data
+		updateData("lastServer", serverName);
 	}
 
 	/**

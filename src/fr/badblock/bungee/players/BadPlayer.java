@@ -352,6 +352,13 @@ public final class BadPlayer extends BadOfflinePlayer {
 	public void remove() {
 		// Remove from the map
 		BungeeLocalManager.getInstance().getMaps().remove(getName());
+		try {
+			setKill(true);
+			saveData();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// Global logging
 		BungeeManager.getInstance().log(ChatColor.RED + getName() + " is now disconnected.");
 	}

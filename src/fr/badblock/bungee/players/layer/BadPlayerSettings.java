@@ -83,6 +83,8 @@ public class BadPlayerSettings {
 		query.put("partyable", partyable != null ? partyable.name() : null);
 		// Put friend listable
 		query.put("friendListable", friendListable != null ? friendListable.name() : null);
+		// Put pmPrivacy
+		query.put("pmPrivacy", pmPrivacy != null ? pmPrivacy.name() : null);
 		// Returns DBObject
 		return query;
 	}
