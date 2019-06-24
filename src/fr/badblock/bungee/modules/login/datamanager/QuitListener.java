@@ -37,6 +37,7 @@ public class QuitListener extends BadListener {
 			return;
 		}
 
+		badPlayer.setKill(true);
 		// We remove the BadPlayer object
 		badPlayer.remove();
 
