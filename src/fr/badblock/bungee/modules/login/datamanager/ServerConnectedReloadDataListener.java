@@ -62,7 +62,7 @@ public class ServerConnectedReloadDataListener extends BadListener {
 			// Set the last server
 			badPlayer.setLastServer(serverInfo.getName());
 			// We update the last server in the player data
-			badPlayer.updateLastServer(proxiedPlayer);
+			badPlayer.updateLastServer(proxiedPlayer, serverInfo.getName());
 			
 			BadBungee.log("§a<=> " + proxiedPlayer.getName() + " has been moved to " + serverInfo.getName() + ".");
 		});

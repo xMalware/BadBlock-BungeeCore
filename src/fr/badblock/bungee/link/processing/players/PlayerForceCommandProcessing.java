@@ -2,6 +2,7 @@ package fr.badblock.bungee.link.processing.players;
 
 import fr.badblock.bungee.link.processing.players.abstracts.PlayerPacket;
 import fr.badblock.bungee.link.processing.players.abstracts._PlayerProcessing;
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
@@ -19,7 +20,8 @@ public class PlayerForceCommandProcessing extends _PlayerProcessing {
 	@Override
 	public void done(ProxiedPlayer proxiedPlayer, PlayerPacket playerPacket) {
 		// Force command
-		proxiedPlayer.chat(playerPacket.getContent());
+		
+		BungeeCord.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, playerPacket.getContent());
 	}
 
 }
